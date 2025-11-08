@@ -12,7 +12,7 @@ import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 import appCss from '../styles.css?url'
 
 import type { QueryClient } from '@tanstack/react-query'
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
+import { SidebarProvider } from '@/components/ui/sidebar'
 import AppSidebar from '@/components/global/sidebar'
 
 interface MyRouterContext {
@@ -30,7 +30,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'TelNetQuiz Admin Panel',
+        title: 'TelNetQuiz Panel',
       },
     ],
     links: [
@@ -38,6 +38,10 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         rel: 'stylesheet',
         href: appCss,
       },
+      {
+        rel: 'icon',
+        href: '/favicon.ico'
+      }
     ],
   }),
 
@@ -51,14 +55,14 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body>
+      <body className=''>
         <SidebarProvider>
           <AppSidebar/>
-          <main>
-            <SidebarTrigger/>
+          <main className='px-6 mt-8 w-full'>
             {children}
           </main>  
-          <TanStackDevtools
+        </SidebarProvider>
+        <TanStackDevtools
             config={{
               position: 'bottom-right',
             }}
@@ -71,7 +75,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             ]}
           />
           <Scripts />
-        </SidebarProvider>
       </body>
     </html>
   )

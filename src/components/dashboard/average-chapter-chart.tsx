@@ -1,0 +1,62 @@
+import { Bar, BarChart, Cell, Label, Tooltip, XAxis, YAxis } from "recharts";
+import { ChartConfig, ChartContainer } from "../ui/chart";
+import { averageScoreChapter } from "@/data/mock-data";
+import { Card } from "../ui/card";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
+
+interface AverageChapterBarChartProps {
+  className?: string
+}
+
+const chartConfig = {
+  averageScore: {
+    label: "Average Score",
+    color: "#f37704",
+  },
+} satisfies ChartConfig
+
+export default function AverageChapterBarChart({ className }: AverageChapterBarChartProps) {
+  const [focusBar, setFocusBar] = useState<number | null>(null)
+
+  return (
+    <Card className={cn("", className)}>
+      <h2 className="text-xl text-telnet-primary mb-3 ml-5 font-black">Average Score per Chapter</h2>
+      <ChartContainer config={chartConfig}>
+        <BarChart
+          data={averageScoreChapter}
+          onMouseMove={state => {
+            if (state.isTooltipActive) {
+              setFocusBar(state.activeTooltipIndex || null)
+            } else {
+              setFocusBar(null)
+            }
+          }}
+          onMouseLeave={_ => {
+            setFocusBar(null)
+          }}
+        >
+          <XAxis dataKey="chapter">
+            <Label value="Chapters" offset={-2} position="insideBottom" />
+          </XAxis>
+          <YAxis>
+            <Label
+              value="Average Score"
+              angle={-90}
+              offset={+15}
+              position="insideLeft"
+              style={{ textAnchor: "middle" }}
+            />
+          </YAxis>
+          <Tooltip />
+          <Bar dataKey="averageScore" fill="#f37704">
+            {averageScoreChapter.map((_, index) => (
+              <Cell key={`cell-${index}`} fill={focusBar === index ? "#ffdab7" : "#f37704"} />
+            ))}
+          </Bar>
+
+        </BarChart>
+      </ChartContainer>
+    </Card>
+  )
+}

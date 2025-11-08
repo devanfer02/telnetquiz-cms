@@ -1,9 +1,7 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { Navigate, createFileRoute } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/')({ component: App })
+export const Route = createFileRoute('/')({ component: IndexRedirect })
 
-function App() {
-  return (
-    <h1>Hello World!</h1>
-  )
+function IndexRedirect() {
+  return <Navigate to='/dashboard' replace />
 }
