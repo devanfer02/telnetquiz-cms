@@ -3,18 +3,17 @@ import {
   Scripts,
   createRootRouteWithContext,
 } from '@tanstack/react-router'
+
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
-
-import Header from '../components/Header'
-
-import StoreDevtools from '../lib/demo-store-devtools'
 
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 
 import appCss from '../styles.css?url'
 
 import type { QueryClient } from '@tanstack/react-query'
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
+import AppSidebar from '@/components/global/sidebar'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -31,7 +30,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'TanStack Start Starter',
+        title: 'TelNetQuiz Admin Panel',
       },
     ],
     links: [
@@ -43,6 +42,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
   }),
 
   shellComponent: RootDocument,
+  notFoundComponent: NotFoundPage
 })
 
 function RootDocument({ children }: { children: React.ReactNode }) {
@@ -52,23 +52,35 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <Header />
-        {children}
-        <TanStackDevtools
-          config={{
-            position: 'bottom-right',
-          }}
-          plugins={[
-            {
-              name: 'Tanstack Router',
-              render: <TanStackRouterDevtoolsPanel />,
-            },
-            StoreDevtools,
-            TanStackQueryDevtools,
-          ]}
-        />
-        <Scripts />
+        <SidebarProvider>
+          <AppSidebar/>
+          <main>
+            <SidebarTrigger/>
+            {children}
+          </main>  
+          <TanStackDevtools
+            config={{
+              position: 'bottom-right',
+            }}
+            plugins={[
+              {
+                name: 'Tanstack Router',
+                render: <TanStackRouterDevtoolsPanel />,
+              },
+              TanStackQueryDevtools,
+            ]}
+          />
+          <Scripts />
+        </SidebarProvider>
       </body>
     </html>
+  )
+}
+
+function NotFoundPage() {
+  return (
+    <div className='flex flex-col justify-center align-center items-center min-h-screen'>
+      <h1 className='text-2xl text-center'>404 | Page Not Found</h1>
+    </div>
   )
 }
