@@ -1,40 +1,19 @@
-import { FileQuestionIcon, Layers, LayoutDashboard, LogOut, MessageSquareDot, Users } from "lucide-react";
+import { sidebarItems } from "@/data/constant";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "../ui/sidebar";
-import { Link } from "@tanstack/react-router";
-
-const items = [
-  {
-    title: "Dashboard",
-    url: "/",
-    icon: LayoutDashboard
-  },
-  {
-    title: "Chapters",
-    url: "/chapters",
-    icon: Layers
-  },
-  {
-    title: "Quiz",
-    url: "/quiz",
-    icon: MessageSquareDot,
-  },
-  {
-    title: "Questions",
-    url: "/questions",
-    icon: FileQuestionIcon
-  },
-  {
-    title: "Users",
-    url: "/users",
-    icon: Users
-  }
-]
+import { Link, useRouterState } from "@tanstack/react-router";
+import { LogOut } from "lucide-react";
 
 export default function AppSidebar() {
+  const routerState = useRouterState()
+
+  const currentPath = routerState.location.pathname
+
+  console.log(currentPath)
+
   return (
     <Sidebar>
       <SidebarHeader className="bg-telnet-primary">
-        <SidebarGroupLabel className="text-xl">
+        <SidebarGroupLabel className="text-xl text-white font-bold mt-5">
           TelNetQuiz CMS
         </SidebarGroupLabel>
       </SidebarHeader>
@@ -42,9 +21,9 @@ export default function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map(item => (
-                <SidebarMenuItem key={item.title} className="py-2">
-                  <SidebarMenuButton asChild className="hover:text-telnet-dark-brown">
+              {sidebarItems.map(item => (
+                <SidebarMenuItem key={item.title} className="py-2 ">
+                  <SidebarMenuButton asChild className={`hover:text-telnet-dark-brown duration-200 ${currentPath.includes(item.url) ? "bg-white text-telnet-primary" : ""}`}>
                     <Link to={item.url}>
                       <item.icon className="size-5!"/>
                       <span className="text-md">{item.title}</span>
