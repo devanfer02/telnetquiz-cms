@@ -38,9 +38,9 @@ export default function AppSidebar() {
       <SidebarFooter className="bg-telnet-primary">
         <SidebarMenuItem>
           <SidebarMenuButton asChild>
-            <div className="flex flex-row gap-x-5 mb-4 cursor-pointer">
+            <div className="flex flex-row gap-x-5 mb-4 cursor-pointer text-white">
               <LogOut className="size-5!"/>
-              <span className="text-lg">Logout</span>
+              <span className="text-lg font-semibold">Logout</span>
             </div>
           </SidebarMenuButton>
         </SidebarMenuItem>
