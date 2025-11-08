@@ -3,12 +3,14 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupConte
 import { Link, useRouterState } from "@tanstack/react-router";
 import { LogOut } from "lucide-react";
 
+const isActive = (currentPath: string, itemUrl: string) => {
+  return currentPath === itemUrl || currentPath.startsWith(itemUrl + "/");
+}
+
 export default function AppSidebar() {
   const routerState = useRouterState()
 
   const currentPath = routerState.location.pathname
-
-  console.log(currentPath)
 
   return (
     <Sidebar>
@@ -23,7 +25,7 @@ export default function AppSidebar() {
             <SidebarMenu>
               {sidebarItems.map(item => (
                 <SidebarMenuItem key={item.title} className="py-2 ">
-                  <SidebarMenuButton asChild className={`hover:text-telnet-dark-brown duration-200 ${currentPath.includes(item.url) ? "bg-white text-telnet-primary" : ""}`}>
+                  <SidebarMenuButton asChild className={`hover:text-telnet-dark-brown duration-200 ${isActive(currentPath, item.url) ? "bg-white text-telnet-primary" : "bg-telnet-primary text-white"}`}>
                     <Link to={item.url}>
                       <item.icon className="size-5!"/>
                       <span className="text-md">{item.title}</span>
