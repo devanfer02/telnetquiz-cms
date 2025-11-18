@@ -8,8 +8,8 @@ export const Route = createFileRoute('/chapters/')({
 function RouteComponent() {
   return (
     <>
-      <div className="my-5">
-        <h1 className="text-3xl font-bold tracking-tight">Chapters</h1>
+      <div className="mt-3 mb-5">
+        <h1 className="text-3xl font-black text-telnet-primary tracking-tight">Chapters</h1>
         <p className="text-muted-foreground">
           Daftar semua chapter tentang Media dan Jaringan Telekomunikasi.
         </p>
