@@ -1,7 +1,7 @@
 import ChapterForm from '@/components/chapters/chapter-form';
 import { mockChapters } from '@/data/mock-chapter-data';
+import { useCustomForm } from '@/hooks/use-custom-form';
 import { ChapterValues } from '@/types/zod/chapter';
-import { useForm } from '@tanstack/react-form';
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/chapters/edit/$id')({
@@ -13,7 +13,7 @@ export default function RouteComponent() {
   const chapterId = parseInt(id, 10)
   const chapter = mockChapters.find(c => c.id === chapterId)
 
-  const form = useForm({
+  const form = useCustomForm({
     defaultValues: {
       id: chapter?.id,
       title: chapter?.title,

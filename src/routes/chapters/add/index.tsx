@@ -1,14 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useForm } from "@tanstack/react-form";
 import ChapterForm from "@/components/chapters/chapter-form";
 import { ChapterValues } from "@/types/zod/chapter";
+import { useCustomForm } from "@/hooks/use-custom-form";
 
 export const Route = createFileRoute("/chapters/add/")({
   component: RouteComponent,
 });
 
 export default function RouteComponent() {
-  const form = useForm({
+  const form = useCustomForm({
     defaultValues: {
       title: "",
       description: "",

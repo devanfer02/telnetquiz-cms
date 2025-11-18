@@ -1,15 +1,15 @@
-import type { useForm } from "@tanstack/react-form";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ChapterSchema, ChapterValues } from "@/types/zod/chapter";
+import type { useCustomForm } from "@/hooks/use-custom-form";
 
 const MASCOTS = [1, 2, 3, 4];
 
 interface ChapterFormProps {
-  form: ReturnType<typeof useForm<ChapterValues, any, any, any, any, any, any, any, any, any, any, any>>
+  form: ReturnType<typeof useCustomForm<ChapterValues>>
   buttonText: string 
 }
 
