@@ -1,7 +1,7 @@
 import { Bar, BarChart, Cell, Label, Tooltip, XAxis, YAxis } from "recharts";
-import { ChartConfig, ChartContainer } from "../ui/chart";
+import { ChartConfig, ChartContainer } from "../../../components/ui/chart";
 import { averageScoreChapter } from "@/data/mock-data";
-import { Card } from "../ui/card";
+import { Card } from "../../../components/ui/card";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 

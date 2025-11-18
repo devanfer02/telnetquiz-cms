@@ -1,5 +1,5 @@
 import { ColumnDef, SortingState, flexRender, getCoreRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
-import { Button } from "../ui/button";
+import { Button } from "../../../components/ui/button";
 import {
   Table,
   TableBody,
@@ -11,8 +11,8 @@ import {
 } from "@/components/ui/table"
 import { mockLeaderboard } from "@/data/mock-data";
 import { useState } from "react";
-import { Card } from "../ui/card";
-import { SortableHeader } from "../global/sortable-header";
+import { Card } from "../../../components/ui/card";
+import { SortableHeader } from "../../../components/global/sortable-header";
 import { cn } from "@/lib/utils";
 
 type LeaderboardEntry = {

@@ -1,4 +1,3 @@
-import Greeting from '@/components/dashboard/greeting'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/chapters/')({
@@ -8,7 +7,7 @@ export const Route = createFileRoute('/chapters/')({
 function RouteComponent() {
   return (
     <>
-      <Greeting/>
+      
 
     </>
   )

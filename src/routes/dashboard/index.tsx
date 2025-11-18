@@ -1,10 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router'
-import AverageChapterBarChart from '@/components/dashboard/average-chapter-chart'
-import DashboardStats from '@/components/dashboard/dashboard-stat'
-import Greeting from '@/components/dashboard/greeting'
-import Leaderboard from '@/components/dashboard/leaderboard'
-import RecentSubmission from '@/components/dashboard/recent-submission'
-import AboutDashboard from '@/components/dashboard/about-dashboard'
+import AverageChapterBarChart from '@/routes/dashboard/-sections/average-chapter-chart'
+import DashboardStats from '@/routes/dashboard/-sections/dashboard-stat'
+import Greeting from '@/routes/dashboard/-sections/greeting'
+import Leaderboard from '@/routes/dashboard/-sections/leaderboard'
+import RecentSubmission from '@/routes/dashboard/-sections/recent-submission'
+import AboutDashboard from '@/routes/dashboard/-sections/about-dashboard'
 
 export const Route = createFileRoute('/dashboard/')({
   component: DashboardIndex,

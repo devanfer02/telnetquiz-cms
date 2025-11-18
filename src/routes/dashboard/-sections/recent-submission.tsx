@@ -18,9 +18,9 @@ import {
   TableCaption,
 } from "@/components/ui/table"
 import { submissions } from "@/data/mock-data"
-import { Card } from "../ui/card"
+import { Card } from "../../../components/ui/card"
 import { useState } from "react"
-import { SortableHeader } from "../global/sortable-header"
+import { SortableHeader } from "../../../components/global/sortable-header"
 import { Submission } from "@/types/submission"
 
 export const columns: ColumnDef<Submission>[] = [

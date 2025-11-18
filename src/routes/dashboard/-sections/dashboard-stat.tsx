@@ -1,6 +1,6 @@
 import { dashboardItems } from "@/data/constant";
-import CardStat from "../global/card-stat";
-import { Card } from "../ui/card";
+import CardStat from "../../../components/global/card-stat";
+import { Card } from "../../../components/ui/card";
 
 export default function DashboardStats() {
   return (
