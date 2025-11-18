@@ -13,6 +13,7 @@ import { Route as UsersRouteRouteImport } from './routes/users/route'
 import { Route as QuizRouteRouteImport } from './routes/quiz/route'
 import { Route as QuestionsRouteRouteImport } from './routes/questions/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SubmissionsIndexRouteImport } from './routes/submissions/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as ChaptersIndexRouteImport } from './routes/chapters/index'
 import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-query'
@@ -43,6 +44,11 @@ const QuestionsRouteRoute = QuestionsRouteRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SubmissionsIndexRoute = SubmissionsIndexRouteImport.update({
+  id: '/submissions/',
+  path: '/submissions/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
@@ -113,6 +119,7 @@ export interface FileRoutesByFullPath {
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/chapters': typeof ChaptersIndexRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/submissions': typeof SubmissionsIndexRoute
   '/chapters/edit/$id': typeof ChaptersEditIdRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/api/tq-todos': typeof DemoApiTqTodosRoute
@@ -130,6 +137,7 @@ export interface FileRoutesByTo {
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/chapters': typeof ChaptersIndexRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/submissions': typeof SubmissionsIndexRoute
   '/chapters/edit/$id': typeof ChaptersEditIdRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/api/tq-todos': typeof DemoApiTqTodosRoute
@@ -148,6 +156,7 @@ export interface FileRoutesById {
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/chapters/': typeof ChaptersIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/submissions/': typeof SubmissionsIndexRoute
   '/chapters/edit/$id': typeof ChaptersEditIdRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/api/tq-todos': typeof DemoApiTqTodosRoute
@@ -167,6 +176,7 @@ export interface FileRouteTypes {
     | '/demo/tanstack-query'
     | '/chapters'
     | '/dashboard'
+    | '/submissions'
     | '/chapters/edit/$id'
     | '/demo/api/names'
     | '/demo/api/tq-todos'
@@ -184,6 +194,7 @@ export interface FileRouteTypes {
     | '/demo/tanstack-query'
     | '/chapters'
     | '/dashboard'
+    | '/submissions'
     | '/chapters/edit/$id'
     | '/demo/api/names'
     | '/demo/api/tq-todos'
@@ -201,6 +212,7 @@ export interface FileRouteTypes {
     | '/demo/tanstack-query'
     | '/chapters/'
     | '/dashboard/'
+    | '/submissions/'
     | '/chapters/edit/$id'
     | '/demo/api/names'
     | '/demo/api/tq-todos'
@@ -219,6 +231,7 @@ export interface RootRouteChildren {
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
   ChaptersIndexRoute: typeof ChaptersIndexRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
+  SubmissionsIndexRoute: typeof SubmissionsIndexRoute
   ChaptersEditIdRoute: typeof ChaptersEditIdRoute
   DemoApiNamesRoute: typeof DemoApiNamesRoute
   DemoApiTqTodosRoute: typeof DemoApiTqTodosRoute
@@ -253,6 +266,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/submissions/': {
+      id: '/submissions/'
+      path: '/submissions'
+      fullPath: '/submissions'
+      preLoaderRoute: typeof SubmissionsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard/': {
@@ -347,6 +367,7 @@ const rootRouteChildren: RootRouteChildren = {
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
   ChaptersIndexRoute: ChaptersIndexRoute,
   DashboardIndexRoute: DashboardIndexRoute,
+  SubmissionsIndexRoute: SubmissionsIndexRoute,
   ChaptersEditIdRoute: ChaptersEditIdRoute,
   DemoApiNamesRoute: DemoApiNamesRoute,
   DemoApiTqTodosRoute: DemoApiTqTodosRoute,
