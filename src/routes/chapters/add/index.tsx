@@ -12,7 +12,7 @@ export default function RouteComponent() {
     defaultValues: {
       title: "",
       description: "",
-      mascotId: 0,
+      mascotId: 1,
     } as ChapterValues,
     onSubmit: async ({ value }) => {
       console.log("submitted ", value);
