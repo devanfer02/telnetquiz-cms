@@ -1,11 +1,7 @@
 import {
-  useReactTable,
-  getCoreRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
   flexRender,
   ColumnDef,
-  SortingState,
+  Table as ReactTable,
 } from "@tanstack/react-table"
 
 import {
@@ -17,34 +13,21 @@ import {
   TableRow,
   TableCaption,
 } from "@/components/ui/table"
-import { useState } from "react"
 import { Card } from "../ui/card"
 
 interface TanstackTableProps<T> {
-  rows: T[]
+  table: ReactTable<any>
   columns: ColumnDef<T>[]
   title: string 
   fallbackMessage: string 
 }
 
 export default function TanstackTable<T>({
-  rows,
+  table,
   columns,
   title,
   fallbackMessage
 }: TanstackTableProps<T>) {
-  const [data, _] = useState(() => rows)
-  const [sorting, setSorting] = useState<SortingState>([])
-
-  const table = useReactTable({
-    data,
-    columns,
-    state: { sorting },
-    onSortingChange: setSorting,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-  } as any)
 
   return (
     <Card className="space-y-4 px-5 my-5">

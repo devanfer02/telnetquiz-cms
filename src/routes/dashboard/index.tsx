@@ -5,6 +5,7 @@ import Greeting from '@/routes/dashboard/-sections/greeting'
 import Leaderboard from '@/routes/dashboard/-sections/leaderboard'
 import RecentSubmission from '@/routes/dashboard/-sections/recent-submission'
 import AboutDashboard from '@/routes/dashboard/-sections/about-dashboard'
+import Footer from '@/components/global/footer'
 
 export const Route = createFileRoute('/dashboard/')({
   component: DashboardIndex,
@@ -25,9 +26,7 @@ function DashboardIndex() {
           <Leaderboard className="flex-1" />
         </div>
       </div>
-      <div className='mb-10 w-full text-center'>
-        <span className=''>Made with ❤️ by Devan F.</span>
-      </div>
+      <Footer/>
     </>
   )
 }

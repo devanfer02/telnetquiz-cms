@@ -1,11 +1,17 @@
 import {
-  ColumnDef
+  ColumnDef,
+  SortingState,
+  getCoreRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable
 } from "@tanstack/react-table"
 
 import { submissions } from "@/data/mock-data"
 import { SortableHeader } from "../../../components/global/sortable-header"
 import { Submission } from "@/types/submission"
 import TanstackTable from "@/components/global/ts-table"
+import { useState } from "react"
 
 export const columns: ColumnDef<Submission>[] = [
   {
@@ -35,8 +41,21 @@ export const columns: ColumnDef<Submission>[] = [
 ]
 
 export default function RecentSubmission() {
+  const [data, _] = useState(() => submissions)
+  const [sorting, setSorting] = useState<SortingState>([])
+
+  const table = useReactTable({
+    data,
+    columns,
+    state: { sorting },
+    onSortingChange: setSorting,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+  } as any)
+
   return <TanstackTable
-    rows={submissions}
+    table={table}
     columns={columns}
     title="Recent Submissions"
     fallbackMessage="No Submission Yet"

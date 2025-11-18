@@ -18,7 +18,9 @@ import { Route as ChaptersIndexRouteImport } from './routes/chapters/index'
 import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-query'
 import { Route as DemoTableRouteImport } from './routes/demo/table'
 import { Route as DemoStoreRouteImport } from './routes/demo/store'
+import { Route as ChaptersIdRouteImport } from './routes/chapters/$id'
 import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
+import { Route as ChaptersAddIndexRouteImport } from './routes/chapters/add/index'
 import { Route as DemoApiTqTodosRouteImport } from './routes/demo/api.tq-todos'
 import { Route as DemoApiNamesRouteImport } from './routes/demo/api.names'
 
@@ -67,9 +69,19 @@ const DemoStoreRoute = DemoStoreRouteImport.update({
   path: '/demo/store',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ChaptersIdRoute = ChaptersIdRouteImport.update({
+  id: '/chapters/$id',
+  path: '/chapters/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthSignInRoute = AuthSignInRouteImport.update({
   id: '/auth/sign-in',
   path: '/auth/sign-in',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChaptersAddIndexRoute = ChaptersAddIndexRouteImport.update({
+  id: '/chapters/add/',
+  path: '/chapters/add/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DemoApiTqTodosRoute = DemoApiTqTodosRouteImport.update({
@@ -89,6 +101,7 @@ export interface FileRoutesByFullPath {
   '/quiz': typeof QuizRouteRoute
   '/users': typeof UsersRouteRoute
   '/auth/sign-in': typeof AuthSignInRoute
+  '/chapters/$id': typeof ChaptersIdRoute
   '/demo/store': typeof DemoStoreRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
@@ -96,6 +109,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardIndexRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/api/tq-todos': typeof DemoApiTqTodosRoute
+  '/chapters/add': typeof ChaptersAddIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -103,6 +117,7 @@ export interface FileRoutesByTo {
   '/quiz': typeof QuizRouteRoute
   '/users': typeof UsersRouteRoute
   '/auth/sign-in': typeof AuthSignInRoute
+  '/chapters/$id': typeof ChaptersIdRoute
   '/demo/store': typeof DemoStoreRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
@@ -110,6 +125,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardIndexRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/api/tq-todos': typeof DemoApiTqTodosRoute
+  '/chapters/add': typeof ChaptersAddIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -118,6 +134,7 @@ export interface FileRoutesById {
   '/quiz': typeof QuizRouteRoute
   '/users': typeof UsersRouteRoute
   '/auth/sign-in': typeof AuthSignInRoute
+  '/chapters/$id': typeof ChaptersIdRoute
   '/demo/store': typeof DemoStoreRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
@@ -125,6 +142,7 @@ export interface FileRoutesById {
   '/dashboard/': typeof DashboardIndexRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/api/tq-todos': typeof DemoApiTqTodosRoute
+  '/chapters/add/': typeof ChaptersAddIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -134,6 +152,7 @@ export interface FileRouteTypes {
     | '/quiz'
     | '/users'
     | '/auth/sign-in'
+    | '/chapters/$id'
     | '/demo/store'
     | '/demo/table'
     | '/demo/tanstack-query'
@@ -141,6 +160,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/demo/api/names'
     | '/demo/api/tq-todos'
+    | '/chapters/add'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -148,6 +168,7 @@ export interface FileRouteTypes {
     | '/quiz'
     | '/users'
     | '/auth/sign-in'
+    | '/chapters/$id'
     | '/demo/store'
     | '/demo/table'
     | '/demo/tanstack-query'
@@ -155,6 +176,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/demo/api/names'
     | '/demo/api/tq-todos'
+    | '/chapters/add'
   id:
     | '__root__'
     | '/'
@@ -162,6 +184,7 @@ export interface FileRouteTypes {
     | '/quiz'
     | '/users'
     | '/auth/sign-in'
+    | '/chapters/$id'
     | '/demo/store'
     | '/demo/table'
     | '/demo/tanstack-query'
@@ -169,6 +192,7 @@ export interface FileRouteTypes {
     | '/dashboard/'
     | '/demo/api/names'
     | '/demo/api/tq-todos'
+    | '/chapters/add/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -177,6 +201,7 @@ export interface RootRouteChildren {
   QuizRouteRoute: typeof QuizRouteRoute
   UsersRouteRoute: typeof UsersRouteRoute
   AuthSignInRoute: typeof AuthSignInRoute
+  ChaptersIdRoute: typeof ChaptersIdRoute
   DemoStoreRoute: typeof DemoStoreRoute
   DemoTableRoute: typeof DemoTableRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
@@ -184,6 +209,7 @@ export interface RootRouteChildren {
   DashboardIndexRoute: typeof DashboardIndexRoute
   DemoApiNamesRoute: typeof DemoApiNamesRoute
   DemoApiTqTodosRoute: typeof DemoApiTqTodosRoute
+  ChaptersAddIndexRoute: typeof ChaptersAddIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -251,11 +277,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoStoreRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/chapters/$id': {
+      id: '/chapters/$id'
+      path: '/chapters/$id'
+      fullPath: '/chapters/$id'
+      preLoaderRoute: typeof ChaptersIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth/sign-in': {
       id: '/auth/sign-in'
       path: '/auth/sign-in'
       fullPath: '/auth/sign-in'
       preLoaderRoute: typeof AuthSignInRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/chapters/add/': {
+      id: '/chapters/add/'
+      path: '/chapters/add'
+      fullPath: '/chapters/add'
+      preLoaderRoute: typeof ChaptersAddIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/demo/api/tq-todos': {
@@ -281,6 +321,7 @@ const rootRouteChildren: RootRouteChildren = {
   QuizRouteRoute: QuizRouteRoute,
   UsersRouteRoute: UsersRouteRoute,
   AuthSignInRoute: AuthSignInRoute,
+  ChaptersIdRoute: ChaptersIdRoute,
   DemoStoreRoute: DemoStoreRoute,
   DemoTableRoute: DemoTableRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
@@ -288,6 +329,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardIndexRoute: DashboardIndexRoute,
   DemoApiNamesRoute: DemoApiNamesRoute,
   DemoApiTqTodosRoute: DemoApiTqTodosRoute,
+  ChaptersAddIndexRoute: ChaptersAddIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
