@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { chapters } from "@/data/mock-data";
 import { Link } from "@tanstack/react-router";
 import { ColumnDef, SortingState, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
+import { Delete, Edit, Trash, Trash2 } from "lucide-react";
 import { useState } from "react";
 
 export const columns: ColumnDef<Chapter>[] = [
@@ -51,6 +52,33 @@ export const columns: ColumnDef<Chapter>[] = [
 
       return <img className="max-w-10" src={url} />
     }
+  },
+  {
+    id: "actions",
+    header: "Actions",
+    size: 100,
+    cell: ({ row }) => {
+      const chapter = row.original
+
+      return (
+        <div className="flex gap-2">
+          <Link
+            to="/chapters/edit/$id"
+            params={{ id: chapter.id.toString() }}
+            className="p-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm"
+          >
+            <Edit size="18" />
+          </Link>
+
+          <button
+            onClick={() => console.log("delete", chapter.id)}
+            className="p-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm cursor-pointer"
+          >
+            <Trash2 size="18" />
+          </button>
+        </div>
+      )
+    },
   },
 ]
 

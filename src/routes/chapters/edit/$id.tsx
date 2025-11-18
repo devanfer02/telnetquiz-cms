@@ -8,6 +8,8 @@ export const Route = createFileRoute('/chapters/edit/$id')({
 })
 
 export default function RouteComponent() {
+  const { id } = Route.useParams()
+
   const form = useForm({
     defaultValues: {
       title: "",
@@ -23,7 +25,7 @@ export default function RouteComponent() {
     <>
       <div className="mb-6">
         <h1 className="text-telnet-primary font-black text-3xl">
-          Tambah Chapter Baru
+          Edit Chapter { id }
         </h1>
         <p className="text-muted-foreground">
           Isi form di bawah untuk menambahkan chapter baru.
