@@ -10,9 +10,10 @@ const MASCOTS = [1, 2, 3, 4];
 
 interface ChapterFormProps {
   form: ReturnType<typeof useForm<ChapterValues, any, any, any, any, any, any, any, any, any, any, any>>
+  buttonText: string 
 }
 
-export default function ChapterForm({form}: ChapterFormProps) {
+export default function ChapterForm({form, buttonText}: ChapterFormProps) {
 
   return (
     <Card className="p-8 shadow-md border border-telnet-surface-darker">
@@ -145,7 +146,7 @@ export default function ChapterForm({form}: ChapterFormProps) {
                    hover:bg-white hover:text-telnet-primary border border-telnet-primary 
                    transition-colors duration-200 w-full cursor-pointer"
       >
-        Tambah Chapter
+        {buttonText}
       </Button>
     </form>
   </Card>

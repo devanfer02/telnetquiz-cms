@@ -29,7 +29,7 @@ export default function RouteComponent() {
           Isi form di bawah untuk menambahkan chapter baru.
         </p>
       </div>
-      <ChapterForm form={form}/>
+      <ChapterForm form={form} buttonText="Tambah"/>
     </>
   );
 }

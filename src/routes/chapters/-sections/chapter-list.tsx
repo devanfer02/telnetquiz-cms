@@ -2,10 +2,10 @@ import { SortableHeader } from "@/components/global/sortable-header";
 import TanstackTable from "@/components/global/ts-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { chapters } from "@/data/mock-data";
+import { mockChapters } from "@/data/mock-chapter-data";
 import { Link } from "@tanstack/react-router";
 import { ColumnDef, SortingState, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
-import { Delete, Edit, Trash, Trash2 } from "lucide-react";
+import { Edit, Trash2 } from "lucide-react";
 import { useState } from "react";
 
 export const columns: ColumnDef<Chapter>[] = [
@@ -71,7 +71,7 @@ export const columns: ColumnDef<Chapter>[] = [
           </Link>
 
           <button
-            onClick={() => console.log("delete", chapter.id)}
+            onClick={() => alert(`delete ${chapter.id}`)}
             className="p-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm cursor-pointer"
           >
             <Trash2 size="18" />
@@ -84,7 +84,7 @@ export const columns: ColumnDef<Chapter>[] = [
 
 export default function ChapterList() {
   const [keyword, setKeyword] = useState("")
-  const [data, _] = useState(() => chapters)
+  const [data, _] = useState(() => mockChapters)
   const [sorting, setSorting] = useState<SortingState>([])
 
   const table = useReactTable({

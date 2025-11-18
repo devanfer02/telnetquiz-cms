@@ -14,7 +14,7 @@ function RouteComponent() {
           Daftar semua chapter tentang Media dan Jaringan Telekomunikasi.
         </p>
       </div>
-      <ChapterList 
+      <ChapterList
       />
     </>
   )

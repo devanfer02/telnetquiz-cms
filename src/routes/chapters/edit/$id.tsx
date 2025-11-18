@@ -1,4 +1,5 @@
 import ChapterForm from '@/components/chapters/chapter-form';
+import { mockChapters } from '@/data/mock-chapter-data';
 import { ChapterValues } from '@/types/zod/chapter';
 import { useForm } from '@tanstack/react-form';
 import { createFileRoute } from '@tanstack/react-router'
@@ -9,12 +10,15 @@ export const Route = createFileRoute('/chapters/edit/$id')({
 
 export default function RouteComponent() {
   const { id } = Route.useParams()
+  const chapterId = parseInt(id, 10)
+  const chapter = mockChapters.find(c => c.id === chapterId)
 
   const form = useForm({
     defaultValues: {
-      title: "",
-      description: "",
-      mascotId: 0,
+      id: chapter?.id,
+      title: chapter?.title,
+      description: chapter?.description,
+      mascotId: chapter?.mascotId,
     } as ChapterValues,
     onSubmit: async ({ value }) => {
       console.log("submitted ", value);
@@ -31,7 +35,7 @@ export default function RouteComponent() {
           Isi form di bawah untuk menambahkan chapter baru.
         </p>
       </div>
-      <ChapterForm form={form}/>
+      <ChapterForm form={form} buttonText='Perbarui'/>
     </>
   );
 }
