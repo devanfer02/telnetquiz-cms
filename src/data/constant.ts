@@ -3,7 +3,7 @@ import { FileQuestionIcon, Layers, LayoutDashboard, MessageSquareDot, Upload, Us
 export const sidebarItems = [
   {
     title: "Dashboard",
-    url: "/",
+    url: "/dashboard",
     icon: LayoutDashboard,
   },
   {

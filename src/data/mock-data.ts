@@ -1,37 +1,55 @@
-import { faker } from "@faker-js/faker"
-
-export type Submission = {
-  id: number
-  userName: string
-  chapterId: string
-  quizId: string
-  score: number
-  startedAt: string
-  completedAt: string
-}
-
-function generateSubmissions(count: number = 10): Submission[] {
-  const submissions: Submission[] = []
-
-  for (let i = 1; i <= count; i++) {
-    const started = faker.date.recent({ days: 5 })
-    const completed = new Date(started.getTime() + faker.number.int({ min: 5, max: 20 }) * 60_000)
-
-    submissions.push({
-      id: i,
-      userName: faker.person.fullName(),
-      chapterId: `CH-${faker.number.int({ min: 1, max: 10 }).toString().padStart(3, "0")}`,
-      quizId: `QZ-${faker.number.int({ min: 100, max: 110 })}`,
-      score: faker.number.int({ min: 60, max: 100 }),
-      startedAt: started.toLocaleDateString("en-CA"),
-      completedAt: completed.toLocaleDateString("en-CA"),
-    })
-  }
-
-  return submissions
-}
-
-export const submissions = generateSubmissions(50)
+export const submissions = [
+  { id: 1, userName: "Alice Johnson", chapterId: "CH-007", quizId: "QZ-105", score: 88, startedAt: "2025-11-08", completedAt: "2025-11-08" },
+  { id: 2, userName: "Bob Smith", chapterId: "CH-002", quizId: "QZ-101", score: 92, startedAt: "2025-11-07", completedAt: "2025-11-07" },
+  { id: 3, userName: "Charlie Brown", chapterId: "CH-005", quizId: "QZ-108", score: 76, startedAt: "2025-11-08", completedAt: "2025-11-08" },
+  { id: 4, userName: "Diana Miller", chapterId: "CH-007", quizId: "QZ-105", score: 81, startedAt: "2025-11-06", completedAt: "2025-11-06" },
+  { id: 5, userName: "Ethan Davis", chapterId: "CH-009", quizId: "QZ-103", score: 95, startedAt: "2025-11-08", completedAt: "2025-11-08" },
+  { id: 6, userName: "Fiona White", chapterId: "CH-001", quizId: "QZ-102", score: 68, startedAt: "2025-11-05", completedAt: "2025-11-05" },
+  { id: 7, userName: "George Wilson", chapterId: "CH-010", quizId: "QZ-110", score: 83, startedAt: "2025-11-07", completedAt: "2025-11-07" },
+  { id: 8, userName: "Hannah Moore", chapterId: "CH-003", quizId: "QZ-107", score: 79, startedAt: "2025-11-08", completedAt: "2025-11-08" },
+  { id: 9, userName: "Ian Taylor", chapterId: "CH-004", quizId: "QZ-104", score: 99, startedAt: "2025-11-06", completedAt: "2025-11-06" },
+  { id: 10, userName: "Julia Anderson", chapterId: "CH-008", quizId: "QZ-106", score: 85, startedAt: "2025-11-08", completedAt: "2025-11-08" },
+  { id: 11, userName: "Kevin Thomas", chapterId: "CH-002", quizId: "QZ-101", score: 72, startedAt: "2025-11-07", completedAt: "2025-11-07" },
+  { id: 12, userName: "Linda Jackson", chapterId: "CH-006", quizId: "QZ-109", score: 91, startedAt: "2025-11-05", completedAt: "2025-11-05" },
+  { id: 13, userName: "Michael Harris", chapterId: "CH-005", quizId: "QZ-108", score: 80, startedAt: "2025-11-08", completedAt: "2025-11-08" },
+  { id: 14, userName: "Nina Martin", chapterId: "CH-001", quizId: "QZ-102", score: 87, startedAt: "2025-11-06", completedAt: "2025-11-06" },
+  { id: 15, userName: "Oscar Lee", chapterId: "CH-009", quizId: "QZ-103", score: 74, startedAt: "2025-11-07", completedAt: "2025-11-07" },
+  { id: 16, userName: "Paula Garcia", chapterId: "CH-010", quizId: "QZ-110", score: 94, startedAt: "2025-11-08", completedAt: "2025-11-08" },
+  { id: 17, userName: "Quincy Rodriguez", chapterId: "CH-003", quizId: "QZ-107", score: 65, startedAt: "2025-11-05", completedAt: "2025-11-05" },
+  { id: 18, userName: "Rachel Martinez", chapterId: "CH-007", quizId: "QZ-105", score: 89, startedAt: "2025-11-08", completedAt: "2025-11-08" },
+  { id: 19, userName: "Steve Clark", chapterId: "CH-004", quizId: "QZ-104", score: 82, startedAt: "2025-11-07", completedAt: "2025-11-07" },
+  { id: 20, userName: "Tina Lewis", chapterId: "CH-008", quizId: "QZ-106", score: 96, startedAt: "2025-11-06", completedAt: "2025-11-06" },
+  { id: 21, userName: "Uma Walker", chapterId: "CH-006", quizId: "QZ-109", score: 77, startedAt: "2025-11-08", completedAt: "2025-11-08" },
+  { id: 22, userName: "Victor Hall", chapterId: "CH-002", quizId: "QZ-101", score: 85, startedAt: "2025-11-05", completedAt: "2025-11-05" },
+  { id: 23, userName: "Wendy Allen", chapterId: "CH-005", quizId: "QZ-108", score: 93, startedAt: "2025-11-07", completedAt: "2025-11-07" },
+  { id: 24, userName: "Xander Young", chapterId: "CH-009", quizId: "QZ-103", score: 61, startedAt: "2025-11-08", completedAt: "2025-11-08" },
+  { id: 25, userName: "Yara King", chapterId: "CH-001", quizId: "QZ-102", score: 84, startedAt: "2025-11-06", completedAt: "2025-11-06" },
+  { id: 26, userName: "Zane Wright", chapterId: "CH-010", quizId: "QZ-110", score: 78, startedAt: "2025-11-08", completedAt: "2025-11-08" },
+  { id: 27, userName: "Amy Lopez", chapterId: "CH-003", quizId: "QZ-107", score: 90, startedAt: "2025-11-07", completedAt: "2025-11-07" },
+  { id: 28, userName: "Ben Hill", chapterId: "CH-007", quizId: "QZ-105", score: 73, startedAt: "2025-11-05", completedAt: "2025-11-05" },
+  { id: 29, userName: "Cara Scott", chapterId: "CH-004", quizId: "QZ-104", score: 88, startedAt: "2025-11-08", completedAt: "2025-11-08" },
+  { id: 30, userName: "David Green", chapterId: "CH-008", quizId: "QZ-106", score: 97, startedAt: "2025-11-06", completedAt: "2025-11-06" },
+  { id: 31, userName: "Eva Adams", chapterId: "CH-006", quizId: "QZ-109", score: 69, startedAt: "2025-11-07", completedAt: "2025-11-07" },
+  { id: 32, userName: "Frank Baker", chapterId: "CH-002", quizId: "QZ-101", score: 86, startedAt: "2025-11-08", completedAt: "2025-11-08" },
+  { id: 33, userName: "Grace Carter", chapterId: "CH-005", quizId: "QZ-108", score: 75, startedAt: "2025-11-05", completedAt: "2025-11-05" },
+  { id: 34, userName: "Henry Perez", chapterId: "CH-009", quizId: "QZ-103", score: 98, startedAt: "2025-11-08", completedAt: "2025-11-08" },
+  { id: 35, userName: "Ivy Roberts", chapterId: "CH-001", quizId: "QZ-102", score: 81, startedAt: "2025-11-06", completedAt: "2025-11-06" },
+  { id: 36, userName: "Jack Turner", chapterId: "CH-010", quizId: "QZ-110", score: 83, startedAt: "2025-11-07", completedAt: "2025-11-07" },
+  { id: 37, userName: "Kate Phillips", chapterId: "CH-003", quizId: "QZ-107", score: 94, startedAt: "2025-11-08", completedAt: "2025-11-08" },
+  { id: 38, userName: "Leo Campbell", chapterId: "CH-007", quizId: "QZ-105", score: 70, startedAt: "2025-11-05", completedAt: "2025-11-05" },
+  { id: 39, userName: "Mia Parker", chapterId: "CH-004", quizId: "QZ-104", score: 89, startedAt: "2025-11-07", completedAt: "2025-11-07" },
+  { id: 40, userName: "Noah Evans", chapterId: "CH-008", quizId: "QZ-106", score: 80, startedAt: "2025-11-08", completedAt: "2025-11-08" },
+  { id: 41, userName: "Olivia Edwards", chapterId: "CH-006", quizId: "QZ-109", score: 95, startedAt: "2025-11-06", completedAt: "2025-11-06" },
+  { id: 42, userName: "Paul Collins", chapterId: "CH-002", quizId: "QZ-101", score: 63, startedAt: "2025-11-08", completedAt: "2025-11-08" },
+  { id: 43, userName: "Quinn Stewart", chapterId: "CH-005", quizId: "QZ-108", score: 87, startedAt: "2025-11-07", completedAt: "2025-11-07" },
+  { id: 44, userName: "Ruby Sanchez", chapterId: "CH-009", quizId: "QZ-103", score: 79, startedAt: "2025-11-05", completedAt: "2025-11-05" },
+  { id: 45, userName: "Sam Morris", chapterId: "CH-001", quizId: "QZ-102", score: 91, startedAt: "2025-11-08", completedAt: "2025-11-08" },
+  { id: 46, userName: "Tara Rogers", chapterId: "CH-010", quizId: "QZ-110", score: 82, startedAt: "2025-11-06", completedAt: "2025-11-06" },
+  { id: 47, userName: "Leo Campbell", chapterId: "CH-003", quizId: "QZ-107", score: 71, startedAt: "2025-11-07", completedAt: "2025-11-07" },
+  { id: 48, userName: "Vince Peterson", chapterId: "CH-007", quizId: "QZ-105", score: 96, startedAt: "2025-11-08", completedAt: "2025-11-08" },
+  { id: 49, userName: "Willow Reed", chapterId: "CH-004", quizId: "QZ-104", score: 66, startedAt: "2025-11-05", completedAt: "2025-11-05" },
+  { id: 50, userName: "Zoe Bell", chapterId: "CH-008", quizId: "QZ-106", score: 84, startedAt: "2025-11-08", completedAt: "2025-11-08" },
+]
 
 export const averageScoreChapter = [
   {
@@ -68,3 +86,4 @@ export const mockLeaderboard = [
   { rank: 9, userName: "Ian", score: 78, latestSubmitAt: "2025-11-08 10:30" },
   { rank: 10, userName: "Julia", score: 77, latestSubmitAt: "2025-11-08 10:45" },
 ]
+

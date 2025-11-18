@@ -1,11 +1,7 @@
 import {
-  useReactTable,
-  getCoreRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
   flexRender,
   ColumnDef,
-  SortingState,
+  Table as ReactTable,
 } from "@tanstack/react-table"
 
 import {
@@ -17,56 +13,26 @@ import {
   TableRow,
   TableCaption,
 } from "@/components/ui/table"
-import { Submission, submissions } from "@/data/mock-data"
 import { Card } from "../ui/card"
-import { useState } from "react"
-import { SortableHeader } from "../global/sortable-header"
 
-export const columns: ColumnDef<Submission>[] = [
-  {
-    accessorKey: "userName",
-    header: ({ column }) => <SortableHeader column={column} title="User's Name" />,
-  },
-  {
-    accessorKey: "chapterId",
-    header: ({ column }) => <SortableHeader column={column} title="Chapter ID" />,
-  },
-  {
-    accessorKey: "quizId",
-    header: ({ column }) => <SortableHeader column={column} title="Quiz ID" />,
-  },
-  {
-    accessorKey: "score",
-    header: ({ column }) => <SortableHeader column={column} title="Score" />,
-  },
-  {
-    accessorKey: "startedAt",
-    header: ({ column }) => <SortableHeader column={column} title="Started At" />,
-  },
-  {
-    accessorKey: "completedAt",
-    header: ({ column }) => <SortableHeader column={column} title="Completed At" />,
-  },
-]
+interface TanstackTableProps<T> {
+  table: ReactTable<any>
+  columns: ColumnDef<T>[]
+  title: string 
+  fallbackMessage: string 
+}
 
-export default function RecentSubmission() {
-  const [data, _] = useState(() => submissions)
-  const [sorting, setSorting] = useState<SortingState>([])
-
-  const table = useReactTable({
-    data,
-    columns,
-    state: { sorting },
-    onSortingChange: setSorting,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-  } as any)
+export default function TanstackTable<T>({
+  table,
+  columns,
+  title,
+  fallbackMessage
+}: TanstackTableProps<T>) {
 
   return (
     <Card className="space-y-4 px-5 my-5">
       <Table>
-        <TableCaption className="caption-top mt-0 mb-5 text-telnet-primary font-black text-xl text-left">Recent submissions</TableCaption>
+        <TableCaption className="caption-top mt-0 mb-5 text-telnet-primary font-black text-xl text-left">{title}</TableCaption>
         <TableHeader>
           {table.getHeaderGroups().map(headerGroup => (
             <TableRow key={headerGroup.id}>
@@ -99,7 +65,7 @@ export default function RecentSubmission() {
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                No submissions found
+                {fallbackMessage}
               </TableCell>
             </TableRow>
           )}
@@ -127,5 +93,5 @@ export default function RecentSubmission() {
         </button>
       </div>
     </Card>
-  )
+  ) 
 }
