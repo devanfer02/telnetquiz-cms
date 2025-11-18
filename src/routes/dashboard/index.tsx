@@ -17,11 +17,11 @@ function DashboardIndex() {
       <AboutDashboard />
       <DashboardStats />
       <RecentSubmission />
-      <div className="flex flex-row gap-x-5 mb-10">
-        <div className="w-3/5 flex flex-col min-h-0">
+      <div className="flex flex-col lg:flex-row gap-y-5 gap-x-5 mb-10">
+        <div className="lg:w-3/5 flex flex-col min-h-0">
           <AverageChapterBarChart className="flex-1" />
         </div>
-        <div className="w-2/5 flex flex-col min-h-0">
+        <div className="lg:w-2/5 flex flex-col min-h-0">
           <Leaderboard className="flex-1" />
         </div>
       </div>
