@@ -1,13 +1,3 @@
-export type Submission = {
-  id: number
-  userName: string
-  chapterId: string
-  quizId: string
-  score: number
-  startedAt: string
-  completedAt: string
-}
-
 export const submissions = [
   { id: 1, userName: "Alice Johnson", chapterId: "CH-007", quizId: "QZ-105", score: 88, startedAt: "2025-11-08", completedAt: "2025-11-08" },
   { id: 2, userName: "Bob Smith", chapterId: "CH-002", quizId: "QZ-101", score: 92, startedAt: "2025-11-07", completedAt: "2025-11-07" },

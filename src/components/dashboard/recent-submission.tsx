@@ -17,10 +17,11 @@ import {
   TableRow,
   TableCaption,
 } from "@/components/ui/table"
-import { Submission, submissions } from "@/data/mock-data"
+import { submissions } from "@/data/mock-data"
 import { Card } from "../ui/card"
 import { useState } from "react"
 import { SortableHeader } from "../global/sortable-header"
+import { Submission } from "@/types/submission"
 
 export const columns: ColumnDef<Submission>[] = [
   {
