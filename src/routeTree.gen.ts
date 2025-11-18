@@ -23,6 +23,7 @@ import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
 import { Route as ChaptersAddIndexRouteImport } from './routes/chapters/add/index'
 import { Route as DemoApiTqTodosRouteImport } from './routes/demo/api.tq-todos'
 import { Route as DemoApiNamesRouteImport } from './routes/demo/api.names'
+import { Route as ChaptersEditIdRouteImport } from './routes/chapters/edit/$id'
 
 const UsersRouteRoute = UsersRouteRouteImport.update({
   id: '/users',
@@ -94,6 +95,11 @@ const DemoApiNamesRoute = DemoApiNamesRouteImport.update({
   path: '/demo/api/names',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ChaptersEditIdRoute = ChaptersEditIdRouteImport.update({
+  id: '/chapters/edit/$id',
+  path: '/chapters/edit/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -107,6 +113,7 @@ export interface FileRoutesByFullPath {
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/chapters': typeof ChaptersIndexRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/chapters/edit/$id': typeof ChaptersEditIdRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/api/tq-todos': typeof DemoApiTqTodosRoute
   '/chapters/add': typeof ChaptersAddIndexRoute
@@ -123,6 +130,7 @@ export interface FileRoutesByTo {
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/chapters': typeof ChaptersIndexRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/chapters/edit/$id': typeof ChaptersEditIdRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/api/tq-todos': typeof DemoApiTqTodosRoute
   '/chapters/add': typeof ChaptersAddIndexRoute
@@ -140,6 +148,7 @@ export interface FileRoutesById {
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/chapters/': typeof ChaptersIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/chapters/edit/$id': typeof ChaptersEditIdRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/api/tq-todos': typeof DemoApiTqTodosRoute
   '/chapters/add/': typeof ChaptersAddIndexRoute
@@ -158,6 +167,7 @@ export interface FileRouteTypes {
     | '/demo/tanstack-query'
     | '/chapters'
     | '/dashboard'
+    | '/chapters/edit/$id'
     | '/demo/api/names'
     | '/demo/api/tq-todos'
     | '/chapters/add'
@@ -174,6 +184,7 @@ export interface FileRouteTypes {
     | '/demo/tanstack-query'
     | '/chapters'
     | '/dashboard'
+    | '/chapters/edit/$id'
     | '/demo/api/names'
     | '/demo/api/tq-todos'
     | '/chapters/add'
@@ -190,6 +201,7 @@ export interface FileRouteTypes {
     | '/demo/tanstack-query'
     | '/chapters/'
     | '/dashboard/'
+    | '/chapters/edit/$id'
     | '/demo/api/names'
     | '/demo/api/tq-todos'
     | '/chapters/add/'
@@ -207,6 +219,7 @@ export interface RootRouteChildren {
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
   ChaptersIndexRoute: typeof ChaptersIndexRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
+  ChaptersEditIdRoute: typeof ChaptersEditIdRoute
   DemoApiNamesRoute: typeof DemoApiNamesRoute
   DemoApiTqTodosRoute: typeof DemoApiTqTodosRoute
   ChaptersAddIndexRoute: typeof ChaptersAddIndexRoute
@@ -312,6 +325,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoApiNamesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/chapters/edit/$id': {
+      id: '/chapters/edit/$id'
+      path: '/chapters/edit/$id'
+      fullPath: '/chapters/edit/$id'
+      preLoaderRoute: typeof ChaptersEditIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -327,6 +347,7 @@ const rootRouteChildren: RootRouteChildren = {
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
   ChaptersIndexRoute: ChaptersIndexRoute,
   DashboardIndexRoute: DashboardIndexRoute,
+  ChaptersEditIdRoute: ChaptersEditIdRoute,
   DemoApiNamesRoute: DemoApiNamesRoute,
   DemoApiTqTodosRoute: DemoApiTqTodosRoute,
   ChaptersAddIndexRoute: ChaptersAddIndexRoute,

@@ -1,11 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useForm } from "@tanstack/react-form";
-import ChapterForm from "@/components/chapters/chapter-form";
-import { ChapterValues } from "@/types/zod/chapter";
+import ChapterForm from '@/components/chapters/chapter-form';
+import { ChapterValues } from '@/types/zod/chapter';
+import { useForm } from '@tanstack/react-form';
+import { createFileRoute } from '@tanstack/react-router'
 
-export const Route = createFileRoute("/chapters/add/")({
+export const Route = createFileRoute('/chapters/edit/$id')({
   component: RouteComponent,
-});
+})
 
 export default function RouteComponent() {
   const form = useForm({
