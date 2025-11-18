@@ -19,4 +19,4 @@ To build this application for production:
 pnpm build
 ```
 
-See [usage](./TANSTACK.MD) for reference as to some simple usage regarding tanstack
+See [usage](./TANSTACK.md) for reference as to some simple usage regarding tanstack
