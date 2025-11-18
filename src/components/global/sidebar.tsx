@@ -24,8 +24,8 @@ export default function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {sidebarItems.map(item => (
-                <SidebarMenuItem key={item.title} className="py-2 ">
-                  <SidebarMenuButton asChild className={`hover:text-telnet-dark-brown duration-200 ${isActive(currentPath, item.url) ? "bg-white text-telnet-primary" : "bg-telnet-primary text-white"}`}>
+                <SidebarMenuItem key={item.title} className="py-1">
+                  <SidebarMenuButton asChild className={`py-5 hover:text-telnet-dark-brown duration-200 ${isActive(currentPath, item.url) ? "bg-white text-telnet-primary" : "bg-telnet-primary text-white"}`}>
                     <Link to={item.url}>
                       <item.icon className="size-5!"/>
                       <span className="text-md">{item.title}</span>
