@@ -101,7 +101,7 @@ export default function QuizList({quizzes}: QuizListProps) {
       <TanstackTable
         table={table}
         columns={columns}
-        title="List Chapters"
+        title="List Quiz"
         fallbackMessage="No Chapter created yet"
       />
     </>

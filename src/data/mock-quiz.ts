@@ -29,7 +29,6 @@ export const mockQuizzes: Quiz[] = baseQuizzes.map((quiz) => {
 
 export const mockQuizzesChapter: Record<number, Quiz[]> = Object.fromEntries(
   mockChapters.map((chapter) => {
-    console.log(baseQuizzes)
 
     const randomCount = Math.floor(Math.random() * 3) + 2; 
 

@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import ChapterList from './-sections/chapter-list'
 import { mockChapters } from '@/data/mock-chapter'
 
-export const Route = createFileRoute('/chapters')({
+export const Route = createFileRoute('/chapters/')({
   loader: () => ({data: mockChapters}),
   component: RouteComponent,
 })
