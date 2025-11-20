@@ -57,7 +57,7 @@ export const columns: ColumnDef<Quiz>[] = [
     id: "actions",
     header: "Actions",
     size: 100,
-    cell: ({ row }) => <ActionCell row={row} keyName="id"/>
+    cell: ({ row }) => <ActionCell row={row} keyName="id" editHref="/quiz/edit/$id"/>
   },
 ]
 
@@ -93,8 +93,8 @@ export default function QuizList({quizzes}: QuizListProps) {
           className="w-full border border-telnet-surface-darker"
         />
         <Button className="px-4 py-2 rounded-md bg-primary border border-telnet-primary bg-telnet-primary text-white hover:bg-white hover:text-telnet-primary duration-200 cursor-pointer">
-          <Link to="/chapters/add">
-            Tambah Chapter
+          <Link to="/quiz/add">
+            Tambah Quiz
           </Link>
         </Button>
       </div>

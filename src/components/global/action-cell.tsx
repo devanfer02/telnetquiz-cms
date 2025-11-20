@@ -4,16 +4,17 @@ import { Edit, Trash2 } from "lucide-react";
 
 interface ActionCellProps<T,K extends keyof T> {
   row: Row<T>
-  keyName: K;
+  keyName: K
+  editHref: string 
 }
 
-export default function ActionCell<T, K extends keyof T>({row, keyName}: ActionCellProps<T, K>) {
+export default function ActionCell<T, K extends keyof T>({row, keyName, editHref}: ActionCellProps<T, K>) {
   const id = row.original[keyName]
 
   return (
     <div className="flex gap-2">
       <Link
-        to="/chapters/edit/$id"
+        to={editHref}
         params={{ id: String(id) }}
         className="p-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm"
       >

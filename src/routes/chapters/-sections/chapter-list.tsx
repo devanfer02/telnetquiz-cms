@@ -55,7 +55,7 @@ export const columns: ColumnDef<Chapter>[] = [
     size: 100,
     cell: ({ row }) => {
       return (
-        <ActionCell row={row} keyName="id"/>
+        <ActionCell row={row} keyName="id" editHref="/chapters/edit/$id"/>
       )
     },
   },

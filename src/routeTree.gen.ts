@@ -16,10 +16,12 @@ import { Route as SubmissionsIndexRouteImport } from './routes/submissions/index
 import { Route as QuizIndexRouteImport } from './routes/quiz/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as ChaptersIndexRouteImport } from './routes/chapters/index'
+import { Route as QuizAddRouteImport } from './routes/quiz/add'
 import { Route as QuizIdRouteImport } from './routes/quiz/$id'
 import { Route as ChaptersAddRouteImport } from './routes/chapters/add'
 import { Route as ChaptersIdRouteImport } from './routes/chapters/$id'
 import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
+import { Route as QuizEditIdRouteImport } from './routes/quiz/edit.$id'
 import { Route as ChaptersEditIdRouteImport } from './routes/chapters/edit.$id'
 
 const UsersRouteRoute = UsersRouteRouteImport.update({
@@ -57,6 +59,11 @@ const ChaptersIndexRoute = ChaptersIndexRouteImport.update({
   path: '/chapters/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const QuizAddRoute = QuizAddRouteImport.update({
+  id: '/quiz/add',
+  path: '/quiz/add',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const QuizIdRoute = QuizIdRouteImport.update({
   id: '/quiz/$id',
   path: '/quiz/$id',
@@ -77,6 +84,11 @@ const AuthSignInRoute = AuthSignInRouteImport.update({
   path: '/auth/sign-in',
   getParentRoute: () => rootRouteImport,
 } as any)
+const QuizEditIdRoute = QuizEditIdRouteImport.update({
+  id: '/quiz/edit/$id',
+  path: '/quiz/edit/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ChaptersEditIdRoute = ChaptersEditIdRouteImport.update({
   id: '/chapters/edit/$id',
   path: '/chapters/edit/$id',
@@ -91,11 +103,13 @@ export interface FileRoutesByFullPath {
   '/chapters/$id': typeof ChaptersIdRoute
   '/chapters/add': typeof ChaptersAddRoute
   '/quiz/$id': typeof QuizIdRoute
+  '/quiz/add': typeof QuizAddRoute
   '/chapters': typeof ChaptersIndexRoute
   '/dashboard': typeof DashboardIndexRoute
   '/quiz': typeof QuizIndexRoute
   '/submissions': typeof SubmissionsIndexRoute
   '/chapters/edit/$id': typeof ChaptersEditIdRoute
+  '/quiz/edit/$id': typeof QuizEditIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -105,11 +119,13 @@ export interface FileRoutesByTo {
   '/chapters/$id': typeof ChaptersIdRoute
   '/chapters/add': typeof ChaptersAddRoute
   '/quiz/$id': typeof QuizIdRoute
+  '/quiz/add': typeof QuizAddRoute
   '/chapters': typeof ChaptersIndexRoute
   '/dashboard': typeof DashboardIndexRoute
   '/quiz': typeof QuizIndexRoute
   '/submissions': typeof SubmissionsIndexRoute
   '/chapters/edit/$id': typeof ChaptersEditIdRoute
+  '/quiz/edit/$id': typeof QuizEditIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -120,11 +136,13 @@ export interface FileRoutesById {
   '/chapters/$id': typeof ChaptersIdRoute
   '/chapters/add': typeof ChaptersAddRoute
   '/quiz/$id': typeof QuizIdRoute
+  '/quiz/add': typeof QuizAddRoute
   '/chapters/': typeof ChaptersIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/quiz/': typeof QuizIndexRoute
   '/submissions/': typeof SubmissionsIndexRoute
   '/chapters/edit/$id': typeof ChaptersEditIdRoute
+  '/quiz/edit/$id': typeof QuizEditIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -136,11 +154,13 @@ export interface FileRouteTypes {
     | '/chapters/$id'
     | '/chapters/add'
     | '/quiz/$id'
+    | '/quiz/add'
     | '/chapters'
     | '/dashboard'
     | '/quiz'
     | '/submissions'
     | '/chapters/edit/$id'
+    | '/quiz/edit/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -150,11 +170,13 @@ export interface FileRouteTypes {
     | '/chapters/$id'
     | '/chapters/add'
     | '/quiz/$id'
+    | '/quiz/add'
     | '/chapters'
     | '/dashboard'
     | '/quiz'
     | '/submissions'
     | '/chapters/edit/$id'
+    | '/quiz/edit/$id'
   id:
     | '__root__'
     | '/'
@@ -164,11 +186,13 @@ export interface FileRouteTypes {
     | '/chapters/$id'
     | '/chapters/add'
     | '/quiz/$id'
+    | '/quiz/add'
     | '/chapters/'
     | '/dashboard/'
     | '/quiz/'
     | '/submissions/'
     | '/chapters/edit/$id'
+    | '/quiz/edit/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -179,11 +203,13 @@ export interface RootRouteChildren {
   ChaptersIdRoute: typeof ChaptersIdRoute
   ChaptersAddRoute: typeof ChaptersAddRoute
   QuizIdRoute: typeof QuizIdRoute
+  QuizAddRoute: typeof QuizAddRoute
   ChaptersIndexRoute: typeof ChaptersIndexRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
   QuizIndexRoute: typeof QuizIndexRoute
   SubmissionsIndexRoute: typeof SubmissionsIndexRoute
   ChaptersEditIdRoute: typeof ChaptersEditIdRoute
+  QuizEditIdRoute: typeof QuizEditIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -237,6 +263,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ChaptersIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/quiz/add': {
+      id: '/quiz/add'
+      path: '/quiz/add'
+      fullPath: '/quiz/add'
+      preLoaderRoute: typeof QuizAddRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/quiz/$id': {
       id: '/quiz/$id'
       path: '/quiz/$id'
@@ -265,6 +298,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSignInRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/quiz/edit/$id': {
+      id: '/quiz/edit/$id'
+      path: '/quiz/edit/$id'
+      fullPath: '/quiz/edit/$id'
+      preLoaderRoute: typeof QuizEditIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/chapters/edit/$id': {
       id: '/chapters/edit/$id'
       path: '/chapters/edit/$id'
@@ -283,11 +323,13 @@ const rootRouteChildren: RootRouteChildren = {
   ChaptersIdRoute: ChaptersIdRoute,
   ChaptersAddRoute: ChaptersAddRoute,
   QuizIdRoute: QuizIdRoute,
+  QuizAddRoute: QuizAddRoute,
   ChaptersIndexRoute: ChaptersIndexRoute,
   DashboardIndexRoute: DashboardIndexRoute,
   QuizIndexRoute: QuizIndexRoute,
   SubmissionsIndexRoute: SubmissionsIndexRoute,
   ChaptersEditIdRoute: ChaptersEditIdRoute,
+  QuizEditIdRoute: QuizEditIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
