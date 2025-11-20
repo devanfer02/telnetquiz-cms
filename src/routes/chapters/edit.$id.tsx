@@ -1,5 +1,5 @@
 import ChapterForm from '@/components/chapters/chapter-form';
-import { mockChapters } from '@/data/mock-chapter-data';
+import { mockChapters } from '@/data/mock-chapter';
 import { useCustomForm } from '@/hooks/use-custom-form';
 import { ChapterValues } from '@/types/zod/chapter';
 import { createFileRoute } from '@tanstack/react-router'

@@ -1,27 +1,15 @@
-import { useEffect, useState } from "react"
-import { Sun, Moon, Coffee } from "lucide-react"
+import { Skeleton } from "@/components/ui/skeleton"
+import { useGreeting } from "@/hooks/use-greeting"
 
 export default function Greeting() {
-  const [greeting, setGreeting] = useState("")
-  const [icon, setIcon] = useState(<Sun className="size-5 text-yellow-500" />)
+  const { mounted, greeting, icon } = useGreeting()
 
-  useEffect(() => {
-    const hour = new Date().getHours()
-
-    if (hour >= 5 && hour < 12) {
-      setGreeting("Good morning")
-      setIcon(<Coffee className="size-5 text-amber-500" />)
-    } else if (hour >= 12 && hour < 18) {
-      setGreeting("Good afternoon")
-      setIcon(<Sun className="size-5 text-orange-400" />)
-    } else if (hour >= 18 && hour < 22) {
-      setGreeting("Good evening")
-      setIcon(<Moon className="size-5 text-indigo-400" />)
-    } else {
-      setGreeting("Good night")
-      setIcon(<Moon className="size-5 text-blue-400" />)
-    }
-  }, [])
+  if (!mounted) return (
+    <div className="flex items-center gap-3">
+      <Skeleton className="h-7 w-7 rounded-full bg-gray-300" />
+      <Skeleton className="h-5 w-80 rounded-md bg-gray-300" />
+    </div>
+  )
 
   return (
     <div className="flex items-center gap-2 text-xl text-foreground font-black">

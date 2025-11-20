@@ -3,7 +3,7 @@ import ChapterForm from "@/components/chapters/chapter-form";
 import { ChapterValues } from "@/types/zod/chapter";
 import { useCustomForm } from "@/hooks/use-custom-form";
 
-export const Route = createFileRoute("/chapters/add/")({
+export const Route = createFileRoute("/chapters/add")({
   component: RouteComponent,
 });
 
@@ -12,7 +12,7 @@ export default function RouteComponent() {
     defaultValues: {
       title: "",
       description: "",
-      mascotId: 0,
+      mascotId: 1,
     } as ChapterValues,
     onSubmit: async ({ value }) => {
       console.log("submitted ", value);

@@ -1,3 +1,5 @@
+import { baseQuizzes } from "./mock-quiz";
+
 export const mockChapters: Chapter[] = [
   {
     id: 1,
@@ -70,20 +72,3 @@ export const mockChapters: Chapter[] = [
     mascotId: 4,
   },
 ]
-
-
-export const mockQuizzes: Record<number, Quiz[]> = {
-  1: [
-    { id: 101, title: "Networking Basics", difficulty: "easy", numberOfQuestions: 10 },
-    { id: 102, title: "IP Addressing", difficulty: "medium", numberOfQuestions: 15 },
-  ],
-  2: [
-    { id: 201, title: "OSI Layer 1-3", difficulty: "easy", numberOfQuestions: 12 },
-    { id: 202, title: "OSI Layer 4-7", difficulty: "medium", numberOfQuestions: 18 },
-    { id: 203, title: "OSI Model Trivia", difficulty: "hard", numberOfQuestions: 20 },
-  ],
-  3: [
-    { id: 301, title: "TCP vs UDP", difficulty: "medium", numberOfQuestions: 15 },
-    { id: 302, title: "Subnetting", difficulty: "hard", numberOfQuestions: 25 },
-  ],
-};

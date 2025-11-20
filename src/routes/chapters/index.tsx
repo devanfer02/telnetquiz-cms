@@ -1,11 +1,15 @@
 import { createFileRoute } from '@tanstack/react-router'
 import ChapterList from './-sections/chapter-list'
+import { mockChapters } from '@/data/mock-chapter'
 
 export const Route = createFileRoute('/chapters/')({
+  loader: () => ({data: mockChapters}),
   component: RouteComponent,
 })
 
 function RouteComponent() {
+  const { data } = Route.useLoaderData()
+
   return (
     <>
       <div className="mt-3 mb-5">
@@ -15,6 +19,7 @@ function RouteComponent() {
         </p>
       </div>
       <ChapterList
+        chapters={data}
       />
     </>
   )

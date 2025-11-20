@@ -4,13 +4,11 @@ import TableLink from "@/components/global/table-link";
 import TanstackTable from "@/components/global/ts-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { mockChapters } from "@/data/mock-chapter";
 import { Link } from "@tanstack/react-router";
 import { ColumnDef, SortingState, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
-import { Edit, Trash2 } from "lucide-react";
 import { useState } from "react";
 
-export const columns: ColumnDef<Chapter>[] = [
+export const columns: ColumnDef<Quiz>[] = [
   {
     accessorKey: "id",
     header: ({ column }) => <SortableHeader column={column} title="ID" />,
@@ -19,9 +17,26 @@ export const columns: ColumnDef<Chapter>[] = [
       const id = row.original.id.toString()
 
       return (
-        <TableLink to="/chapters/$id" paramKey="id" paramValue={id}/>
+        <TableLink to="/quiz/$id" paramKey="id" paramValue={id}/>
       )
     }
+  },
+  {
+    accessorKey: "chapterId",
+    header: ({column}) => <SortableHeader column={column} title="Chapter ID"/>,
+    size: 10,
+    cell: ({row}) => {
+      const chapterId = row.original.chapterId!.toString()
+
+      return (
+        <TableLink to="/chapters/$id" paramKey="id" paramValue={chapterId}/>
+      )
+    }
+  },
+  {
+    accessorKey: "chapterName",
+    header: "Chapter Name",
+    size: 10
   },
   {
     accessorKey: "title",
@@ -29,45 +44,30 @@ export const columns: ColumnDef<Chapter>[] = [
     size: 50,
   },
   {
-    accessorKey: "description",
-    header: "Description",
-    size: 200,
-    cell: ({ row }) => (
-      <div className="whitespace-normal wrap-break-word">
-        {row.original.description}
-      </div>
-    )
+    accessorKey: "difficulty",
+    header: ({ column }) => <SortableHeader column={column} title="Difficulty" />,
+    size: 50,
   },
   {
-    accessorKey: "mascotId",
-    header: "Mascot",
-    cell: ({ row }) => {
-      const mascotId = row.original.mascotId.toString()
-
-      const url = `/assets/mascot/chap${mascotId}.png`
-
-      return <img className="max-w-10" src={url} />
-    }
+    accessorKey: "numberOfQuestions",
+    header: ({column}) => <SortableHeader column={column} title="Total Questions" className="text-center"/>,
+    cell: ({row}) => <p className="text-center">{row.original.numberOfQuestions}</p>
   },
   {
     id: "actions",
     header: "Actions",
     size: 100,
-    cell: ({ row }) => {
-      return (
-        <ActionCell row={row} keyName="id" editHref="/chapters/edit/$id"/>
-      )
-    },
+    cell: ({ row }) => <ActionCell row={row} keyName="id" editHref="/quiz/edit/$id"/>
   },
 ]
 
-interface ChapterListProps {
-  chapters: Chapter[]
+interface QuizListProps {
+  quizzes: Quiz[]
 }
 
-export default function ChapterList({chapters}: ChapterListProps) {
+export default function QuizList({quizzes}: QuizListProps) {
   const [keyword, setKeyword] = useState("")
-  const [data, _] = useState(() => chapters)
+  const [data, _] = useState(() => quizzes)
   const [sorting, setSorting] = useState<SortingState>([])
 
   const table = useReactTable({
@@ -87,21 +87,21 @@ export default function ChapterList({chapters}: ChapterListProps) {
     <>
       <div className="flex items-center justify-between mb-4 gap-x-5">
         <Input
-          placeholder="Cari chapter..."
+          placeholder="Cari quiz..."
           value={keyword ?? ""}
           onChange={e => setKeyword(e.target.value)}
           className="w-full border border-telnet-surface-darker"
         />
         <Button className="px-4 py-2 rounded-md bg-primary border border-telnet-primary bg-telnet-primary text-white hover:bg-white hover:text-telnet-primary duration-200 cursor-pointer">
-          <Link to="/chapters/add">
-            Tambah Chapter
+          <Link to="/quiz/add">
+            Tambah Quiz
           </Link>
         </Button>
       </div>
       <TanstackTable
         table={table}
         columns={columns}
-        title="List Chapters"
+        title="List Quiz"
         fallbackMessage="No Chapter created yet"
       />
     </>

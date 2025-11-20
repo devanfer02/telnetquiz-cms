@@ -9,7 +9,7 @@ import {
   TableRow,
   TableCaption,
 } from "@/components/ui/table"
-import { mockLeaderboard } from "@/data/mock-data";
+import { mockLeaderboard } from "@/data/mock-dashboard";
 import { useState } from "react";
 import { Card } from "../../../components/ui/card";
 import { SortableHeader } from "../../../components/global/sortable-header";
