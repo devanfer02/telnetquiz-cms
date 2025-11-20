@@ -3,7 +3,7 @@ import ChapterForm from "@/components/chapters/chapter-form";
 import { ChapterValues } from "@/types/zod/chapter";
 import { useCustomForm } from "@/hooks/use-custom-form";
 
-export const Route = createFileRoute("/chapters/add/")({
+export const Route = createFileRoute("/chapters/add")({
   component: RouteComponent,
 });
 
