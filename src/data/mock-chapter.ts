@@ -72,7 +72,7 @@ export const mockChapters: Chapter[] = [
 ]
 
 
-export const mockQuizzes: Record<number, Quiz[]> = {
+export const mockQuizzesChapter: Record<number, Quiz[]> = {
   1: [
     { id: 101, title: "Networking Basics", difficulty: "easy", numberOfQuestions: 10 },
     { id: 102, title: "IP Addressing", difficulty: "medium", numberOfQuestions: 15 },

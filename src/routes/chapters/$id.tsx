@@ -8,7 +8,7 @@ import {
   ColumnDef,
 } from '@tanstack/react-table'
 import TanstackTable from '@/components/global/ts-table'
-import { mockChapters, mockQuizzes } from '@/data/mock-chapter-data'
+import { mockChapters, mockQuizzesChapter } from '@/data/mock-chapter'
 
 export const Route = createFileRoute('/chapters/$id')({
   component: RouteComponent,
@@ -18,7 +18,7 @@ function RouteComponent() {
   const { id } = Route.useParams()
   const chapterId = parseInt(id, 10)
   const chapter = mockChapters.find(c => c.id === chapterId)
-  const quizzes = mockQuizzes[chapterId] || []
+  const quizzes = mockQuizzesChapter[chapterId] || []
 
   const columns = useMemo<ColumnDef<Quiz>[]>(
     () => [

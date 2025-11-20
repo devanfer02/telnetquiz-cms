@@ -1,14 +1,14 @@
+import ActionCell from "@/components/global/action-cell";
 import { SortableHeader } from "@/components/global/sortable-header";
+import TableLink from "@/components/global/table-link";
 import TanstackTable from "@/components/global/ts-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { mockChapters } from "@/data/mock-chapter";
 import { Link } from "@tanstack/react-router";
 import { ColumnDef, SortingState, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
-import { Edit, Trash2 } from "lucide-react";
 import { useState } from "react";
 
-export const columns: ColumnDef<Chapter>[] = [
+export const columns: ColumnDef<Quiz>[] = [
   {
     accessorKey: "id",
     header: ({ column }) => <SortableHeader column={column} title="ID" />,
@@ -17,15 +17,26 @@ export const columns: ColumnDef<Chapter>[] = [
       const id = row.original.id.toString()
 
       return (
-        <Link
-          to="/chapters/$id"
-          params={{ id }}
-          className="hover:text-telnet-primary hover:bg-white duration-200 bg-telnet-primary py-1 px-2 rounded-md border border-telnet-primary text-white"
-        >
-          {id}
-        </Link>
+        <TableLink to="/quiz/$id" paramKey="id" paramValue={id}/>
       )
     }
+  },
+  {
+    accessorKey: "chapterId",
+    header: ({column}) => <SortableHeader column={column} title="Chapter ID"/>,
+    size: 10,
+    cell: ({row}) => {
+      const chapterId = row.original.chapterId!.toString()
+
+      return (
+        <TableLink to="/chapters/$id" paramKey="id" paramValue={chapterId}/>
+      )
+    }
+  },
+  {
+    accessorKey: "chapterName",
+    header: "Chapter Name",
+    size: 10
   },
   {
     accessorKey: "title",
@@ -33,58 +44,30 @@ export const columns: ColumnDef<Chapter>[] = [
     size: 50,
   },
   {
-    accessorKey: "description",
-    header: "Description",
-    size: 200,
-    cell: ({ row }) => (
-      <div className="whitespace-normal wrap-break-word">
-        {row.original.description}
-      </div>
-    )
+    accessorKey: "difficulty",
+    header: ({ column }) => <SortableHeader column={column} title="Difficulty" />,
+    size: 50,
   },
   {
-    accessorKey: "mascotId",
-    header: "Mascot",
-    cell: ({ row }) => {
-      const mascotId = row.original.mascotId.toString()
-
-      const url = `/assets/mascot/chap${mascotId}.png`
-
-      return <img className="max-w-10" src={url} />
-    }
+    accessorKey: "numberOfQuestions",
+    header: ({column}) => <SortableHeader column={column} title="Total Questions" className="text-center"/>,
+    cell: ({row}) => <p className="text-center">{row.original.numberOfQuestions}</p>
   },
   {
     id: "actions",
     header: "Actions",
     size: 100,
-    cell: ({ row }) => {
-      const chapter = row.original
-
-      return (
-        <div className="flex gap-2">
-          <Link
-            to="/chapters/edit/$id"
-            params={{ id: chapter.id.toString() }}
-            className="p-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm"
-          >
-            <Edit size="18" />
-          </Link>
-
-          <button
-            onClick={() => alert(`delete ${chapter.id}`)}
-            className="p-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm cursor-pointer"
-          >
-            <Trash2 size="18" />
-          </button>
-        </div>
-      )
-    },
+    cell: ({ row }) => <ActionCell row={row} keyName="id"/>
   },
 ]
 
-export default function ChapterList() {
+interface QuizListProps {
+  quizzes: Quiz[]
+}
+
+export default function QuizList({quizzes}: QuizListProps) {
   const [keyword, setKeyword] = useState("")
-  const [data, _] = useState(() => mockChapters)
+  const [data, _] = useState(() => quizzes)
   const [sorting, setSorting] = useState<SortingState>([])
 
   const table = useReactTable({
@@ -104,7 +87,7 @@ export default function ChapterList() {
     <>
       <div className="flex items-center justify-between mb-4 gap-x-5">
         <Input
-          placeholder="Cari chapter..."
+          placeholder="Cari quiz..."
           value={keyword ?? ""}
           onChange={e => setKeyword(e.target.value)}
           className="w-full border border-telnet-surface-darker"

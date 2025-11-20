@@ -10,12 +10,13 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UsersRouteRouteImport } from './routes/users/route'
-import { Route as QuizRouteRouteImport } from './routes/quiz/route'
 import { Route as QuestionsRouteRouteImport } from './routes/questions/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SubmissionsIndexRouteImport } from './routes/submissions/index'
+import { Route as QuizIndexRouteImport } from './routes/quiz/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as ChaptersIndexRouteImport } from './routes/chapters/index'
+import { Route as QuizIdRouteImport } from './routes/quiz/$id'
 import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-query'
 import { Route as DemoTableRouteImport } from './routes/demo/table'
 import { Route as DemoStoreRouteImport } from './routes/demo/store'
@@ -29,11 +30,6 @@ import { Route as ChaptersEditIdRouteImport } from './routes/chapters/edit/$id'
 const UsersRouteRoute = UsersRouteRouteImport.update({
   id: '/users',
   path: '/users',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const QuizRouteRoute = QuizRouteRouteImport.update({
-  id: '/quiz',
-  path: '/quiz',
   getParentRoute: () => rootRouteImport,
 } as any)
 const QuestionsRouteRoute = QuestionsRouteRouteImport.update({
@@ -51,6 +47,11 @@ const SubmissionsIndexRoute = SubmissionsIndexRouteImport.update({
   path: '/submissions/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const QuizIndexRoute = QuizIndexRouteImport.update({
+  id: '/quiz/',
+  path: '/quiz/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
   id: '/dashboard/',
   path: '/dashboard/',
@@ -59,6 +60,11 @@ const DashboardIndexRoute = DashboardIndexRouteImport.update({
 const ChaptersIndexRoute = ChaptersIndexRouteImport.update({
   id: '/chapters/',
   path: '/chapters/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuizIdRoute = QuizIdRouteImport.update({
+  id: '/quiz/$id',
+  path: '/quiz/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DemoTanstackQueryRoute = DemoTanstackQueryRouteImport.update({
@@ -110,15 +116,16 @@ const ChaptersEditIdRoute = ChaptersEditIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/questions': typeof QuestionsRouteRoute
-  '/quiz': typeof QuizRouteRoute
   '/users': typeof UsersRouteRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/chapters/$id': typeof ChaptersIdRoute
   '/demo/store': typeof DemoStoreRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/quiz/$id': typeof QuizIdRoute
   '/chapters': typeof ChaptersIndexRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/quiz': typeof QuizIndexRoute
   '/submissions': typeof SubmissionsIndexRoute
   '/chapters/edit/$id': typeof ChaptersEditIdRoute
   '/demo/api/names': typeof DemoApiNamesRoute
@@ -128,15 +135,16 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/questions': typeof QuestionsRouteRoute
-  '/quiz': typeof QuizRouteRoute
   '/users': typeof UsersRouteRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/chapters/$id': typeof ChaptersIdRoute
   '/demo/store': typeof DemoStoreRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/quiz/$id': typeof QuizIdRoute
   '/chapters': typeof ChaptersIndexRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/quiz': typeof QuizIndexRoute
   '/submissions': typeof SubmissionsIndexRoute
   '/chapters/edit/$id': typeof ChaptersEditIdRoute
   '/demo/api/names': typeof DemoApiNamesRoute
@@ -147,15 +155,16 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/questions': typeof QuestionsRouteRoute
-  '/quiz': typeof QuizRouteRoute
   '/users': typeof UsersRouteRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/chapters/$id': typeof ChaptersIdRoute
   '/demo/store': typeof DemoStoreRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/quiz/$id': typeof QuizIdRoute
   '/chapters/': typeof ChaptersIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/quiz/': typeof QuizIndexRoute
   '/submissions/': typeof SubmissionsIndexRoute
   '/chapters/edit/$id': typeof ChaptersEditIdRoute
   '/demo/api/names': typeof DemoApiNamesRoute
@@ -167,15 +176,16 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/questions'
-    | '/quiz'
     | '/users'
     | '/auth/sign-in'
     | '/chapters/$id'
     | '/demo/store'
     | '/demo/table'
     | '/demo/tanstack-query'
+    | '/quiz/$id'
     | '/chapters'
     | '/dashboard'
+    | '/quiz'
     | '/submissions'
     | '/chapters/edit/$id'
     | '/demo/api/names'
@@ -185,15 +195,16 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/questions'
-    | '/quiz'
     | '/users'
     | '/auth/sign-in'
     | '/chapters/$id'
     | '/demo/store'
     | '/demo/table'
     | '/demo/tanstack-query'
+    | '/quiz/$id'
     | '/chapters'
     | '/dashboard'
+    | '/quiz'
     | '/submissions'
     | '/chapters/edit/$id'
     | '/demo/api/names'
@@ -203,15 +214,16 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/questions'
-    | '/quiz'
     | '/users'
     | '/auth/sign-in'
     | '/chapters/$id'
     | '/demo/store'
     | '/demo/table'
     | '/demo/tanstack-query'
+    | '/quiz/$id'
     | '/chapters/'
     | '/dashboard/'
+    | '/quiz/'
     | '/submissions/'
     | '/chapters/edit/$id'
     | '/demo/api/names'
@@ -222,15 +234,16 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   QuestionsRouteRoute: typeof QuestionsRouteRoute
-  QuizRouteRoute: typeof QuizRouteRoute
   UsersRouteRoute: typeof UsersRouteRoute
   AuthSignInRoute: typeof AuthSignInRoute
   ChaptersIdRoute: typeof ChaptersIdRoute
   DemoStoreRoute: typeof DemoStoreRoute
   DemoTableRoute: typeof DemoTableRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
+  QuizIdRoute: typeof QuizIdRoute
   ChaptersIndexRoute: typeof ChaptersIndexRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
+  QuizIndexRoute: typeof QuizIndexRoute
   SubmissionsIndexRoute: typeof SubmissionsIndexRoute
   ChaptersEditIdRoute: typeof ChaptersEditIdRoute
   DemoApiNamesRoute: typeof DemoApiNamesRoute
@@ -245,13 +258,6 @@ declare module '@tanstack/react-router' {
       path: '/users'
       fullPath: '/users'
       preLoaderRoute: typeof UsersRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/quiz': {
-      id: '/quiz'
-      path: '/quiz'
-      fullPath: '/quiz'
-      preLoaderRoute: typeof QuizRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/questions': {
@@ -275,6 +281,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SubmissionsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/quiz/': {
+      id: '/quiz/'
+      path: '/quiz'
+      fullPath: '/quiz'
+      preLoaderRoute: typeof QuizIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard/': {
       id: '/dashboard/'
       path: '/dashboard'
@@ -287,6 +300,13 @@ declare module '@tanstack/react-router' {
       path: '/chapters'
       fullPath: '/chapters'
       preLoaderRoute: typeof ChaptersIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quiz/$id': {
+      id: '/quiz/$id'
+      path: '/quiz/$id'
+      fullPath: '/quiz/$id'
+      preLoaderRoute: typeof QuizIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/demo/tanstack-query': {
@@ -358,15 +378,16 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   QuestionsRouteRoute: QuestionsRouteRoute,
-  QuizRouteRoute: QuizRouteRoute,
   UsersRouteRoute: UsersRouteRoute,
   AuthSignInRoute: AuthSignInRoute,
   ChaptersIdRoute: ChaptersIdRoute,
   DemoStoreRoute: DemoStoreRoute,
   DemoTableRoute: DemoTableRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
+  QuizIdRoute: QuizIdRoute,
   ChaptersIndexRoute: ChaptersIndexRoute,
   DashboardIndexRoute: DashboardIndexRoute,
+  QuizIndexRoute: QuizIndexRoute,
   SubmissionsIndexRoute: SubmissionsIndexRoute,
   ChaptersEditIdRoute: ChaptersEditIdRoute,
   DemoApiNamesRoute: DemoApiNamesRoute,
