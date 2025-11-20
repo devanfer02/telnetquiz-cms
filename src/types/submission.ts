@@ -1,4 +1,4 @@
-export type Submission = {
+type Submission = {
   id: number
   userName: string
   chapterId: string

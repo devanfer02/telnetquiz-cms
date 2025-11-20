@@ -7,9 +7,7 @@ import {
   useReactTable
 } from "@tanstack/react-table"
 
-import { submissions } from "@/data/mock-data"
 import { SortableHeader } from "../../../components/global/sortable-header"
-import { Submission } from "@/types/submission"
 import TanstackTable from "@/components/global/ts-table"
 import { useState } from "react"
 
@@ -40,7 +38,11 @@ export const columns: ColumnDef<Submission>[] = [
   },
 ]
 
-export default function RecentSubmission() {
+interface RecentSubmissionProps {
+  submissions: Submission[]
+}
+
+export default function RecentSubmission({submissions}: RecentSubmissionProps) {
   const [data, _] = useState(() => submissions)
   const [sorting, setSorting] = useState<SortingState>([])
 

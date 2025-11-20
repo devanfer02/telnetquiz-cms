@@ -1,4 +1,6 @@
+import ActionCell from "@/components/global/action-cell";
 import { SortableHeader } from "@/components/global/sortable-header";
+import TableLink from "@/components/global/table-link";
 import TanstackTable from "@/components/global/ts-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,13 +19,7 @@ export const columns: ColumnDef<Chapter>[] = [
       const id = row.original.id.toString()
 
       return (
-        <Link
-          to="/chapters/$id"
-          params={{ id }}
-          className="hover:text-telnet-primary hover:bg-white duration-200 bg-telnet-primary py-1 px-2 rounded-md border border-telnet-primary text-white"
-        >
-          {id}
-        </Link>
+        <TableLink to="/chapters/$id" paramKey="id" paramValue={id}/>
       )
     }
   },
@@ -58,33 +54,20 @@ export const columns: ColumnDef<Chapter>[] = [
     header: "Actions",
     size: 100,
     cell: ({ row }) => {
-      const chapter = row.original
-
       return (
-        <div className="flex gap-2">
-          <Link
-            to="/chapters/edit/$id"
-            params={{ id: chapter.id.toString() }}
-            className="p-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm"
-          >
-            <Edit size="18" />
-          </Link>
-
-          <button
-            onClick={() => alert(`delete ${chapter.id}`)}
-            className="p-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm cursor-pointer"
-          >
-            <Trash2 size="18" />
-          </button>
-        </div>
+        <ActionCell row={row} keyName="id"/>
       )
     },
   },
 ]
 
-export default function ChapterList() {
+interface ChapterListProps {
+  chapters: Chapter[]
+}
+
+export default function ChapterList({chapters}: ChapterListProps) {
   const [keyword, setKeyword] = useState("")
-  const [data, _] = useState(() => mockChapters)
+  const [data, _] = useState(() => chapters)
   const [sorting, setSorting] = useState<SortingState>([])
 
   const table = useReactTable({

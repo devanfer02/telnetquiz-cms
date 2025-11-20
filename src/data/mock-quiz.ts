@@ -4,7 +4,7 @@ function getRandomChapter(chapters: Chapter[]) {
   return chapters[Math.floor(Math.random() * chapters.length)];
 }
 
-const baseQuizzes: Quiz[] = [
+export const baseQuizzes: Quiz[] = [
   { id: 301, title: "TCP vs UDP", difficulty: "medium", numberOfQuestions: 15 },
   { id: 302, title: "OSI Model Fundamentals", difficulty: "easy", numberOfQuestions: 10 },
   { id: 303, title: "Subnetting Basics", difficulty: "hard", numberOfQuestions: 20 },
@@ -26,3 +26,25 @@ export const mockQuizzes: Quiz[] = baseQuizzes.map((quiz) => {
     chapterName: chapter.title,
   };
 });
+
+export const mockQuizzesChapter: Record<number, Quiz[]> = Object.fromEntries(
+  mockChapters.map((chapter) => {
+    console.log(baseQuizzes)
+
+    const randomCount = Math.floor(Math.random() * 3) + 2; 
+
+    const selected = structuredClone(
+      baseQuizzes
+        .sort(() => Math.random() - 0.5)
+        .slice(0, randomCount)
+    ).map((quiz) => ({
+      ...quiz,
+      chapterId: chapter.id,
+      chapterName: chapter.title,
+    }));
+
+    return [chapter.id, selected];
+  })
+);
+
+

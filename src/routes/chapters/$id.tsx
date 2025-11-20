@@ -8,7 +8,8 @@ import {
   ColumnDef,
 } from '@tanstack/react-table'
 import TanstackTable from '@/components/global/ts-table'
-import { mockChapters, mockQuizzesChapter } from '@/data/mock-chapter'
+import { mockChapters } from '@/data/mock-chapter'
+import { mockQuizzesChapter } from '@/data/mock-quiz'
 
 export const Route = createFileRoute('/chapters/$id')({
   component: RouteComponent,

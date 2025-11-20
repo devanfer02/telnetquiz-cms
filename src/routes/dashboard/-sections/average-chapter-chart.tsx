@@ -1,12 +1,12 @@
 import { Bar, BarChart, Cell, Label, Tooltip, XAxis, YAxis } from "recharts";
 import { ChartConfig, ChartContainer } from "../../../components/ui/chart";
-import { averageScoreChapter } from "@/data/mock-data";
 import { Card } from "../../../components/ui/card";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
 interface AverageChapterBarChartProps {
   className?: string
+  averages: AverageScoreChapter[]
 }
 
 const chartConfig = {
@@ -16,7 +16,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export default function AverageChapterBarChart({ className }: AverageChapterBarChartProps) {
+export default function AverageChapterBarChart({ className, averages }: AverageChapterBarChartProps) {
   const [focusBar, setFocusBar] = useState<number | null>(null)
 
   return (
@@ -24,7 +24,7 @@ export default function AverageChapterBarChart({ className }: AverageChapterBarC
       <h2 className="text-xl text-telnet-primary mb-3 ml-5 font-black">Average Score per Chapter</h2>
       <ChartContainer config={chartConfig}>
         <BarChart
-          data={averageScoreChapter}
+          data={averages}
           onMouseMove={state => {
             if (state.isTooltipActive) {
               setFocusBar(state.activeTooltipIndex || null)
@@ -50,7 +50,7 @@ export default function AverageChapterBarChart({ className }: AverageChapterBarC
           </YAxis>
           <Tooltip />
           <Bar dataKey="averageScore" fill="#f37704">
-            {averageScoreChapter.map((_, index) => (
+            {averages.map((_, index) => (
               <Cell key={`cell-${index}`} fill={focusBar === index ? "#ffdab7" : "#f37704"} />
             ))}
           </Bar>
