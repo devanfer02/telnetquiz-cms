@@ -10,12 +10,12 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UsersRouteRouteImport } from './routes/users/route'
+import { Route as SubmissionsRouteRouteImport } from './routes/submissions/route'
+import { Route as QuizRouteRouteImport } from './routes/quiz/route'
 import { Route as QuestionsRouteRouteImport } from './routes/questions/route'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as SubmissionsIndexRouteImport } from './routes/submissions/index'
-import { Route as QuizIndexRouteImport } from './routes/quiz/index'
-import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
-import { Route as ChaptersIndexRouteImport } from './routes/chapters/index'
+import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
+import { Route as ChaptersRouteRouteImport } from './routes/chapters/route'
+import { Route as RouteRouteImport } from './routes/route'
 import { Route as QuizAddRouteImport } from './routes/quiz/add'
 import { Route as QuizIdRouteImport } from './routes/quiz/$id'
 import { Route as ChaptersAddRouteImport } from './routes/chapters/add'
@@ -29,55 +29,55 @@ const UsersRouteRoute = UsersRouteRouteImport.update({
   path: '/users',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SubmissionsRouteRoute = SubmissionsRouteRouteImport.update({
+  id: '/submissions',
+  path: '/submissions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuizRouteRoute = QuizRouteRouteImport.update({
+  id: '/quiz',
+  path: '/quiz',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const QuestionsRouteRoute = QuestionsRouteRouteImport.update({
   id: '/questions',
   path: '/questions',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
+const DashboardRouteRoute = DashboardRouteRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChaptersRouteRoute = ChaptersRouteRouteImport.update({
+  id: '/chapters',
+  path: '/chapters',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RouteRoute = RouteRouteImport.update({
   id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SubmissionsIndexRoute = SubmissionsIndexRouteImport.update({
-  id: '/submissions/',
-  path: '/submissions/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const QuizIndexRoute = QuizIndexRouteImport.update({
-  id: '/quiz/',
-  path: '/quiz/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DashboardIndexRoute = DashboardIndexRouteImport.update({
-  id: '/dashboard/',
-  path: '/dashboard/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ChaptersIndexRoute = ChaptersIndexRouteImport.update({
-  id: '/chapters/',
-  path: '/chapters/',
+  path: '',
   getParentRoute: () => rootRouteImport,
 } as any)
 const QuizAddRoute = QuizAddRouteImport.update({
-  id: '/quiz/add',
-  path: '/quiz/add',
-  getParentRoute: () => rootRouteImport,
+  id: '/add',
+  path: '/add',
+  getParentRoute: () => QuizRouteRoute,
 } as any)
 const QuizIdRoute = QuizIdRouteImport.update({
-  id: '/quiz/$id',
-  path: '/quiz/$id',
-  getParentRoute: () => rootRouteImport,
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => QuizRouteRoute,
 } as any)
 const ChaptersAddRoute = ChaptersAddRouteImport.update({
-  id: '/chapters/add',
-  path: '/chapters/add',
-  getParentRoute: () => rootRouteImport,
+  id: '/add',
+  path: '/add',
+  getParentRoute: () => ChaptersRouteRoute,
 } as any)
 const ChaptersIdRoute = ChaptersIdRouteImport.update({
-  id: '/chapters/$id',
-  path: '/chapters/$id',
-  getParentRoute: () => rootRouteImport,
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ChaptersRouteRoute,
 } as any)
 const AuthSignInRoute = AuthSignInRouteImport.update({
   id: '/auth/sign-in',
@@ -85,131 +85,121 @@ const AuthSignInRoute = AuthSignInRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const QuizEditIdRoute = QuizEditIdRouteImport.update({
-  id: '/quiz/edit/$id',
-  path: '/quiz/edit/$id',
-  getParentRoute: () => rootRouteImport,
+  id: '/edit/$id',
+  path: '/edit/$id',
+  getParentRoute: () => QuizRouteRoute,
 } as any)
 const ChaptersEditIdRoute = ChaptersEditIdRouteImport.update({
-  id: '/chapters/edit/$id',
-  path: '/chapters/edit/$id',
-  getParentRoute: () => rootRouteImport,
+  id: '/edit/$id',
+  path: '/edit/$id',
+  getParentRoute: () => ChaptersRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/chapters': typeof ChaptersRouteRouteWithChildren
+  '/dashboard': typeof DashboardRouteRoute
   '/questions': typeof QuestionsRouteRoute
+  '/quiz': typeof QuizRouteRouteWithChildren
+  '/submissions': typeof SubmissionsRouteRoute
   '/users': typeof UsersRouteRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/chapters/$id': typeof ChaptersIdRoute
   '/chapters/add': typeof ChaptersAddRoute
   '/quiz/$id': typeof QuizIdRoute
   '/quiz/add': typeof QuizAddRoute
-  '/chapters': typeof ChaptersIndexRoute
-  '/dashboard': typeof DashboardIndexRoute
-  '/quiz': typeof QuizIndexRoute
-  '/submissions': typeof SubmissionsIndexRoute
   '/chapters/edit/$id': typeof ChaptersEditIdRoute
   '/quiz/edit/$id': typeof QuizEditIdRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/chapters': typeof ChaptersRouteRouteWithChildren
+  '/dashboard': typeof DashboardRouteRoute
   '/questions': typeof QuestionsRouteRoute
+  '/quiz': typeof QuizRouteRouteWithChildren
+  '/submissions': typeof SubmissionsRouteRoute
   '/users': typeof UsersRouteRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/chapters/$id': typeof ChaptersIdRoute
   '/chapters/add': typeof ChaptersAddRoute
   '/quiz/$id': typeof QuizIdRoute
   '/quiz/add': typeof QuizAddRoute
-  '/chapters': typeof ChaptersIndexRoute
-  '/dashboard': typeof DashboardIndexRoute
-  '/quiz': typeof QuizIndexRoute
-  '/submissions': typeof SubmissionsIndexRoute
   '/chapters/edit/$id': typeof ChaptersEditIdRoute
   '/quiz/edit/$id': typeof QuizEditIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/': typeof RouteRoute
+  '/chapters': typeof ChaptersRouteRouteWithChildren
+  '/dashboard': typeof DashboardRouteRoute
   '/questions': typeof QuestionsRouteRoute
+  '/quiz': typeof QuizRouteRouteWithChildren
+  '/submissions': typeof SubmissionsRouteRoute
   '/users': typeof UsersRouteRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/chapters/$id': typeof ChaptersIdRoute
   '/chapters/add': typeof ChaptersAddRoute
   '/quiz/$id': typeof QuizIdRoute
   '/quiz/add': typeof QuizAddRoute
-  '/chapters/': typeof ChaptersIndexRoute
-  '/dashboard/': typeof DashboardIndexRoute
-  '/quiz/': typeof QuizIndexRoute
-  '/submissions/': typeof SubmissionsIndexRoute
   '/chapters/edit/$id': typeof ChaptersEditIdRoute
   '/quiz/edit/$id': typeof QuizEditIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
+    | '/chapters'
+    | '/dashboard'
     | '/questions'
+    | '/quiz'
+    | '/submissions'
     | '/users'
     | '/auth/sign-in'
     | '/chapters/$id'
     | '/chapters/add'
     | '/quiz/$id'
     | '/quiz/add'
-    | '/chapters'
-    | '/dashboard'
-    | '/quiz'
-    | '/submissions'
     | '/chapters/edit/$id'
     | '/quiz/edit/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
+    | '/chapters'
+    | '/dashboard'
     | '/questions'
+    | '/quiz'
+    | '/submissions'
     | '/users'
     | '/auth/sign-in'
     | '/chapters/$id'
     | '/chapters/add'
     | '/quiz/$id'
     | '/quiz/add'
-    | '/chapters'
-    | '/dashboard'
-    | '/quiz'
-    | '/submissions'
     | '/chapters/edit/$id'
     | '/quiz/edit/$id'
   id:
     | '__root__'
     | '/'
+    | '/chapters'
+    | '/dashboard'
     | '/questions'
+    | '/quiz'
+    | '/submissions'
     | '/users'
     | '/auth/sign-in'
     | '/chapters/$id'
     | '/chapters/add'
     | '/quiz/$id'
     | '/quiz/add'
-    | '/chapters/'
-    | '/dashboard/'
-    | '/quiz/'
-    | '/submissions/'
     | '/chapters/edit/$id'
     | '/quiz/edit/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  RouteRoute: typeof RouteRoute
+  ChaptersRouteRoute: typeof ChaptersRouteRouteWithChildren
+  DashboardRouteRoute: typeof DashboardRouteRoute
   QuestionsRouteRoute: typeof QuestionsRouteRoute
+  QuizRouteRoute: typeof QuizRouteRouteWithChildren
+  SubmissionsRouteRoute: typeof SubmissionsRouteRoute
   UsersRouteRoute: typeof UsersRouteRoute
   AuthSignInRoute: typeof AuthSignInRoute
-  ChaptersIdRoute: typeof ChaptersIdRoute
-  ChaptersAddRoute: typeof ChaptersAddRoute
-  QuizIdRoute: typeof QuizIdRoute
-  QuizAddRoute: typeof QuizAddRoute
-  ChaptersIndexRoute: typeof ChaptersIndexRoute
-  DashboardIndexRoute: typeof DashboardIndexRoute
-  QuizIndexRoute: typeof QuizIndexRoute
-  SubmissionsIndexRoute: typeof SubmissionsIndexRoute
-  ChaptersEditIdRoute: typeof ChaptersEditIdRoute
-  QuizEditIdRoute: typeof QuizEditIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -221,6 +211,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UsersRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/submissions': {
+      id: '/submissions'
+      path: '/submissions'
+      fullPath: '/submissions'
+      preLoaderRoute: typeof SubmissionsRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quiz': {
+      id: '/quiz'
+      path: '/quiz'
+      fullPath: '/quiz'
+      preLoaderRoute: typeof QuizRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/questions': {
       id: '/questions'
       path: '/questions'
@@ -228,68 +232,54 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof QuestionsRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/submissions/': {
-      id: '/submissions/'
-      path: '/submissions'
-      fullPath: '/submissions'
-      preLoaderRoute: typeof SubmissionsIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/quiz/': {
-      id: '/quiz/'
-      path: '/quiz'
-      fullPath: '/quiz'
-      preLoaderRoute: typeof QuizIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dashboard/': {
-      id: '/dashboard/'
+    '/dashboard': {
+      id: '/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardIndexRouteImport
+      preLoaderRoute: typeof DashboardRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/chapters/': {
-      id: '/chapters/'
+    '/chapters': {
+      id: '/chapters'
       path: '/chapters'
       fullPath: '/chapters'
-      preLoaderRoute: typeof ChaptersIndexRouteImport
+      preLoaderRoute: typeof ChaptersRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof RouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/quiz/add': {
       id: '/quiz/add'
-      path: '/quiz/add'
+      path: '/add'
       fullPath: '/quiz/add'
       preLoaderRoute: typeof QuizAddRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof QuizRouteRoute
     }
     '/quiz/$id': {
       id: '/quiz/$id'
-      path: '/quiz/$id'
+      path: '/$id'
       fullPath: '/quiz/$id'
       preLoaderRoute: typeof QuizIdRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof QuizRouteRoute
     }
     '/chapters/add': {
       id: '/chapters/add'
-      path: '/chapters/add'
+      path: '/add'
       fullPath: '/chapters/add'
       preLoaderRoute: typeof ChaptersAddRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof ChaptersRouteRoute
     }
     '/chapters/$id': {
       id: '/chapters/$id'
-      path: '/chapters/$id'
+      path: '/$id'
       fullPath: '/chapters/$id'
       preLoaderRoute: typeof ChaptersIdRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof ChaptersRouteRoute
     }
     '/auth/sign-in': {
       id: '/auth/sign-in'
@@ -300,36 +290,62 @@ declare module '@tanstack/react-router' {
     }
     '/quiz/edit/$id': {
       id: '/quiz/edit/$id'
-      path: '/quiz/edit/$id'
+      path: '/edit/$id'
       fullPath: '/quiz/edit/$id'
       preLoaderRoute: typeof QuizEditIdRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof QuizRouteRoute
     }
     '/chapters/edit/$id': {
       id: '/chapters/edit/$id'
-      path: '/chapters/edit/$id'
+      path: '/edit/$id'
       fullPath: '/chapters/edit/$id'
       preLoaderRoute: typeof ChaptersEditIdRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof ChaptersRouteRoute
     }
   }
 }
 
-const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  QuestionsRouteRoute: QuestionsRouteRoute,
-  UsersRouteRoute: UsersRouteRoute,
-  AuthSignInRoute: AuthSignInRoute,
+interface ChaptersRouteRouteChildren {
+  ChaptersIdRoute: typeof ChaptersIdRoute
+  ChaptersAddRoute: typeof ChaptersAddRoute
+  ChaptersEditIdRoute: typeof ChaptersEditIdRoute
+}
+
+const ChaptersRouteRouteChildren: ChaptersRouteRouteChildren = {
   ChaptersIdRoute: ChaptersIdRoute,
   ChaptersAddRoute: ChaptersAddRoute,
+  ChaptersEditIdRoute: ChaptersEditIdRoute,
+}
+
+const ChaptersRouteRouteWithChildren = ChaptersRouteRoute._addFileChildren(
+  ChaptersRouteRouteChildren,
+)
+
+interface QuizRouteRouteChildren {
+  QuizIdRoute: typeof QuizIdRoute
+  QuizAddRoute: typeof QuizAddRoute
+  QuizEditIdRoute: typeof QuizEditIdRoute
+}
+
+const QuizRouteRouteChildren: QuizRouteRouteChildren = {
   QuizIdRoute: QuizIdRoute,
   QuizAddRoute: QuizAddRoute,
-  ChaptersIndexRoute: ChaptersIndexRoute,
-  DashboardIndexRoute: DashboardIndexRoute,
-  QuizIndexRoute: QuizIndexRoute,
-  SubmissionsIndexRoute: SubmissionsIndexRoute,
-  ChaptersEditIdRoute: ChaptersEditIdRoute,
   QuizEditIdRoute: QuizEditIdRoute,
+}
+
+const QuizRouteRouteWithChildren = QuizRouteRoute._addFileChildren(
+  QuizRouteRouteChildren,
+)
+
+const rootRouteChildren: RootRouteChildren = {
+  RouteRoute: RouteRoute,
+  ChaptersRouteRoute: ChaptersRouteRouteWithChildren,
+  DashboardRouteRoute: DashboardRouteRoute,
+  QuestionsRouteRoute: QuestionsRouteRoute,
+  QuizRouteRoute: QuizRouteRouteWithChildren,
+  SubmissionsRouteRoute: SubmissionsRouteRoute,
+  UsersRouteRoute: UsersRouteRoute,
+  AuthSignInRoute: AuthSignInRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

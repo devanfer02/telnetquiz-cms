@@ -8,7 +8,7 @@ import AboutDashboard from '@/routes/dashboard/-sections/about-dashboard'
 import Footer from '@/components/global/footer'
 import { generateAverageScoreByChapter, generateHistory } from '@/data/mock-dashboard'
 
-export const Route = createFileRoute('/dashboard/')({
+export const Route = createFileRoute('/dashboard')({
   loader: () => ({recentSubmission: generateHistory(100), averageScores: generateAverageScoreByChapter()}),
   component: DashboardIndex,
 })
