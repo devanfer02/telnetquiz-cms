@@ -11,10 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UsersRouteRouteImport } from './routes/users/route'
 import { Route as SubmissionsRouteRouteImport } from './routes/submissions/route'
-import { Route as QuestionsRouteRouteImport } from './routes/questions/route'
 import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
-import { Route as RouteRouteImport } from './routes/route'
+import { Route as IndexRouteImport } from './routes/index'
 import { Route as QuizIndexRouteImport } from './routes/quiz/index'
+import { Route as QuestionsIndexRouteImport } from './routes/questions/index'
 import { Route as ChaptersIndexRouteImport } from './routes/chapters/index'
 import { Route as QuizAddRouteImport } from './routes/quiz/add'
 import { Route as QuizIdRouteImport } from './routes/quiz/$id'
@@ -34,24 +34,24 @@ const SubmissionsRouteRoute = SubmissionsRouteRouteImport.update({
   path: '/submissions',
   getParentRoute: () => rootRouteImport,
 } as any)
-const QuestionsRouteRoute = QuestionsRouteRouteImport.update({
-  id: '/questions',
-  path: '/questions',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const DashboardRouteRoute = DashboardRouteRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
-const RouteRoute = RouteRouteImport.update({
+const IndexRoute = IndexRouteImport.update({
   id: '/',
-  path: '',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const QuizIndexRoute = QuizIndexRouteImport.update({
   id: '/quiz/',
   path: '/quiz/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuestionsIndexRoute = QuestionsIndexRouteImport.update({
+  id: '/questions/',
+  path: '/questions/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ChaptersIndexRoute = ChaptersIndexRouteImport.update({
@@ -96,8 +96,8 @@ const ChaptersEditIdRoute = ChaptersEditIdRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteRoute
-  '/questions': typeof QuestionsRouteRoute
   '/submissions': typeof SubmissionsRouteRoute
   '/users': typeof UsersRouteRoute
   '/auth/sign-in': typeof AuthSignInRoute
@@ -106,13 +106,14 @@ export interface FileRoutesByFullPath {
   '/quiz/$id': typeof QuizIdRoute
   '/quiz/add': typeof QuizAddRoute
   '/chapters': typeof ChaptersIndexRoute
+  '/questions': typeof QuestionsIndexRoute
   '/quiz': typeof QuizIndexRoute
   '/chapters/edit/$id': typeof ChaptersEditIdRoute
   '/quiz/edit/$id': typeof QuizEditIdRoute
 }
 export interface FileRoutesByTo {
+  '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteRoute
-  '/questions': typeof QuestionsRouteRoute
   '/submissions': typeof SubmissionsRouteRoute
   '/users': typeof UsersRouteRoute
   '/auth/sign-in': typeof AuthSignInRoute
@@ -121,15 +122,15 @@ export interface FileRoutesByTo {
   '/quiz/$id': typeof QuizIdRoute
   '/quiz/add': typeof QuizAddRoute
   '/chapters': typeof ChaptersIndexRoute
+  '/questions': typeof QuestionsIndexRoute
   '/quiz': typeof QuizIndexRoute
   '/chapters/edit/$id': typeof ChaptersEditIdRoute
   '/quiz/edit/$id': typeof QuizEditIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof RouteRoute
+  '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteRoute
-  '/questions': typeof QuestionsRouteRoute
   '/submissions': typeof SubmissionsRouteRoute
   '/users': typeof UsersRouteRoute
   '/auth/sign-in': typeof AuthSignInRoute
@@ -138,6 +139,7 @@ export interface FileRoutesById {
   '/quiz/$id': typeof QuizIdRoute
   '/quiz/add': typeof QuizAddRoute
   '/chapters/': typeof ChaptersIndexRoute
+  '/questions/': typeof QuestionsIndexRoute
   '/quiz/': typeof QuizIndexRoute
   '/chapters/edit/$id': typeof ChaptersEditIdRoute
   '/quiz/edit/$id': typeof QuizEditIdRoute
@@ -145,8 +147,8 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/'
     | '/dashboard'
-    | '/questions'
     | '/submissions'
     | '/users'
     | '/auth/sign-in'
@@ -155,13 +157,14 @@ export interface FileRouteTypes {
     | '/quiz/$id'
     | '/quiz/add'
     | '/chapters'
+    | '/questions'
     | '/quiz'
     | '/chapters/edit/$id'
     | '/quiz/edit/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/'
     | '/dashboard'
-    | '/questions'
     | '/submissions'
     | '/users'
     | '/auth/sign-in'
@@ -170,6 +173,7 @@ export interface FileRouteTypes {
     | '/quiz/$id'
     | '/quiz/add'
     | '/chapters'
+    | '/questions'
     | '/quiz'
     | '/chapters/edit/$id'
     | '/quiz/edit/$id'
@@ -177,7 +181,6 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/dashboard'
-    | '/questions'
     | '/submissions'
     | '/users'
     | '/auth/sign-in'
@@ -186,15 +189,15 @@ export interface FileRouteTypes {
     | '/quiz/$id'
     | '/quiz/add'
     | '/chapters/'
+    | '/questions/'
     | '/quiz/'
     | '/chapters/edit/$id'
     | '/quiz/edit/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  RouteRoute: typeof RouteRoute
+  IndexRoute: typeof IndexRoute
   DashboardRouteRoute: typeof DashboardRouteRoute
-  QuestionsRouteRoute: typeof QuestionsRouteRoute
   SubmissionsRouteRoute: typeof SubmissionsRouteRoute
   UsersRouteRoute: typeof UsersRouteRoute
   AuthSignInRoute: typeof AuthSignInRoute
@@ -203,6 +206,7 @@ export interface RootRouteChildren {
   QuizIdRoute: typeof QuizIdRoute
   QuizAddRoute: typeof QuizAddRoute
   ChaptersIndexRoute: typeof ChaptersIndexRoute
+  QuestionsIndexRoute: typeof QuestionsIndexRoute
   QuizIndexRoute: typeof QuizIndexRoute
   ChaptersEditIdRoute: typeof ChaptersEditIdRoute
   QuizEditIdRoute: typeof QuizEditIdRoute
@@ -224,13 +228,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SubmissionsRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/questions': {
-      id: '/questions'
-      path: '/questions'
-      fullPath: '/questions'
-      preLoaderRoute: typeof QuestionsRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/dashboard': {
       id: '/dashboard'
       path: '/dashboard'
@@ -240,9 +237,9 @@ declare module '@tanstack/react-router' {
     }
     '/': {
       id: '/'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof RouteRouteImport
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/quiz/': {
@@ -250,6 +247,13 @@ declare module '@tanstack/react-router' {
       path: '/quiz'
       fullPath: '/quiz'
       preLoaderRoute: typeof QuizIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/questions/': {
+      id: '/questions/'
+      path: '/questions'
+      fullPath: '/questions'
+      preLoaderRoute: typeof QuestionsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/chapters/': {
@@ -312,9 +316,8 @@ declare module '@tanstack/react-router' {
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  RouteRoute: RouteRoute,
+  IndexRoute: IndexRoute,
   DashboardRouteRoute: DashboardRouteRoute,
-  QuestionsRouteRoute: QuestionsRouteRoute,
   SubmissionsRouteRoute: SubmissionsRouteRoute,
   UsersRouteRoute: UsersRouteRoute,
   AuthSignInRoute: AuthSignInRoute,
@@ -323,6 +326,7 @@ const rootRouteChildren: RootRouteChildren = {
   QuizIdRoute: QuizIdRoute,
   QuizAddRoute: QuizAddRoute,
   ChaptersIndexRoute: ChaptersIndexRoute,
+  QuestionsIndexRoute: QuestionsIndexRoute,
   QuizIndexRoute: QuizIndexRoute,
   ChaptersEditIdRoute: ChaptersEditIdRoute,
   QuizEditIdRoute: QuizEditIdRoute,

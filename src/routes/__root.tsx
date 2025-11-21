@@ -14,6 +14,7 @@ import appCss from '../styles.css?url'
 import type { QueryClient } from '@tanstack/react-query'
 import { SidebarProvider } from '@/components/ui/sidebar'
 import AppSidebar from '@/components/global/sidebar'
+import GlobalLoader from '@/components/global/global-loading'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -55,26 +56,30 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body className=''>
+      <body className='w-full'>
         <SidebarProvider>
-          <AppSidebar/>
-          <main className='px-6 mt-8 w-full'>
-            {children}
-          </main>  
+          <AppSidebar />
+          <div className="relative flex-1">
+            <GlobalLoader />
+
+            <main className="px-6 mt-8 w-full">
+              {children}
+            </main>
+          </div>
         </SidebarProvider>
         <TanStackDevtools
-            config={{
-              position: 'bottom-right',
-            }}
-            plugins={[
-              {
-                name: 'Tanstack Router',
-                render: <TanStackRouterDevtoolsPanel />,
-              },
-              TanStackQueryDevtools,
-            ]}
-          />
-          <Scripts />
+          config={{
+            position: 'bottom-right',
+          }}
+          plugins={[
+            {
+              name: 'Tanstack Router',
+              render: <TanStackRouterDevtoolsPanel />,
+            },
+            TanStackQueryDevtools,
+          ]}
+        />
+        <Scripts />
       </body>
     </html>
   )
