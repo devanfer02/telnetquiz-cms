@@ -4,6 +4,7 @@ import TableLink from "@/components/global/table-link";
 import TanstackTable from "@/components/global/ts-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { filterColumns } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
 import { ColumnDef, SortingState, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
 import { useState } from "react";
@@ -51,7 +52,7 @@ export const columns: ColumnDef<Quiz>[] = [
   {
     accessorKey: "numberOfQuestions",
     header: ({column}) => <SortableHeader column={column} title="Total Questions" className="text-center"/>,
-    cell: ({row}) => <p className="text-center">{row.original.numberOfQuestions}</p>
+    cell: ({row}) => <p className="">{row.original.numberOfQuestions}</p>
   },
   {
     id: "actions",
@@ -63,16 +64,17 @@ export const columns: ColumnDef<Quiz>[] = [
 
 interface QuizListProps {
   quizzes: Quiz[]
+  disableKey?: (keyof Quiz)[]
 }
 
-export default function QuizList({quizzes}: QuizListProps) {
+export default function QuizList({quizzes, disableKey}: QuizListProps) {
   const [keyword, setKeyword] = useState("")
   const [data, _] = useState(() => quizzes)
   const [sorting, setSorting] = useState<SortingState>([])
 
   const table = useReactTable({
     data,
-    columns,
+    columns: filterColumns(columns, disableKey),
     state: { globalFilter: keyword, sorting },
     onGlobalFilterChange: setKeyword,
     globalFilterFn: "includesString",
