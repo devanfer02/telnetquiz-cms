@@ -7,3 +7,7 @@ type Question = {
   question: string 
   options: Option[]
 }
+
+type QuestionSerialized = Omit<Question, "image"> & {
+  image?: string | null
+}

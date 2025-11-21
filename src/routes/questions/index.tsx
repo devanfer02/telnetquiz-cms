@@ -3,7 +3,13 @@ import QuestionList from './-sections/question-list'
 import { mockQuestions } from '@/data/mock-question'
 
 export const Route = createFileRoute('/questions/')({
-  loader: () => ({data: mockQuestions}),  
+  loader: () => {
+    const safe = mockQuestions.map(q => ({
+      ...q,
+      image: null,
+    }))
+    return { data: safe }
+  },  
   component: RouteComponent,
 })
 
