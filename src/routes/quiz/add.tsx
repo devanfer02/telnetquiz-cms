@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import QuizForm from "@/components/quiz/quiz-form";
 import { QuizValues } from "@/types/zod/quiz";
 import { useCustomForm } from "@/hooks/use-custom-form";
+import QuizForm from "./-sections/quiz-form";
 
 export const Route = createFileRoute("/quiz/add")({
   component: RouteComponent,

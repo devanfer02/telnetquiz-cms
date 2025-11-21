@@ -1,8 +1,8 @@
-import QuizForm from '@/components/quiz/quiz-form';
 import { mockQuizzes } from '@/data/mock-quiz';
 import { useCustomForm } from '@/hooks/use-custom-form';
 import { QuizValues } from '@/types/zod/quiz';
 import { createFileRoute } from '@tanstack/react-router'
+import QuizForm from './-sections/quiz-form';
 
 export const Route = createFileRoute('/quiz/edit/$id')({
   component: RouteComponent,

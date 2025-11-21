@@ -1,4 +1,3 @@
-
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -80,7 +79,7 @@ export default function QuizForm({form, buttonText}: QuizFormProps) {
               id={field.name}
               value={field.state.value}
               onBlur={field.handleBlur}
-              onChange={(e) => field.handleChange(e.target.value)}
+              onChange={(e) => field.handleChange(e.target.value as "easy" | "medium" | "hard")}
               className="w-full p-2 border border-telnet-surface-darker rounded-md"
             >
               <option value="easy">Easy</option>

@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import ChapterForm from "@/components/chapters/chapter-form";
 import { ChapterValues } from "@/types/zod/chapter";
 import { useCustomForm } from "@/hooks/use-custom-form";
+import ChapterForm from "./-sections/chapter-form";
 
 export const Route = createFileRoute("/chapters/add")({
   component: RouteComponent,
