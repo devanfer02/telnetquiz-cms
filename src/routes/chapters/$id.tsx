@@ -1,5 +1,4 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useMemo } from 'react'
 import { mockChapters } from '@/data/mock-chapter'
 import { mockQuizzesChapter } from '@/data/mock-quiz'
 import QuizList from '../quiz/-sections/quiz-list'
@@ -21,7 +20,7 @@ function RouteComponent() {
   return (
     <div className="p-4">
       <div className="mb-3">
-        <h1 className="text-3xl font-bold text-telnet-primary">{chapter.title}</h1>
+        <h1 className="text-3xl font-bold text-telnet-primary">Chapter: {chapter.title}</h1>
         <p className="text-lg mt-2 text-telnet-secondary">{chapter.description}</p>
       </div>
       <QuizList

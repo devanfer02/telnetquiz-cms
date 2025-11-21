@@ -18,6 +18,7 @@ import { Route as QuestionsIndexRouteImport } from './routes/questions/index'
 import { Route as ChaptersIndexRouteImport } from './routes/chapters/index'
 import { Route as QuizAddRouteImport } from './routes/quiz/add'
 import { Route as QuizIdRouteImport } from './routes/quiz/$id'
+import { Route as QuestionsAddRouteImport } from './routes/questions/add'
 import { Route as ChaptersAddRouteImport } from './routes/chapters/add'
 import { Route as ChaptersIdRouteImport } from './routes/chapters/$id'
 import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
@@ -69,6 +70,11 @@ const QuizIdRoute = QuizIdRouteImport.update({
   path: '/quiz/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const QuestionsAddRoute = QuestionsAddRouteImport.update({
+  id: '/questions/add',
+  path: '/questions/add',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ChaptersAddRoute = ChaptersAddRouteImport.update({
   id: '/chapters/add',
   path: '/chapters/add',
@@ -103,6 +109,7 @@ export interface FileRoutesByFullPath {
   '/auth/sign-in': typeof AuthSignInRoute
   '/chapters/$id': typeof ChaptersIdRoute
   '/chapters/add': typeof ChaptersAddRoute
+  '/questions/add': typeof QuestionsAddRoute
   '/quiz/$id': typeof QuizIdRoute
   '/quiz/add': typeof QuizAddRoute
   '/chapters': typeof ChaptersIndexRoute
@@ -119,6 +126,7 @@ export interface FileRoutesByTo {
   '/auth/sign-in': typeof AuthSignInRoute
   '/chapters/$id': typeof ChaptersIdRoute
   '/chapters/add': typeof ChaptersAddRoute
+  '/questions/add': typeof QuestionsAddRoute
   '/quiz/$id': typeof QuizIdRoute
   '/quiz/add': typeof QuizAddRoute
   '/chapters': typeof ChaptersIndexRoute
@@ -136,6 +144,7 @@ export interface FileRoutesById {
   '/auth/sign-in': typeof AuthSignInRoute
   '/chapters/$id': typeof ChaptersIdRoute
   '/chapters/add': typeof ChaptersAddRoute
+  '/questions/add': typeof QuestionsAddRoute
   '/quiz/$id': typeof QuizIdRoute
   '/quiz/add': typeof QuizAddRoute
   '/chapters/': typeof ChaptersIndexRoute
@@ -154,6 +163,7 @@ export interface FileRouteTypes {
     | '/auth/sign-in'
     | '/chapters/$id'
     | '/chapters/add'
+    | '/questions/add'
     | '/quiz/$id'
     | '/quiz/add'
     | '/chapters'
@@ -170,6 +180,7 @@ export interface FileRouteTypes {
     | '/auth/sign-in'
     | '/chapters/$id'
     | '/chapters/add'
+    | '/questions/add'
     | '/quiz/$id'
     | '/quiz/add'
     | '/chapters'
@@ -186,6 +197,7 @@ export interface FileRouteTypes {
     | '/auth/sign-in'
     | '/chapters/$id'
     | '/chapters/add'
+    | '/questions/add'
     | '/quiz/$id'
     | '/quiz/add'
     | '/chapters/'
@@ -203,6 +215,7 @@ export interface RootRouteChildren {
   AuthSignInRoute: typeof AuthSignInRoute
   ChaptersIdRoute: typeof ChaptersIdRoute
   ChaptersAddRoute: typeof ChaptersAddRoute
+  QuestionsAddRoute: typeof QuestionsAddRoute
   QuizIdRoute: typeof QuizIdRoute
   QuizAddRoute: typeof QuizAddRoute
   ChaptersIndexRoute: typeof ChaptersIndexRoute
@@ -277,6 +290,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof QuizIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/questions/add': {
+      id: '/questions/add'
+      path: '/questions/add'
+      fullPath: '/questions/add'
+      preLoaderRoute: typeof QuestionsAddRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/chapters/add': {
       id: '/chapters/add'
       path: '/chapters/add'
@@ -323,6 +343,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthSignInRoute: AuthSignInRoute,
   ChaptersIdRoute: ChaptersIdRoute,
   ChaptersAddRoute: ChaptersAddRoute,
+  QuestionsAddRoute: QuestionsAddRoute,
   QuizIdRoute: QuizIdRoute,
   QuizAddRoute: QuizAddRoute,
   ChaptersIndexRoute: ChaptersIndexRoute,
