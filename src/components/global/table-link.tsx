@@ -16,7 +16,7 @@ export default function TableLink<K extends string>({
     <Link
       to={to}
       params={{ [paramKey]: paramValue } as Record<K, string | number>}
-      className=" hover:bg-white duration-200 py-1 px-2 rounded-md text-telnet-primary hover:text-telnet-dark-brown font-semibold"
+      className="hover:bg-white duration-200 py-1 px-2 rounded-md text-telnet-primary hover:text-telnet-dark-brown font-semibold"
     >
       {paramValue}
     </Link>

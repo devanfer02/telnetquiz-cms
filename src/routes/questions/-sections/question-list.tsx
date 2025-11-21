@@ -18,19 +18,21 @@ export const columns: ColumnDef<Question>[] = [
       const id = row.original.id.toString()
 
       return (
-        <TableLink to="/questions/$id" paramKey="id" paramValue={id}/>
+        <p className="hover:bg-white duration-200 py-1 px-2 rounded-md text-telnet-primary hover:text-telnet-dark-brown font-semibold">
+          {id}
+        </p>
       )
     }
   },
   {
     accessorKey: "quizId",
-    header: ({column}) => <SortableHeader column={column} title="Quiz ID"/>,
+    header: ({ column }) => <SortableHeader column={column} title="Quiz ID" />,
     size: 10,
-    cell: ({row}) => {
+    cell: ({ row }) => {
       const quizId = row.original.quizId.toString()
 
       return (
-        <TableLink to="/quiz/$id" paramKey="id" paramValue={quizId}/>
+        <TableLink to="/quiz/$id" paramKey="id" paramValue={quizId} />
       )
     }
   },
@@ -49,10 +51,10 @@ export const columns: ColumnDef<Question>[] = [
     header: "Image",
     size: 50,
     cell: ({ row }) => {
-      if (!row.original.imageLink) return null 
+      if (!row.original.imageLink) return null
 
       return (
-        <img src={row.original.imageLink} alt="image description" className="w-18 h-18" /> 
+        <img src={row.original.imageLink} alt="image description" className="w-18 h-18" />
       )
     }
   },
@@ -60,7 +62,7 @@ export const columns: ColumnDef<Question>[] = [
     id: "actions",
     header: "Actions",
     size: 100,
-    cell: ({ row }) => <ActionCell row={row} keyName="id" editHref="/questions/edit/$id"/>
+    cell: ({ row }) => <ActionCell row={row} keyName="id" editHref="/questions/edit/$id" />
   },
 ]
 
@@ -69,7 +71,7 @@ interface QuestionListProps {
   disableKey?: (keyof Question)[]
 }
 
-export default function QuestionList({questions, disableKey}: QuestionListProps) {
+export default function QuestionList({ questions, disableKey }: QuestionListProps) {
   const [keyword, setKeyword] = useState("")
   const [data, _] = useState(() => questions)
   const [sorting, setSorting] = useState<SortingState>([])

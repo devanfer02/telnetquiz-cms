@@ -15,6 +15,7 @@ export function generateMockQuestions(quizzes: Quiz[]): Question[] {
         imageLink: "https://www.practicalnetworking.net/wp-content/uploads/2016/01/packtrav-osi-layers.png",
         description: `Pertanyaan terkait topik ${quiz.title}`,
         question: generateQuestionText(quiz.title, i),
+        options: []
       })
     }
 
