@@ -4,6 +4,7 @@ import TableLink from "@/components/global/table-link";
 import TanstackTable from "@/components/global/ts-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { filterColumns } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
 import { ColumnDef, SortingState, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
 import { useState } from "react";
@@ -65,16 +66,17 @@ export const columns: ColumnDef<Question>[] = [
 
 interface QuestionListProps {
   questions: Question[]
+  disableKey?: (keyof Question)[]
 }
 
-export default function QuestionList({questions}: QuestionListProps) {
+export default function QuestionList({questions, disableKey}: QuestionListProps) {
   const [keyword, setKeyword] = useState("")
   const [data, _] = useState(() => questions)
   const [sorting, setSorting] = useState<SortingState>([])
 
   const table = useReactTable({
     data,
-    columns,
+    columns: filterColumns(columns, disableKey),
     state: { globalFilter: keyword, sorting },
     onGlobalFilterChange: setKeyword,
     globalFilterFn: "includesString",

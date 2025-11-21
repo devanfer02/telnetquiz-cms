@@ -29,7 +29,7 @@ export default function RouteComponent() {
     <>
       <div className="mb-6">
         <h1 className="text-telnet-primary font-black text-3xl">
-          Edit Chapter { id }
+          Edit Chapter { chapter?.title }
         </h1>
         <p className="text-muted-foreground">
           Isi form di bawah untuk menambahkan chapter baru.

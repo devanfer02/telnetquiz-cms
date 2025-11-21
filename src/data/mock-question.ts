@@ -80,3 +80,17 @@ function generateQuestionText(title: string, index: number): string {
 
 
 export const mockQuestions = generateMockQuestions(baseQuizzes)
+
+export function generateMockQuestionsByQuiz(
+  questions: Question[]
+): { [key: string]: Question[] } {
+  return questions.reduce((acc, q) => {
+    if (!acc[q.quizId]) {
+      acc[q.quizId] = []
+    }
+    acc[q.quizId].push(q)
+    return acc
+  }, {} as { [key: string]: Question[] })
+}
+
+export const mockQuestionsQuiz = generateMockQuestionsByQuiz(mockQuestions)
