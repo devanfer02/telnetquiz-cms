@@ -1,21 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ChapterValues } from "@/types/zod/chapter";
 import { useCustomForm } from "@/hooks/use-custom-form";
-import ChapterForm from "./-sections/chapter-form";
+import QuestionForm from "@/routes/questions/-sections/question-form";
 
-export const Route = createFileRoute("/chapters/add")({
+export const Route = createFileRoute("/questions/add")({
   component: RouteComponent,
 });
 
 export default function RouteComponent() {
   const form = useCustomForm({
-    defaultValues: {
-      title: "",
-      description: "",
-      mascotId: 1,
-    } as ChapterValues,
+    defaultValues: { questions: [] } as { questions: Question[] },
     onSubmit: async ({ value }) => {
-      console.log("submitted ", value);
+      console.log("submitted ", JSON.stringify(value));
     },
   });
 
@@ -23,13 +18,13 @@ export default function RouteComponent() {
     <>
       <div className="mb-6">
         <h1 className="text-telnet-primary font-black text-3xl">
-          Tambah Chapter Baru
+          Add New Questions
         </h1>
         <p className="text-muted-foreground">
-          Isi form di bawah untuk menambahkan chapter baru.
+          Fill out the form below to add new questions. You can add multiple questions at once.
         </p>
       </div>
-      <ChapterForm form={form} buttonText="Tambah"/>
+      <QuestionForm form={form} buttonText="Add Questions" />
     </>
   );
 }

@@ -1,8 +1,8 @@
-import QuizForm from '@/components/quiz/quiz-form';
 import { mockQuizzes } from '@/data/mock-quiz';
 import { useCustomForm } from '@/hooks/use-custom-form';
 import { QuizValues } from '@/types/zod/quiz';
 import { createFileRoute } from '@tanstack/react-router'
+import QuizForm from './-sections/quiz-form';
 
 export const Route = createFileRoute('/quiz/edit/$id')({
   component: RouteComponent,
@@ -30,7 +30,7 @@ export default function RouteComponent() {
     <>
       <div className="mb-6">
         <h1 className="text-telnet-primary font-black text-3xl">
-          Edit Kuis { id }
+          Edit Kuis { quiz?.title }
         </h1>
         <p className="text-muted-foreground">
           Isi form di bawah untuk memperbarui kuis.

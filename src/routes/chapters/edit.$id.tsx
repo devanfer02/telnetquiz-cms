@@ -1,8 +1,8 @@
-import ChapterForm from '@/components/chapters/chapter-form';
 import { mockChapters } from '@/data/mock-chapter';
 import { useCustomForm } from '@/hooks/use-custom-form';
 import { ChapterValues } from '@/types/zod/chapter';
 import { createFileRoute } from '@tanstack/react-router'
+import ChapterForm from './-sections/chapter-form';
 
 export const Route = createFileRoute('/chapters/edit/$id')({
   component: RouteComponent,
@@ -29,7 +29,7 @@ export default function RouteComponent() {
     <>
       <div className="mb-6">
         <h1 className="text-telnet-primary font-black text-3xl">
-          Edit Chapter { id }
+          Edit Chapter { chapter?.title }
         </h1>
         <p className="text-muted-foreground">
           Isi form di bawah untuk menambahkan chapter baru.
