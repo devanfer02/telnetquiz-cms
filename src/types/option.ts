@@ -1,5 +1,5 @@
 type Option = {
-  questionId: string
-  text: string 
-  isCorrect: boolean 
-}
+	questionId: string;
+	text: string;
+	isCorrect: boolean;
+};

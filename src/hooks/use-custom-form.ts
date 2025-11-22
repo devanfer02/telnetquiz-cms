@@ -1,10 +1,25 @@
-import {useForm, FormOptions as TanStackFormOptions} from "@tanstack/react-form";
+import {
+	type FormOptions as TanStackFormOptions,
+	useForm,
+} from "@tanstack/react-form";
 
-export interface InputProperties<TData> extends TanStackFormOptions<TData, any, any, any, any, any, any, any, any, any, any> {
-}
+export interface InputProperties<TData>
+	extends TanStackFormOptions<
+		TData,
+		any,
+		any,
+		any,
+		any,
+		any,
+		any,
+		any,
+		any,
+		any,
+		any
+	> {}
 
 export function useCustomForm<TData>(properties: InputProperties<TData>) {
-    const form = useForm(properties)
+	const form = useForm(properties);
 
-    return form 
-} 
+	return form;
+}

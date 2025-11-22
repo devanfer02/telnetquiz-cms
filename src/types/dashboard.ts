@@ -1,4 +1,4 @@
 type AverageScoreChapter = {
-  chapter: string;
-  averageScore: number;
+	chapter: string;
+	averageScore: number;
 };
