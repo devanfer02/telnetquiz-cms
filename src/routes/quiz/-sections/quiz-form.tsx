@@ -2,12 +2,12 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { QuizSchema, QuizValues } from "@/types/zod/quiz";
+import { QuizSchema, QuizFormData } from "@/types/zod/quiz";
 import type { useCustomForm } from "@/hooks/use-custom-form";
 import { mockChapters } from "@/data/mock-chapter";
 
 interface QuizFormProps {
-  form: ReturnType<typeof useCustomForm<QuizValues>>
+  form: ReturnType<typeof useCustomForm<QuizFormData>>
   buttonText: string
 }
 

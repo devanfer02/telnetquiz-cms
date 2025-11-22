@@ -3,13 +3,13 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ChapterSchema, ChapterValues } from "@/types/zod/chapter";
+import { chapterSchema, ChapterFormData } from "@/types/zod/chapter";
 import type { useCustomForm } from "@/hooks/use-custom-form";
 
 const MASCOTS = [1, 2, 3, 4];
 
 interface ChapterFormProps {
-  form: ReturnType<typeof useCustomForm<ChapterValues>>
+  form: ReturnType<typeof useCustomForm<ChapterFormData>>
   buttonText: string 
 }
 
@@ -29,7 +29,7 @@ export default function ChapterForm({form, buttonText}: ChapterFormProps) {
         name="title"
         validators={{
           onChange: (value) => {
-            const result = ChapterSchema.shape.title.safeParse(value.value);
+            const result = chapterSchema.shape.title.safeParse(value.value);
             return result.success 
               ? undefined 
               : result.error.issues[0].message;
@@ -61,7 +61,7 @@ export default function ChapterForm({form, buttonText}: ChapterFormProps) {
         name="description"
         validators={{
           onChange: (value) => {
-            const result = ChapterSchema.shape.description.safeParse(value.value);
+            const result = chapterSchema.shape.description.safeParse(value.value);
             return result.success 
               ? undefined 
               : result.error.issues[0].message;
@@ -96,7 +96,7 @@ export default function ChapterForm({form, buttonText}: ChapterFormProps) {
         name="mascotId"
         validators={{
           onChange: (value) => {
-            const result = ChapterSchema.shape.mascotId.safeParse(value.value);
+            const result = chapterSchema.shape.mascotId.safeParse(value.value);
             return result.success 
               ? undefined 
               : result.error.issues[0].message;

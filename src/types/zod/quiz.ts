@@ -7,4 +7,4 @@ export const QuizSchema = z.object({
   chapterId: z.number().min(1, "Pilih chapter"),
 });
 
-export type QuizValues  = z.infer<typeof QuizSchema>
+export type QuizFormData  = z.infer<typeof QuizSchema>

@@ -1,6 +1,6 @@
 import { mockQuizzes } from '@/data/mock-quiz';
 import { useCustomForm } from '@/hooks/use-custom-form';
-import { QuizValues } from '@/types/zod/quiz';
+import { QuizFormData } from '@/types/zod/quiz';
 import { createFileRoute } from '@tanstack/react-router'
 import QuizForm from './-sections/quiz-form';
 
@@ -20,7 +20,7 @@ export default function RouteComponent() {
       difficulty: quiz?.difficulty,
       numberOfQuestions: quiz?.numberOfQuestions,
       chapterId: quiz?.chapterId,
-    } as QuizValues,
+    } as QuizFormData,
     onSubmit: async ({ value }) => {
       console.log("submitted ", value);
     },

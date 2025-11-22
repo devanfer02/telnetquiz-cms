@@ -1,4 +1,4 @@
-import { questionSchema } from "@/types/zod/question";
+import { QuestionFormData, QuestionsFormData, questionSchema } from "@/types/zod/question";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -9,20 +9,18 @@ import { useCustomForm } from "@/hooks/use-custom-form";
 import SubmitButton from "@/components/global/submit-button";
 
 interface QuestionFormProps {
-  form: ReturnType<typeof useCustomForm<{ questions: Question[] }>>
+  form: ReturnType<typeof useCustomForm<QuestionsFormData>>
   buttonText: string;
 }
 
 interface OptionsArrayProps {
-  form: ReturnType<typeof useCustomForm<{ questions: Question[] }>>
+  form: ReturnType<typeof useCustomForm<QuestionsFormData>>
   questionIndex: number 
 }
 
-function createEmptyQuestion(index: number): Question {
+function createEmptyQuestion(index: number): QuestionFormData {
   return {
-    id: `Q${index + 1}`,
     quizId: "",
-    imageLink: "",
     description: "",
     question: "",
     options: [

@@ -1,6 +1,6 @@
 import { mockChapters } from '@/data/mock-chapter';
 import { useCustomForm } from '@/hooks/use-custom-form';
-import { ChapterValues } from '@/types/zod/chapter';
+import { ChapterFormData } from '@/types/zod/chapter';
 import { createFileRoute } from '@tanstack/react-router'
 import ChapterForm from './-sections/chapter-form';
 
@@ -19,7 +19,7 @@ export default function RouteComponent() {
       title: chapter?.title,
       description: chapter?.description,
       mascotId: chapter?.mascotId,
-    } as ChapterValues,
+    } as ChapterFormData,
     onSubmit: async ({ value }) => {
       console.log("submitted ", value);
     },

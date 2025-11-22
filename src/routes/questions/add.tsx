@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useCustomForm } from "@/hooks/use-custom-form";
 import QuestionForm from "@/routes/questions/-sections/question-form";
 import { updateCount } from "@/services/example";
+import { QuestionsFormData } from "@/types/zod/question";
 
 export const Route = createFileRoute("/questions/add")({
   component: RouteComponent,
@@ -9,7 +10,7 @@ export const Route = createFileRoute("/questions/add")({
 
 export default function RouteComponent() {
   const form = useCustomForm({
-    defaultValues: { questions: [] } as { questions: Question[] },
+    defaultValues: { questions: [] } as QuestionsFormData,
     onSubmit: async ({ value }) => {
       const res = await updateCount(({data: 3}))
 
