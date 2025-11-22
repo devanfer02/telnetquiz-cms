@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String       @id @default(cuid())
+  fullname   String
+  email      String
+  password   String
+  Submission Submission[]
+}
+
+model Chapter {
+  id          Int          @id @default(autoincrement())
+  title       String
+  description String
+  mascotId    Int
+  quizzes     Quiz[]
+  submissions Submission[]
+}
+
+model Quiz {
+  id                String       @id @default(cuid())
+  title             String
+  difficulty        Difficulty
+  numberOfQuestions Int
+  chapterId         Int
+  chapter           Chapter      @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  questions         Question[]
+  submissions       Submission[]
+}
+
+model Question {
+  id          String   @id @default(cuid())
+  description String
+  question    String
+  imageLink   String?
+  quizId      String
+  quiz        Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  options     Option[]
+}
+
+model Option {
+  id         String   @id @default(cuid())
+  text       String
+  isCorrect  Boolean
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+}
+
+model Submission {
+  id          Int      @id @default(autoincrement())
+  score       Int
+  startedAt   DateTime @default(now())
+  completedAt DateTime @default(now())
+  chapterId   Int
+  chapter     Chapter  @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  quizId      String
+  quiz        Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum Difficulty {
+  easy
+  medium
+  hard
+}

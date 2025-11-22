@@ -9,7 +9,7 @@ import { TanStackDevtools } from '@tanstack/react-devtools'
 
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 
-import appCss from '../styles.css?url'
+import appCss from '../css/styles.css?url'
 
 import type { QueryClient } from '@tanstack/react-query'
 import { SidebarProvider } from '@/components/ui/sidebar'
