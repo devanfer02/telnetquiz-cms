@@ -55,9 +55,9 @@ export default function AverageChapterBarChart({
 					</YAxis>
 					<Tooltip />
 					<Bar dataKey="averageScore" fill="#f37704">
-						{averages.map((_, index) => (
+						{averages.map((average, index) => (
 							<Cell
-								key={`cell-${index}`}
+								key={average.chapter}
 								fill={focusBar === index ? "#ffdab7" : "#f37704"}
 							/>
 						))}

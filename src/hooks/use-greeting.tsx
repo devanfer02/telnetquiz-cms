@@ -23,7 +23,7 @@ export function useGreeting() {
 			setIcon(<Moon className="size-5 text-blue-400" />);
 		}
 		setMounted(true);
-	}, [mounted]);
+	}, []);
 
 	return { mounted, greeting, icon };
 }

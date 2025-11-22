@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import type { useCustomForm } from "@/hooks/use-custom-form";
+import { validateField } from "@/lib/utils";
 import { type ChapterFormData, chapterSchema } from "@/types/zod/chapter";
 
 const MASCOTS = [1, 2, 3, 4];
@@ -27,12 +28,8 @@ export default function ChapterForm({ form, buttonText }: ChapterFormProps) {
 				<form.Field
 					name="title"
 					validators={{
-						onChange: (value) => {
-							const result = chapterSchema.shape.title.safeParse(value.value);
-							return result.success
-								? undefined
-								: result.error.issues[0].message;
-						},
+						onChange: (value) =>
+							validateField(chapterSchema, "title", value.value),
 					}}
 				>
 					{(field) => (
@@ -61,14 +58,8 @@ export default function ChapterForm({ form, buttonText }: ChapterFormProps) {
 				<form.Field
 					name="description"
 					validators={{
-						onChange: (value) => {
-							const result = chapterSchema.shape.description.safeParse(
-								value.value,
-							);
-							return result.success
-								? undefined
-								: result.error.issues[0].message;
-						},
+						onChange: (value) =>
+							validateField(chapterSchema, "description", value.value),
 					}}
 				>
 					{(field) => (
@@ -100,14 +91,8 @@ export default function ChapterForm({ form, buttonText }: ChapterFormProps) {
 				<form.Field
 					name="mascotId"
 					validators={{
-						onChange: (value) => {
-							const result = chapterSchema.shape.mascotId.safeParse(
-								value.value,
-							);
-							return result.success
-								? undefined
-								: result.error.issues[0].message;
-						},
+						onChange: (value) =>
+							validateField(chapterSchema, "mascotId", value.value),
 					}}
 				>
 					{(field) => (

@@ -20,7 +20,11 @@ export default function AboutDashboard() {
 					</p>
 				</div>
 				<div className="flex flex-col justify-center items-center lg:w-1/4 my-5 lg:my-0">
-					<img src="/assets/mascot/chap1.png" className="max-w-[150px]" />
+					<img
+						src="/assets/mascot/chap1.png"
+						className="max-w-[150px]"
+						alt="chap1-mascot"
+					/>
 				</div>
 			</CardContent>
 		</Card>

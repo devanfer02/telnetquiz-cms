@@ -6,7 +6,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import type { useCustomForm } from "@/hooks/use-custom-form";
+import { validateField } from "@/lib/utils";
 import {
+	optionSchema,
 	type QuestionFormData,
 	type QuestionsFormData,
 	questionSchema,
@@ -60,6 +62,10 @@ function OptionsArray({ form, questionIndex }: OptionsArrayProps) {
 								{/* Option text field */}
 								<form.Field
 									name={`questions[${questionIndex}].options[${optionIndex}].text`}
+									validators={{
+										onChange: (value) =>
+											validateField(optionSchema, "text", value.value),
+									}}
 								>
 									{(optionField) => (
 										<Input
@@ -141,15 +147,12 @@ export default function QuestionForm({ form, buttonText }: QuestionFormProps) {
 									<form.Field
 										name={`questions[${index}].description`}
 										validators={{
-											onChange: (value) => {
-												const result =
-													questionSchema.shape.description.safeParse(
-														value.value,
-													);
-												return result.success
-													? undefined
-													: result.error.issues[0].message;
-											},
+											onChange: (value) =>
+												validateField(
+													questionSchema,
+													"description",
+													value.value,
+												),
 										}}
 									>
 										{(field) => (
@@ -176,14 +179,8 @@ export default function QuestionForm({ form, buttonText }: QuestionFormProps) {
 									<form.Field
 										name={`questions[${index}].question`}
 										validators={{
-											onChange: (value) => {
-												const result = questionSchema.shape.question.safeParse(
-													value.value,
-												);
-												return result.success
-													? undefined
-													: result.error.issues[0].message;
-											},
+											onChange: (value) =>
+												validateField(questionSchema, "question", value.value),
 										}}
 									>
 										{(field) => (
@@ -214,11 +211,7 @@ export default function QuestionForm({ form, buttonText }: QuestionFormProps) {
 												const file = value.value;
 												if (!file) return undefined; // optional → OK
 
-												const result =
-													questionSchema.shape.image.safeParse(file);
-												return result.success
-													? undefined
-													: result.error.issues[0].message;
+												return validateField(questionSchema, "image", file);
 											},
 										}}
 									>

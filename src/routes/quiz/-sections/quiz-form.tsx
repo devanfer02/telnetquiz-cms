@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { mockChapters } from "@/data/mock-chapter";
 import type { useCustomForm } from "@/hooks/use-custom-form";
+import { validateField } from "@/lib/utils";
 import { type QuizFormData, QuizSchema } from "@/types/zod/quiz";
 
 interface QuizFormProps {
@@ -25,12 +26,8 @@ export default function QuizForm({ form, buttonText }: QuizFormProps) {
 				<form.Field
 					name="title"
 					validators={{
-						onChange: (value) => {
-							const result = QuizSchema.shape.title.safeParse(value.value);
-							return result.success
-								? undefined
-								: result.error.issues[0].message;
-						},
+						onChange: (value) =>
+							validateField(QuizSchema, "title", value.value),
 					}}
 				>
 					{(field) => (
@@ -60,12 +57,8 @@ export default function QuizForm({ form, buttonText }: QuizFormProps) {
 				<form.Field
 					name="difficulty"
 					validators={{
-						onChange: (value) => {
-							const result = QuizSchema.shape.difficulty.safeParse(value.value);
-							return result.success
-								? undefined
-								: result.error.issues[0].message;
-						},
+						onChange: (value) =>
+							validateField(QuizSchema, "difficulty", value.value),
 					}}
 				>
 					{(field) => (
@@ -103,14 +96,8 @@ export default function QuizForm({ form, buttonText }: QuizFormProps) {
 				<form.Field
 					name="numberOfQuestions"
 					validators={{
-						onChange: (value) => {
-							const result = QuizSchema.shape.numberOfQuestions.safeParse(
-								value.value,
-							);
-							return result.success
-								? undefined
-								: result.error.issues[0].message;
-						},
+						onChange: (value) =>
+							validateField(QuizSchema, "numberOfQuestions", value.value),
 					}}
 				>
 					{(field) => (
@@ -141,12 +128,8 @@ export default function QuizForm({ form, buttonText }: QuizFormProps) {
 				<form.Field
 					name="chapterId"
 					validators={{
-						onChange: (value) => {
-							const result = QuizSchema.shape.chapterId.safeParse(value.value);
-							return result.success
-								? undefined
-								: result.error.issues[0].message;
-						},
+						onChange: (value) =>
+							validateField(QuizSchema, "chapterId", value.value),
 					}}
 				>
 					{(field) => (
