@@ -48,4 +48,3 @@ type Submission = {
 	startedAt: string;
 	completedAt: string;
 };
-

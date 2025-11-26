@@ -16,11 +16,6 @@
     "db:migrate": "bunx drizzle-kit generate && bunx drizzle-kit push",
     "prepare": "husky"
   },
-  "lint-staged": {
-    "*.{ts,tsx,js,jsx,json,css,md}": [
-      "biome check --write"
-    ]
-  },
   "dependencies": {
     "@faker-js/faker": "^10.0.0",
     "@neondatabase/serverless": "^1.0.2",

@@ -1,2 +1,1 @@
-pnpm test
-bunx list-staged
+bunx biome format . --write
