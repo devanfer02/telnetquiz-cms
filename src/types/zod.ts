@@ -1,4 +1,4 @@
-import { z } from "zod";
+import z from "zod";
 
 const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES = [
@@ -7,6 +7,12 @@ const ACCEPTED_IMAGE_TYPES = [
 	"image/png",
 	"image/webp",
 ];
+
+export const chapterSchema = z.object({
+	title: z.string().min(3, "Judul minimal 3 karakter"),
+	description: z.string().min(10, "Deskripsi minimal 10 karakter"),
+	mascotId: z.number().min(1, "Pilih mascot"),
+});
 
 export const optionSchema = z.object({
 	text: z.string().min(1, { message: "Option text is required." }),
@@ -45,6 +51,15 @@ export const questionsSchema = z.object({
 	questions: z.array(questionSchema),
 });
 
+export const quizSchema = z.object({
+	title: z.string().min(3, "Judul minimal 3 karakter"),
+	difficulty: z.enum(["easy", "medium", "hard"]),
+	numberOfQuestions: z.number().min(1, "Jumlah soal minimal 1"),
+	chapterId: z.number().min(1, "Pilih chapter"),
+});
+
+export type QuizFormData = z.infer<typeof quizSchema>;
 export type OptionFormData = z.infer<typeof optionSchema>;
 export type QuestionFormData = z.infer<typeof questionSchema>;
 export type QuestionsFormData = z.infer<typeof questionsSchema>;
+export type ChapterFormData = z.infer<typeof chapterSchema>;

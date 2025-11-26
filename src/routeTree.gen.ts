@@ -9,9 +9,9 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as UsersRouteRouteImport } from './routes/users/route'
 import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as UsersIndexRouteImport } from './routes/users/index'
 import { Route as SubmissionsIndexRouteImport } from './routes/submissions/index'
 import { Route as QuizIndexRouteImport } from './routes/quiz/index'
 import { Route as QuestionsIndexRouteImport } from './routes/questions/index'
@@ -26,11 +26,6 @@ import { Route as ApiChaptersRouteImport } from './routes/api/chapters'
 import { Route as QuizEditIdRouteImport } from './routes/quiz/edit.$id'
 import { Route as ChaptersEditIdRouteImport } from './routes/chapters/edit.$id'
 
-const UsersRouteRoute = UsersRouteRouteImport.update({
-  id: '/users',
-  path: '/users',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const DashboardRouteRoute = DashboardRouteRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -39,6 +34,11 @@ const DashboardRouteRoute = DashboardRouteRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UsersIndexRoute = UsersIndexRouteImport.update({
+  id: '/users/',
+  path: '/users/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SubmissionsIndexRoute = SubmissionsIndexRouteImport.update({
@@ -110,7 +110,6 @@ const ChaptersEditIdRoute = ChaptersEditIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteRoute
-  '/users': typeof UsersRouteRoute
   '/api/chapters': typeof ApiChaptersRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/chapters/$id': typeof ChaptersIdRoute
@@ -122,13 +121,13 @@ export interface FileRoutesByFullPath {
   '/questions': typeof QuestionsIndexRoute
   '/quiz': typeof QuizIndexRoute
   '/submissions': typeof SubmissionsIndexRoute
+  '/users': typeof UsersIndexRoute
   '/chapters/edit/$id': typeof ChaptersEditIdRoute
   '/quiz/edit/$id': typeof QuizEditIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteRoute
-  '/users': typeof UsersRouteRoute
   '/api/chapters': typeof ApiChaptersRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/chapters/$id': typeof ChaptersIdRoute
@@ -140,6 +139,7 @@ export interface FileRoutesByTo {
   '/questions': typeof QuestionsIndexRoute
   '/quiz': typeof QuizIndexRoute
   '/submissions': typeof SubmissionsIndexRoute
+  '/users': typeof UsersIndexRoute
   '/chapters/edit/$id': typeof ChaptersEditIdRoute
   '/quiz/edit/$id': typeof QuizEditIdRoute
 }
@@ -147,7 +147,6 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteRoute
-  '/users': typeof UsersRouteRoute
   '/api/chapters': typeof ApiChaptersRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/chapters/$id': typeof ChaptersIdRoute
@@ -159,6 +158,7 @@ export interface FileRoutesById {
   '/questions/': typeof QuestionsIndexRoute
   '/quiz/': typeof QuizIndexRoute
   '/submissions/': typeof SubmissionsIndexRoute
+  '/users/': typeof UsersIndexRoute
   '/chapters/edit/$id': typeof ChaptersEditIdRoute
   '/quiz/edit/$id': typeof QuizEditIdRoute
 }
@@ -167,7 +167,6 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/dashboard'
-    | '/users'
     | '/api/chapters'
     | '/auth/sign-in'
     | '/chapters/$id'
@@ -179,13 +178,13 @@ export interface FileRouteTypes {
     | '/questions'
     | '/quiz'
     | '/submissions'
+    | '/users'
     | '/chapters/edit/$id'
     | '/quiz/edit/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/dashboard'
-    | '/users'
     | '/api/chapters'
     | '/auth/sign-in'
     | '/chapters/$id'
@@ -197,13 +196,13 @@ export interface FileRouteTypes {
     | '/questions'
     | '/quiz'
     | '/submissions'
+    | '/users'
     | '/chapters/edit/$id'
     | '/quiz/edit/$id'
   id:
     | '__root__'
     | '/'
     | '/dashboard'
-    | '/users'
     | '/api/chapters'
     | '/auth/sign-in'
     | '/chapters/$id'
@@ -215,6 +214,7 @@ export interface FileRouteTypes {
     | '/questions/'
     | '/quiz/'
     | '/submissions/'
+    | '/users/'
     | '/chapters/edit/$id'
     | '/quiz/edit/$id'
   fileRoutesById: FileRoutesById
@@ -222,7 +222,6 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRouteRoute: typeof DashboardRouteRoute
-  UsersRouteRoute: typeof UsersRouteRoute
   ApiChaptersRoute: typeof ApiChaptersRoute
   AuthSignInRoute: typeof AuthSignInRoute
   ChaptersIdRoute: typeof ChaptersIdRoute
@@ -234,19 +233,13 @@ export interface RootRouteChildren {
   QuestionsIndexRoute: typeof QuestionsIndexRoute
   QuizIndexRoute: typeof QuizIndexRoute
   SubmissionsIndexRoute: typeof SubmissionsIndexRoute
+  UsersIndexRoute: typeof UsersIndexRoute
   ChaptersEditIdRoute: typeof ChaptersEditIdRoute
   QuizEditIdRoute: typeof QuizEditIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/users': {
-      id: '/users'
-      path: '/users'
-      fullPath: '/users'
-      preLoaderRoute: typeof UsersRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/dashboard': {
       id: '/dashboard'
       path: '/dashboard'
@@ -259,6 +252,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/users/': {
+      id: '/users/'
+      path: '/users'
+      fullPath: '/users'
+      preLoaderRoute: typeof UsersIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/submissions/': {
@@ -358,7 +358,6 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRouteRoute: DashboardRouteRoute,
-  UsersRouteRoute: UsersRouteRoute,
   ApiChaptersRoute: ApiChaptersRoute,
   AuthSignInRoute: AuthSignInRoute,
   ChaptersIdRoute: ChaptersIdRoute,
@@ -370,6 +369,7 @@ const rootRouteChildren: RootRouteChildren = {
   QuestionsIndexRoute: QuestionsIndexRoute,
   QuizIndexRoute: QuizIndexRoute,
   SubmissionsIndexRoute: SubmissionsIndexRoute,
+  UsersIndexRoute: UsersIndexRoute,
   ChaptersEditIdRoute: ChaptersEditIdRoute,
   QuizEditIdRoute: QuizEditIdRoute,
 }

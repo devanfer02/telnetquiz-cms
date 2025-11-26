@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { mockChapters } from "@/data/mock-chapter";
 import type { useCustomForm } from "@/hooks/use-custom-form";
 import { validateField } from "@/lib/utils";
-import { type QuizFormData, QuizSchema } from "@/types/zod/quiz";
+import { type QuizFormData, quizSchema } from "@/types/zod";
 
 interface QuizFormProps {
 	form: ReturnType<typeof useCustomForm<QuizFormData>>;
@@ -27,7 +27,7 @@ export default function QuizForm({ form, buttonText }: QuizFormProps) {
 					name="title"
 					validators={{
 						onChange: (value) =>
-							validateField(QuizSchema, "title", value.value),
+							validateField(quizSchema, "title", value.value),
 					}}
 				>
 					{(field) => (
@@ -58,7 +58,7 @@ export default function QuizForm({ form, buttonText }: QuizFormProps) {
 					name="difficulty"
 					validators={{
 						onChange: (value) =>
-							validateField(QuizSchema, "difficulty", value.value),
+							validateField(quizSchema, "difficulty", value.value),
 					}}
 				>
 					{(field) => (
@@ -97,7 +97,7 @@ export default function QuizForm({ form, buttonText }: QuizFormProps) {
 					name="numberOfQuestions"
 					validators={{
 						onChange: (value) =>
-							validateField(QuizSchema, "numberOfQuestions", value.value),
+							validateField(quizSchema, "numberOfQuestions", value.value),
 					}}
 				>
 					{(field) => (
@@ -129,7 +129,7 @@ export default function QuizForm({ form, buttonText }: QuizFormProps) {
 					name="chapterId"
 					validators={{
 						onChange: (value) =>
-							validateField(QuizSchema, "chapterId", value.value),
+							validateField(quizSchema, "chapterId", value.value),
 					}}
 				>
 					{(field) => (

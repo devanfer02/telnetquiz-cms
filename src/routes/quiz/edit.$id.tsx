@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { mockQuizzes } from "@/data/mock-quiz";
 import { useCustomForm } from "@/hooks/use-custom-form";
-import type { QuizFormData } from "@/types/zod/quiz";
+import type { QuizFormData } from "@/types/zod";
 import QuizForm from "./-sections/quiz-form";
 
 export const Route = createFileRoute("/quiz/edit/$id")({
