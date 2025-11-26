@@ -10,9 +10,9 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UsersRouteRouteImport } from './routes/users/route'
-import { Route as SubmissionsRouteRouteImport } from './routes/submissions/route'
 import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SubmissionsIndexRouteImport } from './routes/submissions/index'
 import { Route as QuizIndexRouteImport } from './routes/quiz/index'
 import { Route as QuestionsIndexRouteImport } from './routes/questions/index'
 import { Route as ChaptersIndexRouteImport } from './routes/chapters/index'
@@ -31,11 +31,6 @@ const UsersRouteRoute = UsersRouteRouteImport.update({
   path: '/users',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SubmissionsRouteRoute = SubmissionsRouteRouteImport.update({
-  id: '/submissions',
-  path: '/submissions',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const DashboardRouteRoute = DashboardRouteRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -44,6 +39,11 @@ const DashboardRouteRoute = DashboardRouteRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SubmissionsIndexRoute = SubmissionsIndexRouteImport.update({
+  id: '/submissions/',
+  path: '/submissions/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const QuizIndexRoute = QuizIndexRouteImport.update({
@@ -110,7 +110,6 @@ const ChaptersEditIdRoute = ChaptersEditIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteRoute
-  '/submissions': typeof SubmissionsRouteRoute
   '/users': typeof UsersRouteRoute
   '/api/chapters': typeof ApiChaptersRoute
   '/auth/sign-in': typeof AuthSignInRoute
@@ -122,13 +121,13 @@ export interface FileRoutesByFullPath {
   '/chapters': typeof ChaptersIndexRoute
   '/questions': typeof QuestionsIndexRoute
   '/quiz': typeof QuizIndexRoute
+  '/submissions': typeof SubmissionsIndexRoute
   '/chapters/edit/$id': typeof ChaptersEditIdRoute
   '/quiz/edit/$id': typeof QuizEditIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteRoute
-  '/submissions': typeof SubmissionsRouteRoute
   '/users': typeof UsersRouteRoute
   '/api/chapters': typeof ApiChaptersRoute
   '/auth/sign-in': typeof AuthSignInRoute
@@ -140,6 +139,7 @@ export interface FileRoutesByTo {
   '/chapters': typeof ChaptersIndexRoute
   '/questions': typeof QuestionsIndexRoute
   '/quiz': typeof QuizIndexRoute
+  '/submissions': typeof SubmissionsIndexRoute
   '/chapters/edit/$id': typeof ChaptersEditIdRoute
   '/quiz/edit/$id': typeof QuizEditIdRoute
 }
@@ -147,7 +147,6 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteRoute
-  '/submissions': typeof SubmissionsRouteRoute
   '/users': typeof UsersRouteRoute
   '/api/chapters': typeof ApiChaptersRoute
   '/auth/sign-in': typeof AuthSignInRoute
@@ -159,6 +158,7 @@ export interface FileRoutesById {
   '/chapters/': typeof ChaptersIndexRoute
   '/questions/': typeof QuestionsIndexRoute
   '/quiz/': typeof QuizIndexRoute
+  '/submissions/': typeof SubmissionsIndexRoute
   '/chapters/edit/$id': typeof ChaptersEditIdRoute
   '/quiz/edit/$id': typeof QuizEditIdRoute
 }
@@ -167,7 +167,6 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/dashboard'
-    | '/submissions'
     | '/users'
     | '/api/chapters'
     | '/auth/sign-in'
@@ -179,13 +178,13 @@ export interface FileRouteTypes {
     | '/chapters'
     | '/questions'
     | '/quiz'
+    | '/submissions'
     | '/chapters/edit/$id'
     | '/quiz/edit/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/dashboard'
-    | '/submissions'
     | '/users'
     | '/api/chapters'
     | '/auth/sign-in'
@@ -197,13 +196,13 @@ export interface FileRouteTypes {
     | '/chapters'
     | '/questions'
     | '/quiz'
+    | '/submissions'
     | '/chapters/edit/$id'
     | '/quiz/edit/$id'
   id:
     | '__root__'
     | '/'
     | '/dashboard'
-    | '/submissions'
     | '/users'
     | '/api/chapters'
     | '/auth/sign-in'
@@ -215,6 +214,7 @@ export interface FileRouteTypes {
     | '/chapters/'
     | '/questions/'
     | '/quiz/'
+    | '/submissions/'
     | '/chapters/edit/$id'
     | '/quiz/edit/$id'
   fileRoutesById: FileRoutesById
@@ -222,7 +222,6 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRouteRoute: typeof DashboardRouteRoute
-  SubmissionsRouteRoute: typeof SubmissionsRouteRoute
   UsersRouteRoute: typeof UsersRouteRoute
   ApiChaptersRoute: typeof ApiChaptersRoute
   AuthSignInRoute: typeof AuthSignInRoute
@@ -234,6 +233,7 @@ export interface RootRouteChildren {
   ChaptersIndexRoute: typeof ChaptersIndexRoute
   QuestionsIndexRoute: typeof QuestionsIndexRoute
   QuizIndexRoute: typeof QuizIndexRoute
+  SubmissionsIndexRoute: typeof SubmissionsIndexRoute
   ChaptersEditIdRoute: typeof ChaptersEditIdRoute
   QuizEditIdRoute: typeof QuizEditIdRoute
 }
@@ -245,13 +245,6 @@ declare module '@tanstack/react-router' {
       path: '/users'
       fullPath: '/users'
       preLoaderRoute: typeof UsersRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/submissions': {
-      id: '/submissions'
-      path: '/submissions'
-      fullPath: '/submissions'
-      preLoaderRoute: typeof SubmissionsRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -266,6 +259,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/submissions/': {
+      id: '/submissions/'
+      path: '/submissions'
+      fullPath: '/submissions'
+      preLoaderRoute: typeof SubmissionsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/quiz/': {
@@ -358,7 +358,6 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRouteRoute: DashboardRouteRoute,
-  SubmissionsRouteRoute: SubmissionsRouteRoute,
   UsersRouteRoute: UsersRouteRoute,
   ApiChaptersRoute: ApiChaptersRoute,
   AuthSignInRoute: AuthSignInRoute,
@@ -370,6 +369,7 @@ const rootRouteChildren: RootRouteChildren = {
   ChaptersIndexRoute: ChaptersIndexRoute,
   QuestionsIndexRoute: QuestionsIndexRoute,
   QuizIndexRoute: QuizIndexRoute,
+  SubmissionsIndexRoute: SubmissionsIndexRoute,
   ChaptersEditIdRoute: ChaptersEditIdRoute,
   QuizEditIdRoute: QuizEditIdRoute,
 }
