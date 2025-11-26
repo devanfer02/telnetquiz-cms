@@ -3,7 +3,7 @@ import { useCustomForm } from "@/hooks/use-custom-form";
 import QuestionForm from "@/routes/questions/-sections/question-form";
 import { updateCount } from "@/services/example";
 import { createQuestions } from "@/services/question";
-import type { QuestionsFormData } from "@/types/zod/question";
+import type { QuestionsFormData } from "@/types/zod";
 
 export const Route = createFileRoute("/questions/add")({
 	component: RouteComponent,

@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import type { useCustomForm } from "@/hooks/use-custom-form";
 import { validateField } from "@/lib/utils";
-import { type ChapterFormData, chapterSchema } from "@/types/zod/chapter";
+import { type ChapterFormData, chapterSchema } from "@/types/zod";
 
 const MASCOTS = [1, 2, 3, 4];
 

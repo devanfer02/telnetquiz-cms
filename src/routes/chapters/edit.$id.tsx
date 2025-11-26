@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { mockChapters } from "@/data/mock-chapter";
 import { useCustomForm } from "@/hooks/use-custom-form";
-import type { ChapterFormData } from "@/types/zod/chapter";
+import type { ChapterFormData } from "@/types/zod";
 import ChapterForm from "./-sections/chapter-form";
 
 export const Route = createFileRoute("/chapters/edit/$id")({

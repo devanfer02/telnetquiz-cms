@@ -12,7 +12,7 @@ import {
 	type QuestionFormData,
 	type QuestionsFormData,
 	questionSchema,
-} from "@/types/zod/question";
+} from "@/types/zod";
 
 interface QuestionFormProps {
 	form: ReturnType<typeof useCustomForm<QuestionsFormData>>;

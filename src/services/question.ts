@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { questionsSchema } from "@/types/zod/question";
+import { questionsSchema } from "@/types/zod";
 
 export const createQuestions = createServerFn({
 	method: "POST",
