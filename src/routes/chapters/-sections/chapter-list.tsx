@@ -8,7 +8,6 @@ import {
 	type SortingState,
 	useReactTable,
 } from "@tanstack/react-table";
-import { Edit, Trash2 } from "lucide-react";
 import { useState } from "react";
 import ActionCell from "@/components/global/action-cell";
 import { SortableHeader } from "@/components/global/sortable-header";
@@ -16,7 +15,6 @@ import TableLink from "@/components/global/table-link";
 import TanstackTable from "@/components/global/ts-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { mockChapters } from "@/data/mock-chapter";
 
 export const columns: ColumnDef<Chapter>[] = [
 	{

@@ -21,6 +21,7 @@ export const users = pgTable("users", {
 	password: varchar({ length: 255 }).notNull(),
 	...timestamps,
 });
+
 export const chapters = pgTable("chapters", {
 	id: serial().primaryKey(),
 	title: varchar().notNull(),

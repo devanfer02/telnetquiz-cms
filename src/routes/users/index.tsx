@@ -1,10 +1,15 @@
+import { generateMockUsers } from "@/data/mock-user";
 import { createFileRoute } from "@tanstack/react-router";
+import UserList from "./-sections/user-list";
 
 export const Route = createFileRoute("/users/")({
+	loader: () => ({ data: generateMockUsers(30) }),
 	component: RouteComponent,
 });
 
 function RouteComponent() {
+	const { data: users } = Route.useLoaderData();
+
 	return (
 		<>
 			<div className="mt-3 mb-5">
@@ -15,7 +20,7 @@ function RouteComponent() {
 					List pengguna yang sudah terdaftar
 				</p>
 			</div>
-			{/* <>component</> */}
+			<UserList users={users} />
 		</>
 	);
 }

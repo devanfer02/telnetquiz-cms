@@ -1,3 +1,10 @@
+type User = {
+	id: string;
+	fullname: string;
+	email: string;
+	createdAt: string;
+};
+
 type AverageScoreChapter = {
 	chapter: string;
 	averageScore: number;
