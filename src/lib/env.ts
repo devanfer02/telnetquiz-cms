@@ -5,8 +5,8 @@ export const env = createEnv({
 	server: {
 		SERVER_URL: z.string().url().optional(),
 		SUPABASE_DB_URL: z.string(),
-    GOOGLE_CLIENT_ID: z.string(),
-    GOOGLE_CLIENT_SECRET: z.string()
+		GOOGLE_CLIENT_ID: z.string(),
+		GOOGLE_CLIENT_SECRET: z.string(),
 	},
 
 	/**
