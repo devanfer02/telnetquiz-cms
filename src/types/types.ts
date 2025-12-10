@@ -55,3 +55,11 @@ type Submission = {
 	startedAt: string;
 	completedAt: string;
 };
+
+type StudyMaterial = {
+  id: number;
+  questionId: string;
+  title: string;
+  imageLink: string;
+  content: string;
+}

@@ -13,9 +13,11 @@ import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UsersIndexRouteImport } from './routes/users/index'
 import { Route as SubmissionsIndexRouteImport } from './routes/submissions/index'
+import { Route as StudyMaterialsIndexRouteImport } from './routes/study-materials/index'
 import { Route as QuizIndexRouteImport } from './routes/quiz/index'
 import { Route as QuestionsIndexRouteImport } from './routes/questions/index'
 import { Route as ChaptersIndexRouteImport } from './routes/chapters/index'
+import { Route as StudyMaterialsAddRouteImport } from './routes/study-materials/add'
 import { Route as QuizAddRouteImport } from './routes/quiz/add'
 import { Route as QuizIdRouteImport } from './routes/quiz/$id'
 import { Route as QuestionsAddRouteImport } from './routes/questions/add'
@@ -46,6 +48,11 @@ const SubmissionsIndexRoute = SubmissionsIndexRouteImport.update({
   path: '/submissions/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StudyMaterialsIndexRoute = StudyMaterialsIndexRouteImport.update({
+  id: '/study-materials/',
+  path: '/study-materials/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const QuizIndexRoute = QuizIndexRouteImport.update({
   id: '/quiz/',
   path: '/quiz/',
@@ -59,6 +66,11 @@ const QuestionsIndexRoute = QuestionsIndexRouteImport.update({
 const ChaptersIndexRoute = ChaptersIndexRouteImport.update({
   id: '/chapters/',
   path: '/chapters/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudyMaterialsAddRoute = StudyMaterialsAddRouteImport.update({
+  id: '/study-materials/add',
+  path: '/study-materials/add',
   getParentRoute: () => rootRouteImport,
 } as any)
 const QuizAddRoute = QuizAddRouteImport.update({
@@ -117,9 +129,11 @@ export interface FileRoutesByFullPath {
   '/questions/add': typeof QuestionsAddRoute
   '/quiz/$id': typeof QuizIdRoute
   '/quiz/add': typeof QuizAddRoute
+  '/study-materials/add': typeof StudyMaterialsAddRoute
   '/chapters': typeof ChaptersIndexRoute
   '/questions': typeof QuestionsIndexRoute
   '/quiz': typeof QuizIndexRoute
+  '/study-materials': typeof StudyMaterialsIndexRoute
   '/submissions': typeof SubmissionsIndexRoute
   '/users': typeof UsersIndexRoute
   '/chapters/edit/$id': typeof ChaptersEditIdRoute
@@ -135,9 +149,11 @@ export interface FileRoutesByTo {
   '/questions/add': typeof QuestionsAddRoute
   '/quiz/$id': typeof QuizIdRoute
   '/quiz/add': typeof QuizAddRoute
+  '/study-materials/add': typeof StudyMaterialsAddRoute
   '/chapters': typeof ChaptersIndexRoute
   '/questions': typeof QuestionsIndexRoute
   '/quiz': typeof QuizIndexRoute
+  '/study-materials': typeof StudyMaterialsIndexRoute
   '/submissions': typeof SubmissionsIndexRoute
   '/users': typeof UsersIndexRoute
   '/chapters/edit/$id': typeof ChaptersEditIdRoute
@@ -154,9 +170,11 @@ export interface FileRoutesById {
   '/questions/add': typeof QuestionsAddRoute
   '/quiz/$id': typeof QuizIdRoute
   '/quiz/add': typeof QuizAddRoute
+  '/study-materials/add': typeof StudyMaterialsAddRoute
   '/chapters/': typeof ChaptersIndexRoute
   '/questions/': typeof QuestionsIndexRoute
   '/quiz/': typeof QuizIndexRoute
+  '/study-materials/': typeof StudyMaterialsIndexRoute
   '/submissions/': typeof SubmissionsIndexRoute
   '/users/': typeof UsersIndexRoute
   '/chapters/edit/$id': typeof ChaptersEditIdRoute
@@ -174,9 +192,11 @@ export interface FileRouteTypes {
     | '/questions/add'
     | '/quiz/$id'
     | '/quiz/add'
+    | '/study-materials/add'
     | '/chapters'
     | '/questions'
     | '/quiz'
+    | '/study-materials'
     | '/submissions'
     | '/users'
     | '/chapters/edit/$id'
@@ -192,9 +212,11 @@ export interface FileRouteTypes {
     | '/questions/add'
     | '/quiz/$id'
     | '/quiz/add'
+    | '/study-materials/add'
     | '/chapters'
     | '/questions'
     | '/quiz'
+    | '/study-materials'
     | '/submissions'
     | '/users'
     | '/chapters/edit/$id'
@@ -210,9 +232,11 @@ export interface FileRouteTypes {
     | '/questions/add'
     | '/quiz/$id'
     | '/quiz/add'
+    | '/study-materials/add'
     | '/chapters/'
     | '/questions/'
     | '/quiz/'
+    | '/study-materials/'
     | '/submissions/'
     | '/users/'
     | '/chapters/edit/$id'
@@ -229,9 +253,11 @@ export interface RootRouteChildren {
   QuestionsAddRoute: typeof QuestionsAddRoute
   QuizIdRoute: typeof QuizIdRoute
   QuizAddRoute: typeof QuizAddRoute
+  StudyMaterialsAddRoute: typeof StudyMaterialsAddRoute
   ChaptersIndexRoute: typeof ChaptersIndexRoute
   QuestionsIndexRoute: typeof QuestionsIndexRoute
   QuizIndexRoute: typeof QuizIndexRoute
+  StudyMaterialsIndexRoute: typeof StudyMaterialsIndexRoute
   SubmissionsIndexRoute: typeof SubmissionsIndexRoute
   UsersIndexRoute: typeof UsersIndexRoute
   ChaptersEditIdRoute: typeof ChaptersEditIdRoute
@@ -268,6 +294,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SubmissionsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/study-materials/': {
+      id: '/study-materials/'
+      path: '/study-materials'
+      fullPath: '/study-materials'
+      preLoaderRoute: typeof StudyMaterialsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/quiz/': {
       id: '/quiz/'
       path: '/quiz'
@@ -287,6 +320,13 @@ declare module '@tanstack/react-router' {
       path: '/chapters'
       fullPath: '/chapters'
       preLoaderRoute: typeof ChaptersIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/study-materials/add': {
+      id: '/study-materials/add'
+      path: '/study-materials/add'
+      fullPath: '/study-materials/add'
+      preLoaderRoute: typeof StudyMaterialsAddRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/quiz/add': {
@@ -365,9 +405,11 @@ const rootRouteChildren: RootRouteChildren = {
   QuestionsAddRoute: QuestionsAddRoute,
   QuizIdRoute: QuizIdRoute,
   QuizAddRoute: QuizAddRoute,
+  StudyMaterialsAddRoute: StudyMaterialsAddRoute,
   ChaptersIndexRoute: ChaptersIndexRoute,
   QuestionsIndexRoute: QuestionsIndexRoute,
   QuizIndexRoute: QuizIndexRoute,
+  StudyMaterialsIndexRoute: StudyMaterialsIndexRoute,
   SubmissionsIndexRoute: SubmissionsIndexRoute,
   UsersIndexRoute: UsersIndexRoute,
   ChaptersEditIdRoute: ChaptersEditIdRoute,

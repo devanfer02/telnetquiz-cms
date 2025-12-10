@@ -1,4 +1,5 @@
 import {
+  BookOpen,
 	FileQuestionIcon,
 	Layers,
 	LayoutDashboard,
@@ -23,6 +24,11 @@ export const sidebarItems = [
 		url: "/quiz",
 		icon: MessageSquareDot,
 	},
+  {
+    title: "Study Materials",
+    url: "/study-materials",
+    icon: BookOpen
+  },
 	{
 		title: "Questions",
 		url: "/questions",
