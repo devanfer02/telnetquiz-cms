@@ -57,9 +57,9 @@ type Submission = {
 };
 
 type StudyMaterial = {
-  id: number;
-  questionId: string;
-  title: string;
-  imageLink: string;
-  content: string;
-}
+	id: number;
+	questionId: string;
+	title: string;
+	imageLink: string;
+	content: string;
+};
