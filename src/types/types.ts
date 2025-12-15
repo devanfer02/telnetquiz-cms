@@ -19,7 +19,7 @@ type Chapter = {
 
 type Quiz = {
 	id: number;
-	chapterId?: number;
+	chapterId: number | null;
 	chapterName?: string;
 	title: string;
 	difficulty: "easy" | "medium" | "hard";

@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import type { useCustomForm } from "@/hooks/use-custom-form";
 import { validateField } from "@/lib/utils";
 import { type ChapterFormData, chapterSchema } from "@/types/zod";
+import { Loader2 } from "lucide-react";
 
 const MASCOTS = [1, 2, 3, 4];
 
@@ -138,11 +139,17 @@ export default function ChapterForm({ form, buttonText }: ChapterFormProps) {
 					)}
 				</form.Field>
 				<Button
+					type="submit"
+					disabled={form.state.isSubmitting}
 					className="bg-telnet-primary h-10 py-4 text-lg font-bold text-white 
                    hover:bg-white hover:text-telnet-primary border border-telnet-primary 
                    transition-colors duration-200 w-full cursor-pointer"
 				>
-					{buttonText}
+					{form.state.isSubmitting ? (
+						<Loader2 className="h-4 w-4 animate-spin" />
+					) : (
+						buttonText
+					)}
 				</Button>
 			</form>
 		</Card>

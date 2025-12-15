@@ -98,7 +98,7 @@ export const quizzes = pgTable("quizzes", {
 	id: serial().primaryKey(),
 	chapterId: integer().references(() => chapters.id, { onDelete: "cascade" }),
 	title: varchar().notNull(),
-	difficulty: varchar({ enum: ["easy", "medium", "hard"] }),
+	difficulty: varchar({ enum: ["easy", "medium", "hard"] }).notNull(),
 	...timestamps,
 });
 export const questions = pgTable("questions", {

@@ -8,6 +8,10 @@ const ACCEPTED_IMAGE_TYPES = [
 	"image/webp",
 ];
 
+export const idNumberSchema = z.object({
+	id: z.number().positive(),
+});
+
 export const chapterSchema = z.object({
 	title: z.string().min(3, "Judul minimal 3 karakter"),
 	description: z.string().min(10, "Deskripsi minimal 10 karakter"),

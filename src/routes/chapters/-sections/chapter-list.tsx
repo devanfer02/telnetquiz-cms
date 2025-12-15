@@ -15,67 +15,81 @@ import TableLink from "@/components/global/table-link";
 import TanstackTable from "@/components/global/ts-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
-export const columns: ColumnDef<Chapter>[] = [
-	{
-		accessorKey: "id",
-		header: ({ column }) => <SortableHeader column={column} title="ID" />,
-		size: 10,
-		cell: ({ row }) => {
-			const id = row.original.id.toString();
-
-			return <TableLink to="/chapters/$id" paramKey="id" paramValue={id} />;
-		},
-	},
-	{
-		accessorKey: "title",
-		header: ({ column }) => <SortableHeader column={column} title="Title" />,
-		size: 50,
-	},
-	{
-		accessorKey: "description",
-		header: "Description",
-		size: 200,
-		cell: ({ row }) => (
-			<div className="whitespace-normal wrap-break-word">
-				{row.original.description}
-			</div>
-		),
-	},
-	{
-		accessorKey: "mascotId",
-		header: "Mascot",
-		cell: ({ row }) => {
-			const mascotId = row.original.mascotId.toString();
-
-			const url = `/assets/mascot/chap${mascotId}.png`;
-
-			return <img className="max-w-10" src={url} />;
-		},
-	},
-	{
-		id: "actions",
-		header: "Actions",
-		size: 100,
-		cell: ({ row }) => {
-			return (
-				<ActionCell row={row} keyName="id" editHref="/chapters/edit/$id" />
-			);
-		},
-	},
-];
+import { removeChapter } from "@/actions/chapters";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface ChapterListProps {
 	chapters: Chapter[];
 }
 
 export default function ChapterList({ chapters }: ChapterListProps) {
+	const queryClient = useQueryClient();
 	const [keyword, setKeyword] = useState("");
-	const [data, _] = useState(() => chapters);
 	const [sorting, setSorting] = useState<SortingState>([]);
 
+	const columns: ColumnDef<Chapter>[] = [
+		{
+			accessorKey: "id",
+			header: ({ column }) => <SortableHeader column={column} title="ID" />,
+			size: 10,
+			cell: ({ row }) => {
+				const id = row.original.id.toString();
+
+				return <TableLink to="/chapters/$id" paramKey="id" paramValue={id} />;
+			},
+		},
+		{
+			accessorKey: "title",
+			header: ({ column }) => <SortableHeader column={column} title="Title" />,
+			size: 50,
+		},
+		{
+			accessorKey: "description",
+			header: "Description",
+			size: 200,
+			cell: ({ row }) => (
+				<div className="whitespace-normal wrap-break-word">
+					{row.original.description}
+				</div>
+			),
+		},
+		{
+			accessorKey: "mascotId",
+			header: "Mascot",
+			cell: ({ row }) => {
+				const mascotId = row.original.mascotId.toString();
+
+				const url = `/assets/mascot/chap${mascotId}.png`;
+
+				return <img className="max-w-10" src={url} />;
+			},
+		},
+		{
+			id: "actions",
+			header: "Actions",
+			size: 100,
+			cell: ({ row }) => {
+				const id = row.original.id;
+
+				return (
+					<ActionCell
+						row={row}
+						keyName="id"
+						editHref="/chapters/edit/$id"
+						handleDelete={async () => {
+							await removeChapter({ data: { id } });
+							await queryClient.invalidateQueries({
+								queryKey: ["chapter-list"],
+							});
+						}}
+					/>
+				);
+			},
+		},
+	];
+
 	const table = useReactTable({
-		data,
+		data: chapters,
 		columns,
 		state: { globalFilter: keyword, sorting },
 		onGlobalFilterChange: setKeyword,

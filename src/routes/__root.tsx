@@ -1,5 +1,5 @@
 import { TanStackDevtools } from "@tanstack/react-devtools";
-import type { QueryClient } from "@tanstack/react-query";
+import { type QueryClient } from "@tanstack/react-query";
 import {
 	createRootRouteWithContext,
 	HeadContent,
@@ -11,6 +11,7 @@ import AppSidebar from "@/components/global/sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import appCss from "../css/styles.css?url";
 import TanStackQueryDevtools from "../integrations/tanstack-query/devtools";
+import FlashProvider from "@/providers/flash-provider";
 
 interface MyRouterContext {
 	queryClient: QueryClient;
@@ -58,7 +59,10 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 					<div className="relative flex-1">
 						<GlobalLoader />
 
-						<main className="px-6 mt-8 w-full">{children}</main>
+						<main className="px-6 mt-8 w-full">
+							<FlashProvider />
+							{children}
+						</main>
 					</div>
 				</SidebarProvider>
 				<TanStackDevtools
@@ -73,6 +77,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 						TanStackQueryDevtools,
 					]}
 				/>
+
 				<Scripts />
 			</body>
 		</html>

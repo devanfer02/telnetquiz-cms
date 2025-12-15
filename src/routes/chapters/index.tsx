@@ -1,14 +1,25 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { mockChapters } from "@/data/mock-chapter";
 import ChapterList from "./-sections/chapter-list";
+import { getAllChapters } from "@/actions/chapters";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { Suspense } from "react";
 
 export const Route = createFileRoute("/chapters/")({
-	loader: () => ({ data: mockChapters }),
+	loader: async ({ context }) => {
+		await context.queryClient.prefetchQuery({
+			queryKey: ["chapter-list"],
+			queryFn: () => getAllChapters(),
+		});
+	},
 	component: RouteComponent,
 });
 
 function RouteComponent() {
-	const { data } = Route.useLoaderData();
+	const { data: chapters } = useSuspenseQuery({
+		queryKey: ["chapter-list"],
+		queryFn: () => getAllChapters(),
+		staleTime: 60 * 1000,
+	});
 
 	return (
 		<>
@@ -20,7 +31,9 @@ function RouteComponent() {
 					Daftar semua chapter tentang Media dan Jaringan Telekomunikasi.
 				</p>
 			</div>
-			<ChapterList chapters={data} />
+			<Suspense fallback={<div>Loading chapters...</div>}>
+				<ChapterList chapters={chapters} />
+			</Suspense>
 		</>
 	);
 }
