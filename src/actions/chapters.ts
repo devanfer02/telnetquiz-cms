@@ -1,6 +1,7 @@
 import { DbLayer } from "@/lib/db";
 import {
 	createChapter,
+	deleteChapter,
 	fetchAllChapters,
 	fetchChapterById,
 	patchChapter,
@@ -70,6 +71,25 @@ export const updateChapter = createServerFn({
 
 		return Effect.runPromise(
 			patchChapter(id, chapter).pipe(
+				Effect.provide(DbLayer),
+				Effect.catchAll((err) => {
+					console.error("Failed to get all chapters. ERR:", err);
+
+					return Effect.succeed(null);
+				}),
+			),
+		);
+	});
+
+export const removeChapter = createServerFn({
+	method: "POST",
+})
+	.inputValidator(idNumberSchema)
+	.handler(async ({ data }) => {
+		const { id } = data;
+
+		return Effect.runPromise(
+			deleteChapter(id).pipe(
 				Effect.provide(DbLayer),
 				Effect.catchAll((err) => {
 					console.error("Failed to get all chapters. ERR:", err);

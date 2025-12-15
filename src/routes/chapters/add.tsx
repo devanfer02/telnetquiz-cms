@@ -38,7 +38,7 @@ export default function RouteComponent() {
 				message: "Successfully created new chapter",
 			});
 
-			queryClient.invalidateQueries({ queryKey: ["chapter-list"] });
+			await queryClient.invalidateQueries({ queryKey: ["chapter-list"] });
 
 			navigate({
 				to: "/chapters/$id",
