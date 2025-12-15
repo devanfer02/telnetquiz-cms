@@ -6,7 +6,7 @@ export default defineConfig({
   verbose: true,
   strict: true,
   schema: "./src/database/schema.ts",
-  out: "./drizzle",
+  out: "./src/database/drizzle",
   dbCredentials: {
     url: env.SUPABASE_DB_URL
   }
