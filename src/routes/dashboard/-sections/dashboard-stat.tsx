@@ -8,7 +8,7 @@ export default function DashboardStats() {
 			<h1 className="font-black text-telnet-primary text-xl">
 				Current statistics
 			</h1>
-			<div className={`grid grid-cols-5 gap-x-5`}>
+			<div className={`grid grid-cols-3 gap-x-10 gap-y-5`}>
 				{dashboardItems.map((item) => (
 					<CardStat
 						key={item.title}

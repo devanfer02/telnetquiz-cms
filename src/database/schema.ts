@@ -125,6 +125,15 @@ export const submissions = pgTable("submissions", {
 	...timestamps,
 });
 
+export const studyMaterials = pgTable("study_materials", {
+	id: serial().primaryKey(),
+	questionId: varchar().references(() => questions.id, { onDelete: "cascade" }),
+	title: varchar(),
+	imageLink: varchar(),
+	content: text(),
+	...timestamps,
+});
+
 export const usersRelations = relations(users, ({ many }) => ({
 	submissions: many(submissions),
 }));
@@ -149,6 +158,7 @@ export const questionsRelations = relations(questions, ({ one, many }) => ({
 		references: [quizzes.id],
 	}),
 	options: many(options),
+	questions: many(questions),
 }));
 export const optionsRelations = relations(options, ({ one }) => ({
 	question: one(questions, {
@@ -187,5 +197,12 @@ export const accountRelations = relations(accounts, ({ one }) => ({
 	users: one(users, {
 		fields: [accounts.userId],
 		references: [users.id],
+	}),
+}));
+
+export const studyMaterialRealtions = relations(studyMaterials, ({ one }) => ({
+	questions: one(questions, {
+		fields: [studyMaterials.questionId],
+		references: [questions.id],
 	}),
 }));
