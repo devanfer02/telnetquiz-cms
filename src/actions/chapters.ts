@@ -1,5 +1,10 @@
 import { DbLayer } from "@/lib/db";
-import { fetchAllChapters, fetchChapterById } from "@/services/chapters";
+import {
+	createChapter,
+	fetchAllChapters,
+	fetchChapterById,
+} from "@/services/chapters";
+import { chapterSchema } from "@/types/zod";
 import { createServerFn } from "@tanstack/react-start";
 import { Effect } from "effect";
 import z from "zod";
@@ -26,6 +31,23 @@ export const getChapterById = createServerFn({
 	.handler(async ({ data: id }) => {
 		return Effect.runPromise(
 			fetchChapterById(id).pipe(
+				Effect.provide(DbLayer),
+				Effect.catchAll((err) => {
+					console.error("Failed to get all chapters. ERR:", err);
+
+					return Effect.succeed(null);
+				}),
+			),
+		);
+	});
+
+export const addChapter = createServerFn({
+	method: "POST",
+})
+	.inputValidator(chapterSchema)
+	.handler(async ({ data }) => {
+		return Effect.runPromise(
+			createChapter(data).pipe(
 				Effect.provide(DbLayer),
 				Effect.catchAll((err) => {
 					console.error("Failed to get all chapters. ERR:", err);
