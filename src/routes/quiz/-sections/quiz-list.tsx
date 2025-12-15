@@ -120,7 +120,7 @@ export default function QuizList({ quizzes, disableKey }: QuizListProps) {
 				table={table}
 				columns={columns}
 				title="List Quiz"
-				fallbackMessage="No Chapter created yet"
+				fallbackMessage="No Quiz created yet"
 			/>
 		</>
 	);

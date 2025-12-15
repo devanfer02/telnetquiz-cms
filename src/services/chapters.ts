@@ -1,7 +1,7 @@
-import { chapters } from "@/database/schema";
+import { sql, eq } from "drizzle-orm";
+import { chapters, questions, quizzes } from "@/database/schema";
 import { Db } from "@/lib/db";
 import { ChapterFormData } from "@/types/zod";
-import { eq } from "drizzle-orm";
 import { Effect } from "effect";
 import { DatabaseError, NotFoundError } from "./errors/errors";
 
@@ -23,7 +23,21 @@ export const fetchChapterById = (id: number) =>
 		const { db } = yield* Db;
 
 		const result = yield* Effect.tryPromise({
-			try: () => db.select().from(chapters).where(eq(chapters.id, id)).limit(1),
+			try: () =>
+				db.query.chapters.findFirst({
+					where: eq(chapters.id, id),
+					with: {
+						quizzes: {
+							extras: {
+								numberOfQuestions: sql<number>`(
+                SELECT count(*)
+                FROM ${questions}
+                WHERE "questions"."quizId" = "chapters_quizzes"."id"
+              )`.as("numberOfQuestions"),
+							},
+						},
+					},
+				}),
 			catch: (err) =>
 				new DatabaseError({
 					cause: err,
@@ -31,11 +45,11 @@ export const fetchChapterById = (id: number) =>
 				}),
 		});
 
-		if (result.length === 0) {
+		if (result === undefined) {
 			return yield* Effect.fail(new NotFoundError({ id, entity: "Chapter" }));
 		}
 
-		return result[0];
+		return result;
 	});
 
 export const createChapter = (chapter: ChapterFormData) =>

@@ -1,23 +1,28 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { mockChapters } from "@/data/mock-chapter";
-import { mockQuizzesChapter } from "@/data/mock-quiz";
 import QuizList from "../quiz/-sections/quiz-list";
+import { getChapterById } from "@/actions/chapters";
 
 export const Route = createFileRoute("/chapters/$id")({
+	loader: async ({ params }) => {
+		const chapter = await getChapterById({ data: Number(params.id) });
+
+		return {
+			chapter,
+		};
+	},
 	component: RouteComponent,
 });
 
 function RouteComponent() {
-	const { id } = Route.useParams();
-	const chapterId = parseInt(id, 10);
-	const chapter = mockChapters.find((c) => c.id === chapterId);
-	const quizzes = mockQuizzesChapter[chapterId] || [];
+	const { chapter } = Route.useLoaderData();
 
 	if (!chapter) {
 		return <div>Chapter not found</div>;
 	}
+
+	const id = chapter.id.toString();
 
 	return (
 		<div className="p-4">
@@ -42,7 +47,7 @@ function RouteComponent() {
 					{chapter.description}
 				</p>
 			</div>
-			<QuizList quizzes={quizzes} disableKey={["chapterId"]} />
+			<QuizList quizzes={chapter.quizzes} disableKey={["chapterId"]} />
 		</div>
 	);
 }
