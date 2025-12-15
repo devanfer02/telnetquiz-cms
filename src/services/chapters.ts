@@ -5,7 +5,7 @@ import { eq } from "drizzle-orm";
 import { Effect } from "effect";
 import { DatabaseError, NotFoundError } from "./errors/errors";
 
-export const getAllChapters = Effect.gen(function* () {
+export const fetchAllChapters = Effect.gen(function* () {
 	const { db } = yield* Db;
 
 	return yield* Effect.tryPromise({
@@ -18,7 +18,7 @@ export const getAllChapters = Effect.gen(function* () {
 	});
 });
 
-export const getChapterById = (id: number) =>
+export const fetchChapterById = (id: number) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 

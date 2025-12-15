@@ -7,6 +7,12 @@ import viteTsConfigPaths from 'vite-tsconfig-paths'
 import tailwindcss from '@tailwindcss/vite'
 
 const config = defineConfig({
+  optimizeDeps: {
+    include: ["zod"]
+  },
+  ssr: {
+    noExternal: ["zod"]
+  },
   plugins: [
     // this is the plugin that enables path aliases
     cloudflare({viteEnvironment: { name: 'ssr' }}),

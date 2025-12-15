@@ -1,4 +1,4 @@
-import { Context } from "effect";
+import { Context, Layer } from "effect";
 import { env } from "@/lib/env";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
@@ -10,3 +10,5 @@ const pool = new Pool({
 const db = drizzle(pool);
 
 export class Db extends Context.Tag("Db")<Db, { db: typeof db }>() {}
+
+export const DbLayer = Layer.succeed(Db, { db });

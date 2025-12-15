@@ -1,14 +1,20 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { mockChapters } from "@/data/mock-chapter";
 import ChapterList from "./-sections/chapter-list";
+import { getAllChapters } from "@/actions/chapters";
 
 export const Route = createFileRoute("/chapters/")({
-	loader: () => ({ data: mockChapters }),
+	loader: async () => {
+		const chapters = await getAllChapters();
+
+		return {
+			chapters,
+		};
+	},
 	component: RouteComponent,
 });
 
 function RouteComponent() {
-	const { data } = Route.useLoaderData();
+	const { chapters } = Route.useLoaderData();
 
 	return (
 		<>
@@ -20,7 +26,7 @@ function RouteComponent() {
 					Daftar semua chapter tentang Media dan Jaringan Telekomunikasi.
 				</p>
 			</div>
-			<ChapterList chapters={data} />
+			<ChapterList chapters={chapters} />
 		</>
 	);
 }
