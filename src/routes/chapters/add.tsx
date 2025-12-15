@@ -1,9 +1,10 @@
-import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useCustomForm } from "@/hooks/use-custom-form";
 import type { ChapterFormData } from "@/types/zod";
 import ChapterForm from "./-sections/chapter-form";
 import { addChapter } from "@/actions/chapters";
 import { useFlashStore } from "@/store/use-flash";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/chapters/add")({
 	component: RouteComponent,
@@ -11,6 +12,7 @@ export const Route = createFileRoute("/chapters/add")({
 
 export default function RouteComponent() {
 	const navigate = useNavigate();
+	const queryClient = useQueryClient();
 
 	const form = useCustomForm({
 		defaultValues: {
@@ -35,6 +37,8 @@ export default function RouteComponent() {
 				type: "success",
 				message: "Successfully created new chapter",
 			});
+
+			queryClient.invalidateQueries({ queryKey: ["chapter-list"] });
 
 			navigate({
 				to: "/chapters/$id",
