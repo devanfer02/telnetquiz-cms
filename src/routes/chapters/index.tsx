@@ -18,6 +18,7 @@ function RouteComponent() {
 	const { data: chapters } = useSuspenseQuery({
 		queryKey: ["chapter-list"],
 		queryFn: () => getAllChapters(),
+		staleTime: 60 * 1000,
 	});
 
 	return (
