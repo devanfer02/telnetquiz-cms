@@ -1,5 +1,6 @@
 import { Flash, useFlashStore } from "@/store/use-flash";
 import { X } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const flashStyles: Record<Flash["type"], string> = {
 	error: "bg-red-50 text-red-800 border-red-300",
@@ -7,11 +8,34 @@ const flashStyles: Record<Flash["type"], string> = {
 	info: "bg-blue-50 text-blue-800 border-blue-300",
 };
 
-function FlashBanner({ flash, clear }: { flash: Flash; clear: () => void }) {
+interface FlashBannerProps {
+	flash: Flash;
+	clear: () => void;
+	duration?: number;
+}
+
+function FlashBanner({ flash, clear, duration = 5000 }: FlashBannerProps) {
+	const [visible, setVisible] = useState(true);
+
+	useEffect(() => {
+		const hideTimer = setTimeout(() => {
+			setVisible(false);
+		}, duration);
+
+		const clearTimer = setTimeout(() => {
+			clear();
+		}, duration + 300);
+
+		return () => {
+			clearTimeout(hideTimer);
+			clearTimeout(clearTimer);
+		};
+	}, [duration, clear]);
+
 	return (
 		<div
 			role="alert"
-			className={`relative flex justify-between items-start gap-3 rounded-md border px-4 py-3 shadow-sm ${flashStyles[flash.type]}`}
+			className={`relative flex justify-between items-start gap-3 rounded-md border px-4 py-3 shadow-sm transition-opacity duration-300 ease-out ${visible ? "opacity-100" : "opacity-0"} ${flashStyles[flash.type]}`}
 		>
 			<p className="text-sm leading-relaxed">{flash.message}</p>
 			<div className="flex flex-col justify-center items-center">
