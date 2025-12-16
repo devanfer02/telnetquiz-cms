@@ -16,3 +16,7 @@ export const useFlashStore = create<FlashStore>((set) => ({
 	setFlash: (flash) => set({ flash }),
 	clear: () => set({ flash: null }),
 }));
+
+export const setFlashState = (flash: Flash) => {
+	return useFlashStore.getState().setFlash(flash);
+};

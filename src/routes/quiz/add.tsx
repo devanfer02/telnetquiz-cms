@@ -1,22 +1,49 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useCustomForm } from "@/hooks/use-custom-form";
 import type { QuizFormData } from "@/types/zod";
 import QuizForm from "./-sections/quiz-form";
+import { addQuiz } from "@/actions/quizzes";
+import { setFlashState } from "@/store/use-flash";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/quiz/add")({
 	component: RouteComponent,
 });
 
 export default function RouteComponent() {
+	const navigate = useNavigate();
+	const queryClient = useQueryClient();
+
 	const form = useCustomForm({
 		defaultValues: {
 			title: "",
 			difficulty: "easy",
-			numberOfQuestions: 1,
 			chapterId: 0,
 		} as QuizFormData,
 		onSubmit: async ({ value }) => {
-			console.log("submitted ", value);
+			const result = await addQuiz({ data: value });
+
+			if (result === null) {
+				setFlashState({
+					type: "error",
+					message: "Failed to create quiz. See logs.",
+				});
+
+				navigate({ to: "/quiz" });
+				return;
+			}
+
+			setFlashState({
+				type: "success",
+				message: "Successfully created new quiz",
+			});
+
+			await queryClient.invalidateQueries({ queryKey: ["quiz-list"] });
+
+			navigate({
+				to: "/quiz/$id",
+				params: { id: result.id.toString() },
+			});
 		},
 	});
 

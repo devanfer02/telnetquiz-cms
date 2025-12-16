@@ -1,5 +1,6 @@
 import { DbLayer } from "@/lib/db";
-import { fetchAllQuizzes, fetchQuizById } from "@/services/quizzes";
+import { createQuiz, fetchAllQuizzes, fetchQuizById } from "@/services/quizzes";
+import { quizSchema } from "@/types/zod";
 import { createServerFn } from "@tanstack/react-start";
 import { Effect } from "effect";
 import z from "zod";
@@ -29,6 +30,23 @@ export const getQuizById = createServerFn({
 				Effect.provide(DbLayer),
 				Effect.catchAll((err) => {
 					console.error("Failed to get quiz by id. ERR:", err);
+
+					return Effect.succeed(null);
+				}),
+			),
+		);
+	});
+
+export const addQuiz = createServerFn({
+	method: "POST",
+})
+	.inputValidator(quizSchema)
+	.handler(async ({ data }) => {
+		return Effect.runPromise(
+			createQuiz(data).pipe(
+				Effect.provide(DbLayer),
+				Effect.catchAll((err) => {
+					console.error("Failed to create new chapter. ERR:", err);
 
 					return Effect.succeed(null);
 				}),

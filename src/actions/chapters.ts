@@ -52,7 +52,7 @@ export const addChapter = createServerFn({
 			createChapter(data).pipe(
 				Effect.provide(DbLayer),
 				Effect.catchAll((err) => {
-					console.error("Failed to get all chapters. ERR:", err);
+					console.error("Failed to create new chapter. ERR:", err);
 
 					return Effect.succeed(null);
 				}),

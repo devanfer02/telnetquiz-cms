@@ -3,6 +3,7 @@ import { Db } from "@/lib/db";
 import { eq, sql } from "drizzle-orm";
 import { Effect } from "effect";
 import { DatabaseError, NotFoundError } from "./errors/errors";
+import { QuizFormData } from "@/types/zod";
 
 export const fetchAllQuizzes = Effect.gen(function* () {
 	const { db } = yield* Db;
@@ -48,4 +49,20 @@ export const fetchQuizById = (id: number) =>
 		}
 
 		return result;
+	});
+
+export const createQuiz = (quiz: QuizFormData) =>
+	Effect.gen(function* () {
+		const { db } = yield* Db;
+
+		const result = yield* Effect.tryPromise({
+			try: () => db.insert(quizzes).values(quiz).returning(),
+			catch: (err) =>
+				new DatabaseError({
+					cause: err,
+					message: "Failed to create chapter",
+				}),
+		});
+
+		return result[0];
 	});
