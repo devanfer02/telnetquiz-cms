@@ -58,6 +58,7 @@ export const questionsSchema = z.object({
 export const quizSchema = z.object({
 	title: z.string().min(3, "Judul minimal 3 karakter"),
 	difficulty: z.enum(["easy", "medium", "hard"]),
+	level: z.number().positive(),
 	chapterId: z.number().min(1, "Pilih chapter"),
 });
 

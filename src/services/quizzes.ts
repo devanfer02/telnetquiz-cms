@@ -12,6 +12,9 @@ export const fetchAllQuizzes = Effect.gen(function* () {
 		try: () =>
 			db.query.quizzes.findMany({
 				orderBy: quizzes.createdAt,
+				with: {
+					chapter: true,
+				},
 				extras: {
 					numberOfQuestions: sql<number>`(
           SELECT count(*)

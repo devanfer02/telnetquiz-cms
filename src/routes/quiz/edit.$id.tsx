@@ -34,6 +34,7 @@ export default function RouteComponent() {
 			title: quiz?.title,
 			difficulty: quiz?.difficulty,
 			chapterId: quiz?.chapterId,
+			level: quiz?.level,
 		} as QuizFormData,
 		onSubmit: async ({ value }) => {
 			const result = await updateQuiz({

@@ -1,0 +1,1 @@
+ALTER TABLE "quizzes" ADD CONSTRAINT "levels_quiz_unique" UNIQUE("id","level");

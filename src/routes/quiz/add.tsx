@@ -19,10 +19,12 @@ export default function RouteComponent() {
 			title: "",
 			difficulty: "easy",
 			chapterId: 0,
+			level: 1,
 		} as QuizFormData,
 		onSubmit: async ({ value }) => {
 			const result = await addQuiz({ data: value });
 
+			console.log(result);
 			if (result === null) {
 				setFlashState({
 					type: "error",

@@ -54,7 +54,36 @@ export default function QuizForm({ form, buttonText }: QuizFormProps) {
 						</div>
 					)}
 				</form.Field>
-
+				<form.Field
+					name="level"
+					validators={{
+						onChange: (value) =>
+							validateField(quizSchema, "level", value.value),
+					}}
+				>
+					{(field) => (
+						<div className="space-y-2">
+							<Label
+								htmlFor={field.name}
+								className="text-telnet-primary font-semibold text-lg"
+							>
+								Level
+							</Label>
+							<Input
+								id={field.name}
+								value={field.state.value}
+								onBlur={field.handleBlur}
+								onChange={(e) => field.handleChange(Number(e.target.value))}
+								className="border-telnet-surface-darker"
+							/>
+							{field.state.meta.errors && (
+								<p className="text-red-600 text-sm">
+									{field.state.meta.errors}
+								</p>
+							)}
+						</div>
+					)}
+				</form.Field>
 				<form.Field
 					name="difficulty"
 					validators={{

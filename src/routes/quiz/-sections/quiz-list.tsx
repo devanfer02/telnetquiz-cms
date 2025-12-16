@@ -56,7 +56,7 @@ export default function QuizList({ quizzes, disableKey }: QuizListProps) {
 			},
 		},
 		{
-			accessorKey: "chapterName",
+			accessorKey: "chapter.title",
 			header: "Chapter Name",
 			size: 10,
 		},
@@ -71,6 +71,28 @@ export default function QuizList({ quizzes, disableKey }: QuizListProps) {
 				<SortableHeader column={column} title="Difficulty" />
 			),
 			size: 50,
+			cell: ({ row }) => {
+				const difficultyStyles: Record<string, string> = {
+					easy: "border-sky-500 bg-sky-100 text-sky-500",
+					medium: "border-yellow-500 bg-yellow-100 text-yellow-600",
+					hard: "border-red-500 bg-red-100 text-red-600",
+				};
+
+				return (
+					<p
+						className={`capitalize border rounded-lg py-0.5 px-2 w-fit ${
+							difficultyStyles[row.original.difficulty] ??
+							"border-gray-300 bg-gray-100 text-gray-600"
+						}`}
+					>
+						{row.original.difficulty}
+					</p>
+				);
+			},
+		},
+		{
+			accessorKey: "level",
+			header: ({ column }) => <SortableHeader column={column} title="Level" />,
 		},
 		{
 			accessorKey: "numberOfQuestions",
