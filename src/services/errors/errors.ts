@@ -13,3 +13,7 @@ export class NotFoundError extends Data.TaggedError("NotFoundError")<{
 export class ValidationError extends Data.TaggedError("ValidationError")<{
 	errors: Record<string, any>;
 }> {}
+
+export class AuthError extends Data.TaggedError("AuthError")<{
+	message: string;
+}> {}

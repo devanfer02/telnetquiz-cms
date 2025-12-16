@@ -1,6 +1,7 @@
 import { HttpStatus, response } from "@/lib/http";
 import { parseBody } from "@/lib/http";
-import { ValidationError } from "@/services/errors/errors";
+import { registerUser } from "@/services/auth";
+import { AuthError, ValidationError } from "@/services/errors/errors";
 import { registerUserSchema } from "@/types/zod.api";
 import { createFileRoute } from "@tanstack/react-router";
 import { Effect } from "effect";
@@ -14,7 +15,15 @@ export const Route = createFileRoute("/api/auth/register")({
 						const body = yield* Effect.tryPromise(() => request.json());
 						const data = yield* parseBody(registerUserSchema, body);
 
-						return response(data, HttpStatus.OK);
+						const result = yield* registerUser(data);
+
+						return response(
+							{
+								message: "Successfully register user",
+								token: result.token,
+							},
+							HttpStatus.OK,
+						);
 					}).pipe(
 						Effect.catchTags({
 							ValidationError: (err: ValidationError) =>
@@ -23,6 +32,16 @@ export const Route = createFileRoute("/api/auth/register")({
 										{
 											message: "Request body validation failed",
 											errors: err.errors,
+										},
+										HttpStatus.BAD_REQUEST,
+									),
+								),
+							AuthError: (err: AuthError) =>
+								Effect.succeed(
+									response(
+										{
+											message: "Failed to register user",
+											errors: err.message,
 										},
 										HttpStatus.BAD_REQUEST,
 									),
