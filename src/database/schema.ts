@@ -7,6 +7,7 @@ import {
 	integer,
 	boolean,
 	index,
+	unique,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
@@ -94,13 +95,18 @@ export const chapters = pgTable("chapters", {
 	mascotId: integer().notNull(),
 	...timestamps,
 });
-export const quizzes = pgTable("quizzes", {
-	id: serial().primaryKey(),
-	chapterId: integer().references(() => chapters.id, { onDelete: "cascade" }),
-	title: varchar().notNull(),
-	difficulty: varchar({ enum: ["easy", "medium", "hard"] }).notNull(),
-	...timestamps,
-});
+export const quizzes = pgTable(
+	"quizzes",
+	{
+		id: serial().primaryKey(),
+		chapterId: integer().references(() => chapters.id, { onDelete: "cascade" }),
+		title: varchar().notNull(),
+		level: integer().notNull(),
+		difficulty: varchar({ enum: ["easy", "medium", "hard"] }).notNull(),
+		...timestamps,
+	},
+	(t) => [unique("levels_quiz_unique").on(t.id, t.level)],
+);
 export const questions = pgTable("questions", {
 	id: serial().primaryKey(),
 	quizId: integer().references(() => quizzes.id, { onDelete: "cascade" }),
@@ -127,7 +133,7 @@ export const submissions = pgTable("submissions", {
 
 export const studyMaterials = pgTable("study_materials", {
 	id: serial().primaryKey(),
-	questionId: varchar().references(() => questions.id, { onDelete: "cascade" }),
+	questionId: integer().references(() => questions.id, { onDelete: "cascade" }),
 	title: varchar(),
 	imageLink: varchar(),
 	content: text(),

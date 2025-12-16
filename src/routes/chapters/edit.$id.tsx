@@ -3,7 +3,7 @@ import { useCustomForm } from "@/hooks/use-custom-form";
 import type { ChapterFormData } from "@/types/zod";
 import ChapterForm from "./-sections/chapter-form";
 import { getChapterById, updateChapter } from "@/actions/chapters";
-import { useFlashStore } from "@/store/use-flash";
+import { setFlashState } from "@/store/use-flash";
 import { useQueryClient } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/chapters/edit/$id")({
@@ -44,7 +44,7 @@ export default function RouteComponent() {
 			});
 
 			if (result === null) {
-				useFlashStore.getState().setFlash({
+				setFlashState({
 					type: "error",
 					message: "Failed to update chapter. See logs.",
 				});
@@ -53,7 +53,7 @@ export default function RouteComponent() {
 				return;
 			}
 
-			useFlashStore.getState().setFlash({
+			setFlashState({
 				type: "success",
 				message: "Successfully updated chapter",
 			});

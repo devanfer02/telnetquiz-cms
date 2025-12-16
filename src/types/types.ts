@@ -24,6 +24,8 @@ type Quiz = {
 	title: string;
 	difficulty: "easy" | "medium" | "hard";
 	numberOfQuestions: number;
+	level: number;
+	chapter: Chapter | null;
 };
 
 type Question = {

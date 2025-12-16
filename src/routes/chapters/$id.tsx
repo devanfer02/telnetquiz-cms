@@ -3,6 +3,7 @@ import { Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import QuizList from "../quiz/-sections/quiz-list";
 import { getChapterById } from "@/actions/chapters";
+import NotFound from "@/components/global/not-found";
 
 export const Route = createFileRoute("/chapters/$id")({
 	loader: async ({ params }) => {
@@ -19,7 +20,7 @@ function RouteComponent() {
 	const { chapter } = Route.useLoaderData();
 
 	if (!chapter) {
-		return <div>Chapter not found</div>;
+		return <NotFound message="Chapter not found" />;
 	}
 
 	const id = chapter.id.toString();
@@ -47,7 +48,10 @@ function RouteComponent() {
 					{chapter.description}
 				</p>
 			</div>
-			<QuizList quizzes={chapter.quizzes} disableKey={["chapterId"]} />
+			<QuizList
+				quizzes={chapter.quizzes}
+				disableKey={["chapterId", "chapterName"]}
+			/>
 		</div>
 	);
 }

@@ -1,11 +1,12 @@
+import ChapterOptions from "@/components/chapters/chapter-options";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { mockChapters } from "@/data/mock-chapter";
 import type { useCustomForm } from "@/hooks/use-custom-form";
 import { validateField } from "@/lib/utils";
 import { type QuizFormData, quizSchema } from "@/types/zod";
+import { Suspense } from "react";
 
 interface QuizFormProps {
 	form: ReturnType<typeof useCustomForm<QuizFormData>>;
@@ -53,7 +54,36 @@ export default function QuizForm({ form, buttonText }: QuizFormProps) {
 						</div>
 					)}
 				</form.Field>
-
+				<form.Field
+					name="level"
+					validators={{
+						onChange: (value) =>
+							validateField(quizSchema, "level", value.value),
+					}}
+				>
+					{(field) => (
+						<div className="space-y-2">
+							<Label
+								htmlFor={field.name}
+								className="text-telnet-primary font-semibold text-lg"
+							>
+								Level
+							</Label>
+							<Input
+								id={field.name}
+								value={field.state.value}
+								onBlur={field.handleBlur}
+								onChange={(e) => field.handleChange(Number(e.target.value))}
+								className="border-telnet-surface-darker"
+							/>
+							{field.state.meta.errors && (
+								<p className="text-red-600 text-sm">
+									{field.state.meta.errors}
+								</p>
+							)}
+						</div>
+					)}
+				</form.Field>
 				<form.Field
 					name="difficulty"
 					validators={{
@@ -92,39 +122,6 @@ export default function QuizForm({ form, buttonText }: QuizFormProps) {
 						</div>
 					)}
 				</form.Field>
-
-				<form.Field
-					name="numberOfQuestions"
-					validators={{
-						onChange: (value) =>
-							validateField(quizSchema, "numberOfQuestions", value.value),
-					}}
-				>
-					{(field) => (
-						<div className="space-y-2">
-							<Label
-								htmlFor={field.name}
-								className="text-telnet-primary font-semibold text-lg"
-							>
-								Jumlah Pertanyaan
-							</Label>
-							<Input
-								id={field.name}
-								type="number"
-								value={field.state.value}
-								onBlur={field.handleBlur}
-								onChange={(e) => field.handleChange(Number(e.target.value))}
-								className="border-telnet-surface-darker"
-							/>
-							{field.state.meta.errors && (
-								<p className="text-red-600 text-sm">
-									{field.state.meta.errors}
-								</p>
-							)}
-						</div>
-					)}
-				</form.Field>
-
 				<form.Field
 					name="chapterId"
 					validators={{
@@ -147,12 +144,14 @@ export default function QuizForm({ form, buttonText }: QuizFormProps) {
 								onChange={(e) => field.handleChange(Number(e.target.value))}
 								className="w-full p-2 border border-telnet-surface-darker rounded-md"
 							>
-								<option value={0}>Pilih Chapter</option>
-								{mockChapters.map((chapter) => (
-									<option key={chapter.id} value={chapter.id}>
-										{chapter.title}
-									</option>
-								))}
+								<option value={0} hidden>
+									Pilih Chapter
+								</option>
+								<Suspense
+									fallback={<option disabled>Loading chapters...</option>}
+								>
+									<ChapterOptions />
+								</Suspense>
 							</select>
 							{field.state.meta.errors && (
 								<p className="text-red-600 text-sm">

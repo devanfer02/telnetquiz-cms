@@ -1,24 +1,24 @@
 import { DbLayer } from "@/lib/db";
 import {
-	createChapter,
-	deleteChapter,
-	fetchAllChapters,
-	fetchChapterById,
-	patchChapter,
-} from "@/services/chapters";
-import { chapterSchema, idNumberSchema } from "@/types/zod";
+	createQuiz,
+	deleteQuiz,
+	fetchAllQuizzes,
+	fetchQuizById,
+	patchQuiz,
+} from "@/services/quizzes";
+import { idNumberSchema, quizSchema } from "@/types/zod";
 import { createServerFn } from "@tanstack/react-start";
 import { Effect } from "effect";
 import z from "zod";
 
-export const getAllChapters = createServerFn({
+export const getAllQuizzes = createServerFn({
 	method: "GET",
 }).handler(async () => {
 	return Effect.runPromise(
-		fetchAllChapters.pipe(
+		fetchAllQuizzes.pipe(
 			Effect.provide(DbLayer),
 			Effect.catchAll((err) => {
-				console.error("Failed to get all chapters. ERR:", err);
+				console.error("Failed to get all quizzes. ERR:", err);
 
 				return Effect.succeed([]);
 			}),
@@ -26,16 +26,16 @@ export const getAllChapters = createServerFn({
 	);
 });
 
-export const getChapterById = createServerFn({
+export const getQuizById = createServerFn({
 	method: "GET",
 })
 	.inputValidator(z.number())
 	.handler(async ({ data: id }) => {
 		return Effect.runPromise(
-			fetchChapterById(id).pipe(
+			fetchQuizById(id).pipe(
 				Effect.provide(DbLayer),
 				Effect.catchAll((err) => {
-					console.error("Failed to get chapter by id. ERR:", err);
+					console.error("Failed to get quiz by id. ERR:", err);
 
 					return Effect.succeed(null);
 				}),
@@ -43,13 +43,13 @@ export const getChapterById = createServerFn({
 		);
 	});
 
-export const addChapter = createServerFn({
+export const addQuiz = createServerFn({
 	method: "POST",
 })
-	.inputValidator(chapterSchema)
+	.inputValidator(quizSchema)
 	.handler(async ({ data }) => {
 		return Effect.runPromise(
-			createChapter(data).pipe(
+			createQuiz(data).pipe(
 				Effect.provide(DbLayer),
 				Effect.catchAll((err) => {
 					console.error("Failed to create new chapter. ERR:", err);
@@ -60,20 +60,18 @@ export const addChapter = createServerFn({
 		);
 	});
 
-export const updateChapter = createServerFn({
+export const updateQuiz = createServerFn({
 	method: "POST",
 })
-	.inputValidator(
-		idNumberSchema.extend(z.object({ chapter: chapterSchema }).shape),
-	)
+	.inputValidator(idNumberSchema.extend(z.object({ quiz: quizSchema }).shape))
 	.handler(async ({ data }) => {
-		const { id, chapter } = data;
+		const { id, quiz } = data;
 
 		return Effect.runPromise(
-			patchChapter(id, chapter).pipe(
+			patchQuiz(id, quiz).pipe(
 				Effect.provide(DbLayer),
 				Effect.catchAll((err) => {
-					console.error("Failed to update chapter. ERR:", err);
+					console.error("Failed to update chapter. ERR: ", err);
 
 					return Effect.succeed(null);
 				}),
@@ -81,7 +79,7 @@ export const updateChapter = createServerFn({
 		);
 	});
 
-export const removeChapter = createServerFn({
+export const removeQuiz = createServerFn({
 	method: "POST",
 })
 	.inputValidator(idNumberSchema)
@@ -89,10 +87,10 @@ export const removeChapter = createServerFn({
 		const { id } = data;
 
 		return Effect.runPromise(
-			deleteChapter(id).pipe(
+			deleteQuiz(id).pipe(
 				Effect.provide(DbLayer),
 				Effect.catchAll((err) => {
-					console.error("Failed to delete chapter. ERR:", err);
+					console.error("Failed to delete quiz. ERR:", err);
 
 					return Effect.succeed(null);
 				}),
