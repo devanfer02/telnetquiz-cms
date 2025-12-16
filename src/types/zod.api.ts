@@ -10,4 +10,11 @@ export const registerUserSchema = z.object({
 		.regex(/\d/, "Must contain at least one number"),
 });
 
+export const loginUserSchema = z.object({
+	email: z.email().nonempty(),
+	password: z.string(),
+});
+
 export type RegisterUserFormData = z.infer<typeof registerUserSchema>;
+
+export type LoginUserFormData = z.infer<typeof loginUserSchema>;
