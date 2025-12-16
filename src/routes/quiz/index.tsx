@@ -1,14 +1,24 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { mockQuizzes } from "@/data/mock-quiz";
 import QuizList from "./-sections/quiz-list";
+import { getAllQuizzes } from "@/actions/quizzes";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/quiz/")({
-	loader: () => ({ data: mockQuizzes }),
+	loader: async ({ context }) => {
+		await context.queryClient.prefetchQuery({
+			queryKey: ["quiz-list"],
+			queryFn: () => getAllQuizzes(),
+		});
+	},
 	component: RouteComponent,
 });
 
 function RouteComponent() {
-	const { data } = Route.useLoaderData();
+	const { data: quizzes } = useSuspenseQuery({
+		queryKey: ["quiz-list"],
+		queryFn: () => getAllQuizzes(),
+		staleTime: 60 * 1000,
+	});
 
 	return (
 		<>
@@ -20,7 +30,7 @@ function RouteComponent() {
 					Daftar semua kuis tentang Media dan Jaringan Telekomunikasi.
 				</p>
 			</div>
-			<QuizList quizzes={data} />
+			<QuizList quizzes={quizzes} />
 		</>
 	);
 }

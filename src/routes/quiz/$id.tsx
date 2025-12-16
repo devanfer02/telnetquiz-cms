@@ -2,18 +2,23 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { mockQuestionsQuiz } from "@/data/mock-question";
-import { mockQuizzes } from "@/data/mock-quiz";
 import QuestionList from "../questions/-sections/question-list";
+import { getQuizById } from "@/actions/quizzes";
 
 export const Route = createFileRoute("/quiz/$id")({
+	loader: async ({ params }) => {
+		const quiz = await getQuizById({ data: Number(params.id) });
+
+		return {
+			quiz,
+		};
+	},
 	component: RouteComponent,
 });
 
 function RouteComponent() {
-	const { id } = Route.useParams();
-	const quizId = parseInt(id, 10);
-	const quiz = mockQuizzes.find((q) => q.id === quizId);
-	const questions = mockQuestionsQuiz[quizId] || [];
+	const { quiz } = Route.useLoaderData();
+	const questions = mockQuestionsQuiz["1"] || [];
 
 	if (!quiz) {
 		return <div>Quiz not found</div>;
@@ -29,7 +34,7 @@ function RouteComponent() {
 					<Button className="bg-blue-500 hover:bg-blue-600 text-white">
 						<Link
 							to="/quiz/edit/$id"
-							params={{ id }}
+							params={{ id: quiz.id.toString() }}
 							className="flex items-center justify-center"
 						>
 							<Pencil className="w-4 h-4 mr-2" />

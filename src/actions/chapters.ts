@@ -35,7 +35,7 @@ export const getChapterById = createServerFn({
 			fetchChapterById(id).pipe(
 				Effect.provide(DbLayer),
 				Effect.catchAll((err) => {
-					console.error("Failed to get all chapters. ERR:", err);
+					console.error("Failed to get chapter by id. ERR:", err);
 
 					return Effect.succeed(null);
 				}),

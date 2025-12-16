@@ -1,5 +1,5 @@
-import { sql, eq } from "drizzle-orm";
-import { chapters, questions, quizzes } from "@/database/schema";
+import { sql, eq, desc } from "drizzle-orm";
+import { chapters, questions } from "@/database/schema";
 import { Db } from "@/lib/db";
 import { ChapterFormData } from "@/types/zod";
 import { Effect } from "effect";
@@ -9,7 +9,7 @@ export const fetchAllChapters = Effect.gen(function* () {
 	const { db } = yield* Db;
 
 	return yield* Effect.tryPromise({
-		try: () => db.select().from(chapters),
+		try: () => db.select().from(chapters).orderBy(desc(chapters.createdAt)),
 		catch: (err) =>
 			new DatabaseError({
 				cause: err,

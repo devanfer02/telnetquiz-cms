@@ -1,0 +1,51 @@
+import { questions, quizzes } from "@/database/schema";
+import { Db } from "@/lib/db";
+import { eq, sql } from "drizzle-orm";
+import { Effect } from "effect";
+import { DatabaseError, NotFoundError } from "./errors/errors";
+
+export const fetchAllQuizzes = Effect.gen(function* () {
+	const { db } = yield* Db;
+
+	return yield* Effect.tryPromise({
+		try: () =>
+			db.query.quizzes.findMany({
+				orderBy: quizzes.createdAt,
+				extras: {
+					numberOfQuestions: sql<number>`(
+          SELECT count(*)
+          FROM ${questions}
+          WHERE "questions"."quizId" = "quizzes"."id"
+        )`.as("numberOfQuestions"),
+				},
+			}),
+		catch: (err) =>
+			new DatabaseError({
+				cause: err,
+				message: "Failed to fetch quizzes",
+			}),
+	});
+});
+
+export const fetchQuizById = (id: number) =>
+	Effect.gen(function* () {
+		const { db } = yield* Db;
+
+		const result = yield* Effect.tryPromise({
+			try: () =>
+				db.query.quizzes.findFirst({
+					where: eq(quizzes.id, id),
+				}),
+			catch: (err) =>
+				new DatabaseError({
+					cause: err,
+					message: `Failed to fetch quiz with id ${id}`,
+				}),
+		});
+
+		if (result === undefined) {
+			return yield* Effect.fail(new NotFoundError({ id, entity: "Quiz" }));
+		}
+
+		return result;
+	});
