@@ -27,7 +27,6 @@ interface QuizListProps {
 
 export default function QuizList({ quizzes, disableKey }: QuizListProps) {
 	const [keyword, setKeyword] = useState("");
-	const [data, _] = useState(() => quizzes);
 	const [sorting, setSorting] = useState<SortingState>([]);
 
 	const columns: ColumnDef<Quiz>[] = [
@@ -125,7 +124,7 @@ export default function QuizList({ quizzes, disableKey }: QuizListProps) {
 							if (result !== null) {
 								setFlashState({
 									type: "success",
-									message: "Successfully deleted chapter",
+									message: "Successfully deleted quiz",
 								});
 							}
 						}}
@@ -136,7 +135,7 @@ export default function QuizList({ quizzes, disableKey }: QuizListProps) {
 	];
 
 	const table = useReactTable({
-		data,
+		data: quizzes,
 		columns: filterColumns(columns, disableKey),
 		state: { globalFilter: keyword, sorting },
 		onGlobalFilterChange: setKeyword,
