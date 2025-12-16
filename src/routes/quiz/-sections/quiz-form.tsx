@@ -1,4 +1,3 @@
-import { getAllChapters } from "@/actions/chapters";
 import ChapterOptions from "@/components/chapters/chapter-options";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";

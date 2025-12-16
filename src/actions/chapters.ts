@@ -73,7 +73,7 @@ export const updateChapter = createServerFn({
 			patchChapter(id, chapter).pipe(
 				Effect.provide(DbLayer),
 				Effect.catchAll((err) => {
-					console.error("Failed to get all chapters. ERR:", err);
+					console.error("Failed to update chapter. ERR:", err);
 
 					return Effect.succeed(null);
 				}),
@@ -92,7 +92,7 @@ export const removeChapter = createServerFn({
 			deleteChapter(id).pipe(
 				Effect.provide(DbLayer),
 				Effect.catchAll((err) => {
-					console.error("Failed to get all chapters. ERR:", err);
+					console.error("Failed to delete chapter. ERR:", err);
 
 					return Effect.succeed(null);
 				}),

@@ -16,69 +16,9 @@ import TanstackTable from "@/components/global/ts-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { filterColumns } from "@/lib/utils";
-
-export const columns: ColumnDef<Quiz>[] = [
-	{
-		accessorKey: "id",
-		header: ({ column }) => <SortableHeader column={column} title="ID" />,
-		size: 10,
-		cell: ({ row }) => {
-			const id = row.original.id.toString();
-
-			return <TableLink to="/quiz/$id" paramKey="id" paramValue={id} />;
-		},
-	},
-	{
-		accessorKey: "chapterId",
-		header: ({ column }) => (
-			<SortableHeader column={column} title="Chapter ID" />
-		),
-		size: 10,
-		cell: ({ row }) => {
-			const chapterId = row.original.chapterId!.toString();
-
-			return (
-				<TableLink to="/chapters/$id" paramKey="id" paramValue={chapterId} />
-			);
-		},
-	},
-	{
-		accessorKey: "chapterName",
-		header: "Chapter Name",
-		size: 10,
-	},
-	{
-		accessorKey: "title",
-		header: ({ column }) => <SortableHeader column={column} title="Title" />,
-		size: 50,
-	},
-	{
-		accessorKey: "difficulty",
-		header: ({ column }) => (
-			<SortableHeader column={column} title="Difficulty" />
-		),
-		size: 50,
-	},
-	{
-		accessorKey: "numberOfQuestions",
-		header: ({ column }) => (
-			<SortableHeader
-				column={column}
-				title="Total Questions"
-				className="text-center"
-			/>
-		),
-		cell: ({ row }) => <p className="">{row.original.numberOfQuestions}</p>,
-	},
-	{
-		id: "actions",
-		header: "Actions",
-		size: 100,
-		cell: ({ row }) => (
-			<ActionCell row={row} keyName="id" editHref="/quiz/edit/$id" />
-		),
-	},
-];
+import { removeQuiz } from "@/actions/quizzes";
+import { queryClient } from "@/lib/query-client";
+import { setFlashState } from "@/store/use-flash";
 
 interface QuizListProps {
 	quizzes: Quiz[];
@@ -89,6 +29,89 @@ export default function QuizList({ quizzes, disableKey }: QuizListProps) {
 	const [keyword, setKeyword] = useState("");
 	const [data, _] = useState(() => quizzes);
 	const [sorting, setSorting] = useState<SortingState>([]);
+
+	const columns: ColumnDef<Quiz>[] = [
+		{
+			accessorKey: "id",
+			header: ({ column }) => <SortableHeader column={column} title="ID" />,
+			size: 10,
+			cell: ({ row }) => {
+				const id = row.original.id.toString();
+
+				return <TableLink to="/quiz/$id" paramKey="id" paramValue={id} />;
+			},
+		},
+		{
+			accessorKey: "chapterId",
+			header: ({ column }) => (
+				<SortableHeader column={column} title="Chapter ID" />
+			),
+			size: 10,
+			cell: ({ row }) => {
+				const chapterId = row.original.chapterId!.toString();
+
+				return (
+					<TableLink to="/chapters/$id" paramKey="id" paramValue={chapterId} />
+				);
+			},
+		},
+		{
+			accessorKey: "chapterName",
+			header: "Chapter Name",
+			size: 10,
+		},
+		{
+			accessorKey: "title",
+			header: ({ column }) => <SortableHeader column={column} title="Title" />,
+			size: 50,
+		},
+		{
+			accessorKey: "difficulty",
+			header: ({ column }) => (
+				<SortableHeader column={column} title="Difficulty" />
+			),
+			size: 50,
+		},
+		{
+			accessorKey: "numberOfQuestions",
+			header: ({ column }) => (
+				<SortableHeader
+					column={column}
+					title="Total Questions"
+					className="text-center"
+				/>
+			),
+			cell: ({ row }) => <p className="">{row.original.numberOfQuestions}</p>,
+		},
+		{
+			id: "actions",
+			header: "Actions",
+			size: 100,
+			cell: ({ row }) => {
+				const id = row.original.id;
+
+				return (
+					<ActionCell
+						row={row}
+						keyName="id"
+						editHref="/quiz/edit/$id"
+						handleDelete={async () => {
+							const result = await removeQuiz({ data: { id } });
+							await queryClient.invalidateQueries({
+								queryKey: ["quiz-list"],
+							});
+							if (result !== null) {
+								setFlashState({
+									type: "success",
+									message: "Successfully deleted chapter",
+								});
+							}
+						}}
+					/>
+				);
+			},
+		},
+	];
 
 	const table = useReactTable({
 		data,

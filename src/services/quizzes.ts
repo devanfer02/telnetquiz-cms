@@ -66,3 +66,40 @@ export const createQuiz = (quiz: QuizFormData) =>
 
 		return result[0];
 	});
+
+export const patchQuiz = (id: number, quiz: QuizFormData) =>
+	Effect.gen(function* () {
+		const { db } = yield* Db;
+
+		const result = yield* Effect.tryPromise({
+			try: () =>
+				db.update(quizzes).set(quiz).where(eq(quizzes.id, id)).returning(),
+			catch: (err) =>
+				new DatabaseError({
+					cause: err,
+					message: `Failed to update quiz with id ${id}`,
+				}),
+		});
+
+		if (result.length === 0) {
+			return yield* Effect.fail(new NotFoundError({ id, entity: "Quiz" }));
+		}
+
+		return result[0];
+	});
+
+export const deleteQuiz = (id: number) =>
+	Effect.gen(function* () {
+		const { db } = yield* Db;
+
+		yield* Effect.tryPromise({
+			try: () => db.delete(quizzes).where(eq(quizzes.id, id)),
+			catch: (err) =>
+				new DatabaseError({
+					cause: err,
+					message: `Failed to delete quiz with id ${id}`,
+				}),
+		});
+
+		return { success: true, id };
+	});

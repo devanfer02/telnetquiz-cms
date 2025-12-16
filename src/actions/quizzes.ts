@@ -1,6 +1,12 @@
 import { DbLayer } from "@/lib/db";
-import { createQuiz, fetchAllQuizzes, fetchQuizById } from "@/services/quizzes";
-import { quizSchema } from "@/types/zod";
+import {
+	createQuiz,
+	deleteQuiz,
+	fetchAllQuizzes,
+	fetchQuizById,
+	patchQuiz,
+} from "@/services/quizzes";
+import { idNumberSchema, quizSchema } from "@/types/zod";
 import { createServerFn } from "@tanstack/react-start";
 import { Effect } from "effect";
 import z from "zod";
@@ -47,6 +53,44 @@ export const addQuiz = createServerFn({
 				Effect.provide(DbLayer),
 				Effect.catchAll((err) => {
 					console.error("Failed to create new chapter. ERR:", err);
+
+					return Effect.succeed(null);
+				}),
+			),
+		);
+	});
+
+export const updateQuiz = createServerFn({
+	method: "POST",
+})
+	.inputValidator(idNumberSchema.extend(z.object({ quiz: quizSchema }).shape))
+	.handler(async ({ data }) => {
+		const { id, quiz } = data;
+
+		return Effect.runPromise(
+			patchQuiz(id, quiz).pipe(
+				Effect.provide(DbLayer),
+				Effect.catchAll((err) => {
+					console.error("Failed to update chapter. ERR: ", err);
+
+					return Effect.succeed(null);
+				}),
+			),
+		);
+	});
+
+export const removeQuiz = createServerFn({
+	method: "POST",
+})
+	.inputValidator(idNumberSchema)
+	.handler(async ({ data }) => {
+		const { id } = data;
+
+		return Effect.runPromise(
+			deleteQuiz(id).pipe(
+				Effect.provide(DbLayer),
+				Effect.catchAll((err) => {
+					console.error("Failed to delete quiz. ERR:", err);
 
 					return Effect.succeed(null);
 				}),

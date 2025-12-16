@@ -1,28 +1,69 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { mockQuizzes } from "@/data/mock-quiz";
+import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useCustomForm } from "@/hooks/use-custom-form";
 import type { QuizFormData } from "@/types/zod";
 import QuizForm from "./-sections/quiz-form";
+import { getQuizById, updateQuiz } from "@/actions/quizzes";
+import { useQueryClient } from "@tanstack/react-query";
+import { setFlashState } from "@/store/use-flash";
 
 export const Route = createFileRoute("/quiz/edit/$id")({
+	loader: async ({ params }) => {
+		const quiz = await getQuizById({ data: Number(params.id) });
+
+		if (quiz === null) {
+			throw redirect({
+				to: "/quiz",
+			});
+		}
+
+		return {
+			quiz,
+		};
+	},
 	component: RouteComponent,
 });
 
 export default function RouteComponent() {
-	const { id } = Route.useParams();
-	const quizId = parseInt(id, 10);
-	const quiz = mockQuizzes.find((c) => c.id === quizId);
+	const navigate = useNavigate();
+	const queryClient = useQueryClient();
+	const { quiz } = Route.useLoaderData();
 
 	const form = useCustomForm({
 		defaultValues: {
 			id: quiz?.id,
 			title: quiz?.title,
 			difficulty: quiz?.difficulty,
-			numberOfQuestions: quiz?.numberOfQuestions,
 			chapterId: quiz?.chapterId,
 		} as QuizFormData,
 		onSubmit: async ({ value }) => {
-			console.log("submitted ", value);
+			const result = await updateQuiz({
+				data: {
+					id: quiz.id,
+					quiz: value,
+				},
+			});
+
+			if (result === null) {
+				setFlashState({
+					type: "error",
+					message: "Failed to update quiz. See logs.",
+				});
+
+				navigate({ to: "/quiz" });
+				return;
+			}
+
+			setFlashState({
+				type: "success",
+				message: "Successfully update quiz",
+			});
+
+			await queryClient.invalidateQueries({ queryKey: ["quiz-list"] });
+
+			navigate({
+				to: "/quiz/$id",
+				params: { id: result.id.toString() },
+			});
 		},
 	});
 
