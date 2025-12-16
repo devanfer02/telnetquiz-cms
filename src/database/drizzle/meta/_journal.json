@@ -36,6 +36,20 @@
 			"when": 1765870941039,
 			"tag": "0004_clammy_turbo",
 			"breakpoints": true
+		},
+		{
+			"idx": 5,
+			"version": "7",
+			"when": 1765898973330,
+			"tag": "0005_heavy_nextwave",
+			"breakpoints": true
+		},
+		{
+			"idx": 6,
+			"version": "7",
+			"when": 1765899050360,
+			"tag": "0006_flat_jazinda",
+			"breakpoints": true
 		}
 	]
 }
