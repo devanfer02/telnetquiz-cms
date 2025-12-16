@@ -8,7 +8,7 @@ const pool = new Pool({
 	connectionString: env.SUPABASE_DB_URL,
 });
 
-const db = drizzle(pool, { schema });
+export const db = drizzle(pool, { schema });
 
 export class Db extends Context.Tag("Db")<Db, { db: typeof db }>() {}
 
