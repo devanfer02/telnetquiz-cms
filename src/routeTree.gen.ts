@@ -27,6 +27,7 @@ import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
 import { Route as ApiChaptersRouteImport } from './routes/api/chapters'
 import { Route as QuizEditIdRouteImport } from './routes/quiz/edit.$id'
 import { Route as ChaptersEditIdRouteImport } from './routes/chapters/edit.$id'
+import { Route as ApiAuthRegisterRouteImport } from './routes/api/auth/register'
 
 const DashboardRouteRoute = DashboardRouteRouteImport.update({
   id: '/dashboard',
@@ -118,6 +119,11 @@ const ChaptersEditIdRoute = ChaptersEditIdRouteImport.update({
   path: '/chapters/edit/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAuthRegisterRoute = ApiAuthRegisterRouteImport.update({
+  id: '/api/auth/register',
+  path: '/api/auth/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -136,6 +142,7 @@ export interface FileRoutesByFullPath {
   '/study-materials': typeof StudyMaterialsIndexRoute
   '/submissions': typeof SubmissionsIndexRoute
   '/users': typeof UsersIndexRoute
+  '/api/auth/register': typeof ApiAuthRegisterRoute
   '/chapters/edit/$id': typeof ChaptersEditIdRoute
   '/quiz/edit/$id': typeof QuizEditIdRoute
 }
@@ -156,6 +163,7 @@ export interface FileRoutesByTo {
   '/study-materials': typeof StudyMaterialsIndexRoute
   '/submissions': typeof SubmissionsIndexRoute
   '/users': typeof UsersIndexRoute
+  '/api/auth/register': typeof ApiAuthRegisterRoute
   '/chapters/edit/$id': typeof ChaptersEditIdRoute
   '/quiz/edit/$id': typeof QuizEditIdRoute
 }
@@ -177,6 +185,7 @@ export interface FileRoutesById {
   '/study-materials/': typeof StudyMaterialsIndexRoute
   '/submissions/': typeof SubmissionsIndexRoute
   '/users/': typeof UsersIndexRoute
+  '/api/auth/register': typeof ApiAuthRegisterRoute
   '/chapters/edit/$id': typeof ChaptersEditIdRoute
   '/quiz/edit/$id': typeof QuizEditIdRoute
 }
@@ -199,6 +208,7 @@ export interface FileRouteTypes {
     | '/study-materials'
     | '/submissions'
     | '/users'
+    | '/api/auth/register'
     | '/chapters/edit/$id'
     | '/quiz/edit/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -219,6 +229,7 @@ export interface FileRouteTypes {
     | '/study-materials'
     | '/submissions'
     | '/users'
+    | '/api/auth/register'
     | '/chapters/edit/$id'
     | '/quiz/edit/$id'
   id:
@@ -239,6 +250,7 @@ export interface FileRouteTypes {
     | '/study-materials/'
     | '/submissions/'
     | '/users/'
+    | '/api/auth/register'
     | '/chapters/edit/$id'
     | '/quiz/edit/$id'
   fileRoutesById: FileRoutesById
@@ -260,6 +272,7 @@ export interface RootRouteChildren {
   StudyMaterialsIndexRoute: typeof StudyMaterialsIndexRoute
   SubmissionsIndexRoute: typeof SubmissionsIndexRoute
   UsersIndexRoute: typeof UsersIndexRoute
+  ApiAuthRegisterRoute: typeof ApiAuthRegisterRoute
   ChaptersEditIdRoute: typeof ChaptersEditIdRoute
   QuizEditIdRoute: typeof QuizEditIdRoute
 }
@@ -392,6 +405,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ChaptersEditIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/auth/register': {
+      id: '/api/auth/register'
+      path: '/api/auth/register'
+      fullPath: '/api/auth/register'
+      preLoaderRoute: typeof ApiAuthRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -412,6 +432,7 @@ const rootRouteChildren: RootRouteChildren = {
   StudyMaterialsIndexRoute: StudyMaterialsIndexRoute,
   SubmissionsIndexRoute: SubmissionsIndexRoute,
   UsersIndexRoute: UsersIndexRoute,
+  ApiAuthRegisterRoute: ApiAuthRegisterRoute,
   ChaptersEditIdRoute: ChaptersEditIdRoute,
   QuizEditIdRoute: QuizEditIdRoute,
 }
@@ -420,10 +441,11 @@ export const routeTree = rootRouteImport
   ._addFileTypes<FileRouteTypes>()
 
 import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
+import type { startInstance } from './start.ts'
 declare module '@tanstack/react-start' {
   interface Register {
     ssr: true
     router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
   }
 }

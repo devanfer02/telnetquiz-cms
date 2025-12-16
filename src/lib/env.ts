@@ -7,6 +7,7 @@ export const env = createEnv({
 		SUPABASE_DB_URL: z.string(),
 		GOOGLE_CLIENT_ID: z.string(),
 		GOOGLE_CLIENT_SECRET: z.string(),
+		API_KEY: z.string(),
 	},
 
 	/**
