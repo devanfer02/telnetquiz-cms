@@ -17,3 +17,15 @@ export class ValidationError extends Data.TaggedError("ValidationError")<{
 export class AuthError extends Data.TaggedError("AuthError")<{
 	message: string;
 }> {}
+
+export class CloudflareR2Error extends Data.TaggedError("CloudflareR2Error")<{
+	cause: unknown;
+	message: string;
+}> {}
+
+export class InternalServerError extends Data.TaggedError(
+	"InternalServerError",
+)<{
+	cause: unknown;
+	message: string;
+}> {}

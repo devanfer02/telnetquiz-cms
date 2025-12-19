@@ -8,6 +8,10 @@ export const env = createEnv({
 		GOOGLE_CLIENT_ID: z.string(),
 		GOOGLE_CLIENT_SECRET: z.string(),
 		API_KEY: z.string(),
+		CLOUDFLARE_SECRET_KEY: z.string(),
+		CLOUDFLARE_ACCESS_KEY: z.string(),
+		CLOUDFLARE_BUCKET: z.string(),
+		CLOUDFLARE_R2_ENDPOINT: z.url(),
 	},
 
 	/**

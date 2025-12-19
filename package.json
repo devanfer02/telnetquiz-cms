@@ -58,6 +58,7 @@
     "tailwind-merge": "^3.0.2",
     "tailwindcss": "^4.0.6",
     "tw-animate-css": "^1.3.6",
+    "ulid": "^3.0.2",
     "vite-tsconfig-paths": "^5.1.4",
     "zod": "^4.1.11",
     "zustand": "^5.0.9"
@@ -67,6 +68,7 @@
     "@tanstack/devtools-event-client": "^0.3.2",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.2.0",
+    "@types/bun": "^1.3.4",
     "@types/node": "^22.10.2",
     "@types/pg": "^8.10.0",
     "@types/react": "^19.2.0",

@@ -1,6 +1,7 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { ulid } from "ulid";
 import { z } from "zod";
 
 export function cn(...inputs: ClassValue[]) {
@@ -32,4 +33,18 @@ export function validateField<
 	const result = fieldSchema.safeParse(value);
 
 	return result.success ? undefined : result.error.issues[0].message;
+}
+
+export function generateFilename(
+	originalName: string,
+	options?: { prefix: string },
+) {
+	const ext = originalName.includes(".") ? originalName.split(".").pop() : "";
+
+	const date = new Date().toISOString().slice(0, 10);
+	const id = ulid();
+
+	const prefix = options?.prefix ? `${options.prefix}_` : "";
+
+	return `${prefix}${date}_${id}${ext}`;
 }
