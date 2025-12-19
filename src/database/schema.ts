@@ -110,6 +110,7 @@ export const quizzes = pgTable(
 export const questions = pgTable("questions", {
 	id: serial().primaryKey(),
 	quizId: integer().references(() => quizzes.id, { onDelete: "cascade" }),
+  materialId: integer().references(() => studyMaterials.id, { onDelete: "cascade" }),
 	imageLink: varchar(),
 	description: text().notNull(),
 	question: varchar().notNull(),
@@ -139,14 +140,6 @@ export const studyMaterials = pgTable("study_materials", {
 	...timestamps,
 });
 
-export const questionMaterials = pgTable("question_materials", {
-	studyMaterialId: integer().references(() => studyMaterials.id, {
-		onDelete: "cascade",
-	}),
-	questionId: integer().references(() => questions.id, { onDelete: "cascade" }),
-	...timestamps,
-});
-
 export const usersRelations = relations(users, ({ many }) => ({
 	submissions: many(submissions),
 }));
@@ -170,8 +163,11 @@ export const questionsRelations = relations(questions, ({ one, many }) => ({
 		fields: [questions.quizId],
 		references: [quizzes.id],
 	}),
+  studyMaterial: one(studyMaterials, {
+    fields: [questions.materialId],
+    references: [studyMaterials.id]
+  }),
 	options: many(options),
-	questions: many(questions),
 }));
 export const optionsRelations = relations(options, ({ one }) => ({
 	question: one(questions, {
@@ -214,23 +210,5 @@ export const accountRelations = relations(accounts, ({ one }) => ({
 }));
 
 export const studyMaterialRelations = relations(studyMaterials, ({ many }) => ({
-	questionMaterials: many(questionMaterials),
+	questions: many(questions),
 }));
-
-export const questionRelations = relations(questions, ({ many }) => ({
-	questionMaterials: many(questionMaterials),
-}));
-
-export const questionMaterialRelations = relations(
-	questionMaterials,
-	({ one }) => ({
-		studyMaterials: one(studyMaterials, {
-			fields: [questionMaterials.studyMaterialId],
-			references: [studyMaterials.id],
-		}),
-		questions: one(questions, {
-			fields: [questionMaterials.questionId],
-			references: [questions.id],
-		}),
-	}),
-);
