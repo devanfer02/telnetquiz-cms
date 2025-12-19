@@ -34,7 +34,8 @@ export const optionSchema = z.object({
 });
 
 export const questionSchema = z.object({
-	quizId: z.string(),
+	quizId: z.number(),
+	materialId: z.number(),
 	image: imageFileSchema,
 	description: z
 		.string()

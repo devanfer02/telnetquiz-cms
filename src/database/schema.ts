@@ -110,7 +110,9 @@ export const quizzes = pgTable(
 export const questions = pgTable("questions", {
 	id: serial().primaryKey(),
 	quizId: integer().references(() => quizzes.id, { onDelete: "cascade" }),
-  materialId: integer().references(() => studyMaterials.id, { onDelete: "cascade" }),
+	materialId: integer().references(() => studyMaterials.id, {
+		onDelete: "cascade",
+	}),
 	imageLink: varchar(),
 	description: text().notNull(),
 	question: varchar().notNull(),
@@ -163,10 +165,10 @@ export const questionsRelations = relations(questions, ({ one, many }) => ({
 		fields: [questions.quizId],
 		references: [quizzes.id],
 	}),
-  studyMaterial: one(studyMaterials, {
-    fields: [questions.materialId],
-    references: [studyMaterials.id]
-  }),
+	studyMaterial: one(studyMaterials, {
+		fields: [questions.materialId],
+		references: [studyMaterials.id],
+	}),
 	options: many(options),
 }));
 export const optionsRelations = relations(options, ({ one }) => ({

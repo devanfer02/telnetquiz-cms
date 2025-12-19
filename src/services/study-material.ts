@@ -10,11 +10,11 @@ import {
 	ValidationError,
 } from "./errors/errors";
 import { StudyMaterialFormData, studyMaterialSchema } from "@/types/zod";
-import { R2Client } from "@/lib/storage";
-import { ulid } from "ulid";
+import { S3 } from "@/lib/s3";
 import z, { ZodError } from "zod";
 import { generateFilename } from "@/lib/utils";
 import { env } from "@/lib/env";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
 
 export const fetchAllStudyMaterials = Effect.gen(function* () {
 	const { db } = yield* Db;
@@ -58,7 +58,7 @@ export const fetchStudyMaterialById = (id: number) =>
 export const createStudyMaterial = (studyMaterial: StudyMaterialFormData) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
-		const { r2client } = yield* R2Client;
+		const { s3 } = yield* S3;
 
 		const parsed = yield* Effect.try({
 			try: () => {
@@ -89,12 +89,25 @@ export const createStudyMaterial = (studyMaterial: StudyMaterialFormData) =>
 		if (parsed.imageFile) {
 			const filename = generateFilename(parsed.imageFile.name);
 
-			yield* Effect.tryPromise({
-				try: () =>
-					r2client.write(filename, studyMaterial.imageFile, {
-						type: "image/png",
-						acl: "public-read",
+			const fileArrayBuf = yield* Effect.tryPromise({
+				try: () => parsed.imageFile!.arrayBuffer(),
+				catch: (err) =>
+					new InternalServerError({
+						cause: err,
+						message: "Failed to convert to array buffer",
 					}),
+			});
+
+			const body = new Uint8Array(fileArrayBuf);
+
+			const putObjCommand = new PutObjectCommand({
+				Bucket: env.CLOUDFLARE_BUCKET,
+				Key: `/study-materials/${filename}`,
+				Body: body,
+			});
+
+			yield* Effect.tryPromise({
+				try: () => s3.send(putObjCommand),
 				catch: (err) =>
 					new CloudflareR2Error({
 						cause: err,
@@ -102,25 +115,81 @@ export const createStudyMaterial = (studyMaterial: StudyMaterialFormData) =>
 					}),
 			});
 
-			imageLink = `${env.CLOUDFLARE_R2_ENDPOINT}/${env.CLOUDFLARE_BUCKET}/${filename}`;
+			imageLink = `${env.CLOUDFLARE_R2_ENDPOINT}/${env.CLOUDFLARE_BUCKET}/study-materials/${filename}`;
 		}
 
-		const [material] = yield* Effect.tryPromise({
+		const material = yield* Effect.tryPromise({
 			try: () =>
 				db
 					.insert(studyMaterials)
 					.values({
 						title: studyMaterial.title,
 						content: studyMaterial.content,
-						imageLink: imageLink,
+						imageLink,
 					})
 					.returning(),
 			catch: (err) =>
 				new DatabaseError({
 					cause: err,
-					message: "Failed to insert study material",
+					message: "Failed to create study material transaction",
 				}),
 		});
 
 		return material;
+	});
+
+export const patchStudyMaterial = (
+	id: number,
+	studyMaterial: StudyMaterialFormData,
+) =>
+	Effect.gen(function* () {
+		const { db } = yield* Db;
+
+		const result = yield* Effect.tryPromise({
+			try: () =>
+				db
+					.update(studyMaterials)
+					.set(studyMaterial)
+					.where(eq(studyMaterials.id, id))
+					.returning(),
+			catch: (error) =>
+				new DatabaseError({
+					cause: error,
+					message: `Failed to update study material with id ${id}`,
+				}),
+		});
+
+		if (result.length === 0) {
+			return yield* Effect.fail(
+				new NotFoundError({ id, entity: "StudyMaterial" }),
+			);
+		}
+
+		return result[0];
+	});
+
+export const deleteStudyMaterialById = (id: number) =>
+	Effect.gen(function* () {
+		const { db } = yield* Db;
+
+		const result = yield* Effect.tryPromise({
+			try: () =>
+				db.delete(studyMaterials).where(eq(studyMaterials.id, id)).returning(),
+			catch: (err) =>
+				new DatabaseError({
+					cause: err,
+					message: `Failed to delete study material with id ${id}`,
+				}),
+		});
+
+		if (result.length === 0) {
+			return yield* Effect.fail(
+				new NotFoundError({ id, entity: "StudyMaterial" }),
+			);
+		}
+
+		return {
+			success: true,
+			id,
+		};
 	});

@@ -25,6 +25,7 @@ import { Route as ChaptersAddRouteImport } from './routes/chapters/add'
 import { Route as ChaptersIdRouteImport } from './routes/chapters/$id'
 import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
 import { Route as ApiChaptersRouteImport } from './routes/api/chapters'
+import { Route as StudyMaterialsEditIdRouteImport } from './routes/study-materials/edit.$id'
 import { Route as QuizEditIdRouteImport } from './routes/quiz/edit.$id'
 import { Route as ChaptersEditIdRouteImport } from './routes/chapters/edit.$id'
 import { Route as ApiAuthRegisterRouteImport } from './routes/api/auth/register'
@@ -110,6 +111,11 @@ const ApiChaptersRoute = ApiChaptersRouteImport.update({
   path: '/api/chapters',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StudyMaterialsEditIdRoute = StudyMaterialsEditIdRouteImport.update({
+  id: '/study-materials/edit/$id',
+  path: '/study-materials/edit/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const QuizEditIdRoute = QuizEditIdRouteImport.update({
   id: '/quiz/edit/$id',
   path: '/quiz/edit/$id',
@@ -152,6 +158,7 @@ export interface FileRoutesByFullPath {
   '/api/auth/register': typeof ApiAuthRegisterRoute
   '/chapters/edit/$id': typeof ChaptersEditIdRoute
   '/quiz/edit/$id': typeof QuizEditIdRoute
+  '/study-materials/edit/$id': typeof StudyMaterialsEditIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -174,6 +181,7 @@ export interface FileRoutesByTo {
   '/api/auth/register': typeof ApiAuthRegisterRoute
   '/chapters/edit/$id': typeof ChaptersEditIdRoute
   '/quiz/edit/$id': typeof QuizEditIdRoute
+  '/study-materials/edit/$id': typeof StudyMaterialsEditIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -197,6 +205,7 @@ export interface FileRoutesById {
   '/api/auth/register': typeof ApiAuthRegisterRoute
   '/chapters/edit/$id': typeof ChaptersEditIdRoute
   '/quiz/edit/$id': typeof QuizEditIdRoute
+  '/study-materials/edit/$id': typeof StudyMaterialsEditIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -221,6 +230,7 @@ export interface FileRouteTypes {
     | '/api/auth/register'
     | '/chapters/edit/$id'
     | '/quiz/edit/$id'
+    | '/study-materials/edit/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -243,6 +253,7 @@ export interface FileRouteTypes {
     | '/api/auth/register'
     | '/chapters/edit/$id'
     | '/quiz/edit/$id'
+    | '/study-materials/edit/$id'
   id:
     | '__root__'
     | '/'
@@ -265,6 +276,7 @@ export interface FileRouteTypes {
     | '/api/auth/register'
     | '/chapters/edit/$id'
     | '/quiz/edit/$id'
+    | '/study-materials/edit/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -288,6 +300,7 @@ export interface RootRouteChildren {
   ApiAuthRegisterRoute: typeof ApiAuthRegisterRoute
   ChaptersEditIdRoute: typeof ChaptersEditIdRoute
   QuizEditIdRoute: typeof QuizEditIdRoute
+  StudyMaterialsEditIdRoute: typeof StudyMaterialsEditIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -404,6 +417,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiChaptersRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/study-materials/edit/$id': {
+      id: '/study-materials/edit/$id'
+      path: '/study-materials/edit/$id'
+      fullPath: '/study-materials/edit/$id'
+      preLoaderRoute: typeof StudyMaterialsEditIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/quiz/edit/$id': {
       id: '/quiz/edit/$id'
       path: '/quiz/edit/$id'
@@ -456,6 +476,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiAuthRegisterRoute: ApiAuthRegisterRoute,
   ChaptersEditIdRoute: ChaptersEditIdRoute,
   QuizEditIdRoute: QuizEditIdRoute,
+  StudyMaterialsEditIdRoute: StudyMaterialsEditIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
