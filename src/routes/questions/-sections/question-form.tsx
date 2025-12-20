@@ -8,114 +8,29 @@ import { Textarea } from "@/components/ui/textarea";
 import type { useCustomForm } from "@/hooks/use-custom-form";
 import { validateField } from "@/lib/utils";
 import {
-	optionSchema,
 	type QuestionFormData,
 	type QuestionsFormData,
 	questionSchema,
 } from "@/types/zod";
+import OptionsArray from "./options-form";
+import { Suspense } from "react";
+import QuizOptions from "@/components/quiz/quiz-options";
+import StudyMaterialOptions from "@/components/study-materials/study-material-options";
 
 interface QuestionFormProps {
 	form: ReturnType<typeof useCustomForm<QuestionsFormData>>;
 	buttonText: string;
 }
 
-interface OptionsArrayProps {
-	form: ReturnType<typeof useCustomForm<QuestionsFormData>>;
-	questionIndex: number;
-}
-
 function createEmptyQuestion(index: number): QuestionFormData {
 	return {
-		quizId: "",
+		quizId: 0,
+		materialId: 0,
 		description: "",
 		question: "",
 		options: [{ questionId: `Q${index + 1}`, text: "", isCorrect: false }],
 	};
 }
-
-function OptionsArray({ form, questionIndex }: OptionsArrayProps) {
-	return (
-		<form.Field name={`questions[${questionIndex}].options`} mode="array">
-			{(optionsField) => (
-				<div>
-					<Label>Options</Label>
-
-					<div className="space-y-3 mt-3">
-						{optionsField.state.value.map((option, optionIndex) => (
-							<div key={optionIndex} className="flex items-center gap-2">
-								{/* Radio button (mark correct) */}
-								<input
-									type="radio"
-									name={`correctOption-${questionIndex}`}
-									checked={option.isCorrect}
-									onChange={() => {
-										optionsField.handleChange(
-											optionsField.state.value.map((o, i) => ({
-												...o,
-												isCorrect: i === optionIndex,
-											})),
-										);
-									}}
-									className="h-5 w-5 text-telnet-primary"
-								/>
-
-								{/* Option text field */}
-								<form.Field
-									name={`questions[${questionIndex}].options[${optionIndex}].text`}
-									validators={{
-										onChange: (value) =>
-											validateField(optionSchema, "text", value.value),
-									}}
-								>
-									{(optionField) => (
-										<Input
-											id={optionField.name}
-											name={optionField.name}
-											value={optionField.state.value}
-											onBlur={optionField.handleBlur}
-											onChange={(e) => optionField.handleChange(e.target.value)}
-											placeholder={`Option ${optionIndex + 1}`}
-											className="flex-1"
-										/>
-									)}
-								</form.Field>
-
-								{/* Remove option */}
-								<Button
-									type="button"
-									variant="ghost"
-									size="icon"
-									disabled={optionsField.state.value.length <= 1}
-									onClick={() => optionsField.removeValue(optionIndex)}
-								>
-									<Trash2 className="h-4 w-4" />
-								</Button>
-							</div>
-						))}
-					</div>
-
-					<Button
-						type="button"
-						variant="outline"
-						size="sm"
-						className="mt-3"
-						onClick={() =>
-							optionsField.pushValue({
-								questionId: `Q${questionIndex}`,
-								text: "",
-								isCorrect: false,
-							})
-						}
-					>
-						<Plus className="h-4 w-4 mr-2" />
-						Add Option
-					</Button>
-				</div>
-			)}
-		</form.Field>
-	);
-}
-
 export default function QuestionForm({ form, buttonText }: QuestionFormProps) {
 	return (
 		<form
@@ -125,6 +40,82 @@ export default function QuestionForm({ form, buttonText }: QuestionFormProps) {
 				form.handleSubmit();
 			}}
 		>
+			<form.Field
+				name="quizId"
+				validators={{
+					onChange: (value) =>
+						validateField(questionSchema, "quizId", value.value),
+				}}
+			>
+				{(field) => (
+					<div className="space-y-2">
+						<Label
+							htmlFor={field.name}
+							className="text-telnet-primary font-semibold text-lg"
+						>
+							Quiz
+						</Label>
+						<select
+							id={field.name}
+							value={field.state.value}
+							onBlur={field.handleBlur}
+							onChange={(e) => field.handleChange(Number(e.target.value))}
+							className="w-full p-2 border border-telnet-surface-darker rounded-md"
+						>
+							<option value={0} hidden>
+								Pilih Quiz
+							</option>
+							<Suspense fallback={<option disabled>Loading quizzes...</option>}>
+								<QuizOptions />
+							</Suspense>
+						</select>
+						{field.state.meta.errors && (
+							<p className="text-red-600 text-sm">{field.state.meta.errors}</p>
+						)}
+					</div>
+				)}
+			</form.Field>
+			<form.Field
+				name="materialId"
+				validators={{
+					onChange: (value) =>
+						validateField(questionSchema, "materialId", value.value),
+				}}
+			>
+				{(field) => (
+					<div className="space-y-2">
+						<Label
+							htmlFor={field.name}
+							className="text-telnet-primary font-semibold text-lg"
+						>
+							Study Material
+						</Label>
+						<select
+							id={field.name}
+							value={field.state.value}
+							onBlur={field.handleBlur}
+							onChange={(e) => field.handleChange(Number(e.target.value))}
+							className="w-full p-2 border border-telnet-surface-darker rounded-md"
+						>
+							<option value={0} hidden>
+								Pilih Study Material
+							</option>
+							<Suspense
+								fallback={<option disabled>Loading study materials...</option>}
+							>
+								<StudyMaterialOptions />
+							</Suspense>
+						</select>
+						{field.state.meta.errors && (
+							<p className="text-red-600 text-sm">{field.state.meta.errors}</p>
+						)}
+					</div>
+				)}
+			</form.Field>
+
+			<Label className="text-telnet-primary font-semibold text-lg">
+				Questions
+			</Label>
 			<form.Field name="questions" mode="array">
 				{(questionsField) => (
 					<div className="space-y-6">
@@ -249,24 +240,15 @@ export default function QuestionForm({ form, buttonText }: QuestionFormProps) {
 							<Button
 								type="button"
 								variant="outline"
-								onClick={() =>
+								onClick={() => {
 									questionsField.pushValue(
 										createEmptyQuestion(questionsField.state.value.length),
-									)
-								}
+									);
+								}}
 							>
 								<Plus className="h-4 w-4 mr-2" />
 								Add Question
 							</Button>
-
-							<form.Subscribe
-								selector={(state) => [state.canSubmit, state.isSubmitting]}
-								children={([canSubmit, isSubmitting]) => (
-									<Button type="submit" size="lg" disabled={!canSubmit}>
-										{isSubmitting ? "..." : buttonText}
-									</Button>
-								)}
-							/>
 						</div>
 						{questionsField.state.meta.errors && (
 							<p className="text-red-500 text-sm mt-1">
@@ -276,7 +258,7 @@ export default function QuestionForm({ form, buttonText }: QuestionFormProps) {
 					</div>
 				)}
 			</form.Field>
-			<SubmitButton>Tambah Pertanyaan</SubmitButton>
+			<SubmitButton>{buttonText}</SubmitButton>
 		</form>
 	);
 }

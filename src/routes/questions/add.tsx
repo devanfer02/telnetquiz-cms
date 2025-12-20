@@ -9,7 +9,11 @@ export const Route = createFileRoute("/questions/add")({
 
 export default function RouteComponent() {
 	const form = useCustomForm({
-		defaultValues: { questions: [] } as QuestionsFormData,
+		defaultValues: {
+			quizId: 0,
+			materialId: 0,
+			questions: [],
+		} as QuestionsFormData,
 		onSubmit: async ({ value }) => {
 			console.log(value);
 		},
@@ -26,7 +30,7 @@ export default function RouteComponent() {
 					questions at once.
 				</p>
 			</div>
-			<QuestionForm form={form} buttonText="Add Questions" />
+			<QuestionForm form={form} buttonText="Tambah Pertanyaan" />
 		</>
 	);
 }
