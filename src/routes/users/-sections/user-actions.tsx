@@ -1,0 +1,139 @@
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
+	Sheet,
+	SheetContent,
+	SheetDescription,
+	SheetHeader,
+	SheetTitle,
+	SheetTrigger,
+} from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import { Edit, Trash2 } from "lucide-react";
+import { useState } from "react";
+import { useCustomForm } from "@/hooks/use-custom-form";
+import UserForm from "./user-form";
+import { updateUser, removeUser } from "@/actions/users";
+import { useQueryClient } from "@tanstack/react-query";
+import { QUERY_KEYS } from "@/lib/constant";
+import { setFlashState } from "@/store/use-flash";
+import { EditUserFormData } from "@/types/zod";
+
+interface UserActionsProps {
+	user: User;
+}
+
+export default function UserActions({ user }: UserActionsProps) {
+	const [open, setOpen] = useState(false);
+	const queryClient = useQueryClient();
+
+	const form = useCustomForm({
+		defaultValues: {
+			fullname: user.name,
+			email: user.email,
+			password: "",
+		} as EditUserFormData,
+		onSubmit: async ({ value }) => {
+			const result = await updateUser({
+				data: {
+					id: user.id,
+					user: value,
+				},
+			});
+
+			if (result) {
+				setFlashState({
+					type: "success",
+					message: "User updated successfully",
+				});
+				setOpen(false);
+				await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.USERS] });
+			} else {
+				setFlashState({
+					type: "error",
+					message: "Failed to update user",
+				});
+			}
+		},
+	});
+
+	const handleDelete = async () => {
+		const result = await removeUser({ data: { id: user.id } });
+		if (result) {
+			setFlashState({
+				type: "success",
+				message: "User deleted successfully",
+			});
+			await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.USERS] });
+		} else {
+			setFlashState({
+				type: "error",
+				message: "Failed to delete user",
+			});
+		}
+	};
+
+	return (
+		<div className="flex gap-2">
+			<Sheet open={open} onOpenChange={setOpen}>
+				<SheetTrigger asChild>
+					<Button
+						size="icon"
+						className="bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
+					>
+						<Edit size={18} />
+					</Button>
+				</SheetTrigger>
+				<SheetContent className="w-250 px-5">
+					<SheetHeader>
+						<SheetTitle>Edit User</SheetTitle>
+						<SheetDescription>Update user details.</SheetDescription>
+					</SheetHeader>
+					<div className="">
+						<UserForm form={form} buttonText="Perbaharui User" />
+					</div>
+				</SheetContent>
+			</Sheet>
+
+			<AlertDialog>
+				<AlertDialogTrigger asChild>
+					<Button
+						size="icon"
+						className="bg-red-600 hover:bg-red-700 text-white cursor-pointer"
+					>
+						<Trash2 size={18} />
+					</Button>
+				</AlertDialogTrigger>
+				<AlertDialogContent>
+					<AlertDialogHeader>
+						<AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+						<AlertDialogDescription>
+							This action cannot be undone. This will permanently delete this
+							user with ID <span className="font-semibold">{user.id}</span>.
+						</AlertDialogDescription>
+					</AlertDialogHeader>
+					<AlertDialogFooter>
+						<AlertDialogCancel className="cursor-pointer">
+							Cancel
+						</AlertDialogCancel>
+						<AlertDialogAction
+							onClick={handleDelete}
+							className="bg-red-600 text-white hover:bg-red-700 cursor-pointer"
+						>
+							Continue
+						</AlertDialogAction>
+					</AlertDialogFooter>
+				</AlertDialogContent>
+			</AlertDialog>
+		</div>
+	);
+}

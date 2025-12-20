@@ -21,6 +21,10 @@ export const idNumberSchema = z.object({
 	id: z.number().positive(),
 });
 
+export const idStringSchema = z.object({
+	id: z.string().nonempty(),
+});
+
 export const chapterSchema = z.object({
 	title: z.string().min(3, "Judul minimal 3 karakter"),
 	description: z.string().min(10, "Deskripsi minimal 10 karakter"),
@@ -80,6 +84,19 @@ export const quizSchema = z.object({
 	chapterId: z.number().min(1, "Pilih chapter"),
 });
 
+export const editUserSchema = z.object({
+	fullname: z.string().min(3).max(255),
+	email: z.email().nonempty(),
+	password: z
+		.string()
+		.min(6)
+		.max(255)
+		.regex(/\d/, "Must contain at least one number")
+		.optional()
+		.or(z.literal("")),
+});
+
+export type EditUserFormData = z.infer<typeof editUserSchema>;
 export type QuizFormData = z.infer<typeof quizSchema>;
 export type OptionFormData = z.infer<typeof optionSchema>;
 export type QuestionFormData = z.infer<typeof questionSchema>;

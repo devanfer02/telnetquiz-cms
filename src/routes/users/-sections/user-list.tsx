@@ -11,6 +11,7 @@ import { useState } from "react";
 import { SortableHeader } from "@/components/global/sortable-header";
 import TanstackTable from "@/components/global/ts-table";
 import { Input } from "@/components/ui/input";
+import UserActions from "./user-actions";
 
 export const columns: ColumnDef<User>[] = [
 	{
@@ -35,6 +36,11 @@ export const columns: ColumnDef<User>[] = [
 		accessorKey: "createdAt",
 		header: "Registered At",
 	},
+	{
+		id: "actions",
+		header: "Actions",
+		cell: ({ row }) => <UserActions user={row.original} />,
+	},
 ];
 
 interface UserListProps {
@@ -43,11 +49,10 @@ interface UserListProps {
 
 export default function UserList({ users }: UserListProps) {
 	const [keyword, setKeyword] = useState("");
-	const [data, _] = useState(() => users);
 	const [sorting, setSorting] = useState<SortingState>([]);
 
 	const table = useReactTable({
-		data,
+		data: users,
 		columns,
 		state: { globalFilter: keyword, sorting },
 		onGlobalFilterChange: setKeyword,
