@@ -2,11 +2,12 @@ import { createFileRoute } from "@tanstack/react-router";
 import QuizList from "./-sections/quiz-list";
 import { getAllQuizzes } from "@/actions/quizzes";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { QUERY_KEYS } from "@/lib/constant";
 
 export const Route = createFileRoute("/quiz/")({
 	loader: async ({ context }) => {
 		await context.queryClient.prefetchQuery({
-			queryKey: ["quiz-list"],
+			queryKey: [QUERY_KEYS.QUIZZES],
 			queryFn: () => getAllQuizzes(),
 		});
 	},
@@ -15,7 +16,7 @@ export const Route = createFileRoute("/quiz/")({
 
 function RouteComponent() {
 	const { data: quizzes } = useSuspenseQuery({
-		queryKey: ["quiz-list"],
+		queryKey: [QUERY_KEYS.QUIZZES],
 		queryFn: () => getAllQuizzes(),
 		staleTime: 60 * 1000,
 	});

@@ -5,6 +5,7 @@ import type { QuestionsFormData } from "@/types/zod";
 import { addQuestions } from "@/actions/questions";
 import { setFlashState } from "@/store/use-flash";
 import { useQueryClient } from "@tanstack/react-query";
+import { QUERY_KEYS } from "@/lib/constant";
 
 export const Route = createFileRoute("/questions/add")({
 	component: RouteComponent,
@@ -54,7 +55,7 @@ export default function RouteComponent() {
 			});
 
 			await queryClient.invalidateQueries({
-				queryKey: ["question-list"],
+				queryKey: [QUERY_KEYS.QUESTIONS],
 			});
 
 			navigate({ to: "/questions" });

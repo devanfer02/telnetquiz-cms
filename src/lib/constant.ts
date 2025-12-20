@@ -52,3 +52,10 @@ export const dashboardItems = sidebarItems
 		...item,
 		counter: 20,
 	}));
+
+export const QUERY_KEYS = {
+	CHAPTERS: "chapter-list",
+	QUIZZES: "quiz-list",
+	QUESTIONS: "question-list",
+	STUDY_MATERIALS: "study-material-list",
+};

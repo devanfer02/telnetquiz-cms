@@ -3,11 +3,12 @@ import ChapterList from "./-sections/chapter-list";
 import { getAllChapters } from "@/actions/chapters";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Suspense } from "react";
+import { QUERY_KEYS } from "@/lib/constant";
 
 export const Route = createFileRoute("/chapters/")({
 	loader: async ({ context }) => {
 		await context.queryClient.prefetchQuery({
-			queryKey: ["chapter-list"],
+			queryKey: [QUERY_KEYS.CHAPTERS],
 			queryFn: () => getAllChapters(),
 		});
 	},
@@ -16,7 +17,7 @@ export const Route = createFileRoute("/chapters/")({
 
 function RouteComponent() {
 	const { data: chapters } = useSuspenseQuery({
-		queryKey: ["chapter-list"],
+		queryKey: [QUERY_KEYS.CHAPTERS],
 		queryFn: () => getAllChapters(),
 		staleTime: 60 * 1000,
 	});

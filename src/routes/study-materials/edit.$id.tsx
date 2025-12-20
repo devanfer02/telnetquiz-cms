@@ -8,6 +8,7 @@ import {
 } from "@/actions/study-material";
 import { setFlashState } from "@/store/use-flash";
 import { useQueryClient } from "@tanstack/react-query";
+import { QUERY_KEYS } from "@/lib/constant";
 
 export const Route = createFileRoute("/study-materials/edit/$id")({
 	loader: async ({ params }) => {
@@ -68,7 +69,7 @@ export default function RouteComponent() {
 			});
 
 			await queryClient.invalidateQueries({
-				queryKey: ["study-material-list"],
+				queryKey: [QUERY_KEYS.STUDY_MATERIALS],
 			});
 
 			navigate({

@@ -5,6 +5,7 @@ import type { QuestionsFormData } from "@/types/zod";
 import { getQuestionById, updateQuestion } from "@/actions/questions";
 import { setFlashState } from "@/store/use-flash";
 import { useQueryClient } from "@tanstack/react-query";
+import { QUERY_KEYS } from "@/lib/constant";
 
 export const Route = createFileRoute("/questions/edit/$id")({
 	loader: async ({ params }) => {
@@ -77,7 +78,7 @@ export default function RouteComponent() {
 				message: "Successfully updated question",
 			});
 
-			await queryClient.invalidateQueries({ queryKey: ["question-list"] });
+			await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.QUESTIONS] });
 			navigate({ to: "/questions" });
 		},
 	});

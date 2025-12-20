@@ -26,6 +26,7 @@ import {
 	AccordionItem,
 	AccordionTrigger,
 } from "@/components/ui/accordion";
+import { QUERY_KEYS } from "@/lib/constant";
 
 interface QuestionListProps {
 	questions: Question[];
@@ -174,7 +175,7 @@ export default function QuestionList({
 						handleDelete={async () => {
 							const result = await removeQuestion({ data: id });
 							await queryClient.invalidateQueries({
-								queryKey: ["question-list"],
+								queryKey: [QUERY_KEYS.QUESTIONS],
 							});
 							if (result !== null) {
 								setFlashState({

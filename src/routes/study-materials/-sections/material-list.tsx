@@ -9,6 +9,7 @@ import { filterColumns } from "@/lib/utils";
 import { setFlashState } from "@/store/use-flash";
 import { useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
+import { QUERY_KEYS } from "@/lib/constant";
 import {
 	ColumnDef,
 	getCoreRowModel,
@@ -92,7 +93,7 @@ export default function StudyMaterialList({
 						handleDelete={async () => {
 							const result = await removeStudyMaterial({ data: id });
 							await queryClient.invalidateQueries({
-								queryKey: ["study-material-list"],
+								queryKey: [QUERY_KEYS.STUDY_MATERIALS],
 							});
 							if (result !== null) {
 								setFlashState({

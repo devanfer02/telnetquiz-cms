@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { removeChapter } from "@/actions/chapters";
 import { useQueryClient } from "@tanstack/react-query";
 import { setFlashState } from "@/store/use-flash";
+import { QUERY_KEYS } from "@/lib/constant";
 
 interface ChapterListProps {
 	chapters: Chapter[];
@@ -80,7 +81,7 @@ export default function ChapterList({ chapters }: ChapterListProps) {
 						handleDelete={async () => {
 							const result = await removeChapter({ data: { id } });
 							await queryClient.invalidateQueries({
-								queryKey: ["chapter-list"],
+								queryKey: [QUERY_KEYS.CHAPTERS],
 							});
 							if (result !== null) {
 								setFlashState({

@@ -1,9 +1,10 @@
 import { getAllStudyMaterials } from "@/actions/study-material";
+import { QUERY_KEYS } from "@/lib/constant";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
 export default function StudyMaterialOptions() {
 	const { data: materials } = useSuspenseQuery({
-		queryKey: ["study-material-list"],
+		queryKey: [QUERY_KEYS.STUDY_MATERIALS],
 		queryFn: () => getAllStudyMaterials(),
 	});
 
