@@ -23,6 +23,12 @@ const config = defineConfig({
     tanstackStart(),
     viteReact(),
   ],
+  optimizeDeps: {
+    include: ['react-quill-new'],
+  },  
+  ssr: {
+    noExternal: ['react-quill-new'],
+  },
 })
 
 export default config

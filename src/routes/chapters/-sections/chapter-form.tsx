@@ -8,6 +8,8 @@ import { validateField } from "@/lib/utils";
 import { type ChapterFormData, chapterSchema } from "@/types/zod";
 import { useStore } from "@tanstack/react-form";
 
+import { RichTextarea } from "@/components/global/quill-textarea";
+
 const MASCOTS = [1, 2, 3, 4];
 
 interface ChapterFormProps {
@@ -74,13 +76,9 @@ export default function ChapterForm({ form, buttonText }: ChapterFormProps) {
 								Deskripsi
 							</Label>
 
-							<Textarea
-								id={field.name}
-								rows={5}
+							<RichTextarea
 								value={field.state.value}
-								onBlur={field.handleBlur}
-								onChange={(e) => field.handleChange(e.target.value)}
-								className="resize-none border-telnet-surface-darker"
+								onChange={(val) => field.handleChange(val)}
 							/>
 
 							{field.state.meta.errors && (

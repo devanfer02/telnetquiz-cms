@@ -57,9 +57,10 @@ export default function MaterialHeader({ studyMaterial }: MaterialHeaderProps) {
 				{/* Content section */}
 				<div className="mt-6 pt-6 border-t border-gray-200">
 					<div className="prose max-w-none">
-						<p className="text-gray-700 whitespace-pre-wrap">
-							{studyMaterial.content}
-						</p>
+						<div
+							className="text-gray-700"
+							dangerouslySetInnerHTML={{ __html: studyMaterial.content }}
+						/>
 					</div>
 
 					<MetadataTable

@@ -3,11 +3,11 @@ import SubmitButton from "@/components/global/submit-button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import type { useCustomForm } from "@/hooks/use-custom-form";
 import { validateField } from "@/lib/utils";
 import { type StudyMaterialFormData, studyMaterialSchema } from "@/types/zod";
 import { useStore } from "@tanstack/react-form";
+import { RichTextarea } from "@/components/global/quill-textarea";
 
 interface MaterialFormProps {
 	form: ReturnType<typeof useCustomForm<StudyMaterialFormData>>;
@@ -78,13 +78,9 @@ export default function MaterialForm({
 								Konten
 							</Label>
 
-							<Textarea
-								id={field.name}
-								rows={5}
+							<RichTextarea
 								value={field.state.value}
-								onBlur={field.handleBlur}
-								onChange={(e) => field.handleChange(e.target.value)}
-								className="resize-none border-telnet-surface-darker"
+								onChange={(val) => field.handleChange(val)}
 							/>
 
 							{field.state.meta.errors && (

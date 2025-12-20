@@ -57,6 +57,13 @@
 			"when": 1766170157677,
 			"tag": "0007_public_fantastic_four",
 			"breakpoints": true
+		},
+		{
+			"idx": 8,
+			"version": "7",
+			"when": 1766241496301,
+			"tag": "0008_lucky_angel",
+			"breakpoints": true
 		}
 	]
 }

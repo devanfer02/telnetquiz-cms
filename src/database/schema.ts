@@ -115,7 +115,7 @@ export const questions = pgTable("questions", {
 	}),
 	imageLink: varchar(),
 	description: text().notNull(),
-	question: varchar().notNull(),
+	question: text().notNull(),
 	...timestamps,
 });
 export const options = pgTable("options", {

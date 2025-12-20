@@ -57,9 +57,10 @@ export default function StudyMaterialList({
 			header: "Content",
 			size: 200,
 			cell: ({ row }) => (
-				<div className="whitespace-normal wrap-break-word">
-					{row.original.content}
-				</div>
+				<div
+					className="max-h-20 overflow-y-auto prose prose-sm"
+					dangerouslySetInnerHTML={{ __html: row.original.content }}
+				/>
 			),
 		},
 		{

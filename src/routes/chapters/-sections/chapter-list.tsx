@@ -50,9 +50,10 @@ export default function ChapterList({ chapters }: ChapterListProps) {
 			header: "Description",
 			size: 200,
 			cell: ({ row }) => (
-				<div className="whitespace-normal wrap-break-word">
-					{row.original.description}
-				</div>
+				<div
+					className="max-h-20 overflow-y-auto prose prose-sm"
+					dangerouslySetInnerHTML={{ __html: row.original.description }}
+				/>
 			),
 		},
 		{

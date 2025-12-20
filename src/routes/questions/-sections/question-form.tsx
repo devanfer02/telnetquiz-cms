@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { RichTextarea } from "@/components/global/quill-textarea";
 import type { useCustomForm } from "@/hooks/use-custom-form";
 import { validateField } from "@/lib/utils";
 import {
@@ -155,13 +155,9 @@ export default function QuestionForm({ form, buttonText }: QuestionFormProps) {
 												<Label className="mb-2" htmlFor={field.name}>
 													Description
 												</Label>
-												<Textarea
-													id={field.name}
-													name={field.name}
+												<RichTextarea
 													value={field.state.value}
-													onBlur={field.handleBlur}
-													onChange={(e) => field.handleChange(e.target.value)}
-													placeholder="e.g. This question is about TCP/IP..."
+													onChange={(val) => field.handleChange(val)}
 												/>
 												{field.state.meta.errors && (
 													<p className="text-red-500 text-sm mt-1">
@@ -183,13 +179,9 @@ export default function QuestionForm({ form, buttonText }: QuestionFormProps) {
 												<Label className="mb-2" htmlFor={field.name}>
 													Question Text
 												</Label>
-												<Textarea
-													id={field.name}
-													name={field.name}
+												<RichTextarea
 													value={field.state.value}
-													onBlur={field.handleBlur}
-													onChange={(e) => field.handleChange(e.target.value)}
-													placeholder="e.g. What is the function of the transport layer?"
+													onChange={(val) => field.handleChange(val)}
 												/>
 												{field.state.meta.errors && (
 													<p className="text-red-500 text-sm mt-1">

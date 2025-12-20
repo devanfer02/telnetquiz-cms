@@ -97,6 +97,12 @@ export default function QuestionList({
 				<SortableHeader column={column} title="Description" />
 			),
 			size: 50,
+			cell: ({ row }) => (
+				<div
+					className="max-h-20 overflow-y-auto prose prose-sm"
+					dangerouslySetInnerHTML={{ __html: row.original.description }}
+				/>
+			),
 		},
 		{
 			accessorKey: "question",
@@ -104,6 +110,12 @@ export default function QuestionList({
 				<SortableHeader column={column} title="Question" />
 			),
 			size: 100,
+			cell: ({ row }) => (
+				<div
+					className="max-h-20 overflow-y-auto prose prose-sm"
+					dangerouslySetInnerHTML={{ __html: row.original.question }}
+				/>
+			),
 		},
 		{
 			id: "options",

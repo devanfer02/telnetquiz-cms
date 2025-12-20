@@ -45,9 +45,10 @@ export default function ChapterHeader({ chapter }: ChapterHeaderProps) {
 				</div>
 				<div className="mt-6 pt-6 border-t border-gray-200">
 					<div className="prose max-w-none">
-						<p className="text-gray-700 whitespace-pre-wrap">
-							{chapter.description}
-						</p>
+						<div
+							className="text-gray-700"
+							dangerouslySetInnerHTML={{ __html: chapter.description }}
+						/>
 					</div>
 
 					<MetadataTable
