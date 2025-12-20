@@ -1,8 +1,15 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { type ClassValue, clsx } from "clsx";
+import path from "path";
 import { twMerge } from "tailwind-merge";
 import { ulid } from "ulid";
 import { z } from "zod";
+
+const EXTENSION_MAP = {
+	".jpg": "image/jpg",
+	".png": "image/png",
+	jpeg: "image/jpeg",
+} as Record<string, string>;
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -46,5 +53,11 @@ export function generateFilename(
 
 	const prefix = options?.prefix ? `${options.prefix}_` : "";
 
-	return `${prefix}${date}_${id}${ext}`;
+	return `${prefix}${date}_${id}.${ext}`;
+}
+
+export function getFileExtension(fileName: string) {
+	const ext = path.extname(fileName);
+
+	return EXTENSION_MAP[ext];
 }

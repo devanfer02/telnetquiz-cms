@@ -1,3 +1,5 @@
+import { addStudyMaterial } from "@/actions/study-material";
+import FileInput from "@/components/global/file-input";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -95,18 +97,11 @@ export default function MaterialForm({ form, buttonText }: MaterialFormProps) {
 					}}
 				>
 					{(field) => (
-						<div className="space-y-2">
-							<Label
-								htmlFor={field.name}
-								className="text-telnet-primary font-semibold text-lg"
-							>
-								Gambar
-							</Label>
-							<Input
+						<div className="">
+							<FileInput
 								id={field.name}
-								type="file"
-								onChange={(e) => field.handleChange(e.target.files?.[0])}
-								className="border-telnet-surface-darker"
+								htmlFor={field.name}
+								action={(e) => field.handleChange(e.target.files?.[0])}
 							/>
 							{field.state.meta.errors && (
 								<p className="text-red-600 text-sm">

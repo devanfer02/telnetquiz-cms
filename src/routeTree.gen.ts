@@ -18,6 +18,7 @@ import { Route as QuizIndexRouteImport } from './routes/quiz/index'
 import { Route as QuestionsIndexRouteImport } from './routes/questions/index'
 import { Route as ChaptersIndexRouteImport } from './routes/chapters/index'
 import { Route as StudyMaterialsAddRouteImport } from './routes/study-materials/add'
+import { Route as StudyMaterialsIdRouteImport } from './routes/study-materials/$id'
 import { Route as QuizAddRouteImport } from './routes/quiz/add'
 import { Route as QuizIdRouteImport } from './routes/quiz/$id'
 import { Route as QuestionsAddRouteImport } from './routes/questions/add'
@@ -74,6 +75,11 @@ const ChaptersIndexRoute = ChaptersIndexRouteImport.update({
 const StudyMaterialsAddRoute = StudyMaterialsAddRouteImport.update({
   id: '/study-materials/add',
   path: '/study-materials/add',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudyMaterialsIdRoute = StudyMaterialsIdRouteImport.update({
+  id: '/study-materials/$id',
+  path: '/study-materials/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const QuizAddRoute = QuizAddRouteImport.update({
@@ -147,6 +153,7 @@ export interface FileRoutesByFullPath {
   '/questions/add': typeof QuestionsAddRoute
   '/quiz/$id': typeof QuizIdRoute
   '/quiz/add': typeof QuizAddRoute
+  '/study-materials/$id': typeof StudyMaterialsIdRoute
   '/study-materials/add': typeof StudyMaterialsAddRoute
   '/chapters': typeof ChaptersIndexRoute
   '/questions': typeof QuestionsIndexRoute
@@ -170,6 +177,7 @@ export interface FileRoutesByTo {
   '/questions/add': typeof QuestionsAddRoute
   '/quiz/$id': typeof QuizIdRoute
   '/quiz/add': typeof QuizAddRoute
+  '/study-materials/$id': typeof StudyMaterialsIdRoute
   '/study-materials/add': typeof StudyMaterialsAddRoute
   '/chapters': typeof ChaptersIndexRoute
   '/questions': typeof QuestionsIndexRoute
@@ -194,6 +202,7 @@ export interface FileRoutesById {
   '/questions/add': typeof QuestionsAddRoute
   '/quiz/$id': typeof QuizIdRoute
   '/quiz/add': typeof QuizAddRoute
+  '/study-materials/$id': typeof StudyMaterialsIdRoute
   '/study-materials/add': typeof StudyMaterialsAddRoute
   '/chapters/': typeof ChaptersIndexRoute
   '/questions/': typeof QuestionsIndexRoute
@@ -219,6 +228,7 @@ export interface FileRouteTypes {
     | '/questions/add'
     | '/quiz/$id'
     | '/quiz/add'
+    | '/study-materials/$id'
     | '/study-materials/add'
     | '/chapters'
     | '/questions'
@@ -242,6 +252,7 @@ export interface FileRouteTypes {
     | '/questions/add'
     | '/quiz/$id'
     | '/quiz/add'
+    | '/study-materials/$id'
     | '/study-materials/add'
     | '/chapters'
     | '/questions'
@@ -265,6 +276,7 @@ export interface FileRouteTypes {
     | '/questions/add'
     | '/quiz/$id'
     | '/quiz/add'
+    | '/study-materials/$id'
     | '/study-materials/add'
     | '/chapters/'
     | '/questions/'
@@ -289,6 +301,7 @@ export interface RootRouteChildren {
   QuestionsAddRoute: typeof QuestionsAddRoute
   QuizIdRoute: typeof QuizIdRoute
   QuizAddRoute: typeof QuizAddRoute
+  StudyMaterialsIdRoute: typeof StudyMaterialsIdRoute
   StudyMaterialsAddRoute: typeof StudyMaterialsAddRoute
   ChaptersIndexRoute: typeof ChaptersIndexRoute
   QuestionsIndexRoute: typeof QuestionsIndexRoute
@@ -366,6 +379,13 @@ declare module '@tanstack/react-router' {
       path: '/study-materials/add'
       fullPath: '/study-materials/add'
       preLoaderRoute: typeof StudyMaterialsAddRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/study-materials/$id': {
+      id: '/study-materials/$id'
+      path: '/study-materials/$id'
+      fullPath: '/study-materials/$id'
+      preLoaderRoute: typeof StudyMaterialsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/quiz/add': {
@@ -465,6 +485,7 @@ const rootRouteChildren: RootRouteChildren = {
   QuestionsAddRoute: QuestionsAddRoute,
   QuizIdRoute: QuizIdRoute,
   QuizAddRoute: QuizAddRoute,
+  StudyMaterialsIdRoute: StudyMaterialsIdRoute,
   StudyMaterialsAddRoute: StudyMaterialsAddRoute,
   ChaptersIndexRoute: ChaptersIndexRoute,
   QuestionsIndexRoute: QuestionsIndexRoute,

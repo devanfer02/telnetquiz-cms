@@ -47,10 +47,20 @@ export const getStudyMaterialById = createServerFn({
 export const addStudyMaterial = createServerFn({
 	method: "POST",
 })
-	.inputValidator(studyMaterialSchema)
+	.inputValidator(z.instanceof(FormData))
 	.handler(async ({ data }) => {
+		const title = data.get("title");
+		const content = data.get("content");
+		const image = data.get("imageFile");
+
+		const payload = {
+			title: typeof title === "string" ? title : "",
+			content: typeof content === "string" ? content : "",
+			imageFile: image instanceof File ? image : undefined,
+		};
+
 		return Effect.runPromise(
-			createStudyMaterial(data).pipe(
+			createStudyMaterial(payload).pipe(
 				Effect.provide(DbLayer),
 				Effect.provide(S3Layer),
 				Effect.catchAll((err) => {

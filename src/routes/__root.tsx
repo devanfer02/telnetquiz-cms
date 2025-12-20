@@ -9,6 +9,7 @@ import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import GlobalLoader from "@/components/global/global-loading";
 import AppSidebar from "@/components/global/sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
+// @ts-ignore
 import appCss from "../css/styles.css?url";
 import TanStackQueryDevtools from "../integrations/tanstack-query/devtools";
 import FlashProvider from "@/providers/flash-provider";

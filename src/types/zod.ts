@@ -60,7 +60,14 @@ export const questionsSchema = z.object({
 
 export const studyMaterialSchema = z.object({
 	title: z.string().min(3),
-	imageFile: imageFileSchema,
+	imageFile: z
+		.instanceof(File)
+		.refine((file) => file?.size <= MAX_FILE_SIZE, "Max image size is 5MB")
+		.refine(
+			(file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+			"Only .jpg, .jpeg, .png and .webp formats are supported.",
+		)
+		.optional(),
 	content: z.string(),
 });
 

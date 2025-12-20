@@ -7,12 +7,10 @@ import {
 	DatabaseError,
 	InternalServerError,
 	NotFoundError,
-	ValidationError,
 } from "./errors/errors";
-import { StudyMaterialFormData, studyMaterialSchema } from "@/types/zod";
+import { StudyMaterialFormData } from "@/types/zod";
 import { S3 } from "@/lib/s3";
-import z, { ZodError } from "zod";
-import { generateFilename } from "@/lib/utils";
+import { generateFilename, getFileExtension } from "@/lib/utils";
 import { env } from "@/lib/env";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 
@@ -60,37 +58,13 @@ export const createStudyMaterial = (studyMaterial: StudyMaterialFormData) =>
 		const { db } = yield* Db;
 		const { s3 } = yield* S3;
 
-		const parsed = yield* Effect.try({
-			try: () => {
-				const parsed = studyMaterialSchema
-					.extend({
-						imageFile: z.instanceof(File).optional(),
-					})
-					.parse(studyMaterial);
-
-				return parsed;
-			},
-			catch: (err) => {
-				if (err instanceof ZodError) {
-					return new ValidationError({
-						errors: z.flattenError(err).fieldErrors,
-					});
-				}
-
-				return new InternalServerError({
-					cause: err,
-					message: "Failed to parse request body",
-				});
-			},
-		});
-
 		let imageLink: string | null = null;
 
-		if (parsed.imageFile) {
-			const filename = generateFilename(parsed.imageFile.name);
+		if (studyMaterial.imageFile) {
+			const filename = generateFilename(studyMaterial.imageFile.name);
 
 			const fileArrayBuf = yield* Effect.tryPromise({
-				try: () => parsed.imageFile!.arrayBuffer(),
+				try: () => studyMaterial.imageFile!.arrayBuffer(),
 				catch: (err) =>
 					new InternalServerError({
 						cause: err,
@@ -102,8 +76,9 @@ export const createStudyMaterial = (studyMaterial: StudyMaterialFormData) =>
 
 			const putObjCommand = new PutObjectCommand({
 				Bucket: env.CLOUDFLARE_BUCKET,
-				Key: `/study-materials/${filename}`,
+				Key: `study-materials/${filename}`,
 				Body: body,
+				ContentType: getFileExtension(studyMaterial.imageFile.name),
 			});
 
 			yield* Effect.tryPromise({
@@ -115,10 +90,10 @@ export const createStudyMaterial = (studyMaterial: StudyMaterialFormData) =>
 					}),
 			});
 
-			imageLink = `${env.CLOUDFLARE_R2_ENDPOINT}/${env.CLOUDFLARE_BUCKET}/study-materials/${filename}`;
+			imageLink = `${env.CLOUDFLARE_R2_DOMAIN}/study-materials/${filename}`;
 		}
 
-		const material = yield* Effect.tryPromise({
+		const [material] = yield* Effect.tryPromise({
 			try: () =>
 				db
 					.insert(studyMaterials)

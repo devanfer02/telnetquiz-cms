@@ -3,7 +3,7 @@ import { useCustomForm } from "@/hooks/use-custom-form";
 import type { StudyMaterialFormData } from "@/types/zod";
 import MaterialForm from "./-sections/material-form";
 import { addStudyMaterial } from "@/actions/study-material";
-import { useFlashStore } from "@/store/use-flash";
+import { setFlashState } from "@/store/use-flash";
 import { useQueryClient } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/study-materials/add")({
@@ -21,10 +21,19 @@ export default function RouteComponent() {
 			questionId: 0,
 		} as StudyMaterialFormData,
 		onSubmit: async ({ value }) => {
-			const result = await addStudyMaterial({ data: value });
+			const formData = new FormData();
+
+			formData.append("title", value.title);
+			formData.append("content", value.content);
+			if (value.imageFile) {
+				formData.append("imageFile", value.imageFile);
+			}
+
+			const result = await addStudyMaterial({ data: formData });
+			console.log(result);
 
 			if (result === null) {
-				useFlashStore.getState().setFlash({
+				setFlashState({
 					type: "error",
 					message: "Failed to create study material. See logs.",
 				});
@@ -33,7 +42,7 @@ export default function RouteComponent() {
 				return;
 			}
 
-			useFlashStore.getState().setFlash({
+			setFlashState({
 				type: "success",
 				message: "Successfully created new study material",
 			});
@@ -42,7 +51,10 @@ export default function RouteComponent() {
 				queryKey: ["study-material-list"],
 			});
 
-			navigate({ to: "/study-materials" });
+			navigate({
+				to: "/study-materials/$id",
+				params: { id: result.id.toString() },
+			});
 		},
 	});
 
