@@ -2,11 +2,12 @@ import { createFileRoute } from "@tanstack/react-router";
 import StudyMaterialList from "./-sections/material-list";
 import { getAllStudyMaterials } from "@/actions/study-material";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { QUERY_KEYS } from "@/lib/constant";
 
 export const Route = createFileRoute("/study-materials/")({
 	loader: async ({ context }) => {
 		await context.queryClient.prefetchQuery({
-			queryKey: ["study-material-list"],
+			queryKey: [QUERY_KEYS.STUDY_MATERIALS],
 			queryFn: () => getAllStudyMaterials(),
 		});
 	},
@@ -15,7 +16,7 @@ export const Route = createFileRoute("/study-materials/")({
 
 function RouteComponent() {
 	const { data: studyMaterials } = useSuspenseQuery({
-		queryKey: ["study-material-list"],
+		queryKey: [QUERY_KEYS.STUDY_MATERIALS],
 		queryFn: () => getAllStudyMaterials(),
 		staleTime: 60 * 1000,
 	});

@@ -1,4 +1,4 @@
-import { dashboardItems } from "@/data/constant";
+import { dashboardItems } from "@/lib/constant";
 import CardStat from "../../../components/global/card-stat";
 import { Card } from "../../../components/ui/card";
 

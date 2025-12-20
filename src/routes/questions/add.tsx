@@ -1,17 +1,64 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useCustomForm } from "@/hooks/use-custom-form";
 import QuestionForm from "@/routes/questions/-sections/question-form";
 import type { QuestionsFormData } from "@/types/zod";
+import { addQuestions } from "@/actions/questions";
+import { setFlashState } from "@/store/use-flash";
+import { useQueryClient } from "@tanstack/react-query";
+import { QUERY_KEYS } from "@/lib/constant";
 
 export const Route = createFileRoute("/questions/add")({
 	component: RouteComponent,
 });
 
 export default function RouteComponent() {
+	const navigate = useNavigate();
+	const queryClient = useQueryClient();
+
 	const form = useCustomForm({
-		defaultValues: { questions: [] } as QuestionsFormData,
+		defaultValues: {
+			quizId: 0,
+			materialId: 0,
+			questions: [],
+		} as QuestionsFormData,
 		onSubmit: async ({ value }) => {
-			console.log(value);
+			const questionsPayload = value.questions.map((q) => ({
+				...q,
+				image: undefined,
+			}));
+
+			const formData = new FormData();
+			formData.append("quizId", String(value.quizId));
+			formData.append("materialId", String(value.materialId));
+			formData.append("questions", JSON.stringify(questionsPayload));
+
+			value.questions.forEach((q, index) => {
+				if (q.image instanceof File) {
+					formData.append(`image_${index}`, q.image);
+				}
+			});
+
+			const result = await addQuestions({ data: formData });
+			if (result === null) {
+				setFlashState({
+					type: "error",
+					message: "Failed to create questions. See logs.",
+				});
+
+				navigate({ to: "/questions" });
+				return;
+			}
+
+			setFlashState({
+				type: "success",
+				message: "Successfully created question",
+			});
+
+			await queryClient.invalidateQueries({
+				queryKey: [QUERY_KEYS.QUESTIONS],
+			});
+
+			navigate({ to: "/questions" });
 		},
 	});
 
@@ -26,7 +73,7 @@ export default function RouteComponent() {
 					questions at once.
 				</p>
 			</div>
-			<QuestionForm form={form} buttonText="Add Questions" />
+			<QuestionForm form={form} buttonText="Tambah Pertanyaan" />
 		</>
 	);
 }

@@ -5,6 +5,7 @@ import ChapterForm from "./-sections/chapter-form";
 import { addChapter } from "@/actions/chapters";
 import { useFlashStore } from "@/store/use-flash";
 import { useQueryClient } from "@tanstack/react-query";
+import { QUERY_KEYS } from "@/lib/constant";
 
 export const Route = createFileRoute("/chapters/add")({
 	component: RouteComponent,
@@ -38,7 +39,7 @@ export default function RouteComponent() {
 				message: "Successfully created new chapter",
 			});
 
-			await queryClient.invalidateQueries({ queryKey: ["chapter-list"] });
+			await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.CHAPTERS] });
 
 			navigate({
 				to: "/chapters/$id",

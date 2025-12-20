@@ -1,20 +1,25 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { mockQuestions } from "@/data/mock-question";
 import QuestionList from "./-sections/question-list";
+import { getAllQuestions } from "@/actions/questions";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { QUERY_KEYS } from "@/lib/constant";
 
 export const Route = createFileRoute("/questions/")({
-	loader: () => {
-		const safe = mockQuestions.map((q) => ({
-			...q,
-			image: null,
-		}));
-		return { data: safe };
+	loader: async ({ context }) => {
+		await context.queryClient.prefetchQuery({
+			queryKey: [QUERY_KEYS.QUESTIONS],
+			queryFn: () => getAllQuestions(),
+		});
 	},
 	component: RouteComponent,
 });
 
 function RouteComponent() {
-	const { data } = Route.useLoaderData();
+	const { data: questions } = useSuspenseQuery({
+		queryKey: [QUERY_KEYS.QUESTIONS],
+		queryFn: () => getAllQuestions(),
+		staleTime: 60 * 1000,
+	});
 
 	return (
 		<>
@@ -26,7 +31,7 @@ function RouteComponent() {
 					Daftar semua pertanyaan tentang Media dan Jaringan Telekomunikasi.
 				</p>
 			</div>
-			<QuestionList questions={data} />
+			<QuestionList questions={questions} />
 		</>
 	);
 }

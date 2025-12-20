@@ -35,6 +35,7 @@ type Quiz = {
 type Question = {
 	id: number;
 	quizId: number | null;
+	materialId: number | null;
 	imageLink: string | null;
 	image?: File | null;
 	description: string;
@@ -42,12 +43,8 @@ type Question = {
 	options?: Option[];
 };
 
-type QuestionSerialized = Omit<Question, "image"> & {
-	image?: string | null;
-};
-
 type Option = {
-	questionId: string;
+	questionId: number;
 	text: string;
 	isCorrect: boolean;
 };

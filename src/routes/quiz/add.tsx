@@ -5,6 +5,7 @@ import QuizForm from "./-sections/quiz-form";
 import { addQuiz } from "@/actions/quizzes";
 import { setFlashState } from "@/store/use-flash";
 import { useQueryClient } from "@tanstack/react-query";
+import { QUERY_KEYS } from "@/lib/constant";
 
 export const Route = createFileRoute("/quiz/add")({
 	component: RouteComponent,
@@ -24,7 +25,6 @@ export default function RouteComponent() {
 		onSubmit: async ({ value }) => {
 			const result = await addQuiz({ data: value });
 
-			console.log(result);
 			if (result === null) {
 				setFlashState({
 					type: "error",
@@ -40,7 +40,7 @@ export default function RouteComponent() {
 				message: "Successfully created new quiz",
 			});
 
-			await queryClient.invalidateQueries({ queryKey: ["quiz-list"] });
+			await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.QUIZZES] });
 
 			navigate({
 				to: "/quiz/$id",

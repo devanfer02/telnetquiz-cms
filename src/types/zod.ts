@@ -55,6 +55,8 @@ export const questionSchema = z.object({
 });
 
 export const questionsSchema = z.object({
+	quizId: z.number(),
+	materialId: z.number(),
 	questions: z.array(questionSchema),
 });
 

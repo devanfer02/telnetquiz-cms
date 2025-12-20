@@ -5,6 +5,7 @@ import QuizForm from "./-sections/quiz-form";
 import { getQuizById, updateQuiz } from "@/actions/quizzes";
 import { useQueryClient } from "@tanstack/react-query";
 import { setFlashState } from "@/store/use-flash";
+import { QUERY_KEYS } from "@/lib/constant";
 
 export const Route = createFileRoute("/quiz/edit/$id")({
 	loader: async ({ params }) => {
@@ -59,7 +60,7 @@ export default function RouteComponent() {
 				message: "Successfully update quiz",
 			});
 
-			await queryClient.invalidateQueries({ queryKey: ["quiz-list"] });
+			await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.QUIZZES] });
 
 			navigate({
 				to: "/quiz/$id",

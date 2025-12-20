@@ -5,6 +5,7 @@ import MaterialForm from "./-sections/material-form";
 import { addStudyMaterial } from "@/actions/study-material";
 import { setFlashState } from "@/store/use-flash";
 import { useQueryClient } from "@tanstack/react-query";
+import { QUERY_KEYS } from "@/lib/constant";
 
 export const Route = createFileRoute("/study-materials/add")({
 	component: RouteComponent,
@@ -47,7 +48,7 @@ export default function RouteComponent() {
 			});
 
 			await queryClient.invalidateQueries({
-				queryKey: ["study-material-list"],
+				queryKey: [QUERY_KEYS.STUDY_MATERIALS],
 			});
 
 			navigate({

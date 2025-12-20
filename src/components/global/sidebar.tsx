@@ -1,6 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { LogOut } from "lucide-react";
-import { sidebarItems } from "@/data/constant";
+import { sidebarItems } from "@/lib/constant";
 import {
 	Sidebar,
 	SidebarContent,

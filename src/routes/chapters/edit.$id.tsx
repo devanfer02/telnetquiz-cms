@@ -5,6 +5,7 @@ import ChapterForm from "./-sections/chapter-form";
 import { getChapterById, updateChapter } from "@/actions/chapters";
 import { setFlashState } from "@/store/use-flash";
 import { useQueryClient } from "@tanstack/react-query";
+import { QUERY_KEYS } from "@/lib/constant";
 
 export const Route = createFileRoute("/chapters/edit/$id")({
 	loader: async ({ params }) => {
@@ -58,7 +59,7 @@ export default function RouteComponent() {
 				message: "Successfully updated chapter",
 			});
 
-			await queryClient.invalidateQueries({ queryKey: ["chapter-list"] });
+			await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.CHAPTERS] });
 
 			navigate({
 				to: "/chapters/$id",

@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { mockQuestionsQuiz } from "@/data/mock-question";
 import QuestionList from "../questions/-sections/question-list";
 import { getQuizById } from "@/actions/quizzes";
 import QuizHeader from "./-sections/quiz-header";
@@ -17,7 +16,6 @@ export const Route = createFileRoute("/quiz/$id")({
 
 function RouteComponent() {
 	const { quiz } = Route.useLoaderData();
-	const questions = mockQuestionsQuiz["1"] || [];
 
 	if (!quiz) {
 		return <div>Quiz not found</div>;
@@ -28,7 +26,7 @@ function RouteComponent() {
 			<div className="mb-3">
 				<QuizHeader quiz={quiz} />
 			</div>
-			<QuestionList questions={questions} disableKey={["quizId"]} />
+			<QuestionList questions={quiz.questions} disableKey={["quizId"]} />
 		</div>
 	);
 }

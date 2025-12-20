@@ -1,11 +1,12 @@
 import ChapterOptions from "@/components/chapters/chapter-options";
-import { Button } from "@/components/ui/button";
+import SubmitButton from "@/components/global/submit-button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { useCustomForm } from "@/hooks/use-custom-form";
 import { validateField } from "@/lib/utils";
 import { type QuizFormData, quizSchema } from "@/types/zod";
+import { useStore } from "@tanstack/react-form";
 import { Suspense } from "react";
 
 interface QuizFormProps {
@@ -14,6 +15,8 @@ interface QuizFormProps {
 }
 
 export default function QuizForm({ form, buttonText }: QuizFormProps) {
+	const isSubmitting = useStore(form.store, (state) => state.isSubmitting);
+
 	return (
 		<Card className="p-8 shadow-md border border-telnet-surface-darker">
 			<form
@@ -22,7 +25,7 @@ export default function QuizForm({ form, buttonText }: QuizFormProps) {
 					e.stopPropagation();
 					form.handleSubmit();
 				}}
-				className="space-y-6"
+				className="space-y-6 mb-10"
 			>
 				<form.Field
 					name="title"
@@ -162,13 +165,7 @@ export default function QuizForm({ form, buttonText }: QuizFormProps) {
 					)}
 				</form.Field>
 
-				<Button
-					className="bg-telnet-primary h-10 py-4 text-lg font-bold text-white
-                   hover:bg-white hover:text-telnet-primary border border-telnet-primary
-                   transition-colors duration-200 w-full cursor-pointer"
-				>
-					{buttonText}
-				</Button>
+				<SubmitButton isSubmitting={isSubmitting}>{buttonText}</SubmitButton>
 			</form>
 		</Card>
 	);

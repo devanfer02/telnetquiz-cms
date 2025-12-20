@@ -17,8 +17,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { filterColumns } from "@/lib/utils";
 import { removeQuiz } from "@/actions/quizzes";
-import { queryClient } from "@/lib/query-client";
 import { setFlashState } from "@/store/use-flash";
+import { useQueryClient } from "@tanstack/react-query";
+import { QUERY_KEYS } from "@/lib/constant";
 
 interface QuizListProps {
 	quizzes: Quiz[];
@@ -26,6 +27,7 @@ interface QuizListProps {
 }
 
 export default function QuizList({ quizzes, disableKey }: QuizListProps) {
+	const queryClient = useQueryClient();
 	const [keyword, setKeyword] = useState("");
 	const [sorting, setSorting] = useState<SortingState>([]);
 
@@ -119,7 +121,7 @@ export default function QuizList({ quizzes, disableKey }: QuizListProps) {
 						handleDelete={async () => {
 							const result = await removeQuiz({ data: { id } });
 							await queryClient.invalidateQueries({
-								queryKey: ["quiz-list"],
+								queryKey: [QUERY_KEYS.QUIZZES],
 							});
 							if (result !== null) {
 								setFlashState({
