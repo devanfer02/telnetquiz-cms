@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useCustomForm } from "@/hooks/use-custom-form";
 import QuestionForm from "@/routes/questions/-sections/question-form";
 import type { QuestionsFormData } from "@/types/zod";
-import { createQuestions } from "@/actions/questions";
+import { addQuestions } from "@/actions/questions";
 
 export const Route = createFileRoute("/questions/add")({
 	component: RouteComponent,
@@ -33,7 +33,7 @@ export default function RouteComponent() {
 				}
 			});
 
-			await createQuestions({ data: formData });
+			await addQuestions({ data: formData });
 			navigate({ to: "/questions" });
 		},
 	});

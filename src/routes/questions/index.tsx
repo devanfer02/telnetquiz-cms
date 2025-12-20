@@ -4,11 +4,11 @@ import { getAllQuestions } from "@/actions/questions";
 
 export const Route = createFileRoute("/questions/")({
 	loader: async () => {
-    const questions = await getAllQuestions()
+		const questions = await getAllQuestions();
 
-    return {
-      questions 
-    }
+		return {
+			questions,
+		};
 	},
 	component: RouteComponent,
 });

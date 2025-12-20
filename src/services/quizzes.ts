@@ -39,6 +39,9 @@ export const fetchQuizById = (id: number) =>
 			try: () =>
 				db.query.quizzes.findFirst({
 					where: eq(quizzes.id, id),
+					with: {
+						questions: true,
+					},
 					extras: {
 						numberOfQuestions: sql<number>`(
             SELECT count(*)

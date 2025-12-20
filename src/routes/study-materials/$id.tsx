@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import QuestionList from "../questions/question-list";
+import QuestionList from "../questions/-sections/question-list";
 import { getStudyMaterialById } from "@/actions/study-material";
 import NotFound from "@/components/global/not-found";
 import MaterialHeader from "./-sections/material-header";

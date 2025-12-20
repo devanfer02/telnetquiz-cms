@@ -1,6 +1,10 @@
 import { DbLayer } from "@/lib/db";
 import { S3Layer } from "@/lib/s3";
-import { createQuestionsService, fetchAllQuestions } from "@/services/questions";
+import {
+	createQuestions,
+	deleteQuestionById,
+	fetchAllQuestions,
+} from "@/services/questions";
 import { createServerFn } from "@tanstack/react-start";
 import { Effect } from "effect";
 import z from "zod";
@@ -20,7 +24,7 @@ export const getAllQuestions = createServerFn({
 	);
 });
 
-export const createQuestions = createServerFn({
+export const addQuestions = createServerFn({
 	method: "POST",
 })
 	.inputValidator(z.instanceof(FormData))
@@ -44,12 +48,30 @@ export const createQuestions = createServerFn({
 		};
 
 		return Effect.runPromise(
-			createQuestionsService(parsedData).pipe(
+			createQuestions(parsedData).pipe(
 				Effect.provide(DbLayer),
-        Effect.provide(S3Layer),
+				Effect.provide(S3Layer),
 				Effect.catchAll((err) => {
 					console.error("Failed to create questions. ERR:", err);
 					return Effect.fail(err);
+				}),
+			),
+		);
+	});
+
+export const removeQuestion = createServerFn({
+	method: "POST",
+})
+	.inputValidator(z.number())
+	.handler(async ({ data: id }) => {
+		return Effect.runPromise(
+			deleteQuestionById(id).pipe(
+				Effect.provide(DbLayer),
+				Effect.provide(S3Layer),
+				Effect.catchAll((err) => {
+					console.error("Failed to delete study material. ERR:", err);
+
+					return Effect.fail(null);
 				}),
 			),
 		);

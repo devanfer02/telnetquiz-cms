@@ -35,6 +35,7 @@ type Quiz = {
 type Question = {
 	id: number;
 	quizId: number | null;
+	materialId: number | null;
 	imageLink: string | null;
 	image?: File | null;
 	description: string;
