@@ -1,15 +1,20 @@
-import { generateHistory } from "@/data/mock-dashboard";
+import { getAllSubmissions } from "@/actions/analytics";
+import { QUERY_KEYS } from "@/lib/constant";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import RecentSubmission from "../dashboard/-sections/recent-submission";
 
 export const Route = createFileRoute("/submissions/")({
-	loader: () => ({ data: generateHistory(100) }),
+	loader: async ({ context }) => {
+		await context.queryClient.prefetchQuery({
+			queryKey: [QUERY_KEYS.SUBMISSIONS],
+			queryFn: () => getAllSubmissions(),
+		});
+	},
 	component: RouteComponent,
 });
 
 function RouteComponent() {
-	const { data: submissions } = Route.useLoaderData();
-
 	return (
 		<>
 			<div className="mt-3 mb-5">
@@ -20,7 +25,7 @@ function RouteComponent() {
 					List submisi terbaru dari pengguna.
 				</p>
 			</div>
-			<RecentSubmission submissions={submissions} />
+			<RecentSubmission />
 		</>
 	);
 }

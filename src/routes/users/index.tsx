@@ -1,14 +1,25 @@
-import { generateMockUsers } from "@/data/mock-user";
+import { getAllUsers } from "@/actions/analytics";
+import { QUERY_KEYS } from "@/lib/constant";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import UserList from "./-sections/user-list";
 
 export const Route = createFileRoute("/users/")({
-	loader: () => ({ data: generateMockUsers(30) }),
+	loader: async ({ context }) => {
+		await context.queryClient.prefetchQuery({
+			queryKey: [QUERY_KEYS.USERS],
+			queryFn: () => getAllUsers(),
+		});
+	},
 	component: RouteComponent,
 });
 
 function RouteComponent() {
-	const { data: users } = Route.useLoaderData();
+	const { data: users } = useSuspenseQuery({
+		queryKey: [QUERY_KEYS.USERS],
+		queryFn: () => getAllUsers(),
+		staleTime: 60 * 1000,
+	});
 
 	return (
 		<>

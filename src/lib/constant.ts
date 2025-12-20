@@ -58,4 +58,9 @@ export const QUERY_KEYS = {
 	QUIZZES: "quiz-list",
 	QUESTIONS: "question-list",
 	STUDY_MATERIALS: "study-material-list",
+	USERS: "user-list",
+	SUBMISSIONS: "submission-list",
+	AVERAGE_SCORES: "average-scores",
+	LEADERBOARD: "leaderboard",
+	DASHBOARD_STATS: "dashboard-stats",
 };
