@@ -4,6 +4,8 @@ import {
 	createQuestions,
 	deleteQuestionById,
 	fetchAllQuestions,
+	fetchQuestionById,
+	patchQuestion,
 } from "@/services/questions";
 import { createServerFn } from "@tanstack/react-start";
 import { Effect } from "effect";
@@ -23,6 +25,22 @@ export const getAllQuestions = createServerFn({
 		),
 	);
 });
+
+export const getQuestionById = createServerFn({
+	method: "GET",
+})
+	.inputValidator(z.number())
+	.handler(async ({ data: id }) => {
+		return Effect.runPromise(
+			fetchQuestionById(id).pipe(
+				Effect.provide(DbLayer),
+				Effect.catchAll((err) => {
+					console.error("Failed to fetch question. ERR:", err);
+					return Effect.fail(null);
+				}),
+			),
+		);
+	});
 
 export const addQuestions = createServerFn({
 	method: "POST",
@@ -59,6 +77,40 @@ export const addQuestions = createServerFn({
 		);
 	});
 
+export const updateQuestion = createServerFn({
+	method: "POST",
+})
+	.inputValidator(z.instanceof(FormData))
+	.handler(async ({ data }) => {
+		const id = Number(data.get("id"));
+		const quizId = Number(data.get("quizId"));
+		const materialId = Number(data.get("materialId"));
+		const description = data.get("description") as string;
+		const question = data.get("question") as string;
+		const optionsRaw = JSON.parse(data.get("options") as string);
+		const image = data.get("image");
+
+		const parsedData = {
+			quizId,
+			materialId,
+			description,
+			question,
+			options: optionsRaw,
+			image: image instanceof File ? image : undefined,
+		};
+
+		return Effect.runPromise(
+			patchQuestion(id, parsedData).pipe(
+				Effect.provide(DbLayer),
+				Effect.provide(S3Layer),
+				Effect.catchAll((err) => {
+					console.error("Failed to update question. ERR:", err);
+					return Effect.fail(err);
+				}),
+			),
+		);
+	});
+
 export const removeQuestion = createServerFn({
 	method: "POST",
 })
@@ -69,9 +121,9 @@ export const removeQuestion = createServerFn({
 				Effect.provide(DbLayer),
 				Effect.provide(S3Layer),
 				Effect.catchAll((err) => {
-					console.error("Failed to delete study material. ERR:", err);
+					console.error("Failed to delete question. ERR:", err);
 
-					return Effect.fail(null);
+					return Effect.succeed(null);
 				}),
 			),
 		);

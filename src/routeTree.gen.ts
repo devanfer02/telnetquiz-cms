@@ -28,6 +28,7 @@ import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
 import { Route as ApiChaptersRouteImport } from './routes/api/chapters'
 import { Route as StudyMaterialsEditIdRouteImport } from './routes/study-materials/edit.$id'
 import { Route as QuizEditIdRouteImport } from './routes/quiz/edit.$id'
+import { Route as QuestionsEditIdRouteImport } from './routes/questions/edit.$id'
 import { Route as ChaptersEditIdRouteImport } from './routes/chapters/edit.$id'
 import { Route as ApiAuthRegisterRouteImport } from './routes/api/auth/register'
 import { Route as ApiAuthLoginRouteImport } from './routes/api/auth/login'
@@ -127,6 +128,11 @@ const QuizEditIdRoute = QuizEditIdRouteImport.update({
   path: '/quiz/edit/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const QuestionsEditIdRoute = QuestionsEditIdRouteImport.update({
+  id: '/questions/edit/$id',
+  path: '/questions/edit/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ChaptersEditIdRoute = ChaptersEditIdRouteImport.update({
   id: '/chapters/edit/$id',
   path: '/chapters/edit/$id',
@@ -164,6 +170,7 @@ export interface FileRoutesByFullPath {
   '/api/auth/login': typeof ApiAuthLoginRoute
   '/api/auth/register': typeof ApiAuthRegisterRoute
   '/chapters/edit/$id': typeof ChaptersEditIdRoute
+  '/questions/edit/$id': typeof QuestionsEditIdRoute
   '/quiz/edit/$id': typeof QuizEditIdRoute
   '/study-materials/edit/$id': typeof StudyMaterialsEditIdRoute
 }
@@ -188,6 +195,7 @@ export interface FileRoutesByTo {
   '/api/auth/login': typeof ApiAuthLoginRoute
   '/api/auth/register': typeof ApiAuthRegisterRoute
   '/chapters/edit/$id': typeof ChaptersEditIdRoute
+  '/questions/edit/$id': typeof QuestionsEditIdRoute
   '/quiz/edit/$id': typeof QuizEditIdRoute
   '/study-materials/edit/$id': typeof StudyMaterialsEditIdRoute
 }
@@ -213,6 +221,7 @@ export interface FileRoutesById {
   '/api/auth/login': typeof ApiAuthLoginRoute
   '/api/auth/register': typeof ApiAuthRegisterRoute
   '/chapters/edit/$id': typeof ChaptersEditIdRoute
+  '/questions/edit/$id': typeof QuestionsEditIdRoute
   '/quiz/edit/$id': typeof QuizEditIdRoute
   '/study-materials/edit/$id': typeof StudyMaterialsEditIdRoute
 }
@@ -239,6 +248,7 @@ export interface FileRouteTypes {
     | '/api/auth/login'
     | '/api/auth/register'
     | '/chapters/edit/$id'
+    | '/questions/edit/$id'
     | '/quiz/edit/$id'
     | '/study-materials/edit/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -263,6 +273,7 @@ export interface FileRouteTypes {
     | '/api/auth/login'
     | '/api/auth/register'
     | '/chapters/edit/$id'
+    | '/questions/edit/$id'
     | '/quiz/edit/$id'
     | '/study-materials/edit/$id'
   id:
@@ -287,6 +298,7 @@ export interface FileRouteTypes {
     | '/api/auth/login'
     | '/api/auth/register'
     | '/chapters/edit/$id'
+    | '/questions/edit/$id'
     | '/quiz/edit/$id'
     | '/study-materials/edit/$id'
   fileRoutesById: FileRoutesById
@@ -312,6 +324,7 @@ export interface RootRouteChildren {
   ApiAuthLoginRoute: typeof ApiAuthLoginRoute
   ApiAuthRegisterRoute: typeof ApiAuthRegisterRoute
   ChaptersEditIdRoute: typeof ChaptersEditIdRoute
+  QuestionsEditIdRoute: typeof QuestionsEditIdRoute
   QuizEditIdRoute: typeof QuizEditIdRoute
   StudyMaterialsEditIdRoute: typeof StudyMaterialsEditIdRoute
 }
@@ -451,6 +464,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof QuizEditIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/questions/edit/$id': {
+      id: '/questions/edit/$id'
+      path: '/questions/edit/$id'
+      fullPath: '/questions/edit/$id'
+      preLoaderRoute: typeof QuestionsEditIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/chapters/edit/$id': {
       id: '/chapters/edit/$id'
       path: '/chapters/edit/$id'
@@ -496,6 +516,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiAuthLoginRoute: ApiAuthLoginRoute,
   ApiAuthRegisterRoute: ApiAuthRegisterRoute,
   ChaptersEditIdRoute: ChaptersEditIdRoute,
+  QuestionsEditIdRoute: QuestionsEditIdRoute,
   QuizEditIdRoute: QuizEditIdRoute,
   StudyMaterialsEditIdRoute: StudyMaterialsEditIdRoute,
 }
