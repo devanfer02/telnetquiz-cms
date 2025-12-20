@@ -1,3 +1,4 @@
+import { removeStudyMaterial } from "@/actions/study-material";
 import ActionCell from "@/components/global/action-cell";
 import { SortableHeader } from "@/components/global/sortable-header";
 import TableLink from "@/components/global/table-link";
@@ -5,6 +6,8 @@ import TanstackTable from "@/components/global/ts-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { filterColumns } from "@/lib/utils";
+import { setFlashState } from "@/store/use-flash";
+import { useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import {
 	ColumnDef,
@@ -17,60 +20,6 @@ import {
 } from "@tanstack/react-table";
 import { useState } from "react";
 
-export const columns: ColumnDef<StudyMaterial>[] = [
-	{
-		accessorKey: "id",
-		header: ({ column }) => <SortableHeader column={column} title="ID" />,
-		size: 10,
-		cell: ({ row }) => {
-			const id = row.original.id.toString();
-
-			return (
-				<TableLink to="/study-materials/$id" paramKey="id" paramValue={id} />
-			);
-		},
-	},
-	{
-		accessorKey: "title",
-		header: ({ column }) => <SortableHeader column={column} title="Title" />,
-		size: 50,
-	},
-	{
-		accessorKey: "content",
-		header: "Content",
-		size: 200,
-		cell: ({ row }) => (
-			<div className="whitespace-normal wrap-break-word">
-				{row.original.content}
-			</div>
-		),
-	},
-	{
-		accessorKey: "imageLink",
-		header: "Image",
-		size: 50,
-		cell: ({ row }) => {
-			if (!row.original.imageLink) return null;
-
-			return (
-				<img
-					src={row.original.imageLink}
-					alt="image material"
-					className="w-18 h-18"
-				/>
-			);
-		},
-	},
-	{
-		accessorKey: "actions",
-		header: "Actions",
-		size: 100,
-		cell: ({ row }) => (
-			<ActionCell row={row} keyName="id" editHref="/study-materials/edit/$id" />
-		),
-	},
-];
-
 interface StudyMaterialListProps {
 	studyMaterials: StudyMaterial[];
 	disableKey?: (keyof StudyMaterial)[];
@@ -80,9 +29,84 @@ export default function StudyMaterialList({
 	studyMaterials,
 	disableKey,
 }: StudyMaterialListProps) {
+	const queryClient = useQueryClient();
 	const [keyword, setKeyword] = useState("");
 	const [data, _] = useState(() => studyMaterials);
 	const [sorting, setSorting] = useState<SortingState>([]);
+
+	const columns: ColumnDef<StudyMaterial>[] = [
+		{
+			accessorKey: "id",
+			header: ({ column }) => <SortableHeader column={column} title="ID" />,
+			size: 10,
+			cell: ({ row }) => {
+				const id = row.original.id.toString();
+
+				return (
+					<TableLink to="/study-materials/$id" paramKey="id" paramValue={id} />
+				);
+			},
+		},
+		{
+			accessorKey: "title",
+			header: ({ column }) => <SortableHeader column={column} title="Title" />,
+			size: 50,
+		},
+		{
+			accessorKey: "content",
+			header: "Content",
+			size: 200,
+			cell: ({ row }) => (
+				<div className="whitespace-normal wrap-break-word">
+					{row.original.content}
+				</div>
+			),
+		},
+		{
+			accessorKey: "imageLink",
+			header: "Image",
+			size: 50,
+			cell: ({ row }) => {
+				if (!row.original.imageLink) return null;
+
+				return (
+					<img
+						src={row.original.imageLink}
+						alt="image material"
+						className="w-18 h-18"
+					/>
+				);
+			},
+		},
+		{
+			accessorKey: "actions",
+			header: "Actions",
+			size: 100,
+			cell: ({ row }) => {
+				const id = row.original.id;
+
+				return (
+					<ActionCell
+						row={row}
+						keyName="id"
+						editHref="/study-materials/edit/$id"
+						handleDelete={async () => {
+							const result = await removeStudyMaterial({ data: id });
+							await queryClient.invalidateQueries({
+								queryKey: ["study-material-list"],
+							});
+							if (result !== null) {
+								setFlashState({
+									type: "success",
+									message: "Successfully deleted material",
+								});
+							}
+						}}
+					/>
+				);
+			},
+		},
+	];
 
 	const table = useReactTable({
 		data,

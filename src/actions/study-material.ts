@@ -95,7 +95,7 @@ export const updateStudyMaterial = createServerFn({
 		);
 	});
 
-export const deleteStudyMaterial = createServerFn({
+export const removeStudyMaterial = createServerFn({
 	method: "POST",
 })
 	.inputValidator(z.number())
@@ -103,6 +103,7 @@ export const deleteStudyMaterial = createServerFn({
 		return Effect.runPromise(
 			deleteStudyMaterialById(id).pipe(
 				Effect.provide(DbLayer),
+				Effect.provide(S3Layer),
 				Effect.catchAll((err) => {
 					console.error("Failed to delete study material. ERR:", err);
 

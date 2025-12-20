@@ -12,7 +12,7 @@ import { StudyMaterialFormData } from "@/types/zod";
 import { S3 } from "@/lib/s3";
 import { generateFilename, getFileExtension } from "@/lib/utils";
 import { env } from "@/lib/env";
-import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 
 export const fetchAllStudyMaterials = Effect.gen(function* () {
 	const { db } = yield* Db;
@@ -149,6 +149,7 @@ export const patchStudyMaterial = (
 export const deleteStudyMaterialById = (id: number) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
+		const { s3 } = yield* S3;
 
 		const result = yield* Effect.tryPromise({
 			try: () =>
@@ -164,6 +165,22 @@ export const deleteStudyMaterialById = (id: number) =>
 			return yield* Effect.fail(
 				new NotFoundError({ id, entity: "StudyMaterial" }),
 			);
+		}
+
+		if (result[0].imageLink) {
+			const deleteObjCommand = new DeleteObjectCommand({
+				Bucket: env.CLOUDFLARE_BUCKET,
+				Key: new URL(result[0].imageLink).pathname.slice(1),
+			});
+
+			yield* Effect.tryPromise({
+				try: () => s3.send(deleteObjCommand),
+				catch: (err) =>
+					new CloudflareR2Error({
+						cause: err,
+						message: "Failed to delete file",
+					}),
+			});
 		}
 
 		return {
