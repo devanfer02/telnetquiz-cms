@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import SubmitButton from "@/components/global/submit-button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import type { useCustomForm } from "@/hooks/use-custom-form";
 import { validateField } from "@/lib/utils";
 import { type ChapterFormData, chapterSchema } from "@/types/zod";
-import { Loader2 } from "lucide-react";
+import { useStore } from "@tanstack/react-form";
 
 const MASCOTS = [1, 2, 3, 4];
 
@@ -16,13 +16,15 @@ interface ChapterFormProps {
 }
 
 export default function ChapterForm({ form, buttonText }: ChapterFormProps) {
+	const isSubmitting = useStore(form.store, (state) => state.isSubmitting);
+
 	return (
 		<Card className="p-8 shadow-md border border-telnet-surface-darker">
 			<form
-				onSubmit={(e) => {
+				onSubmit={async (e) => {
 					e.preventDefault();
 					e.stopPropagation();
-					form.handleSubmit();
+					await form.handleSubmit();
 				}}
 				className="space-y-6"
 			>
@@ -138,19 +140,7 @@ export default function ChapterForm({ form, buttonText }: ChapterFormProps) {
 						</div>
 					)}
 				</form.Field>
-				<Button
-					type="submit"
-					disabled={form.state.isSubmitting}
-					className="bg-telnet-primary h-10 py-4 text-lg font-bold text-white 
-                   hover:bg-white hover:text-telnet-primary border border-telnet-primary 
-                   transition-colors duration-200 w-full cursor-pointer"
-				>
-					{form.state.isSubmitting ? (
-						<Loader2 className="h-4 w-4 animate-spin" />
-					) : (
-						buttonText
-					)}
-				</Button>
+				<SubmitButton isSubmitting={isSubmitting}>{buttonText}</SubmitButton>
 			</form>
 		</Card>
 	);

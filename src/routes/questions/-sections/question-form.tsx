@@ -16,6 +16,7 @@ import OptionsArray from "./options-form";
 import { Suspense } from "react";
 import QuizOptions from "@/components/quiz/quiz-options";
 import StudyMaterialOptions from "@/components/study-materials/study-material-options";
+import { useStore } from "@tanstack/react-form";
 
 interface QuestionFormProps {
 	form: ReturnType<typeof useCustomForm<QuestionsFormData>>;
@@ -32,6 +33,8 @@ function createEmptyQuestion(index: number): QuestionFormData {
 	};
 }
 export default function QuestionForm({ form, buttonText }: QuestionFormProps) {
+	const isSubmitting = useStore(form.store, (store) => store.isSubmitting);
+
 	return (
 		<form
 			onSubmit={(e) => {
@@ -258,7 +261,7 @@ export default function QuestionForm({ form, buttonText }: QuestionFormProps) {
 					</div>
 				)}
 			</form.Field>
-			<SubmitButton>{buttonText}</SubmitButton>
+			<SubmitButton isSubmitting={isSubmitting}>{buttonText}</SubmitButton>
 		</form>
 	);
 }

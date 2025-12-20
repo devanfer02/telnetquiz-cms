@@ -1,5 +1,5 @@
 import FileInput from "@/components/global/file-input";
-import { Button } from "@/components/ui/button";
+import SubmitButton from "@/components/global/submit-button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import type { useCustomForm } from "@/hooks/use-custom-form";
 import { validateField } from "@/lib/utils";
 import { type StudyMaterialFormData, studyMaterialSchema } from "@/types/zod";
-import { Loader2 } from "lucide-react";
+import { useStore } from "@tanstack/react-form";
 
 interface MaterialFormProps {
 	form: ReturnType<typeof useCustomForm<StudyMaterialFormData>>;
@@ -20,6 +20,8 @@ export default function MaterialForm({
 	buttonText,
 	oldImageLink,
 }: MaterialFormProps) {
+	const isSubmitting = useStore(form.store, (state) => state.isSubmitting);
+
 	return (
 		<Card className="p-8 shadow-md border border-telnet-surface-darker">
 			<form
@@ -136,19 +138,7 @@ export default function MaterialForm({
 						</div>
 					)}
 				</form.Field>
-				<Button
-					type="submit"
-					disabled={form.state.isSubmitting}
-					className="bg-telnet-primary h-10 py-4 text-lg font-bold text-white 
-                   hover:bg-white hover:text-telnet-primary border border-telnet-primary 
-                   transition-colors duration-200 w-full cursor-pointer"
-				>
-					{form.state.isSubmitting ? (
-						<Loader2 className="h-4 w-4 animate-spin" />
-					) : (
-						buttonText
-					)}
-				</Button>
+				<SubmitButton isSubmitting={isSubmitting}>{buttonText}</SubmitButton>
 			</form>
 		</Card>
 	);

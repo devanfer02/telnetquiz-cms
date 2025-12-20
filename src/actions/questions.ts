@@ -71,7 +71,7 @@ export const addQuestions = createServerFn({
 				Effect.provide(S3Layer),
 				Effect.catchAll((err) => {
 					console.error("Failed to create questions. ERR:", err);
-					return Effect.fail(err);
+					return Effect.succeed(null);
 				}),
 			),
 		);

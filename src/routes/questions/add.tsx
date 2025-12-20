@@ -3,6 +3,8 @@ import { useCustomForm } from "@/hooks/use-custom-form";
 import QuestionForm from "@/routes/questions/-sections/question-form";
 import type { QuestionsFormData } from "@/types/zod";
 import { addQuestions } from "@/actions/questions";
+import { setFlashState } from "@/store/use-flash";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/questions/add")({
 	component: RouteComponent,
@@ -10,6 +12,8 @@ export const Route = createFileRoute("/questions/add")({
 
 export default function RouteComponent() {
 	const navigate = useNavigate();
+	const queryClient = useQueryClient();
+
 	const form = useCustomForm({
 		defaultValues: {
 			quizId: 0,
@@ -33,7 +37,26 @@ export default function RouteComponent() {
 				}
 			});
 
-			await addQuestions({ data: formData });
+			const result = await addQuestions({ data: formData });
+			if (result === null) {
+				setFlashState({
+					type: "error",
+					message: "Failed to create questions. See logs.",
+				});
+
+				navigate({ to: "/questions" });
+				return;
+			}
+
+			setFlashState({
+				type: "success",
+				message: "Successfully created question",
+			});
+
+			await queryClient.invalidateQueries({
+				queryKey: ["question-list"],
+			});
+
 			navigate({ to: "/questions" });
 		},
 	});

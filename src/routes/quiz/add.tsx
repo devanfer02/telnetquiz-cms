@@ -24,7 +24,6 @@ export default function RouteComponent() {
 		onSubmit: async ({ value }) => {
 			const result = await addQuiz({ data: value });
 
-			console.log(result);
 			if (result === null) {
 				setFlashState({
 					type: "error",

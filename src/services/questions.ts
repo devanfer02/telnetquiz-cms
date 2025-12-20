@@ -99,6 +99,10 @@ export const createQuestions = (data: QuestionsFormData) =>
 					message: "Failed to create questions",
 				}),
 		});
+
+		return {
+			success: true,
+		};
 	});
 
 export const patchQuestion = (id: number, data: QuestionFormData) =>

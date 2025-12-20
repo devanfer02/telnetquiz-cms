@@ -31,7 +31,6 @@ export default function StudyMaterialList({
 }: StudyMaterialListProps) {
 	const queryClient = useQueryClient();
 	const [keyword, setKeyword] = useState("");
-	const [data, _] = useState(() => studyMaterials);
 	const [sorting, setSorting] = useState<SortingState>([]);
 
 	const columns: ColumnDef<StudyMaterial>[] = [
@@ -109,7 +108,7 @@ export default function StudyMaterialList({
 	];
 
 	const table = useReactTable({
-		data,
+		data: studyMaterials,
 		columns: filterColumns(columns, disableKey),
 		state: { globalFilter: keyword, sorting },
 		onGlobalFilterChange: setKeyword,
@@ -118,7 +117,7 @@ export default function StudyMaterialList({
 		getCoreRowModel: getCoreRowModel(),
 		getSortedRowModel: getSortedRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
-		getFilteredRowMOdel: getFilteredRowModel(),
+		getFilteredRowModel: getFilteredRowModel(),
 	} as any);
 
 	return (
