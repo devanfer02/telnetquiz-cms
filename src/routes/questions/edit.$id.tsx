@@ -77,7 +77,7 @@ export default function RouteComponent() {
 				message: "Successfully updated question",
 			});
 
-			await queryClient.invalidateQueries({ queryKey: ["questions-list"] });
+			await queryClient.invalidateQueries({ queryKey: ["question-list"] });
 			navigate({ to: "/questions" });
 		},
 	});

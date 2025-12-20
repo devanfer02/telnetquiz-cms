@@ -43,12 +43,8 @@ type Question = {
 	options?: Option[];
 };
 
-type QuestionSerialized = Omit<Question, "image"> & {
-	image?: string | null;
-};
-
 type Option = {
-	questionId: string;
+	questionId: number;
 	text: string;
 	isCorrect: boolean;
 };

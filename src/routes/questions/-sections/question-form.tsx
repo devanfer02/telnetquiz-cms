@@ -42,6 +42,7 @@ export default function QuestionForm({ form, buttonText }: QuestionFormProps) {
 				e.stopPropagation();
 				form.handleSubmit();
 			}}
+			className="mb-10"
 		>
 			<form.Field
 				name="quizId"
@@ -203,7 +204,7 @@ export default function QuestionForm({ form, buttonText }: QuestionFormProps) {
 										validators={{
 											onChange: (value) => {
 												const file = value.value;
-												if (!file) return undefined; // optional → OK
+												if (!file || typeof file === "string") return undefined; // optional or existing → OK
 
 												return validateField(questionSchema, "image", file);
 											},
@@ -214,6 +215,27 @@ export default function QuestionForm({ form, buttonText }: QuestionFormProps) {
 												<Label className="mb-2" htmlFor={field.name}>
 													Image (Optional)
 												</Label>
+
+												{/* Show existing image if available */}
+												{typeof field.state.value === "string" &&
+													field.state.value && (
+														<div className="mb-4">
+															<div className="relative inline-block">
+																<img
+																	src={field.state.value}
+																	alt="Current Question"
+																	className="w-48 h-48 object-cover rounded-lg border-2 border-gray-200 shadow-sm"
+																/>
+																<span className="absolute top-2 right-2 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">
+																	Current
+																</span>
+															</div>
+															<p className="text-sm text-gray-500 mt-2">
+																Upload a new image to replace this one
+															</p>
+														</div>
+													)}
+
 												<Input
 													id={field.name}
 													name={field.name}

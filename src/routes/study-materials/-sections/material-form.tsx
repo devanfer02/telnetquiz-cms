@@ -30,7 +30,7 @@ export default function MaterialForm({
 					e.stopPropagation();
 					form.handleSubmit();
 				}}
-				className="space-y-6"
+				className="space-y-6 mb-10"
 			>
 				<form.Field
 					name="title"

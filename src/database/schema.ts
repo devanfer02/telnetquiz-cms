@@ -120,7 +120,9 @@ export const questions = pgTable("questions", {
 });
 export const options = pgTable("options", {
 	id: serial().primaryKey(),
-	questionId: integer().references(() => questions.id, { onDelete: "cascade" }),
+	questionId: integer()
+		.references(() => questions.id, { onDelete: "cascade" })
+		.notNull(),
 	text: varchar().notNull(),
 	isCorrect: boolean().notNull(),
 	...timestamps,
