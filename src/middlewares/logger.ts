@@ -2,6 +2,11 @@ import { createMiddleware } from "@tanstack/react-start";
 
 export const loggerMiddleware = createMiddleware().server(
 	async ({ request, next }) => {
+		// only logs api request
+		if (!request.url.includes("/api")) {
+			return next();
+		}
+
 		const startTime = Date.now();
 		const url = new URL(request.url);
 

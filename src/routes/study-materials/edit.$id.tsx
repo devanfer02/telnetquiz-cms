@@ -1,40 +1,61 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useCustomForm } from "@/hooks/use-custom-form";
 import type { StudyMaterialFormData } from "@/types/zod";
 import MaterialForm from "./-sections/material-form";
-import { addStudyMaterial } from "@/actions/study-material";
+import {
+	getStudyMaterialById,
+	updateStudyMaterial,
+} from "@/actions/study-material";
 import { setFlashState } from "@/store/use-flash";
 import { useQueryClient } from "@tanstack/react-query";
 
-export const Route = createFileRoute("/study-materials/add")({
+export const Route = createFileRoute("/study-materials/edit/$id")({
+	loader: async ({ params }) => {
+		const studyMaterial = await getStudyMaterialById({
+			data: Number(params.id),
+		});
+
+		if (studyMaterial === null) {
+			throw redirect({
+				to: "/study-materials",
+			});
+		}
+
+		return {
+			studyMaterial,
+		};
+	},
 	component: RouteComponent,
 });
 
 export default function RouteComponent() {
 	const navigate = useNavigate();
 	const queryClient = useQueryClient();
+	const { studyMaterial } = Route.useLoaderData();
 
 	const form = useCustomForm({
 		defaultValues: {
-			title: "",
-			content: "",
-			questionId: 0,
+			id: studyMaterial?.id,
+			title: studyMaterial?.title,
+			content: studyMaterial?.content,
+			imageLink: studyMaterial?.imageLink,
 		} as StudyMaterialFormData,
 		onSubmit: async ({ value }) => {
 			const formData = new FormData();
 
+			formData.append("id", studyMaterial.id.toString());
 			formData.append("title", value.title);
 			formData.append("content", value.content);
 			if (value.imageFile) {
 				formData.append("imageFile", value.imageFile);
 			}
 
-			const result = await addStudyMaterial({ data: formData });
+			const result = await updateStudyMaterial({ data: formData });
 
 			if (result === null) {
 				setFlashState({
 					type: "error",
-					message: "Failed to create study material. See logs.",
+					message: "Failed to update study material. See logs.",
 				});
 
 				navigate({ to: "/study-materials" });
@@ -43,7 +64,7 @@ export default function RouteComponent() {
 
 			setFlashState({
 				type: "success",
-				message: "Successfully created new study material",
+				message: "Successfully updated study material",
 			});
 
 			await queryClient.invalidateQueries({
@@ -61,13 +82,17 @@ export default function RouteComponent() {
 		<>
 			<div className="mb-6">
 				<h1 className="text-telnet-primary font-black text-3xl">
-					Tambah Materi Baru
+					Edit Materi {studyMaterial?.title}
 				</h1>
 				<p className="text-muted-foreground">
-					Isi form di bawah untuk menambahkan materi baru.
+					Isi form di bawah untuk memperbarui materi.
 				</p>
 			</div>
-			<MaterialForm form={form} buttonText="Tambah" />
+			<MaterialForm
+				form={form}
+				buttonText="Perbarui"
+				oldImageLink={studyMaterial.imageLink}
+			/>
 		</>
 	);
 }

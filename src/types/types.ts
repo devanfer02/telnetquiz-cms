@@ -15,27 +15,31 @@ type Chapter = {
 	title: string;
 	description: string;
 	mascotId: number;
+	createdAt: Date;
+	updatedAt: Date;
 };
 
 type Quiz = {
 	id: number;
-	chapterId: number | null;
-	chapterName?: string;
 	title: string;
 	difficulty: "easy" | "medium" | "hard";
 	numberOfQuestions: number;
 	level: number;
-	chapter: Chapter | null;
+	chapter?: Chapter | null;
+	chapterId?: number | null;
+	chapterTitle?: string;
+	createdAt: Date;
+	updatedAt: Date;
 };
 
 type Question = {
-	id: string;
-	quizId: string;
-	imageLink: string;
+	id: number;
+	quizId: number | null;
+	imageLink: string | null;
 	image?: File | null;
 	description: string;
 	question: string;
-	options: Option[];
+	options?: Option[];
 };
 
 type QuestionSerialized = Omit<Question, "image"> & {
@@ -60,8 +64,9 @@ type Submission = {
 
 type StudyMaterial = {
 	id: number;
-	questionId: string;
 	title: string;
-	imageLink: string;
+	imageLink: string | null;
 	content: string;
+	createdAt: Date;
+	updatedAt: Date;
 };

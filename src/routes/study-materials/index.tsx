@@ -1,14 +1,24 @@
 import { createFileRoute } from "@tanstack/react-router";
 import StudyMaterialList from "./-sections/material-list";
-import { mockStudyMaterials } from "@/data/mock-material";
+import { getAllStudyMaterials } from "@/actions/study-material";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/study-materials/")({
-	loader: () => ({ data: mockStudyMaterials }),
+	loader: async ({ context }) => {
+		await context.queryClient.prefetchQuery({
+			queryKey: ["study-material-list"],
+			queryFn: () => getAllStudyMaterials(),
+		});
+	},
 	component: RouteComponent,
 });
 
 function RouteComponent() {
-	const { data } = Route.useLoaderData();
+	const { data: studyMaterials } = useSuspenseQuery({
+		queryKey: ["study-material-list"],
+		queryFn: () => getAllStudyMaterials(),
+		staleTime: 60 * 1000,
+	});
 
 	return (
 		<>
@@ -20,7 +30,7 @@ function RouteComponent() {
 					Daftar materi pelajaran tentang Media dan Jaringan Telekomunikasi
 				</p>
 			</div>
-			<StudyMaterialList studyMaterials={data} />
+			<StudyMaterialList studyMaterials={studyMaterials} />
 		</>
 	);
 }

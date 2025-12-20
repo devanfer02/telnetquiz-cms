@@ -8,6 +8,15 @@ const ACCEPTED_IMAGE_TYPES = [
 	"image/webp",
 ];
 
+export const imageFileSchema = z
+	.any()
+	.optional()
+	.refine((file) => file?.size <= MAX_FILE_SIZE, "Max image size is 5MB")
+	.refine(
+		(file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+		"Only .jpg, .jpeg, .png and .webp formats are supported.",
+	);
+
 export const idNumberSchema = z.object({
 	id: z.number().positive(),
 });
@@ -25,15 +34,9 @@ export const optionSchema = z.object({
 });
 
 export const questionSchema = z.object({
-	quizId: z.string(),
-	image: z
-		.any()
-		.optional()
-		.refine((file) => file?.size <= MAX_FILE_SIZE, "Max image size is 5MB")
-		.refine(
-			(file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-			"Only .jpg, .jpeg, .png and .webp formats are supported.",
-		),
+	quizId: z.number(),
+	materialId: z.number(),
+	image: imageFileSchema,
 	description: z
 		.string()
 		.min(3, { message: "Description must be at least 3 characters." }),
@@ -55,6 +58,19 @@ export const questionsSchema = z.object({
 	questions: z.array(questionSchema),
 });
 
+export const studyMaterialSchema = z.object({
+	title: z.string().min(3),
+	imageFile: z
+		.instanceof(File)
+		.refine((file) => file?.size <= MAX_FILE_SIZE, "Max image size is 5MB")
+		.refine(
+			(file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+			"Only .jpg, .jpeg, .png and .webp formats are supported.",
+		)
+		.optional(),
+	content: z.string(),
+});
+
 export const quizSchema = z.object({
 	title: z.string().min(3, "Judul minimal 3 karakter"),
 	difficulty: z.enum(["easy", "medium", "hard"]),
@@ -67,3 +83,4 @@ export type OptionFormData = z.infer<typeof optionSchema>;
 export type QuestionFormData = z.infer<typeof questionSchema>;
 export type QuestionsFormData = z.infer<typeof questionsSchema>;
 export type ChapterFormData = z.infer<typeof chapterSchema>;
+export type StudyMaterialFormData = z.infer<typeof studyMaterialSchema>;
