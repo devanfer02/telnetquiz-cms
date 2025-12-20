@@ -24,7 +24,7 @@ export const columns: ColumnDef<User>[] = [
 		},
 	},
 	{
-		accessorKey: "fullname",
+		accessorKey: "name",
 		header: ({ column }) => <SortableHeader column={column} title="Fullname" />,
 	},
 	{

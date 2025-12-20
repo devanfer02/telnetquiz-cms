@@ -58,4 +58,6 @@ export const QUERY_KEYS = {
 	QUIZZES: "quiz-list",
 	QUESTIONS: "question-list",
 	STUDY_MATERIALS: "study-material-list",
+	USERS: "user-list",
+	SUBMISSIONS: "submission-list",
 };

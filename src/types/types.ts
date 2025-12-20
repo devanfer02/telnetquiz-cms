@@ -1,8 +1,8 @@
 type User = {
 	id: string;
-	fullname: string;
+	name: string;
 	email: string;
-	createdAt: string;
+	createdAt: Date;
 };
 
 type AverageScoreChapter = {
