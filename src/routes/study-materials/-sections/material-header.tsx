@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Pencil, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { MetadataTable } from "@/components/global/date-metadata";
 
 interface MaterialHeaderProps {
 	studyMaterial: StudyMaterial;
@@ -61,49 +62,10 @@ export default function MaterialHeader({ studyMaterial }: MaterialHeaderProps) {
 						</p>
 					</div>
 
-					{/* Metadata table */}
-					<table className="mt-6 w-full border-collapse">
-						<tbody>
-							{studyMaterial.createdAt && (
-								<tr className="border-b border-gray-200">
-									<td className="py-3 pr-4 text-sm font-medium text-gray-500 w-32">
-										Created At:
-									</td>
-									<td className="py-3 text-sm text-gray-900">
-										{new Date(studyMaterial.createdAt).toLocaleDateString(
-											"en-US",
-											{
-												year: "numeric",
-												month: "long",
-												day: "numeric",
-												hour: "2-digit",
-												minute: "2-digit",
-											},
-										)}
-									</td>
-								</tr>
-							)}
-							{studyMaterial.updatedAt && (
-								<tr className="border-b border-gray-200">
-									<td className="py-3 pr-4 text-sm font-medium text-gray-500 w-32">
-										Updated At:
-									</td>
-									<td className="py-3 text-sm text-gray-900">
-										{new Date(studyMaterial.updatedAt).toLocaleDateString(
-											"en-US",
-											{
-												year: "numeric",
-												month: "long",
-												day: "numeric",
-												hour: "2-digit",
-												minute: "2-digit",
-											},
-										)}
-									</td>
-								</tr>
-							)}
-						</tbody>
-					</table>
+					<MetadataTable
+						createdAt={studyMaterial.createdAt}
+						updatedAt={studyMaterial.updatedAt}
+					/>
 				</div>
 			</div>
 		</div>

@@ -15,6 +15,8 @@ type Chapter = {
 	title: string;
 	description: string;
 	mascotId: number;
+	createdAt: Date;
+	updatedAt: Date;
 };
 
 type Quiz = {
@@ -25,7 +27,7 @@ type Quiz = {
 	difficulty: "easy" | "medium" | "hard";
 	numberOfQuestions: number;
 	level: number;
-	chapter: Chapter | null;
+	chapter?: Chapter | null;
 };
 
 type Question = {

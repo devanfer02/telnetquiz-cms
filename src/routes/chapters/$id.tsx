@@ -1,9 +1,8 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { Pencil } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { createFileRoute } from "@tanstack/react-router";
 import QuizList from "../quiz/-sections/quiz-list";
 import { getChapterById } from "@/actions/chapters";
 import NotFound from "@/components/global/not-found";
+import ChapterHeader from "./-sections/chapter-header";
 
 export const Route = createFileRoute("/chapters/$id")({
 	loader: async ({ params }) => {
@@ -23,30 +22,10 @@ function RouteComponent() {
 		return <NotFound message="Chapter not found" />;
 	}
 
-	const id = chapter.id.toString();
-
 	return (
 		<div className="p-4">
 			<div className="mb-3">
-				<div className="flex justify-between">
-					<h1 className="text-3xl font-bold text-telnet-primary">
-						Chapter: {chapter.title}
-					</h1>
-					<Button className="bg-blue-500 hover:bg-blue-600 text-white">
-						<Link
-							to="/chapters/edit/$id"
-							params={{ id }}
-							className="flex items-center justify-center"
-						>
-							<Pencil className="w-4 h-4 mr-2" />
-							Edit Chapter
-						</Link>
-					</Button>
-				</div>
-
-				<p className="text-lg mt-2 text-telnet-secondary">
-					{chapter.description}
-				</p>
+				<ChapterHeader chapter={chapter} />
 			</div>
 			<QuizList
 				quizzes={chapter.quizzes}

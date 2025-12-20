@@ -1,7 +1,7 @@
 import {
+	BookMarked,
 	BookOpen,
 	FileQuestionIcon,
-	Layers,
 	LayoutDashboard,
 	MessageSquareDot,
 	Upload,
@@ -17,7 +17,7 @@ export const sidebarItems = [
 	{
 		title: "Chapters",
 		url: "/chapters",
-		icon: Layers,
+		icon: BookMarked,
 	},
 	{
 		title: "Quiz",
