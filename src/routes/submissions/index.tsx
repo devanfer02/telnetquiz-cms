@@ -15,12 +15,6 @@ export const Route = createFileRoute("/submissions/")({
 });
 
 function RouteComponent() {
-	const { data: submissions } = useSuspenseQuery({
-		queryKey: [QUERY_KEYS.SUBMISSIONS],
-		queryFn: () => getAllSubmissions(),
-		staleTime: 60 * 1000,
-	});
-
 	return (
 		<>
 			<div className="mt-3 mb-5">
@@ -31,7 +25,7 @@ function RouteComponent() {
 					List submisi terbaru dari pengguna.
 				</p>
 			</div>
-			<RecentSubmission submissions={submissions} />
+			<RecentSubmission />
 		</>
 	);
 }

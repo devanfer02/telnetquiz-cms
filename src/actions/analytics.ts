@@ -1,5 +1,11 @@
 import { DbLayer } from "@/lib/db";
-import { fetchAllSubmissions, fetchAllUsers } from "@/services/analytics";
+import {
+	fetchAllSubmissions,
+	fetchAllUsers,
+	fetchAverageScores,
+	fetchDashboardStats,
+	fetchLeaderboard,
+} from "@/services/analytics";
 import { createServerFn } from "@tanstack/react-start";
 import { Effect } from "effect";
 
@@ -26,6 +32,55 @@ export const getAllSubmissions = createServerFn({
 			Effect.catchAll((err) => {
 				console.error("Failed to get all submissions. ERR:", err);
 				return Effect.succeed([]);
+			}),
+		),
+	);
+});
+
+export const getAverageScores = createServerFn({
+	method: "GET",
+}).handler(async () => {
+	return Effect.runPromise(
+		fetchAverageScores.pipe(
+			Effect.provide(DbLayer),
+			Effect.catchAll((err) => {
+				console.error("Failed to get average scores. ERR:", err);
+				return Effect.succeed([]);
+			}),
+		),
+	);
+});
+
+export const getLeaderboard = createServerFn({
+	method: "GET",
+}).handler(async () => {
+	return Effect.runPromise(
+		fetchLeaderboard.pipe(
+			Effect.provide(DbLayer),
+			Effect.catchAll((err) => {
+				console.error("Failed to get leaderboard. ERR:", err);
+				return Effect.succeed([]);
+			}),
+		),
+	);
+});
+
+export const getDashboardStats = createServerFn({
+	method: "GET",
+}).handler(async () => {
+	return Effect.runPromise(
+		fetchDashboardStats.pipe(
+			Effect.provide(DbLayer),
+			Effect.catchAll((err) => {
+				console.error("Failed to get dashboard stats. ERR:", err);
+				return Effect.succeed({
+					chapters: 0,
+					quizzes: 0,
+					studyMaterials: 0,
+					questions: 0,
+					submissions: 0,
+					users: 0,
+				});
 			}),
 		),
 	);

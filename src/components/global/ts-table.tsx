@@ -67,7 +67,10 @@ export default function TanstackTable<T>({
 						))
 					) : (
 						<TableRow>
-							<TableCell colSpan={columns.length} className="h-24 text-center">
+							<TableCell
+								colSpan={columns.length}
+								className="h-24 text-center text-muted-foreground italic"
+							>
 								{fallbackMessage}
 							</TableCell>
 						</TableRow>

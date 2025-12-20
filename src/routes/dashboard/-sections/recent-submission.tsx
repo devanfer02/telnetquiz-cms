@@ -9,6 +9,9 @@ import {
 import { useState } from "react";
 import TanstackTable from "@/components/global/ts-table";
 import { SortableHeader } from "../../../components/global/sortable-header";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { QUERY_KEYS } from "@/lib/constant";
+import { getAllSubmissions } from "@/actions/analytics";
 
 export const columns: ColumnDef<Submission>[] = [
 	{
@@ -45,18 +48,17 @@ export const columns: ColumnDef<Submission>[] = [
 	},
 ];
 
-interface RecentSubmissionProps {
-	submissions: Submission[];
-}
+export default function RecentSubmission() {
+	const { data: submissions } = useSuspenseQuery({
+		queryKey: [QUERY_KEYS.SUBMISSIONS],
+		queryFn: () => getAllSubmissions(),
+		staleTime: 60 * 1000,
+	});
 
-export default function RecentSubmission({
-	submissions,
-}: RecentSubmissionProps) {
-	const [data, _] = useState(() => submissions);
 	const [sorting, setSorting] = useState<SortingState>([]);
 
 	const table = useReactTable({
-		data,
+		data: submissions,
 		columns,
 		state: { sorting },
 		onSortingChange: setSorting,

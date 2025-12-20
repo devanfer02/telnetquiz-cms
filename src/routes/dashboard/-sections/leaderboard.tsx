@@ -17,11 +17,13 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { mockLeaderboard } from "@/data/mock-dashboard";
 import { cn } from "@/lib/utils";
 import { SortableHeader } from "../../../components/global/sortable-header";
 import { Button } from "../../../components/ui/button";
 import { Card } from "../../../components/ui/card";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { QUERY_KEYS } from "@/lib/constant";
+import { getLeaderboard } from "@/actions/analytics";
 
 type LeaderboardEntry = {
 	rank: number;
@@ -57,10 +59,16 @@ const columns: ColumnDef<LeaderboardEntry>[] = [
 ];
 
 export default function Leaderboard({ className }: LeaderboardProps) {
+	const { data: leaderboard } = useSuspenseQuery({
+		queryKey: [QUERY_KEYS.LEADERBOARD],
+		queryFn: () => getLeaderboard(),
+		staleTime: 60 * 1000,
+	});
+
 	const [sorting, setSorting] = useState<SortingState>([]);
 
 	const table = useReactTable({
-		data: mockLeaderboard,
+		data: leaderboard,
 		columns,
 		state: { sorting },
 		onSortingChange: setSorting,
@@ -71,13 +79,8 @@ export default function Leaderboard({ className }: LeaderboardProps) {
 
 	return (
 		<Card className={cn("px-5 h-full", className)}>
-			<h2 className="text-xl font-black text-telnet-primary mb-4">
-				Leaderboard
-			</h2>
+			<h2 className="text-xl font-black text-telnet-primary">Leaderboard</h2>
 			<Table>
-				<TableCaption className="caption-top mb-3">
-					Top performing users
-				</TableCaption>
 				<TableHeader>
 					{table.getHeaderGroups().map((headerGroup) => (
 						<TableRow key={headerGroup.id}>
@@ -98,15 +101,26 @@ export default function Leaderboard({ className }: LeaderboardProps) {
 					))}
 				</TableHeader>
 				<TableBody>
-					{table.getRowModel().rows.map((row) => (
-						<TableRow key={row.id}>
-							{row.getVisibleCells().map((cell) => (
-								<TableCell key={cell.id}>
-									{cell.renderValue() as string}
-								</TableCell>
-							))}
+					{table.getRowModel().rows.length > 0 ? (
+						table.getRowModel().rows.map((row) => (
+							<TableRow key={row.id}>
+								{row.getVisibleCells().map((cell) => (
+									<TableCell key={cell.id}>
+										{cell.renderValue() as string}
+									</TableCell>
+								))}
+							</TableRow>
+						))
+					) : (
+						<TableRow>
+							<TableCell
+								colSpan={columns.length}
+								className="h-24 text-center text-muted-foreground italic"
+							>
+								No leaderboard data available yet
+							</TableCell>
 						</TableRow>
-					))}
+					)}
 				</TableBody>
 			</Table>
 			<div className="flex items-center justify-end space-x-2 mt-1">
