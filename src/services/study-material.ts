@@ -127,7 +127,6 @@ export const patchStudyMaterial = (
 export const deleteStudyMaterialById = (id: number) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
-		const { s3 } = yield* S3;
 
 		const result = yield* Effect.tryPromise({
 			try: () =>
