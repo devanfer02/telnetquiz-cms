@@ -21,13 +21,15 @@ type Chapter = {
 
 type Quiz = {
 	id: number;
-	chapterId: number | null;
-	chapterName?: string;
 	title: string;
 	difficulty: "easy" | "medium" | "hard";
 	numberOfQuestions: number;
 	level: number;
 	chapter?: Chapter | null;
+	chapterId?: number | null;
+	chapterTitle?: string;
+	createdAt: Date;
+	updatedAt: Date;
 };
 
 type Question = {

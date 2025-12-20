@@ -29,7 +29,7 @@ function RouteComponent() {
 			</div>
 			<QuizList
 				quizzes={chapter.quizzes}
-				disableKey={["chapterId", "chapterName"]}
+				disableKey={["chapterId", "chapterTitle"]}
 			/>
 		</div>
 	);

@@ -39,6 +39,13 @@ export const fetchQuizById = (id: number) =>
 			try: () =>
 				db.query.quizzes.findFirst({
 					where: eq(quizzes.id, id),
+					extras: {
+						numberOfQuestions: sql<number>`(
+            SELECT count(*)
+            FROM ${questions}
+            WHERE "questions"."quizId" = "quizzes"."id"
+          )`.as("numberOfQuestions"),
+					},
 				}),
 			catch: (err) =>
 				new DatabaseError({

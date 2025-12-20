@@ -1,9 +1,9 @@
 import {
 	BookMarked,
 	BookOpen,
+	Brain,
 	FileQuestionIcon,
 	LayoutDashboard,
-	MessageSquareDot,
 	Upload,
 	Users,
 } from "lucide-react";
@@ -22,7 +22,7 @@ export const sidebarItems = [
 	{
 		title: "Quiz",
 		url: "/quiz",
-		icon: MessageSquareDot,
+		icon: Brain,
 	},
 	{
 		title: "Study Materials",
