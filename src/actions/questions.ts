@@ -1,7 +1,9 @@
 import { DbLayer } from "@/lib/db";
-import { fetchAllQuestions } from "@/services/questions";
+import { S3Layer } from "@/lib/s3";
+import { createQuestionsService, fetchAllQuestions } from "@/services/questions";
 import { createServerFn } from "@tanstack/react-start";
 import { Effect } from "effect";
+import z from "zod";
 
 export const getAllQuestions = createServerFn({
 	method: "GET",
@@ -17,3 +19,38 @@ export const getAllQuestions = createServerFn({
 		),
 	);
 });
+
+export const createQuestions = createServerFn({
+	method: "POST",
+})
+	.inputValidator(z.instanceof(FormData))
+	.handler(async ({ data }) => {
+		const quizId = Number(data.get("quizId"));
+		const materialId = Number(data.get("materialId"));
+		const questionsRaw = JSON.parse(data.get("questions") as string);
+
+		const questions = questionsRaw.map((q: any, index: number) => {
+			const image = data.get(`image_${index}`);
+			return {
+				...q,
+				image: image instanceof File ? image : undefined,
+			};
+		});
+
+		const parsedData = {
+			quizId,
+			materialId,
+			questions,
+		};
+
+		return Effect.runPromise(
+			createQuestionsService(parsedData).pipe(
+				Effect.provide(DbLayer),
+        Effect.provide(S3Layer),
+				Effect.catchAll((err) => {
+					console.error("Failed to create questions. ERR:", err);
+					return Effect.fail(err);
+				}),
+			),
+		);
+	});

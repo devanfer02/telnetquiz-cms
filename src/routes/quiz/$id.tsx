@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { mockQuestionsQuiz } from "@/data/mock-question";
-import QuestionList from "../questions/question-list";
+import QuestionList from "../questions/-sections/question-list";
 import { getQuizById } from "@/actions/quizzes";
 import QuizHeader from "./-sections/quiz-header";
 

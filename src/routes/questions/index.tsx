@@ -1,20 +1,20 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { mockQuestions } from "@/data/mock-question";
 import QuestionList from "./-sections/question-list";
+import { getAllQuestions } from "@/actions/questions";
 
 export const Route = createFileRoute("/questions/")({
-	loader: () => {
-		const safe = mockQuestions.map((q) => ({
-			...q,
-			image: null,
-		}));
-		return { data: safe };
+	loader: async () => {
+    const questions = await getAllQuestions()
+
+    return {
+      questions 
+    }
 	},
 	component: RouteComponent,
 });
 
 function RouteComponent() {
-	const { data } = Route.useLoaderData();
+	const { questions } = Route.useLoaderData();
 
 	return (
 		<>
@@ -26,7 +26,7 @@ function RouteComponent() {
 					Daftar semua pertanyaan tentang Media dan Jaringan Telekomunikasi.
 				</p>
 			</div>
-			<QuestionList questions={data} />
+			<QuestionList questions={questions} />
 		</>
 	);
 }
