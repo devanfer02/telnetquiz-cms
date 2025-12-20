@@ -19,6 +19,13 @@ import { filterColumns } from "@/lib/utils";
 import { removeQuestion } from "@/actions/questions";
 import { useQueryClient } from "@tanstack/react-query";
 import { setFlashState } from "@/store/use-flash";
+import { Check, X } from "lucide-react";
+import {
+	Accordion,
+	AccordionContent,
+	AccordionItem,
+	AccordionTrigger,
+} from "@/components/ui/accordion";
 
 interface QuestionListProps {
 	questions: Question[];
@@ -96,6 +103,45 @@ export default function QuestionList({
 				<SortableHeader column={column} title="Question" />
 			),
 			size: 100,
+		},
+		{
+			id: "options",
+			header: "Options",
+			size: 200,
+			cell: ({ row }) => {
+				const options = row.original.options || [];
+				return (
+					<Accordion type="single" collapsible className="w-full">
+						<AccordionItem value="options" className="border-none">
+							<AccordionTrigger className="py-2 text-sm font-medium text-telnet-primary hover:no-underline">
+								Options ({options.length})
+							</AccordionTrigger>
+							<AccordionContent>
+								<div className="flex flex-col gap-1">
+									{options.map((opt, i) => (
+										<div key={i} className="flex items-center gap-2 text-sm">
+											{opt.isCorrect ? (
+												<Check className="w-4 h-4 text-green-500" />
+											) : (
+												<X className="w-4 h-4 text-red-500" />
+											)}
+											<span
+												className={
+													opt.isCorrect
+														? "font-semibold text-green-700"
+														: "text-gray-600"
+												}
+											>
+												{opt.text}
+											</span>
+										</div>
+									))}
+								</div>
+							</AccordionContent>
+						</AccordionItem>
+					</Accordion>
+				);
+			},
 		},
 		{
 			accessorKey: "imageLink",

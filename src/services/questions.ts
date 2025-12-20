@@ -10,7 +10,13 @@ export const fetchAllQuestions = Effect.gen(function* () {
 	const { db } = yield* Db;
 
 	return yield* Effect.tryPromise({
-		try: () => db.select().from(questions).orderBy(desc(questions.createdAt)),
+		try: () =>
+			db.query.questions.findMany({
+				orderBy: desc(questions.createdAt),
+				with: {
+					options: true,
+				},
+			}),
 		catch: (err) =>
 			new DatabaseError({
 				cause: err,
