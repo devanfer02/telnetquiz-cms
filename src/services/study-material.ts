@@ -2,17 +2,10 @@ import { studyMaterials } from "@/database/schema";
 import { Db } from "@/lib/db";
 import { desc, eq } from "drizzle-orm";
 import { Effect } from "effect";
-import {
-	CloudflareR2Error,
-	DatabaseError,
-	InternalServerError,
-	NotFoundError,
-} from "./errors/errors";
+import { DatabaseError, NotFoundError } from "./errors/errors";
 import { StudyMaterialFormData } from "@/types/zod";
 import { S3 } from "@/lib/s3";
-import { generateFilename, getFileExtension } from "@/lib/utils";
-import { env } from "@/lib/env";
-import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
+import { deleteFile, uploadFile } from "./image";
 
 export const fetchAllStudyMaterials = Effect.gen(function* () {
 	const { db } = yield* Db;
@@ -59,41 +52,11 @@ export const fetchStudyMaterialById = (id: number) =>
 export const createStudyMaterial = (studyMaterial: StudyMaterialFormData) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
-		const { s3 } = yield* S3;
 
 		let imageLink: string | null = null;
 
 		if (studyMaterial.imageFile) {
-			const filename = generateFilename(studyMaterial.imageFile.name);
-
-			const fileArrayBuf = yield* Effect.tryPromise({
-				try: () => studyMaterial.imageFile!.arrayBuffer(),
-				catch: (err) =>
-					new InternalServerError({
-						cause: err,
-						message: "Failed to convert to array buffer",
-					}),
-			});
-
-			const body = new Uint8Array(fileArrayBuf);
-
-			const putObjCommand = new PutObjectCommand({
-				Bucket: env.CLOUDFLARE_BUCKET,
-				Key: `study-materials/${filename}`,
-				Body: body,
-				ContentType: getFileExtension(studyMaterial.imageFile.name),
-			});
-
-			yield* Effect.tryPromise({
-				try: () => s3.send(putObjCommand),
-				catch: (err) =>
-					new CloudflareR2Error({
-						cause: err,
-						message: "Failed to write file",
-					}),
-			});
-
-			imageLink = `${env.CLOUDFLARE_R2_DOMAIN}/study-materials/${filename}`;
+			imageLink = yield* uploadFile(studyMaterial.imageFile);
 		}
 
 		const [material] = yield* Effect.tryPromise({
@@ -123,11 +86,26 @@ export const patchStudyMaterial = (
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
+		const material = yield* fetchStudyMaterialById(id);
+		const payload = {
+			title: studyMaterial.title,
+			content: studyMaterial.content,
+			imageLink: material.imageLink,
+		};
+
+		if (material.imageLink) {
+			yield* deleteFile(material.imageLink);
+		}
+
+		if (studyMaterial.imageFile) {
+			payload.imageLink = yield* uploadFile(studyMaterial.imageFile);
+		}
+
 		const result = yield* Effect.tryPromise({
 			try: () =>
 				db
 					.update(studyMaterials)
-					.set(studyMaterial)
+					.set(payload)
 					.where(eq(studyMaterials.id, id))
 					.returning(),
 			catch: (error) =>
@@ -168,19 +146,7 @@ export const deleteStudyMaterialById = (id: number) =>
 		}
 
 		if (result[0].imageLink) {
-			const deleteObjCommand = new DeleteObjectCommand({
-				Bucket: env.CLOUDFLARE_BUCKET,
-				Key: new URL(result[0].imageLink).pathname.slice(1),
-			});
-
-			yield* Effect.tryPromise({
-				try: () => s3.send(deleteObjCommand),
-				catch: (err) =>
-					new CloudflareR2Error({
-						cause: err,
-						message: "Failed to delete file",
-					}),
-			});
+			yield* deleteFile(result[0].imageLink);
 		}
 
 		return {

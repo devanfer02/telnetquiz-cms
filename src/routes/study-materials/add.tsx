@@ -30,7 +30,6 @@ export default function RouteComponent() {
 			}
 
 			const result = await addStudyMaterial({ data: formData });
-			console.log(result);
 
 			if (result === null) {
 				setFlashState({

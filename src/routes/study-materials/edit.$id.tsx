@@ -38,14 +38,19 @@ export default function RouteComponent() {
 			id: studyMaterial?.id,
 			title: studyMaterial?.title,
 			content: studyMaterial?.content,
+			imageLink: studyMaterial?.imageLink,
 		} as StudyMaterialFormData,
 		onSubmit: async ({ value }) => {
-			const result = await updateStudyMaterial({
-				data: {
-					id: studyMaterial.id,
-					studyMaterial: value,
-				},
-			});
+			const formData = new FormData();
+
+			formData.append("id", studyMaterial.id.toString());
+			formData.append("title", value.title);
+			formData.append("content", value.content);
+			if (value.imageFile) {
+				formData.append("imageFile", value.imageFile);
+			}
+
+			const result = await updateStudyMaterial({ data: formData });
 
 			if (result === null) {
 				setFlashState({
@@ -66,7 +71,10 @@ export default function RouteComponent() {
 				queryKey: ["study-material-list"],
 			});
 
-			navigate({ to: "/study-materials" });
+			navigate({
+				to: "/study-materials/$id",
+				params: { id: result.id.toString() },
+			});
 		},
 	});
 
@@ -80,7 +88,11 @@ export default function RouteComponent() {
 					Isi form di bawah untuk memperbarui materi.
 				</p>
 			</div>
-			<MaterialForm form={form} buttonText="Perbarui" />
+			<MaterialForm
+				form={form}
+				buttonText="Perbarui"
+				oldImageLink={studyMaterial.imageLink}
+			/>
 		</>
 	);
 }

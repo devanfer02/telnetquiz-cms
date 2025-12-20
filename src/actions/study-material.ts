@@ -7,7 +7,6 @@ import {
 	fetchStudyMaterialById,
 	patchStudyMaterial,
 } from "@/services/study-material";
-import { studyMaterialSchema } from "@/types/zod";
 import { createServerFn } from "@tanstack/react-start";
 import { Effect } from "effect";
 import z from "zod";
@@ -75,17 +74,24 @@ export const addStudyMaterial = createServerFn({
 export const updateStudyMaterial = createServerFn({
 	method: "POST",
 })
-	.inputValidator(
-		z.object({
-			id: z.number(),
-			studyMaterial: studyMaterialSchema,
-		}),
-	)
+	.inputValidator(z.instanceof(FormData))
 	.handler(async ({ data }) => {
-		const { id, studyMaterial } = data;
+		const id = data.get("id");
+		const title = data.get("title");
+		const content = data.get("content");
+		const image = data.get("imageFile");
+
+		const payload = {
+			id: Number(id),
+			title: typeof title === "string" ? title : "",
+			content: typeof content === "string" ? content : "",
+			imageFile: image instanceof File ? image : undefined,
+		};
+
 		return Effect.runPromise(
-			patchStudyMaterial(id, studyMaterial).pipe(
+			patchStudyMaterial(payload.id, payload).pipe(
 				Effect.provide(DbLayer),
+				Effect.provide(S3Layer),
 				Effect.catchAll((err) => {
 					console.error("Failed to update study material. ERR:", err);
 
