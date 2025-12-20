@@ -4,7 +4,6 @@ import { desc, eq } from "drizzle-orm";
 import { Effect } from "effect";
 import { DatabaseError, NotFoundError } from "./errors/errors";
 import { StudyMaterialFormData } from "@/types/zod";
-import { S3 } from "@/lib/s3";
 import { deleteFile, uploadFile } from "./image";
 
 export const fetchAllStudyMaterials = Effect.gen(function* () {
