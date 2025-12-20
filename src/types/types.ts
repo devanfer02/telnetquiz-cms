@@ -29,13 +29,13 @@ type Quiz = {
 };
 
 type Question = {
-	id: string;
-	quizId: string;
-	imageLink: string;
+	id: number;
+	quizId: number | null;
+	imageLink: string | null;
 	image?: File | null;
 	description: string;
 	question: string;
-	options: Option[];
+	options?: Option[];
 };
 
 type QuestionSerialized = Omit<Question, "image"> & {
@@ -63,4 +63,6 @@ type StudyMaterial = {
 	title: string;
 	imageLink: string | null;
 	content: string;
+	createdAt: Date;
+	updatedAt: Date;
 };

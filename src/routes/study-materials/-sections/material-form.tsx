@@ -1,4 +1,3 @@
-import { addStudyMaterial } from "@/actions/study-material";
 import FileInput from "@/components/global/file-input";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";

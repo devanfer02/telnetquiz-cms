@@ -1,6 +1,6 @@
 import { questions, quizzes } from "@/database/schema";
 import { Db } from "@/lib/db";
-import { eq, sql } from "drizzle-orm";
+import { desc, eq, sql } from "drizzle-orm";
 import { Effect } from "effect";
 import { DatabaseError, NotFoundError } from "./errors/errors";
 import { QuizFormData } from "@/types/zod";
@@ -11,7 +11,7 @@ export const fetchAllQuizzes = Effect.gen(function* () {
 	return yield* Effect.tryPromise({
 		try: () =>
 			db.query.quizzes.findMany({
-				orderBy: quizzes.createdAt,
+				orderBy: desc(quizzes.createdAt),
 				with: {
 					chapter: true,
 				},

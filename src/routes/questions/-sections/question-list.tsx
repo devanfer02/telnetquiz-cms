@@ -37,7 +37,9 @@ export const columns: ColumnDef<Question>[] = [
 		header: ({ column }) => <SortableHeader column={column} title="Quiz ID" />,
 		size: 10,
 		cell: ({ row }) => {
-			const quizId = row.original.quizId.toString();
+			const quizId = row.original.quizId?.toString();
+
+			if (!quizId) return "-";
 
 			return <TableLink to="/quiz/$id" paramKey="id" paramValue={quizId} />;
 		},

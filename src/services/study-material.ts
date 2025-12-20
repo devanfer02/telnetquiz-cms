@@ -36,6 +36,9 @@ export const fetchStudyMaterialById = (id: number) =>
 			try: () =>
 				db.query.studyMaterials.findFirst({
 					where: eq(studyMaterials.id, id),
+					with: {
+						questions: true,
+					},
 				}),
 			catch: (err) =>
 				new DatabaseError({

@@ -31,20 +31,6 @@ export const columns: ColumnDef<StudyMaterial>[] = [
 		},
 	},
 	{
-		accessorKey: "questionId",
-		header: ({ column }) => (
-			<SortableHeader column={column} title="Question ID" />
-		),
-		size: 10,
-		cell: ({ row }) => {
-			const questionId = row.original.questionId.toString();
-
-			return (
-				<TableLink to="/questions/$id" paramKey="id" paramValue={questionId} />
-			);
-		},
-	},
-	{
 		accessorKey: "title",
 		header: ({ column }) => <SortableHeader column={column} title="Title" />,
 		size: 50,
