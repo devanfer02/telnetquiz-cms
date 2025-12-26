@@ -28,7 +28,7 @@ import { Route as webQuizIdRouteImport } from './routes/(web)/quiz/$id'
 import { Route as webQuestionsAddRouteImport } from './routes/(web)/questions/add'
 import { Route as webChaptersAddRouteImport } from './routes/(web)/chapters/add'
 import { Route as webChaptersIdRouteImport } from './routes/(web)/chapters/$id'
-import { Route as webAuthSignInRouteImport } from './routes/(web)/auth/sign-in'
+import { Route as authAuthSignInRouteImport } from './routes/(auth)/auth/sign-in'
 import { Route as webStudyMaterialsEditIdRouteImport } from './routes/(web)/study-materials/edit.$id'
 import { Route as webQuizEditIdRouteImport } from './routes/(web)/quiz/edit.$id'
 import { Route as webQuestionsEditIdRouteImport } from './routes/(web)/questions/edit.$id'
@@ -128,10 +128,10 @@ const webChaptersIdRoute = webChaptersIdRouteImport.update({
   path: '/chapters/$id',
   getParentRoute: () => webRouteRoute,
 } as any)
-const webAuthSignInRoute = webAuthSignInRouteImport.update({
-  id: '/auth/sign-in',
+const authAuthSignInRoute = authAuthSignInRouteImport.update({
+  id: '/(auth)/auth/sign-in',
   path: '/auth/sign-in',
-  getParentRoute: () => webRouteRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
 const webStudyMaterialsEditIdRoute = webStudyMaterialsEditIdRouteImport.update({
   id: '/study-materials/edit/$id',
@@ -158,7 +158,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof webDashboardRouteRoute
   '/api/chapters': typeof ApiChaptersRoute
-  '/auth/sign-in': typeof webAuthSignInRoute
+  '/auth/sign-in': typeof authAuthSignInRoute
   '/chapters/$id': typeof webChaptersIdRoute
   '/chapters/add': typeof webChaptersAddRoute
   '/questions/add': typeof webQuestionsAddRoute
@@ -183,7 +183,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof webDashboardRouteRoute
   '/api/chapters': typeof ApiChaptersRoute
-  '/auth/sign-in': typeof webAuthSignInRoute
+  '/auth/sign-in': typeof authAuthSignInRoute
   '/chapters/$id': typeof webChaptersIdRoute
   '/chapters/add': typeof webChaptersAddRoute
   '/questions/add': typeof webQuestionsAddRoute
@@ -210,7 +210,7 @@ export interface FileRoutesById {
   '/(web)': typeof webRouteRouteWithChildren
   '/(web)/dashboard': typeof webDashboardRouteRoute
   '/api/chapters': typeof ApiChaptersRoute
-  '/(web)/auth/sign-in': typeof webAuthSignInRoute
+  '/(auth)/auth/sign-in': typeof authAuthSignInRoute
   '/(web)/chapters/$id': typeof webChaptersIdRoute
   '/(web)/chapters/add': typeof webChaptersAddRoute
   '/(web)/questions/add': typeof webQuestionsAddRoute
@@ -288,7 +288,7 @@ export interface FileRouteTypes {
     | '/(web)'
     | '/(web)/dashboard'
     | '/api/chapters'
-    | '/(web)/auth/sign-in'
+    | '/(auth)/auth/sign-in'
     | '/(web)/chapters/$id'
     | '/(web)/chapters/add'
     | '/(web)/questions/add'
@@ -314,6 +314,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   webRouteRoute: typeof webRouteRouteWithChildren
   ApiChaptersRoute: typeof ApiChaptersRoute
+  authAuthSignInRoute: typeof authAuthSignInRoute
   ApiAuthLoginRoute: typeof ApiAuthLoginRoute
   ApiAuthRegisterRoute: typeof ApiAuthRegisterRoute
 }
@@ -453,12 +454,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof webChaptersIdRouteImport
       parentRoute: typeof webRouteRoute
     }
-    '/(web)/auth/sign-in': {
-      id: '/(web)/auth/sign-in'
+    '/(auth)/auth/sign-in': {
+      id: '/(auth)/auth/sign-in'
       path: '/auth/sign-in'
       fullPath: '/auth/sign-in'
-      preLoaderRoute: typeof webAuthSignInRouteImport
-      parentRoute: typeof webRouteRoute
+      preLoaderRoute: typeof authAuthSignInRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/(web)/study-materials/edit/$id': {
       id: '/(web)/study-materials/edit/$id'
@@ -493,7 +494,6 @@ declare module '@tanstack/react-router' {
 
 interface webRouteRouteChildren {
   webDashboardRouteRoute: typeof webDashboardRouteRoute
-  webAuthSignInRoute: typeof webAuthSignInRoute
   webChaptersIdRoute: typeof webChaptersIdRoute
   webChaptersAddRoute: typeof webChaptersAddRoute
   webQuestionsAddRoute: typeof webQuestionsAddRoute
@@ -515,7 +515,6 @@ interface webRouteRouteChildren {
 
 const webRouteRouteChildren: webRouteRouteChildren = {
   webDashboardRouteRoute: webDashboardRouteRoute,
-  webAuthSignInRoute: webAuthSignInRoute,
   webChaptersIdRoute: webChaptersIdRoute,
   webChaptersAddRoute: webChaptersAddRoute,
   webQuestionsAddRoute: webQuestionsAddRoute,
@@ -543,6 +542,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   webRouteRoute: webRouteRouteWithChildren,
   ApiChaptersRoute: ApiChaptersRoute,
+  authAuthSignInRoute: authAuthSignInRoute,
   ApiAuthLoginRoute: ApiAuthLoginRoute,
   ApiAuthRegisterRoute: ApiAuthRegisterRoute,
 }
