@@ -1,18 +1,16 @@
 import { TanStackDevtools } from "@tanstack/react-devtools";
+import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+import TanStackQueryDevtools from "@/integrations/tanstack-query/devtools";
 import { type QueryClient } from "@tanstack/react-query";
 import {
 	createRootRouteWithContext,
 	HeadContent,
+	Outlet,
 	Scripts,
 } from "@tanstack/react-router";
-import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
-import GlobalLoader from "@/components/global/global-loading";
-import AppSidebar from "@/components/global/sidebar";
-import { SidebarProvider } from "@/components/ui/sidebar";
 // @ts-ignore
 import appCss from "../css/styles.css?url";
-import TanStackQueryDevtools from "../integrations/tanstack-query/devtools";
-import FlashProvider from "@/providers/flash-provider";
+import { env } from "@/lib/env";
 
 interface MyRouterContext {
 	queryClient: QueryClient;
@@ -25,9 +23,26 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 				charSet: "utf-8",
 			},
 			{
-				name: "viewport",
-				content: "width=device-width, initial-scale=1",
+				name: "description",
+				content: "TelNetQuiz content managament system platform.",
 			},
+			{ property: "og:title", content: "TelNetQuiz" },
+			{
+				property: "og:description",
+				content: "TelNetQuiz mobile app content management system",
+			},
+			{ property: "og:image", content: `${env.VITE_APP_URL}/telnetquiz.webp` },
+			{ property: "og:url", content: `${env.VITE_APP_URL}` },
+			{ property: "twitter:title", content: "TelNetQuiz" },
+			{
+				property: "twitter:description",
+				content: "TelNetQuiz mobile app content management system",
+			},
+			{
+				property: "twitter:image",
+				content: `${env.VITE_APP_URL}/telnetquiz.webp`,
+			},
+			{ property: "twitter:url", content: `${env.VITE_APP_URL}` },
 			{
 				title: "TelNetQuiz Panel",
 			},
@@ -48,24 +63,14 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 	notFoundComponent: NotFoundPage,
 });
 
-function RootDocument({ children }: { children: React.ReactNode }) {
+function RootDocument() {
 	return (
 		<html lang="en">
 			<head>
 				<HeadContent />
 			</head>
 			<body className="w-full">
-				<SidebarProvider>
-					<AppSidebar />
-					<div className="relative flex-1">
-						<GlobalLoader />
-
-						<main className="px-6 mt-8 w-full">
-							<FlashProvider />
-							{children}
-						</main>
-					</div>
-				</SidebarProvider>
+				<Outlet />
 				<TanStackDevtools
 					config={{
 						position: "bottom-right",
@@ -73,12 +78,11 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 					plugins={[
 						{
 							name: "Tanstack Router",
-							render: <TanStackRouterDevtoolsPanel />,
+							render: <TanStackRouterDevtools />,
 						},
 						TanStackQueryDevtools,
 					]}
 				/>
-
 				<Scripts />
 			</body>
 		</html>
