@@ -4,6 +4,7 @@ import { admin } from "better-auth/plugins";
 import { db } from "./db";
 import * as schema from "../database/schema";
 import { Context, Layer } from "effect";
+import { env } from "./env";
 
 export const auth = betterAuth({
 	database: drizzleAdapter(db, {
@@ -16,10 +17,10 @@ export const auth = betterAuth({
 	},
 	plugins: [admin()],
 	socialProviders: {
-		// google: {
-		//   clientId: env.GOOGLE_CLIENT_ID,
-		//   clientSecret: env.GOOGLE_CLIENT_SECRET
-		// }
+		google: {
+			clientId: env.GOOGLE_CLIENT_ID,
+			clientSecret: env.GOOGLE_CLIENT_SECRET,
+		},
 	},
 });
 
