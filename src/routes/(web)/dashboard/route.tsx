@@ -1,9 +1,7 @@
 import Footer from "@/components/global/footer";
 import { QUERY_KEYS } from "@/lib/constant";
-import AboutDashboard from "@/routes/(web)/dashboard/-sections/about-dashboard";
 import AverageChapterBarChart from "@/routes/(web)/dashboard/-sections/average-chapter-chart";
 import DashboardStats from "@/routes/(web)/dashboard/-sections/dashboard-stat";
-import Greeting from "@/routes/(web)/dashboard/-sections/greeting";
 import Leaderboard from "@/routes/(web)/dashboard/-sections/leaderboard";
 import RecentSubmission from "@/routes/(web)/dashboard/-sections/recent-submission";
 import { createFileRoute } from "@tanstack/react-router";
@@ -15,6 +13,7 @@ import {
 } from "@/actions/analytics";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import DashboardHeader from "./-sections/dashboard-header";
 
 export const Route = createFileRoute("/(web)/dashboard")({
 	loader: async ({ context }) => {
@@ -45,8 +44,7 @@ export const Route = createFileRoute("/(web)/dashboard")({
 function DashboardIndex() {
 	return (
 		<>
-			<Greeting />
-			<AboutDashboard />
+			<DashboardHeader />
 
 			<Suspense fallback={<Skeleton className="h-50 w-full my-5" />}>
 				<DashboardStats />

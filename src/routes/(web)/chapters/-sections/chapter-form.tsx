@@ -1,8 +1,7 @@
 import SubmitButton from "@/components/global/submit-button";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import type { useCustomForm } from "@/hooks/use-custom-form";
 import { validateField } from "@/lib/utils";
 import { type ChapterFormData, chapterSchema } from "@/types/zod";
@@ -21,125 +20,117 @@ export default function ChapterForm({ form, buttonText }: ChapterFormProps) {
 	const isSubmitting = useStore(form.store, (state) => state.isSubmitting);
 
 	return (
-		<Card className="p-8 shadow-md border border-telnet-surface-darker">
-			<form
-				onSubmit={async (e) => {
-					e.preventDefault();
-					e.stopPropagation();
-					await form.handleSubmit();
-				}}
-				className="space-y-6 mb-10"
-			>
-				<form.Field
-					name="title"
-					validators={{
-						onChange: (value) =>
-							validateField(chapterSchema, "title", value.value),
+		<Card>
+			<CardContent className="pt-6">
+				<form
+					onSubmit={async (e) => {
+						e.preventDefault();
+						e.stopPropagation();
+						await form.handleSubmit();
 					}}
+					className="space-y-6"
 				>
-					{(field) => (
-						<div className="space-y-2">
-							<Label
-								htmlFor={field.name}
-								className="text-telnet-primary font-semibold text-lg"
-							>
-								Judul
-							</Label>
-							<Input
-								id={field.name}
-								value={field.state.value}
-								onBlur={field.handleBlur}
-								onChange={(e) => field.handleChange(e.target.value)}
-								className="border-telnet-surface-darker"
-							/>
-							{field.state.meta.errors && (
-								<p className="text-red-600 text-sm">
-									{field.state.meta.errors}
-								</p>
-							)}
-						</div>
-					)}
-				</form.Field>
-				<form.Field
-					name="description"
-					validators={{
-						onChange: (value) =>
-							validateField(chapterSchema, "description", value.value),
-					}}
-				>
-					{(field) => (
-						<div className="space-y-2">
-							<Label
-								htmlFor={field.name}
-								className="text-telnet-primary font-semibold text-lg"
-							>
-								Deskripsi
-							</Label>
-
-							<RichTextarea
-								value={field.state.value}
-								onChange={(val) => field.handleChange(val)}
-							/>
-
-							{field.state.meta.errors && (
-								<p className="text-red-600 text-sm">
-									{field.state.meta.errors}
-								</p>
-							)}
-						</div>
-					)}
-				</form.Field>
-				<form.Field
-					name="mascotId"
-					validators={{
-						onChange: (value) =>
-							validateField(chapterSchema, "mascotId", value.value),
-					}}
-				>
-					{(field) => (
-						<div className="space-y-2">
-							<Label className="text-telnet-primary font-semibold text-lg">
-								Pilih Mascot
-							</Label>
-
-							<div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
-								{MASCOTS.map((index) => (
-									<Label
-										key={index}
-										className="flex flex-col items-center cursor-pointer group"
-									>
-										<img
-											src={`/assets/mascot/chap${index}.png`}
-											draggable="false"
-											className="w-28 h-28 object-contain rounded-xl border p-3 border-telnet-surface-darker 
-                               transition-all group-hover:border-telnet-primary group-hover:scale-105"
-										/>
-
-										<Input
-											type="radio"
-											name={field.name}
-											value={index}
-											checked={field.state.value === index}
-											onBlur={field.handleBlur}
-											onChange={(e) =>
-												field.handleChange(Number(e.target.value))
-											}
-											className="mt-2 h-4 w-4 text-telnet-primary"
-										/>
-									</Label>
-								))}
+					<form.Field
+						name="title"
+						validators={{
+							onChange: (value) =>
+								validateField(chapterSchema, "title", value.value),
+						}}
+					>
+						{(field) => (
+							<div className="space-y-2">
+								<Label htmlFor={field.name}>Judul</Label>
+								<Input
+									id={field.name}
+									value={field.state.value}
+									onBlur={field.handleBlur}
+									onChange={(e) => field.handleChange(e.target.value)}
+								/>
+								{field.state.meta.errors && (
+									<p className="text-destructive text-sm">
+										{field.state.meta.errors}
+									</p>
+								)}
 							</div>
+						)}
+					</form.Field>
+					<form.Field
+						name="description"
+						validators={{
+							onChange: (value) =>
+								validateField(chapterSchema, "description", value.value),
+						}}
+					>
+						{(field) => (
+							<div className="space-y-2">
+								<Label htmlFor={field.name}>Deskripsi</Label>
 
-							{field.state.meta.errors && (
-								<p className="text-red-600 text-sm">
-									{field.state.meta.errors}
-								</p>
-							)}
-						</div>
-					)}
-				</form.Field>
-				<SubmitButton isSubmitting={isSubmitting}>{buttonText}</SubmitButton>
-			</form>
+								<RichTextarea
+									value={field.state.value}
+									onChange={(val) => field.handleChange(val)}
+								/>
+
+								{field.state.meta.errors && (
+									<p className="text-destructive text-sm">
+										{field.state.meta.errors}
+									</p>
+								)}
+							</div>
+						)}
+					</form.Field>
+					<form.Field
+						name="mascotId"
+						validators={{
+							onChange: (value) =>
+								validateField(chapterSchema, "mascotId", value.value),
+						}}
+					>
+						{(field) => (
+							<div className="space-y-2">
+								<Label>Pilih Mascot</Label>
+
+								<div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+									{MASCOTS.map((index) => (
+										<Label
+											key={index}
+											className="flex flex-col items-center cursor-pointer group"
+										>
+											<img
+												src={`/assets/mascot/chap${index}.png`}
+												draggable="false"
+												className={`w-28 h-28 object-contain rounded-xl border p-3 transition-all group-hover:scale-105 ${
+													field.state.value === index
+														? "border-primary bg-primary/5 ring-2 ring-primary/20"
+														: "border-border hover:border-primary/50"
+												}`}
+											/>
+
+											<Input
+												type="radio"
+												name={field.name}
+												value={index}
+												checked={field.state.value === index}
+												onBlur={field.handleBlur}
+												onChange={(e) =>
+													field.handleChange(Number(e.target.value))
+												}
+												className="sr-only"
+											/>
+										</Label>
+									))}
+								</div>
+
+								{field.state.meta.errors && (
+									<p className="text-destructive text-sm">
+										{field.state.meta.errors}
+									</p>
+								)}
+							</div>
+						)}
+					</form.Field>
+					<SubmitButton isSubmitting={isSubmitting}>{buttonText}</SubmitButton>
+				</form>
+			</CardContent>
 		</Card>
 	);
 }

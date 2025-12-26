@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useCustomForm } from "@/hooks/use-custom-form";
 import type { ChapterFormData } from "@/types/zod";
 import ChapterForm from "./-sections/chapter-form";
@@ -6,6 +6,9 @@ import { addChapter } from "@/actions/chapters";
 import { useFlashStore } from "@/store/use-flash";
 import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@/lib/constant";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 
 export const Route = createFileRoute("/(web)/chapters/add")({
 	component: RouteComponent,
@@ -49,16 +52,24 @@ export default function RouteComponent() {
 	});
 
 	return (
-		<>
-			<div className="mb-6">
-				<h1 className="text-telnet-primary font-black text-3xl">
-					Tambah Chapter Baru
-				</h1>
-				<p className="text-muted-foreground">
-					Isi form di bawah untuk menambahkan chapter baru.
-				</p>
+		<div className="max-w-4xl mx-auto space-y-6 pb-10">
+			<div className="flex items-center gap-4">
+				<Button variant="outline" size="icon" asChild>
+					<Link to="/chapters">
+						<ArrowLeft className="h-4 w-4" />
+					</Link>
+				</Button>
+				<div>
+					<h1 className="text-2xl font-bold tracking-tight">
+						Tambah Chapter Baru
+					</h1>
+					<p className="text-muted-foreground">
+						Isi form di bawah untuk menambahkan chapter baru.
+					</p>
+				</div>
 			</div>
+			<Separator />
 			<ChapterForm form={form} buttonText="Tambah" />
-		</>
+		</div>
 	);
 }

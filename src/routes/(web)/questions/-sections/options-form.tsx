@@ -32,20 +32,22 @@ export default function OptionsArray({
 											name={`questions[${questionIndex}].options[${optionIndex}].isCorrect`}
 										>
 											{(correctField) => (
-												<input
-													type="radio"
-													name={`correctOption-${questionIndex}`}
-													checked={correctField.state.value}
-													onChange={() => {
-														options.forEach((_, i) => {
-															form.setFieldValue(
-																`questions[${questionIndex}].options[${i}].isCorrect`,
-																i === optionIndex,
-															);
-														});
-													}}
-													className="h-5 w-5 cursor-pointer"
-												/>
+												<div className="flex items-center justify-center">
+													<input
+														type="radio"
+														name={`correctOption-${questionIndex}`}
+														checked={correctField.state.value}
+														onChange={() => {
+															options.forEach((_, i) => {
+																form.setFieldValue(
+																	`questions[${questionIndex}].options[${i}].isCorrect`,
+																	i === optionIndex,
+																);
+															});
+														}}
+														className="h-4 w-4 cursor-pointer accent-primary"
+													/>
+												</div>
 											)}
 										</form.Field>
 
@@ -70,7 +72,7 @@ export default function OptionsArray({
 														placeholder={`Option ${optionIndex + 1}`}
 													/>
 													{optionField.state.meta.errors && (
-														<p className="text-red-600 text-sm mt-1">
+														<p className="text-destructive text-sm mt-1">
 															{optionField.state.meta.errors}
 														</p>
 													)}

@@ -3,6 +3,7 @@ import { QUERY_KEYS } from "@/lib/constant";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import UserList from "./-sections/user-list";
+import PageHeader from "@/components/global/page-header";
 
 export const Route = createFileRoute("/(web)/users/")({
 	loader: async ({ context }) => {
@@ -22,16 +23,12 @@ function RouteComponent() {
 	});
 
 	return (
-		<>
-			<div className="mt-3 mb-5">
-				<h1 className="text-3xl font-black text-telnet-primary tracking-tight">
-					Users
-				</h1>
-				<p className="text-muted-foreground">
-					List pengguna yang sudah terdaftar
-				</p>
-			</div>
+		<div>
+			<PageHeader
+				title="Users"
+				description="List pengguna yang sudah terdaftar."
+			/>
 			<UserList users={users} />
-		</>
+		</div>
 	);
 }

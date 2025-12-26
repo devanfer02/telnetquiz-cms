@@ -1,4 +1,9 @@
-import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
+import {
+	createFileRoute,
+	redirect,
+	useNavigate,
+	Link,
+} from "@tanstack/react-router";
 import { useCustomForm } from "@/hooks/use-custom-form";
 import type { QuizFormData } from "@/types/zod";
 import QuizForm from "./-sections/quiz-form";
@@ -6,6 +11,9 @@ import { getQuizById, updateQuiz } from "@/actions/quizzes";
 import { useQueryClient } from "@tanstack/react-query";
 import { setFlashState } from "@/store/use-flash";
 import { QUERY_KEYS } from "@/lib/constant";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 
 export const Route = createFileRoute("/(web)/quiz/edit/$id")({
 	loader: async ({ params }) => {
@@ -70,16 +78,24 @@ export default function RouteComponent() {
 	});
 
 	return (
-		<>
-			<div className="mb-6">
-				<h1 className="text-telnet-primary font-black text-3xl">
-					Edit Kuis {quiz?.title}
-				</h1>
-				<p className="text-muted-foreground">
-					Isi form di bawah untuk memperbarui kuis.
-				</p>
+		<div className="max-w-4xl mx-auto space-y-6 pb-10">
+			<div className="flex items-center gap-4">
+				<Button variant="outline" size="icon" asChild>
+					<Link to="/quiz/$id" params={{ id: quiz.id.toString() }}>
+						<ArrowLeft className="h-4 w-4" />
+					</Link>
+				</Button>
+				<div>
+					<h1 className="text-2xl font-bold tracking-tight">
+						Edit Kuis {quiz?.title}
+					</h1>
+					<p className="text-muted-foreground">
+						Isi form di bawah untuk memperbarui kuis.
+					</p>
+				</div>
 			</div>
+			<Separator />
 			<QuizForm form={form} buttonText="Perbarui" />
-		</>
+		</div>
 	);
 }

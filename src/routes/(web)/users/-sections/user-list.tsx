@@ -71,7 +71,7 @@ export default function UserList({ users }: UserListProps) {
 					placeholder="Cari User..."
 					value={keyword ?? ""}
 					onChange={(e) => setKeyword(e.target.value)}
-					className="w-full border border-telnet-surface-darker"
+					className="w-full"
 				/>
 			</div>
 			<TanstackTable

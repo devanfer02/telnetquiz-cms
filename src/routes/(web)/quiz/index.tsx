@@ -3,6 +3,7 @@ import QuizList from "./-sections/quiz-list";
 import { getAllQuizzes } from "@/actions/quizzes";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@/lib/constant";
+import PageHeader from "@/components/global/page-header";
 
 export const Route = createFileRoute("/(web)/quiz/")({
 	loader: async ({ context }) => {
@@ -22,16 +23,12 @@ function RouteComponent() {
 	});
 
 	return (
-		<>
-			<div className="mt-3 mb-5">
-				<h1 className="text-3xl font-black text-telnet-primary tracking-tight">
-					Quizzes
-				</h1>
-				<p className="text-muted-foreground">
-					Daftar semua kuis tentang Media dan Jaringan Telekomunikasi.
-				</p>
-			</div>
+		<div>
+			<PageHeader
+				title="Quizzes"
+				description="Daftar semua kuis tentang Media dan Jaringan Telekomunikasi."
+			/>
 			<QuizList quizzes={quizzes} />
-		</>
+		</div>
 	);
 }

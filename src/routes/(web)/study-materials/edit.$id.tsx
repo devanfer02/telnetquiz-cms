@@ -1,4 +1,9 @@
-import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
+import {
+	createFileRoute,
+	redirect,
+	useNavigate,
+	Link,
+} from "@tanstack/react-router";
 import { useCustomForm } from "@/hooks/use-custom-form";
 import type { StudyMaterialFormData } from "@/types/zod";
 import MaterialForm from "./-sections/material-form";
@@ -9,6 +14,9 @@ import {
 import { setFlashState } from "@/store/use-flash";
 import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@/lib/constant";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 
 export const Route = createFileRoute("/(web)/study-materials/edit/$id")({
 	loader: async ({ params }) => {
@@ -80,20 +88,31 @@ export default function RouteComponent() {
 	});
 
 	return (
-		<>
-			<div className="mb-6">
-				<h1 className="text-telnet-primary font-black text-3xl">
-					Edit Materi {studyMaterial?.title}
-				</h1>
-				<p className="text-muted-foreground">
-					Isi form di bawah untuk memperbarui materi.
-				</p>
+		<div className="max-w-4xl mx-auto space-y-6 pb-10">
+			<div className="flex items-center gap-4">
+				<Button variant="outline" size="icon" asChild>
+					<Link
+						to="/study-materials/$id"
+						params={{ id: studyMaterial.id.toString() }}
+					>
+						<ArrowLeft className="h-4 w-4" />
+					</Link>
+				</Button>
+				<div>
+					<h1 className="text-2xl font-bold tracking-tight">
+						Edit Materi {studyMaterial?.title}
+					</h1>
+					<p className="text-muted-foreground">
+						Isi form di bawah untuk memperbarui materi.
+					</p>
+				</div>
 			</div>
+			<Separator />
 			<MaterialForm
 				form={form}
 				buttonText="Perbarui"
 				oldImageLink={studyMaterial.imageLink}
 			/>
-		</>
+		</div>
 	);
 }

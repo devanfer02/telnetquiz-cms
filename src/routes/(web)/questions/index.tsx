@@ -3,6 +3,7 @@ import QuestionList from "./-sections/question-list";
 import { getAllQuestions } from "@/actions/questions";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@/lib/constant";
+import PageHeader from "@/components/global/page-header";
 
 export const Route = createFileRoute("/(web)/questions/")({
 	loader: async ({ context }) => {
@@ -22,16 +23,12 @@ function RouteComponent() {
 	});
 
 	return (
-		<>
-			<div className="mt-3 mb-5">
-				<h1 className="text-3xl font-black text-telnet-primary tracking-tight">
-					Questions
-				</h1>
-				<p className="text-muted-foreground">
-					Daftar semua pertanyaan tentang Media dan Jaringan Telekomunikasi.
-				</p>
-			</div>
+		<div>
+			<PageHeader
+				title="Questions"
+				description="Daftar semua pertanyaan tentang Media dan Jaringan Telekomunikasi."
+			/>
 			<QuestionList questions={questions} />
-		</>
+		</div>
 	);
 }

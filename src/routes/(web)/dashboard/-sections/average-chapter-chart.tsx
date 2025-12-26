@@ -38,7 +38,7 @@ export default function AverageChapterBarChart({
 				Average Score per Chapter
 			</h2>
 			{averages.length === 0 ? (
-				<div className="flex flex-col items-center justify-center h-[300px] text-muted-foreground italic">
+				<div className="flex flex-col items-center justify-center h-75 text-muted-foreground italic">
 					No data available yet
 				</div>
 			) : (

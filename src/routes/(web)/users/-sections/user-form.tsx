@@ -40,7 +40,9 @@ export default function UserForm({ form, buttonText }: UserFormProps) {
 							onChange={(e) => field.handleChange(e.target.value)}
 						/>
 						{field.state.meta.errors && (
-							<p className="text-red-600 text-sm">{field.state.meta.errors}</p>
+							<p className="text-destructive text-sm">
+								{field.state.meta.errors}
+							</p>
 						)}
 					</div>
 				)}
@@ -62,7 +64,9 @@ export default function UserForm({ form, buttonText }: UserFormProps) {
 							onChange={(e) => field.handleChange(e.target.value)}
 						/>
 						{field.state.meta.errors && (
-							<p className="text-red-600 text-sm">{field.state.meta.errors}</p>
+							<p className="text-destructive text-sm">
+								{field.state.meta.errors}
+							</p>
 						)}
 					</div>
 				)}
@@ -86,7 +90,9 @@ export default function UserForm({ form, buttonText }: UserFormProps) {
 							onChange={(e) => field.handleChange(e.target.value)}
 						/>
 						{field.state.meta.errors && (
-							<p className="text-red-600 text-sm">{field.state.meta.errors}</p>
+							<p className="text-destructive text-sm">
+								{field.state.meta.errors}
+							</p>
 						)}
 					</div>
 				)}

@@ -222,7 +222,7 @@ export default function QuestionList({
 					placeholder="Cari pertanyaan..."
 					value={keyword ?? ""}
 					onChange={(e) => setKeyword(e.target.value)}
-					className="w-full border border-telnet-surface-darker"
+					className="w-full"
 				/>
 				<Button className="px-4 py-2 rounded-md bg-primary border border-telnet-primary bg-telnet-primary text-white hover:bg-white hover:text-telnet-primary duration-200 cursor-pointer">
 					<Link to="/questions/add">Tambah Pertanyaan</Link>
