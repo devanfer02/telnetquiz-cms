@@ -9,10 +9,10 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ApiRouteRouteImport } from './routes/api/route'
 import { Route as webRouteRouteImport } from './routes/(web)/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiHealthRouteImport } from './routes/api/health'
-import { Route as ApiChaptersRouteImport } from './routes/api/chapters'
 import { Route as webDashboardRouteRouteImport } from './routes/(web)/dashboard/route'
 import { Route as webUsersIndexRouteImport } from './routes/(web)/users/index'
 import { Route as webSubmissionsIndexRouteImport } from './routes/(web)/submissions/index'
@@ -35,6 +35,11 @@ import { Route as webQuizEditIdRouteImport } from './routes/(web)/quiz/edit.$id'
 import { Route as webQuestionsEditIdRouteImport } from './routes/(web)/questions/edit.$id'
 import { Route as webChaptersEditIdRouteImport } from './routes/(web)/chapters/edit.$id'
 
+const ApiRouteRoute = ApiRouteRouteImport.update({
+  id: '/api',
+  path: '/api',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const webRouteRoute = webRouteRouteImport.update({
   id: '/(web)',
   getParentRoute: () => rootRouteImport,
@@ -45,14 +50,9 @@ const IndexRoute = IndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiHealthRoute = ApiHealthRouteImport.update({
-  id: '/api/health',
-  path: '/api/health',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiChaptersRoute = ApiChaptersRouteImport.update({
-  id: '/api/chapters',
-  path: '/api/chapters',
-  getParentRoute: () => rootRouteImport,
+  id: '/health',
+  path: '/health',
+  getParentRoute: () => ApiRouteRoute,
 } as any)
 const webDashboardRouteRoute = webDashboardRouteRouteImport.update({
   id: '/dashboard',
@@ -90,14 +90,14 @@ const webChaptersIndexRoute = webChaptersIndexRouteImport.update({
   getParentRoute: () => webRouteRoute,
 } as any)
 const ApiAuthRegisterRoute = ApiAuthRegisterRouteImport.update({
-  id: '/api/auth/register',
-  path: '/api/auth/register',
-  getParentRoute: () => rootRouteImport,
+  id: '/auth/register',
+  path: '/auth/register',
+  getParentRoute: () => ApiRouteRoute,
 } as any)
 const ApiAuthLoginRoute = ApiAuthLoginRouteImport.update({
-  id: '/api/auth/login',
-  path: '/api/auth/login',
-  getParentRoute: () => rootRouteImport,
+  id: '/auth/login',
+  path: '/auth/login',
+  getParentRoute: () => ApiRouteRoute,
 } as any)
 const webStudyMaterialsAddRoute = webStudyMaterialsAddRouteImport.update({
   id: '/study-materials/add',
@@ -162,8 +162,8 @@ const webChaptersEditIdRoute = webChaptersEditIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/api': typeof ApiRouteRouteWithChildren
   '/dashboard': typeof webDashboardRouteRoute
-  '/api/chapters': typeof ApiChaptersRoute
   '/api/health': typeof ApiHealthRoute
   '/auth/sign-in': typeof authAuthSignInRoute
   '/chapters/$id': typeof webChaptersIdRoute
@@ -188,8 +188,8 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/api': typeof ApiRouteRouteWithChildren
   '/dashboard': typeof webDashboardRouteRoute
-  '/api/chapters': typeof ApiChaptersRoute
   '/api/health': typeof ApiHealthRoute
   '/auth/sign-in': typeof authAuthSignInRoute
   '/chapters/$id': typeof webChaptersIdRoute
@@ -216,8 +216,8 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/(web)': typeof webRouteRouteWithChildren
+  '/api': typeof ApiRouteRouteWithChildren
   '/(web)/dashboard': typeof webDashboardRouteRoute
-  '/api/chapters': typeof ApiChaptersRoute
   '/api/health': typeof ApiHealthRoute
   '/(auth)/auth/sign-in': typeof authAuthSignInRoute
   '/(web)/chapters/$id': typeof webChaptersIdRoute
@@ -244,8 +244,8 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/api'
     | '/dashboard'
-    | '/api/chapters'
     | '/api/health'
     | '/auth/sign-in'
     | '/chapters/$id'
@@ -270,8 +270,8 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/api'
     | '/dashboard'
-    | '/api/chapters'
     | '/api/health'
     | '/auth/sign-in'
     | '/chapters/$id'
@@ -297,8 +297,8 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/(web)'
+    | '/api'
     | '/(web)/dashboard'
-    | '/api/chapters'
     | '/api/health'
     | '/(auth)/auth/sign-in'
     | '/(web)/chapters/$id'
@@ -325,15 +325,19 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   webRouteRoute: typeof webRouteRouteWithChildren
-  ApiChaptersRoute: typeof ApiChaptersRoute
-  ApiHealthRoute: typeof ApiHealthRoute
+  ApiRouteRoute: typeof ApiRouteRouteWithChildren
   authAuthSignInRoute: typeof authAuthSignInRoute
-  ApiAuthLoginRoute: typeof ApiAuthLoginRoute
-  ApiAuthRegisterRoute: typeof ApiAuthRegisterRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/api': {
+      id: '/api'
+      path: '/api'
+      fullPath: '/api'
+      preLoaderRoute: typeof ApiRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/(web)': {
       id: '/(web)'
       path: ''
@@ -350,17 +354,10 @@ declare module '@tanstack/react-router' {
     }
     '/api/health': {
       id: '/api/health'
-      path: '/api/health'
+      path: '/health'
       fullPath: '/api/health'
       preLoaderRoute: typeof ApiHealthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/chapters': {
-      id: '/api/chapters'
-      path: '/api/chapters'
-      fullPath: '/api/chapters'
-      preLoaderRoute: typeof ApiChaptersRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof ApiRouteRoute
     }
     '/(web)/dashboard': {
       id: '/(web)/dashboard'
@@ -413,17 +410,17 @@ declare module '@tanstack/react-router' {
     }
     '/api/auth/register': {
       id: '/api/auth/register'
-      path: '/api/auth/register'
+      path: '/auth/register'
       fullPath: '/api/auth/register'
       preLoaderRoute: typeof ApiAuthRegisterRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof ApiRouteRoute
     }
     '/api/auth/login': {
       id: '/api/auth/login'
-      path: '/api/auth/login'
+      path: '/auth/login'
       fullPath: '/api/auth/login'
       preLoaderRoute: typeof ApiAuthLoginRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof ApiRouteRoute
     }
     '/(web)/study-materials/add': {
       id: '/(web)/study-materials/add'
@@ -558,14 +555,27 @@ const webRouteRouteWithChildren = webRouteRoute._addFileChildren(
   webRouteRouteChildren,
 )
 
+interface ApiRouteRouteChildren {
+  ApiHealthRoute: typeof ApiHealthRoute
+  ApiAuthLoginRoute: typeof ApiAuthLoginRoute
+  ApiAuthRegisterRoute: typeof ApiAuthRegisterRoute
+}
+
+const ApiRouteRouteChildren: ApiRouteRouteChildren = {
+  ApiHealthRoute: ApiHealthRoute,
+  ApiAuthLoginRoute: ApiAuthLoginRoute,
+  ApiAuthRegisterRoute: ApiAuthRegisterRoute,
+}
+
+const ApiRouteRouteWithChildren = ApiRouteRoute._addFileChildren(
+  ApiRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   webRouteRoute: webRouteRouteWithChildren,
-  ApiChaptersRoute: ApiChaptersRoute,
-  ApiHealthRoute: ApiHealthRoute,
+  ApiRouteRoute: ApiRouteRouteWithChildren,
   authAuthSignInRoute: authAuthSignInRoute,
-  ApiAuthLoginRoute: ApiAuthLoginRoute,
-  ApiAuthRegisterRoute: ApiAuthRegisterRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
