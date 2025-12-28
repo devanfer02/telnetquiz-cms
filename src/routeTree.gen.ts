@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as webRouteRouteImport } from './routes/(web)/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiHealthRouteImport } from './routes/api/health'
 import { Route as ApiChaptersRouteImport } from './routes/api/chapters'
 import { Route as webDashboardRouteRouteImport } from './routes/(web)/dashboard/route'
 import { Route as webUsersIndexRouteImport } from './routes/(web)/users/index'
@@ -41,6 +42,11 @@ const webRouteRoute = webRouteRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiHealthRoute = ApiHealthRouteImport.update({
+  id: '/api/health',
+  path: '/api/health',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiChaptersRoute = ApiChaptersRouteImport.update({
@@ -158,6 +164,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof webDashboardRouteRoute
   '/api/chapters': typeof ApiChaptersRoute
+  '/api/health': typeof ApiHealthRoute
   '/auth/sign-in': typeof authAuthSignInRoute
   '/chapters/$id': typeof webChaptersIdRoute
   '/chapters/add': typeof webChaptersAddRoute
@@ -183,6 +190,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof webDashboardRouteRoute
   '/api/chapters': typeof ApiChaptersRoute
+  '/api/health': typeof ApiHealthRoute
   '/auth/sign-in': typeof authAuthSignInRoute
   '/chapters/$id': typeof webChaptersIdRoute
   '/chapters/add': typeof webChaptersAddRoute
@@ -210,6 +218,7 @@ export interface FileRoutesById {
   '/(web)': typeof webRouteRouteWithChildren
   '/(web)/dashboard': typeof webDashboardRouteRoute
   '/api/chapters': typeof ApiChaptersRoute
+  '/api/health': typeof ApiHealthRoute
   '/(auth)/auth/sign-in': typeof authAuthSignInRoute
   '/(web)/chapters/$id': typeof webChaptersIdRoute
   '/(web)/chapters/add': typeof webChaptersAddRoute
@@ -237,6 +246,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/api/chapters'
+    | '/api/health'
     | '/auth/sign-in'
     | '/chapters/$id'
     | '/chapters/add'
@@ -262,6 +272,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/api/chapters'
+    | '/api/health'
     | '/auth/sign-in'
     | '/chapters/$id'
     | '/chapters/add'
@@ -288,6 +299,7 @@ export interface FileRouteTypes {
     | '/(web)'
     | '/(web)/dashboard'
     | '/api/chapters'
+    | '/api/health'
     | '/(auth)/auth/sign-in'
     | '/(web)/chapters/$id'
     | '/(web)/chapters/add'
@@ -314,6 +326,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   webRouteRoute: typeof webRouteRouteWithChildren
   ApiChaptersRoute: typeof ApiChaptersRoute
+  ApiHealthRoute: typeof ApiHealthRoute
   authAuthSignInRoute: typeof authAuthSignInRoute
   ApiAuthLoginRoute: typeof ApiAuthLoginRoute
   ApiAuthRegisterRoute: typeof ApiAuthRegisterRoute
@@ -333,6 +346,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/health': {
+      id: '/api/health'
+      path: '/api/health'
+      fullPath: '/api/health'
+      preLoaderRoute: typeof ApiHealthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/chapters': {
@@ -542,6 +562,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   webRouteRoute: webRouteRouteWithChildren,
   ApiChaptersRoute: ApiChaptersRoute,
+  ApiHealthRoute: ApiHealthRoute,
   authAuthSignInRoute: authAuthSignInRoute,
   ApiAuthLoginRoute: ApiAuthLoginRoute,
   ApiAuthRegisterRoute: ApiAuthRegisterRoute,

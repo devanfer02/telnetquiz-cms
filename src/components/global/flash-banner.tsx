@@ -51,7 +51,7 @@ function FlashBanner({ flash, clear, duration = 5000 }: FlashBannerProps) {
 	);
 }
 
-export default function FlashProvider() {
+export default function FlashContainer() {
 	const { flash, clear } = useFlashStore();
 
 	if (!flash) return null;
