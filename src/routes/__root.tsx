@@ -1,6 +1,6 @@
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-import TanStackQueryDevtools from "@/integrations/tanstack-query/devtools";
+import TanStackQueryDevtools from "@/lib/devtools";
 import { type QueryClient } from "@tanstack/react-query";
 import {
 	createRootRouteWithContext,
