@@ -4,6 +4,8 @@ import { z } from "zod";
 export const env = createEnv({
 	server: {
 		APP_URL: z.url().optional(),
+		BETTER_AUTH_URL: z.url(),
+		BETTER_AUTH_SECRET: z.string(),
 		SUPABASE_DB_URL: z.string(),
 		GOOGLE_CLIENT_ID: z.string(),
 		GOOGLE_CLIENT_SECRET: z.string(),
@@ -13,6 +15,12 @@ export const env = createEnv({
 		CLOUDFLARE_BUCKET: z.string(),
 		CLOUDFLARE_R2_API: z.url(),
 		CLOUDFLARE_R2_DOMAIN: z.url(),
+		WHITELIST_GMAILS: z.string().transform((val) =>
+			val
+				.split(",")
+				.map((s) => s.trim())
+				.filter(Boolean),
+		),
 	},
 
 	/**
