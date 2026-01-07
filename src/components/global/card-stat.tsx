@@ -17,13 +17,17 @@ export default function CardStat({
 }: CardStatProps) {
 	return (
 		<Link to={target}>
-			<Card className="flex items-center gap-4 p-4 hover:bg-telnet-primary duration-200 group cursor-pointer">
-				<Icon className="size-6 text-telnet-primary group-hover:text-white" />
-				<div className="text-center">
-					<h3 className="text-xs lg:text-sm font-medium text-muted-foreground group-hover:text-white">
+			<Card className="flex flex-row items-start gap-3 p-5 hover:border-telnet-primary/50 hover:shadow-md transition-all duration-200 group cursor-pointer h-full">
+				<div className="p-2 rounded-lg bg-orange-50 text-telnet-primary group-hover:bg-telnet-primary group-hover:text-white transition-colors">
+					<Icon className="size-10" />
+				</div>
+				<div className="flex flex-col gap-1 justify-center ">
+					<p className="text-3xl font-bold tracking-tight text-foreground">
+						{counter}
+					</p>
+					<h3 className="text-md font-medium text-muted-foreground group-hover:text-telnet-primary transition-colors">
 						{title}
 					</h3>
-					<p className="text-2xl font-semibold">{counter}</p>
 				</div>
 			</Card>
 		</Link>

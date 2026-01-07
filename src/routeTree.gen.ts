@@ -9,33 +9,35 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
+import { Route as webRouteRouteImport } from './routes/(web)/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as UsersIndexRouteImport } from './routes/users/index'
-import { Route as SubmissionsIndexRouteImport } from './routes/submissions/index'
-import { Route as StudyMaterialsIndexRouteImport } from './routes/study-materials/index'
-import { Route as QuizIndexRouteImport } from './routes/quiz/index'
-import { Route as QuestionsIndexRouteImport } from './routes/questions/index'
-import { Route as ChaptersIndexRouteImport } from './routes/chapters/index'
-import { Route as StudyMaterialsAddRouteImport } from './routes/study-materials/add'
-import { Route as StudyMaterialsIdRouteImport } from './routes/study-materials/$id'
-import { Route as QuizAddRouteImport } from './routes/quiz/add'
-import { Route as QuizIdRouteImport } from './routes/quiz/$id'
-import { Route as QuestionsAddRouteImport } from './routes/questions/add'
-import { Route as ChaptersAddRouteImport } from './routes/chapters/add'
-import { Route as ChaptersIdRouteImport } from './routes/chapters/$id'
-import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
-import { Route as ApiChaptersRouteImport } from './routes/api/chapters'
-import { Route as StudyMaterialsEditIdRouteImport } from './routes/study-materials/edit.$id'
-import { Route as QuizEditIdRouteImport } from './routes/quiz/edit.$id'
-import { Route as QuestionsEditIdRouteImport } from './routes/questions/edit.$id'
-import { Route as ChaptersEditIdRouteImport } from './routes/chapters/edit.$id'
-import { Route as ApiAuthRegisterRouteImport } from './routes/api/auth/register'
-import { Route as ApiAuthLoginRouteImport } from './routes/api/auth/login'
+import { Route as ApiinternalRouteRouteImport } from './routes/api/(internal)/route'
+import { Route as webDashboardRouteRouteImport } from './routes/(web)/dashboard/route'
+import { Route as webUsersIndexRouteImport } from './routes/(web)/users/index'
+import { Route as webSubmissionsIndexRouteImport } from './routes/(web)/submissions/index'
+import { Route as webStudyMaterialsIndexRouteImport } from './routes/(web)/study-materials/index'
+import { Route as webQuizIndexRouteImport } from './routes/(web)/quiz/index'
+import { Route as webQuestionsIndexRouteImport } from './routes/(web)/questions/index'
+import { Route as webChaptersIndexRouteImport } from './routes/(web)/chapters/index'
+import { Route as ApipublicHealthRouteImport } from './routes/api/(public)/health'
+import { Route as webStudyMaterialsAddRouteImport } from './routes/(web)/study-materials/add'
+import { Route as webStudyMaterialsIdRouteImport } from './routes/(web)/study-materials/$id'
+import { Route as webQuizAddRouteImport } from './routes/(web)/quiz/add'
+import { Route as webQuizIdRouteImport } from './routes/(web)/quiz/$id'
+import { Route as webQuestionsAddRouteImport } from './routes/(web)/questions/add'
+import { Route as webChaptersAddRouteImport } from './routes/(web)/chapters/add'
+import { Route as webChaptersIdRouteImport } from './routes/(web)/chapters/$id'
+import { Route as authAuthSignInRouteImport } from './routes/(auth)/auth/sign-in'
+import { Route as ApipublicAuthSplatRouteImport } from './routes/api/(public)/auth/$'
+import { Route as ApiinternalAuthRegisterRouteImport } from './routes/api/(internal)/auth/register'
+import { Route as ApiinternalAuthLoginRouteImport } from './routes/api/(internal)/auth/login'
+import { Route as webStudyMaterialsEditIdRouteImport } from './routes/(web)/study-materials/edit.$id'
+import { Route as webQuizEditIdRouteImport } from './routes/(web)/quiz/edit.$id'
+import { Route as webQuestionsEditIdRouteImport } from './routes/(web)/questions/edit.$id'
+import { Route as webChaptersEditIdRouteImport } from './routes/(web)/chapters/edit.$id'
 
-const DashboardRouteRoute = DashboardRouteRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
+const webRouteRoute = webRouteRouteImport.update({
+  id: '/(web)',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -43,194 +45,216 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const UsersIndexRoute = UsersIndexRouteImport.update({
+const ApiinternalRouteRoute = ApiinternalRouteRouteImport.update({
+  id: '/api/(internal)',
+  path: '/api',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const webDashboardRouteRoute = webDashboardRouteRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => webRouteRoute,
+} as any)
+const webUsersIndexRoute = webUsersIndexRouteImport.update({
   id: '/users/',
   path: '/users/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => webRouteRoute,
 } as any)
-const SubmissionsIndexRoute = SubmissionsIndexRouteImport.update({
+const webSubmissionsIndexRoute = webSubmissionsIndexRouteImport.update({
   id: '/submissions/',
   path: '/submissions/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => webRouteRoute,
 } as any)
-const StudyMaterialsIndexRoute = StudyMaterialsIndexRouteImport.update({
+const webStudyMaterialsIndexRoute = webStudyMaterialsIndexRouteImport.update({
   id: '/study-materials/',
   path: '/study-materials/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => webRouteRoute,
 } as any)
-const QuizIndexRoute = QuizIndexRouteImport.update({
+const webQuizIndexRoute = webQuizIndexRouteImport.update({
   id: '/quiz/',
   path: '/quiz/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => webRouteRoute,
 } as any)
-const QuestionsIndexRoute = QuestionsIndexRouteImport.update({
+const webQuestionsIndexRoute = webQuestionsIndexRouteImport.update({
   id: '/questions/',
   path: '/questions/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => webRouteRoute,
 } as any)
-const ChaptersIndexRoute = ChaptersIndexRouteImport.update({
+const webChaptersIndexRoute = webChaptersIndexRouteImport.update({
   id: '/chapters/',
   path: '/chapters/',
+  getParentRoute: () => webRouteRoute,
+} as any)
+const ApipublicHealthRoute = ApipublicHealthRouteImport.update({
+  id: '/api/(public)/health',
+  path: '/api/health',
   getParentRoute: () => rootRouteImport,
 } as any)
-const StudyMaterialsAddRoute = StudyMaterialsAddRouteImport.update({
+const webStudyMaterialsAddRoute = webStudyMaterialsAddRouteImport.update({
   id: '/study-materials/add',
   path: '/study-materials/add',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => webRouteRoute,
 } as any)
-const StudyMaterialsIdRoute = StudyMaterialsIdRouteImport.update({
+const webStudyMaterialsIdRoute = webStudyMaterialsIdRouteImport.update({
   id: '/study-materials/$id',
   path: '/study-materials/$id',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => webRouteRoute,
 } as any)
-const QuizAddRoute = QuizAddRouteImport.update({
+const webQuizAddRoute = webQuizAddRouteImport.update({
   id: '/quiz/add',
   path: '/quiz/add',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => webRouteRoute,
 } as any)
-const QuizIdRoute = QuizIdRouteImport.update({
+const webQuizIdRoute = webQuizIdRouteImport.update({
   id: '/quiz/$id',
   path: '/quiz/$id',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => webRouteRoute,
 } as any)
-const QuestionsAddRoute = QuestionsAddRouteImport.update({
+const webQuestionsAddRoute = webQuestionsAddRouteImport.update({
   id: '/questions/add',
   path: '/questions/add',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => webRouteRoute,
 } as any)
-const ChaptersAddRoute = ChaptersAddRouteImport.update({
+const webChaptersAddRoute = webChaptersAddRouteImport.update({
   id: '/chapters/add',
   path: '/chapters/add',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => webRouteRoute,
 } as any)
-const ChaptersIdRoute = ChaptersIdRouteImport.update({
+const webChaptersIdRoute = webChaptersIdRouteImport.update({
   id: '/chapters/$id',
   path: '/chapters/$id',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => webRouteRoute,
 } as any)
-const AuthSignInRoute = AuthSignInRouteImport.update({
-  id: '/auth/sign-in',
+const authAuthSignInRoute = authAuthSignInRouteImport.update({
+  id: '/(auth)/auth/sign-in',
   path: '/auth/sign-in',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiChaptersRoute = ApiChaptersRouteImport.update({
-  id: '/api/chapters',
-  path: '/api/chapters',
+const ApipublicAuthSplatRoute = ApipublicAuthSplatRouteImport.update({
+  id: '/api/(public)/auth/$',
+  path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const StudyMaterialsEditIdRoute = StudyMaterialsEditIdRouteImport.update({
+const ApiinternalAuthRegisterRoute = ApiinternalAuthRegisterRouteImport.update({
+  id: '/auth/register',
+  path: '/auth/register',
+  getParentRoute: () => ApiinternalRouteRoute,
+} as any)
+const ApiinternalAuthLoginRoute = ApiinternalAuthLoginRouteImport.update({
+  id: '/auth/login',
+  path: '/auth/login',
+  getParentRoute: () => ApiinternalRouteRoute,
+} as any)
+const webStudyMaterialsEditIdRoute = webStudyMaterialsEditIdRouteImport.update({
   id: '/study-materials/edit/$id',
   path: '/study-materials/edit/$id',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => webRouteRoute,
 } as any)
-const QuizEditIdRoute = QuizEditIdRouteImport.update({
+const webQuizEditIdRoute = webQuizEditIdRouteImport.update({
   id: '/quiz/edit/$id',
   path: '/quiz/edit/$id',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => webRouteRoute,
 } as any)
-const QuestionsEditIdRoute = QuestionsEditIdRouteImport.update({
+const webQuestionsEditIdRoute = webQuestionsEditIdRouteImport.update({
   id: '/questions/edit/$id',
   path: '/questions/edit/$id',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => webRouteRoute,
 } as any)
-const ChaptersEditIdRoute = ChaptersEditIdRouteImport.update({
+const webChaptersEditIdRoute = webChaptersEditIdRouteImport.update({
   id: '/chapters/edit/$id',
   path: '/chapters/edit/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiAuthRegisterRoute = ApiAuthRegisterRouteImport.update({
-  id: '/api/auth/register',
-  path: '/api/auth/register',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiAuthLoginRoute = ApiAuthLoginRouteImport.update({
-  id: '/api/auth/login',
-  path: '/api/auth/login',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => webRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRouteRoute
-  '/api/chapters': typeof ApiChaptersRoute
-  '/auth/sign-in': typeof AuthSignInRoute
-  '/chapters/$id': typeof ChaptersIdRoute
-  '/chapters/add': typeof ChaptersAddRoute
-  '/questions/add': typeof QuestionsAddRoute
-  '/quiz/$id': typeof QuizIdRoute
-  '/quiz/add': typeof QuizAddRoute
-  '/study-materials/$id': typeof StudyMaterialsIdRoute
-  '/study-materials/add': typeof StudyMaterialsAddRoute
-  '/chapters': typeof ChaptersIndexRoute
-  '/questions': typeof QuestionsIndexRoute
-  '/quiz': typeof QuizIndexRoute
-  '/study-materials': typeof StudyMaterialsIndexRoute
-  '/submissions': typeof SubmissionsIndexRoute
-  '/users': typeof UsersIndexRoute
-  '/api/auth/login': typeof ApiAuthLoginRoute
-  '/api/auth/register': typeof ApiAuthRegisterRoute
-  '/chapters/edit/$id': typeof ChaptersEditIdRoute
-  '/questions/edit/$id': typeof QuestionsEditIdRoute
-  '/quiz/edit/$id': typeof QuizEditIdRoute
-  '/study-materials/edit/$id': typeof StudyMaterialsEditIdRoute
+  '/dashboard': typeof webDashboardRouteRoute
+  '/api': typeof ApiinternalRouteRouteWithChildren
+  '/auth/sign-in': typeof authAuthSignInRoute
+  '/chapters/$id': typeof webChaptersIdRoute
+  '/chapters/add': typeof webChaptersAddRoute
+  '/questions/add': typeof webQuestionsAddRoute
+  '/quiz/$id': typeof webQuizIdRoute
+  '/quiz/add': typeof webQuizAddRoute
+  '/study-materials/$id': typeof webStudyMaterialsIdRoute
+  '/study-materials/add': typeof webStudyMaterialsAddRoute
+  '/api/health': typeof ApipublicHealthRoute
+  '/chapters': typeof webChaptersIndexRoute
+  '/questions': typeof webQuestionsIndexRoute
+  '/quiz': typeof webQuizIndexRoute
+  '/study-materials': typeof webStudyMaterialsIndexRoute
+  '/submissions': typeof webSubmissionsIndexRoute
+  '/users': typeof webUsersIndexRoute
+  '/chapters/edit/$id': typeof webChaptersEditIdRoute
+  '/questions/edit/$id': typeof webQuestionsEditIdRoute
+  '/quiz/edit/$id': typeof webQuizEditIdRoute
+  '/study-materials/edit/$id': typeof webStudyMaterialsEditIdRoute
+  '/api/auth/login': typeof ApiinternalAuthLoginRoute
+  '/api/auth/register': typeof ApiinternalAuthRegisterRoute
+  '/api/auth/$': typeof ApipublicAuthSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRouteRoute
-  '/api/chapters': typeof ApiChaptersRoute
-  '/auth/sign-in': typeof AuthSignInRoute
-  '/chapters/$id': typeof ChaptersIdRoute
-  '/chapters/add': typeof ChaptersAddRoute
-  '/questions/add': typeof QuestionsAddRoute
-  '/quiz/$id': typeof QuizIdRoute
-  '/quiz/add': typeof QuizAddRoute
-  '/study-materials/$id': typeof StudyMaterialsIdRoute
-  '/study-materials/add': typeof StudyMaterialsAddRoute
-  '/chapters': typeof ChaptersIndexRoute
-  '/questions': typeof QuestionsIndexRoute
-  '/quiz': typeof QuizIndexRoute
-  '/study-materials': typeof StudyMaterialsIndexRoute
-  '/submissions': typeof SubmissionsIndexRoute
-  '/users': typeof UsersIndexRoute
-  '/api/auth/login': typeof ApiAuthLoginRoute
-  '/api/auth/register': typeof ApiAuthRegisterRoute
-  '/chapters/edit/$id': typeof ChaptersEditIdRoute
-  '/questions/edit/$id': typeof QuestionsEditIdRoute
-  '/quiz/edit/$id': typeof QuizEditIdRoute
-  '/study-materials/edit/$id': typeof StudyMaterialsEditIdRoute
+  '/dashboard': typeof webDashboardRouteRoute
+  '/api': typeof ApiinternalRouteRouteWithChildren
+  '/auth/sign-in': typeof authAuthSignInRoute
+  '/chapters/$id': typeof webChaptersIdRoute
+  '/chapters/add': typeof webChaptersAddRoute
+  '/questions/add': typeof webQuestionsAddRoute
+  '/quiz/$id': typeof webQuizIdRoute
+  '/quiz/add': typeof webQuizAddRoute
+  '/study-materials/$id': typeof webStudyMaterialsIdRoute
+  '/study-materials/add': typeof webStudyMaterialsAddRoute
+  '/api/health': typeof ApipublicHealthRoute
+  '/chapters': typeof webChaptersIndexRoute
+  '/questions': typeof webQuestionsIndexRoute
+  '/quiz': typeof webQuizIndexRoute
+  '/study-materials': typeof webStudyMaterialsIndexRoute
+  '/submissions': typeof webSubmissionsIndexRoute
+  '/users': typeof webUsersIndexRoute
+  '/chapters/edit/$id': typeof webChaptersEditIdRoute
+  '/questions/edit/$id': typeof webQuestionsEditIdRoute
+  '/quiz/edit/$id': typeof webQuizEditIdRoute
+  '/study-materials/edit/$id': typeof webStudyMaterialsEditIdRoute
+  '/api/auth/login': typeof ApiinternalAuthLoginRoute
+  '/api/auth/register': typeof ApiinternalAuthRegisterRoute
+  '/api/auth/$': typeof ApipublicAuthSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRouteRoute
-  '/api/chapters': typeof ApiChaptersRoute
-  '/auth/sign-in': typeof AuthSignInRoute
-  '/chapters/$id': typeof ChaptersIdRoute
-  '/chapters/add': typeof ChaptersAddRoute
-  '/questions/add': typeof QuestionsAddRoute
-  '/quiz/$id': typeof QuizIdRoute
-  '/quiz/add': typeof QuizAddRoute
-  '/study-materials/$id': typeof StudyMaterialsIdRoute
-  '/study-materials/add': typeof StudyMaterialsAddRoute
-  '/chapters/': typeof ChaptersIndexRoute
-  '/questions/': typeof QuestionsIndexRoute
-  '/quiz/': typeof QuizIndexRoute
-  '/study-materials/': typeof StudyMaterialsIndexRoute
-  '/submissions/': typeof SubmissionsIndexRoute
-  '/users/': typeof UsersIndexRoute
-  '/api/auth/login': typeof ApiAuthLoginRoute
-  '/api/auth/register': typeof ApiAuthRegisterRoute
-  '/chapters/edit/$id': typeof ChaptersEditIdRoute
-  '/questions/edit/$id': typeof QuestionsEditIdRoute
-  '/quiz/edit/$id': typeof QuizEditIdRoute
-  '/study-materials/edit/$id': typeof StudyMaterialsEditIdRoute
+  '/(web)': typeof webRouteRouteWithChildren
+  '/(web)/dashboard': typeof webDashboardRouteRoute
+  '/api/(internal)': typeof ApiinternalRouteRouteWithChildren
+  '/(auth)/auth/sign-in': typeof authAuthSignInRoute
+  '/(web)/chapters/$id': typeof webChaptersIdRoute
+  '/(web)/chapters/add': typeof webChaptersAddRoute
+  '/(web)/questions/add': typeof webQuestionsAddRoute
+  '/(web)/quiz/$id': typeof webQuizIdRoute
+  '/(web)/quiz/add': typeof webQuizAddRoute
+  '/(web)/study-materials/$id': typeof webStudyMaterialsIdRoute
+  '/(web)/study-materials/add': typeof webStudyMaterialsAddRoute
+  '/api/(public)/health': typeof ApipublicHealthRoute
+  '/(web)/chapters/': typeof webChaptersIndexRoute
+  '/(web)/questions/': typeof webQuestionsIndexRoute
+  '/(web)/quiz/': typeof webQuizIndexRoute
+  '/(web)/study-materials/': typeof webStudyMaterialsIndexRoute
+  '/(web)/submissions/': typeof webSubmissionsIndexRoute
+  '/(web)/users/': typeof webUsersIndexRoute
+  '/(web)/chapters/edit/$id': typeof webChaptersEditIdRoute
+  '/(web)/questions/edit/$id': typeof webQuestionsEditIdRoute
+  '/(web)/quiz/edit/$id': typeof webQuizEditIdRoute
+  '/(web)/study-materials/edit/$id': typeof webStudyMaterialsEditIdRoute
+  '/api/(internal)/auth/login': typeof ApiinternalAuthLoginRoute
+  '/api/(internal)/auth/register': typeof ApiinternalAuthRegisterRoute
+  '/api/(public)/auth/$': typeof ApipublicAuthSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/dashboard'
-    | '/api/chapters'
+    | '/api'
     | '/auth/sign-in'
     | '/chapters/$id'
     | '/chapters/add'
@@ -239,23 +263,25 @@ export interface FileRouteTypes {
     | '/quiz/add'
     | '/study-materials/$id'
     | '/study-materials/add'
+    | '/api/health'
     | '/chapters'
     | '/questions'
     | '/quiz'
     | '/study-materials'
     | '/submissions'
     | '/users'
-    | '/api/auth/login'
-    | '/api/auth/register'
     | '/chapters/edit/$id'
     | '/questions/edit/$id'
     | '/quiz/edit/$id'
     | '/study-materials/edit/$id'
+    | '/api/auth/login'
+    | '/api/auth/register'
+    | '/api/auth/$'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/dashboard'
-    | '/api/chapters'
+    | '/api'
     | '/auth/sign-in'
     | '/chapters/$id'
     | '/chapters/add'
@@ -264,78 +290,66 @@ export interface FileRouteTypes {
     | '/quiz/add'
     | '/study-materials/$id'
     | '/study-materials/add'
+    | '/api/health'
     | '/chapters'
     | '/questions'
     | '/quiz'
     | '/study-materials'
     | '/submissions'
     | '/users'
-    | '/api/auth/login'
-    | '/api/auth/register'
     | '/chapters/edit/$id'
     | '/questions/edit/$id'
     | '/quiz/edit/$id'
     | '/study-materials/edit/$id'
+    | '/api/auth/login'
+    | '/api/auth/register'
+    | '/api/auth/$'
   id:
     | '__root__'
     | '/'
-    | '/dashboard'
-    | '/api/chapters'
-    | '/auth/sign-in'
-    | '/chapters/$id'
-    | '/chapters/add'
-    | '/questions/add'
-    | '/quiz/$id'
-    | '/quiz/add'
-    | '/study-materials/$id'
-    | '/study-materials/add'
-    | '/chapters/'
-    | '/questions/'
-    | '/quiz/'
-    | '/study-materials/'
-    | '/submissions/'
-    | '/users/'
-    | '/api/auth/login'
-    | '/api/auth/register'
-    | '/chapters/edit/$id'
-    | '/questions/edit/$id'
-    | '/quiz/edit/$id'
-    | '/study-materials/edit/$id'
+    | '/(web)'
+    | '/(web)/dashboard'
+    | '/api/(internal)'
+    | '/(auth)/auth/sign-in'
+    | '/(web)/chapters/$id'
+    | '/(web)/chapters/add'
+    | '/(web)/questions/add'
+    | '/(web)/quiz/$id'
+    | '/(web)/quiz/add'
+    | '/(web)/study-materials/$id'
+    | '/(web)/study-materials/add'
+    | '/api/(public)/health'
+    | '/(web)/chapters/'
+    | '/(web)/questions/'
+    | '/(web)/quiz/'
+    | '/(web)/study-materials/'
+    | '/(web)/submissions/'
+    | '/(web)/users/'
+    | '/(web)/chapters/edit/$id'
+    | '/(web)/questions/edit/$id'
+    | '/(web)/quiz/edit/$id'
+    | '/(web)/study-materials/edit/$id'
+    | '/api/(internal)/auth/login'
+    | '/api/(internal)/auth/register'
+    | '/api/(public)/auth/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DashboardRouteRoute: typeof DashboardRouteRoute
-  ApiChaptersRoute: typeof ApiChaptersRoute
-  AuthSignInRoute: typeof AuthSignInRoute
-  ChaptersIdRoute: typeof ChaptersIdRoute
-  ChaptersAddRoute: typeof ChaptersAddRoute
-  QuestionsAddRoute: typeof QuestionsAddRoute
-  QuizIdRoute: typeof QuizIdRoute
-  QuizAddRoute: typeof QuizAddRoute
-  StudyMaterialsIdRoute: typeof StudyMaterialsIdRoute
-  StudyMaterialsAddRoute: typeof StudyMaterialsAddRoute
-  ChaptersIndexRoute: typeof ChaptersIndexRoute
-  QuestionsIndexRoute: typeof QuestionsIndexRoute
-  QuizIndexRoute: typeof QuizIndexRoute
-  StudyMaterialsIndexRoute: typeof StudyMaterialsIndexRoute
-  SubmissionsIndexRoute: typeof SubmissionsIndexRoute
-  UsersIndexRoute: typeof UsersIndexRoute
-  ApiAuthLoginRoute: typeof ApiAuthLoginRoute
-  ApiAuthRegisterRoute: typeof ApiAuthRegisterRoute
-  ChaptersEditIdRoute: typeof ChaptersEditIdRoute
-  QuestionsEditIdRoute: typeof QuestionsEditIdRoute
-  QuizEditIdRoute: typeof QuizEditIdRoute
-  StudyMaterialsEditIdRoute: typeof StudyMaterialsEditIdRoute
+  webRouteRoute: typeof webRouteRouteWithChildren
+  ApiinternalRouteRoute: typeof ApiinternalRouteRouteWithChildren
+  authAuthSignInRoute: typeof authAuthSignInRoute
+  ApipublicHealthRoute: typeof ApipublicHealthRoute
+  ApipublicAuthSplatRoute: typeof ApipublicAuthSplatRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteRouteImport
+    '/(web)': {
+      id: '/(web)'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof webRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -345,191 +359,253 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/users/': {
-      id: '/users/'
+    '/api/(internal)': {
+      id: '/api/(internal)'
+      path: '/api'
+      fullPath: '/api'
+      preLoaderRoute: typeof ApiinternalRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(web)/dashboard': {
+      id: '/(web)/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof webDashboardRouteRouteImport
+      parentRoute: typeof webRouteRoute
+    }
+    '/(web)/users/': {
+      id: '/(web)/users/'
       path: '/users'
       fullPath: '/users'
-      preLoaderRoute: typeof UsersIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof webUsersIndexRouteImport
+      parentRoute: typeof webRouteRoute
     }
-    '/submissions/': {
-      id: '/submissions/'
+    '/(web)/submissions/': {
+      id: '/(web)/submissions/'
       path: '/submissions'
       fullPath: '/submissions'
-      preLoaderRoute: typeof SubmissionsIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof webSubmissionsIndexRouteImport
+      parentRoute: typeof webRouteRoute
     }
-    '/study-materials/': {
-      id: '/study-materials/'
+    '/(web)/study-materials/': {
+      id: '/(web)/study-materials/'
       path: '/study-materials'
       fullPath: '/study-materials'
-      preLoaderRoute: typeof StudyMaterialsIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof webStudyMaterialsIndexRouteImport
+      parentRoute: typeof webRouteRoute
     }
-    '/quiz/': {
-      id: '/quiz/'
+    '/(web)/quiz/': {
+      id: '/(web)/quiz/'
       path: '/quiz'
       fullPath: '/quiz'
-      preLoaderRoute: typeof QuizIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof webQuizIndexRouteImport
+      parentRoute: typeof webRouteRoute
     }
-    '/questions/': {
-      id: '/questions/'
+    '/(web)/questions/': {
+      id: '/(web)/questions/'
       path: '/questions'
       fullPath: '/questions'
-      preLoaderRoute: typeof QuestionsIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof webQuestionsIndexRouteImport
+      parentRoute: typeof webRouteRoute
     }
-    '/chapters/': {
-      id: '/chapters/'
+    '/(web)/chapters/': {
+      id: '/(web)/chapters/'
       path: '/chapters'
       fullPath: '/chapters'
-      preLoaderRoute: typeof ChaptersIndexRouteImport
+      preLoaderRoute: typeof webChaptersIndexRouteImport
+      parentRoute: typeof webRouteRoute
+    }
+    '/api/(public)/health': {
+      id: '/api/(public)/health'
+      path: '/api/health'
+      fullPath: '/api/health'
+      preLoaderRoute: typeof ApipublicHealthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/study-materials/add': {
-      id: '/study-materials/add'
+    '/(web)/study-materials/add': {
+      id: '/(web)/study-materials/add'
       path: '/study-materials/add'
       fullPath: '/study-materials/add'
-      preLoaderRoute: typeof StudyMaterialsAddRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof webStudyMaterialsAddRouteImport
+      parentRoute: typeof webRouteRoute
     }
-    '/study-materials/$id': {
-      id: '/study-materials/$id'
+    '/(web)/study-materials/$id': {
+      id: '/(web)/study-materials/$id'
       path: '/study-materials/$id'
       fullPath: '/study-materials/$id'
-      preLoaderRoute: typeof StudyMaterialsIdRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof webStudyMaterialsIdRouteImport
+      parentRoute: typeof webRouteRoute
     }
-    '/quiz/add': {
-      id: '/quiz/add'
+    '/(web)/quiz/add': {
+      id: '/(web)/quiz/add'
       path: '/quiz/add'
       fullPath: '/quiz/add'
-      preLoaderRoute: typeof QuizAddRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof webQuizAddRouteImport
+      parentRoute: typeof webRouteRoute
     }
-    '/quiz/$id': {
-      id: '/quiz/$id'
+    '/(web)/quiz/$id': {
+      id: '/(web)/quiz/$id'
       path: '/quiz/$id'
       fullPath: '/quiz/$id'
-      preLoaderRoute: typeof QuizIdRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof webQuizIdRouteImport
+      parentRoute: typeof webRouteRoute
     }
-    '/questions/add': {
-      id: '/questions/add'
+    '/(web)/questions/add': {
+      id: '/(web)/questions/add'
       path: '/questions/add'
       fullPath: '/questions/add'
-      preLoaderRoute: typeof QuestionsAddRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof webQuestionsAddRouteImport
+      parentRoute: typeof webRouteRoute
     }
-    '/chapters/add': {
-      id: '/chapters/add'
+    '/(web)/chapters/add': {
+      id: '/(web)/chapters/add'
       path: '/chapters/add'
       fullPath: '/chapters/add'
-      preLoaderRoute: typeof ChaptersAddRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof webChaptersAddRouteImport
+      parentRoute: typeof webRouteRoute
     }
-    '/chapters/$id': {
-      id: '/chapters/$id'
+    '/(web)/chapters/$id': {
+      id: '/(web)/chapters/$id'
       path: '/chapters/$id'
       fullPath: '/chapters/$id'
-      preLoaderRoute: typeof ChaptersIdRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof webChaptersIdRouteImport
+      parentRoute: typeof webRouteRoute
     }
-    '/auth/sign-in': {
-      id: '/auth/sign-in'
+    '/(auth)/auth/sign-in': {
+      id: '/(auth)/auth/sign-in'
       path: '/auth/sign-in'
       fullPath: '/auth/sign-in'
-      preLoaderRoute: typeof AuthSignInRouteImport
+      preLoaderRoute: typeof authAuthSignInRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/chapters': {
-      id: '/api/chapters'
-      path: '/api/chapters'
-      fullPath: '/api/chapters'
-      preLoaderRoute: typeof ApiChaptersRouteImport
+    '/api/(public)/auth/$': {
+      id: '/api/(public)/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApipublicAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/study-materials/edit/$id': {
-      id: '/study-materials/edit/$id'
+    '/api/(internal)/auth/register': {
+      id: '/api/(internal)/auth/register'
+      path: '/auth/register'
+      fullPath: '/api/auth/register'
+      preLoaderRoute: typeof ApiinternalAuthRegisterRouteImport
+      parentRoute: typeof ApiinternalRouteRoute
+    }
+    '/api/(internal)/auth/login': {
+      id: '/api/(internal)/auth/login'
+      path: '/auth/login'
+      fullPath: '/api/auth/login'
+      preLoaderRoute: typeof ApiinternalAuthLoginRouteImport
+      parentRoute: typeof ApiinternalRouteRoute
+    }
+    '/(web)/study-materials/edit/$id': {
+      id: '/(web)/study-materials/edit/$id'
       path: '/study-materials/edit/$id'
       fullPath: '/study-materials/edit/$id'
-      preLoaderRoute: typeof StudyMaterialsEditIdRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof webStudyMaterialsEditIdRouteImport
+      parentRoute: typeof webRouteRoute
     }
-    '/quiz/edit/$id': {
-      id: '/quiz/edit/$id'
+    '/(web)/quiz/edit/$id': {
+      id: '/(web)/quiz/edit/$id'
       path: '/quiz/edit/$id'
       fullPath: '/quiz/edit/$id'
-      preLoaderRoute: typeof QuizEditIdRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof webQuizEditIdRouteImport
+      parentRoute: typeof webRouteRoute
     }
-    '/questions/edit/$id': {
-      id: '/questions/edit/$id'
+    '/(web)/questions/edit/$id': {
+      id: '/(web)/questions/edit/$id'
       path: '/questions/edit/$id'
       fullPath: '/questions/edit/$id'
-      preLoaderRoute: typeof QuestionsEditIdRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof webQuestionsEditIdRouteImport
+      parentRoute: typeof webRouteRoute
     }
-    '/chapters/edit/$id': {
-      id: '/chapters/edit/$id'
+    '/(web)/chapters/edit/$id': {
+      id: '/(web)/chapters/edit/$id'
       path: '/chapters/edit/$id'
       fullPath: '/chapters/edit/$id'
-      preLoaderRoute: typeof ChaptersEditIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/auth/register': {
-      id: '/api/auth/register'
-      path: '/api/auth/register'
-      fullPath: '/api/auth/register'
-      preLoaderRoute: typeof ApiAuthRegisterRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/auth/login': {
-      id: '/api/auth/login'
-      path: '/api/auth/login'
-      fullPath: '/api/auth/login'
-      preLoaderRoute: typeof ApiAuthLoginRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof webChaptersEditIdRouteImport
+      parentRoute: typeof webRouteRoute
     }
   }
 }
 
+interface webRouteRouteChildren {
+  webDashboardRouteRoute: typeof webDashboardRouteRoute
+  webChaptersIdRoute: typeof webChaptersIdRoute
+  webChaptersAddRoute: typeof webChaptersAddRoute
+  webQuestionsAddRoute: typeof webQuestionsAddRoute
+  webQuizIdRoute: typeof webQuizIdRoute
+  webQuizAddRoute: typeof webQuizAddRoute
+  webStudyMaterialsIdRoute: typeof webStudyMaterialsIdRoute
+  webStudyMaterialsAddRoute: typeof webStudyMaterialsAddRoute
+  webChaptersIndexRoute: typeof webChaptersIndexRoute
+  webQuestionsIndexRoute: typeof webQuestionsIndexRoute
+  webQuizIndexRoute: typeof webQuizIndexRoute
+  webStudyMaterialsIndexRoute: typeof webStudyMaterialsIndexRoute
+  webSubmissionsIndexRoute: typeof webSubmissionsIndexRoute
+  webUsersIndexRoute: typeof webUsersIndexRoute
+  webChaptersEditIdRoute: typeof webChaptersEditIdRoute
+  webQuestionsEditIdRoute: typeof webQuestionsEditIdRoute
+  webQuizEditIdRoute: typeof webQuizEditIdRoute
+  webStudyMaterialsEditIdRoute: typeof webStudyMaterialsEditIdRoute
+}
+
+const webRouteRouteChildren: webRouteRouteChildren = {
+  webDashboardRouteRoute: webDashboardRouteRoute,
+  webChaptersIdRoute: webChaptersIdRoute,
+  webChaptersAddRoute: webChaptersAddRoute,
+  webQuestionsAddRoute: webQuestionsAddRoute,
+  webQuizIdRoute: webQuizIdRoute,
+  webQuizAddRoute: webQuizAddRoute,
+  webStudyMaterialsIdRoute: webStudyMaterialsIdRoute,
+  webStudyMaterialsAddRoute: webStudyMaterialsAddRoute,
+  webChaptersIndexRoute: webChaptersIndexRoute,
+  webQuestionsIndexRoute: webQuestionsIndexRoute,
+  webQuizIndexRoute: webQuizIndexRoute,
+  webStudyMaterialsIndexRoute: webStudyMaterialsIndexRoute,
+  webSubmissionsIndexRoute: webSubmissionsIndexRoute,
+  webUsersIndexRoute: webUsersIndexRoute,
+  webChaptersEditIdRoute: webChaptersEditIdRoute,
+  webQuestionsEditIdRoute: webQuestionsEditIdRoute,
+  webQuizEditIdRoute: webQuizEditIdRoute,
+  webStudyMaterialsEditIdRoute: webStudyMaterialsEditIdRoute,
+}
+
+const webRouteRouteWithChildren = webRouteRoute._addFileChildren(
+  webRouteRouteChildren,
+)
+
+interface ApiinternalRouteRouteChildren {
+  ApiinternalAuthLoginRoute: typeof ApiinternalAuthLoginRoute
+  ApiinternalAuthRegisterRoute: typeof ApiinternalAuthRegisterRoute
+}
+
+const ApiinternalRouteRouteChildren: ApiinternalRouteRouteChildren = {
+  ApiinternalAuthLoginRoute: ApiinternalAuthLoginRoute,
+  ApiinternalAuthRegisterRoute: ApiinternalAuthRegisterRoute,
+}
+
+const ApiinternalRouteRouteWithChildren =
+  ApiinternalRouteRoute._addFileChildren(ApiinternalRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DashboardRouteRoute: DashboardRouteRoute,
-  ApiChaptersRoute: ApiChaptersRoute,
-  AuthSignInRoute: AuthSignInRoute,
-  ChaptersIdRoute: ChaptersIdRoute,
-  ChaptersAddRoute: ChaptersAddRoute,
-  QuestionsAddRoute: QuestionsAddRoute,
-  QuizIdRoute: QuizIdRoute,
-  QuizAddRoute: QuizAddRoute,
-  StudyMaterialsIdRoute: StudyMaterialsIdRoute,
-  StudyMaterialsAddRoute: StudyMaterialsAddRoute,
-  ChaptersIndexRoute: ChaptersIndexRoute,
-  QuestionsIndexRoute: QuestionsIndexRoute,
-  QuizIndexRoute: QuizIndexRoute,
-  StudyMaterialsIndexRoute: StudyMaterialsIndexRoute,
-  SubmissionsIndexRoute: SubmissionsIndexRoute,
-  UsersIndexRoute: UsersIndexRoute,
-  ApiAuthLoginRoute: ApiAuthLoginRoute,
-  ApiAuthRegisterRoute: ApiAuthRegisterRoute,
-  ChaptersEditIdRoute: ChaptersEditIdRoute,
-  QuestionsEditIdRoute: QuestionsEditIdRoute,
-  QuizEditIdRoute: QuizEditIdRoute,
-  StudyMaterialsEditIdRoute: StudyMaterialsEditIdRoute,
+  webRouteRoute: webRouteRouteWithChildren,
+  ApiinternalRouteRoute: ApiinternalRouteRouteWithChildren,
+  authAuthSignInRoute: authAuthSignInRoute,
+  ApipublicHealthRoute: ApipublicHealthRoute,
+  ApipublicAuthSplatRoute: ApipublicAuthSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
 
 import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
+import type { createStart } from '@tanstack/react-start'
 declare module '@tanstack/react-start' {
   interface Register {
     ssr: true
     router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
   }
 }

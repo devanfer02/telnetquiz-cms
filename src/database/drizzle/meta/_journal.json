@@ -64,6 +64,13 @@
 			"when": 1766241496301,
 			"tag": "0008_lucky_angel",
 			"breakpoints": true
+		},
+		{
+			"idx": 9,
+			"version": "7",
+			"when": 1767748812613,
+			"tag": "0009_chemical_greymalkin",
+			"breakpoints": true
 		}
 	]
 }
