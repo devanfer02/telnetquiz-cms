@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import { authClient } from "@/lib/auth-client";
 import {
 	Card,
 	CardHeader,
@@ -9,6 +8,7 @@ import {
 	CardContent,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { authClient } from "@/lib/auth-client";
 
 export const Route = createFileRoute("/(auth)/auth/sign-in")({
 	component: SignInComponent,
