@@ -22,7 +22,6 @@ const isActive = (currentPath: string, itemUrl: string) => {
 
 export default function AppSidebar() {
 	const { data: session, isPending } = authClient.useSession();
-	console.log(session);
 	const routerState = useRouterState();
 	const navigate = useNavigate();
 

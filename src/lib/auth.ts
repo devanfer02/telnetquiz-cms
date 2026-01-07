@@ -1,6 +1,6 @@
-import { betterAuth } from "better-auth";
+import { APIError, betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { admin } from "better-auth/plugins";
+import { admin, createAuthMiddleware } from "better-auth/plugins";
 import { db } from "./db";
 import * as schema from "../database/schema";
 import { Context, Layer } from "effect";
@@ -29,13 +29,14 @@ export const auth = betterAuth({
 		user: {
 			create: {
 				before: async (user, ctx) => {
-					console.log("OKKK");
-					if (ctx?.path === "/api/auth/callback/google") {
-						console.log("Hitted here!");
+					if (ctx?.path === "/callback/:id") {
 						const allowedEmails = env.WHITELIST_GMAILS;
 
 						if (!allowedEmails.includes(user.email)) {
-							console.log("Yayy!");
+							throw new APIError("FORBIDDEN", {
+								message: "This Google account isn't authorized to sign in.",
+								code: "WKKW",
+							});
 						}
 					}
 				},

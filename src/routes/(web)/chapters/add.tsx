@@ -3,7 +3,7 @@ import { useCustomForm } from "@/hooks/use-custom-form";
 import type { ChapterFormData } from "@/types/zod";
 import ChapterForm from "./-sections/chapter-form";
 import { addChapter } from "@/actions/chapters";
-import { useFlashStore } from "@/store/use-flash";
+import { setFlashState } from "@/store/use-flash";
 import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@/lib/constant";
 import { Button } from "@/components/ui/button";
@@ -28,7 +28,7 @@ export default function RouteComponent() {
 			const result = await addChapter({ data: value });
 
 			if (result === null) {
-				useFlashStore.getState().setFlash({
+				setFlashState({
 					type: "error",
 					message: "Failed to create chapter. See logs.",
 				});
@@ -37,7 +37,7 @@ export default function RouteComponent() {
 				return;
 			}
 
-			useFlashStore.getState().setFlash({
+			setFlashState({
 				type: "success",
 				message: "Successfully created new chapter",
 			});

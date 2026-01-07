@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useSearch } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -9,17 +9,30 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { authClient } from "@/lib/auth-client";
+import { APIError } from "better-auth";
+import { z } from "zod";
 
 export const Route = createFileRoute("/(auth)/auth/sign-in")({
 	component: SignInComponent,
+	validateSearch: z.object({
+		error: z.string().optional(),
+	}),
 });
 
 function SignInComponent() {
+	const search = useSearch({ from: "/(auth)/auth/sign-in" });
 	const handleGoogleSignIn = async () => {
-		await authClient.signIn.social({
-			provider: "google",
-			callbackURL: "/dashboard",
-		});
+		try {
+			await authClient.signIn.social({
+				provider: "google",
+				callbackURL: "/dashboard",
+			});
+		} catch (err) {
+			if (err instanceof APIError) {
+				window.location.href = "/auth/sign-in";
+				console.log(err);
+			}
+		}
 	};
 
 	return (
@@ -109,7 +122,13 @@ function SignInComponent() {
 							</div>
 							Continue with Google
 						</Button>
-
+						{search.error && (
+							<div className="w-full text-center">
+								<span className="text-red-500">
+									{search.error.replaceAll("_", " ")}
+								</span>
+							</div>
+						)}
 						<div className="relative">
 							<div className="absolute inset-0 flex items-center">
 								<Separator />
