@@ -14,6 +14,7 @@ import { env } from "@/lib/env";
 
 interface MyRouterContext {
 	queryClient: QueryClient;
+	user: User | null;
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
