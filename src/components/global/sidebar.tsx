@@ -99,7 +99,7 @@ export default function AppSidebar() {
 								/>
 								<div className="flex flex-col min-w-0">
 									<span className="text-sm font-bold text-white truncate">
-										{session?.user.name ?? "Admin"}
+										Hi, {session?.user.name ?? "Admin"}!
 									</span>
 									<span
 										className="text-xs text-white/70 truncate"
@@ -115,7 +115,7 @@ export default function AppSidebar() {
 					<SidebarMenuItem>
 						<SidebarMenuButton
 							onClick={() => logout()}
-							className="h-12 w-full text-white/90 hover:bg-white/10 hover:text-white hover:translate-x-1 transition-all duration-200 ease-in-out rounded-xl px-4 gap-3 justify-start"
+							className="h-12 w-full text-white/90 hover:bg-white/10 hover:text-white hover:translate-x-1 transition-all duration-200 ease-in-out rounded-xl px-4 gap-3 justify-start cursor-pointer"
 						>
 							<LogOut className="size-5 opacity-80 group-hover:opacity-100" />
 							<span className="text-base font-medium">Logout</span>

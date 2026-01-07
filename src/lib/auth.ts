@@ -1,6 +1,6 @@
 import { APIError, betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { admin, createAuthMiddleware } from "better-auth/plugins";
+import { admin } from "better-auth/plugins";
 import { db } from "./db";
 import * as schema from "../database/schema";
 import { Context, Layer } from "effect";
@@ -16,6 +16,9 @@ export const auth = betterAuth({
 	}),
 	emailAndPassword: {
 		enabled: true,
+	},
+	pages: {
+		signIn: "/auth/sign-in",
 	},
 	plugins: [admin()],
 	socialProviders: {
