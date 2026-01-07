@@ -77,7 +77,9 @@ export const createQuestions = (data: QuestionsFormData) =>
 						.insert(questions)
 						.values(
 							questionsWithImages.map((q) => ({
+								type: data.type,
 								quizId: data.quizId,
+								chapterId: data.chapterId,
 								materialId: data.materialId,
 								description: q.description,
 								question: q.question,
@@ -117,7 +119,9 @@ export const patchQuestion = (id: number, data: QuestionFormData) =>
 
 		const question = yield* fetchQuestionById(id);
 		const payload = {
+			type: data.type,
 			quizId: data.quizId,
+			chapterId: data.chapterId,
 			materialId: data.materialId,
 			description: data.description,
 			question: data.question,

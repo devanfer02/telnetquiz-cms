@@ -8,7 +8,7 @@ import {
 	type SortingState,
 	useReactTable,
 } from "@tanstack/react-table";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import ActionCell from "@/components/global/action-cell";
 import { SortableHeader } from "@/components/global/sortable-header";
 import TableLink from "@/components/global/table-link";
@@ -27,6 +27,7 @@ import {
 	AccordionTrigger,
 } from "@/components/ui/accordion";
 import { QUERY_KEYS } from "@/lib/constant";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface QuestionListProps {
 	questions: Question[];
@@ -39,8 +40,23 @@ export default function QuestionList({
 }: QuestionListProps) {
 	const queryClient = useQueryClient();
 	const [keyword, setKeyword] = useState("");
-	const [data, _] = useState(() => questions);
 	const [sorting, setSorting] = useState<SortingState>([]);
+	const [activeTab, setActiveTab] = useState<"quiz" | "pretest">("quiz");
+
+	const filteredData = useMemo(() => {
+		return questions.filter((q) => {
+			if (activeTab === "quiz") return q.type === "quiz";
+			return q.type === "pretest";
+		});
+	}, [questions, activeTab]);
+
+	const columnVisibility = useMemo(() => {
+		return {
+			quizId: activeTab === "quiz",
+			materialId: activeTab === "quiz",
+			chapterId: activeTab === "pretest",
+		};
+	}, [activeTab]);
 
 	const columns: ColumnDef<Question>[] = [
 		{
@@ -90,6 +106,24 @@ export default function QuestionList({
 					/>
 				);
 			},
+		},
+		{
+			accessorKey: "chapterId",
+			header: "Chapter ID",
+			cell: ({ row }) => {
+				const chapterId = row.original.chapterId?.toString();
+
+				if (!chapterId) return "-";
+
+				return (
+					<TableLink to="/chapters/$id" paramKey="id" paramValue={chapterId} />
+				);
+			},
+		},
+		{
+			accessorKey: "type",
+			header: "Type",
+			cell: ({ row }) => <p className="capitalize">{row.original.type}</p>,
 		},
 		{
 			accessorKey: "description",
@@ -203,9 +237,9 @@ export default function QuestionList({
 	];
 
 	const table = useReactTable({
-		data,
+		data: filteredData,
 		columns: filterColumns(columns, disableKey),
-		state: { globalFilter: keyword, sorting },
+		state: { globalFilter: keyword, sorting, columnVisibility },
 		onGlobalFilterChange: setKeyword,
 		globalFilterFn: "includesString",
 		onSortingChange: setSorting,
@@ -228,12 +262,32 @@ export default function QuestionList({
 					<Link to="/questions/add">Tambah Pertanyaan</Link>
 				</Button>
 			</div>
-			<TanstackTable
-				table={table}
-				columns={columns}
-				title="List Pertanyaan"
-				fallbackMessage="No Question created yet"
-			/>
+			<Tabs
+				value={activeTab}
+				onValueChange={(val) => setActiveTab(val as "quiz" | "pretest")}
+				className="w-full"
+			>
+				<TabsList className="mb-4">
+					<TabsTrigger value="quiz">Quiz Questions</TabsTrigger>
+					<TabsTrigger value="pretest">Pretest Questions</TabsTrigger>
+				</TabsList>
+				<TabsContent value="quiz">
+					<TanstackTable
+						table={table}
+						columns={columns}
+						title="Quiz Questions"
+						fallbackMessage="No Quiz Question created yet"
+					/>
+				</TabsContent>
+				<TabsContent value="pretest">
+					<TanstackTable
+						table={table}
+						columns={columns}
+						title="Pretest Questions"
+						fallbackMessage="No Pretest Question created yet"
+					/>
+				</TabsContent>
+			</Tabs>
 		</>
 	);
 }

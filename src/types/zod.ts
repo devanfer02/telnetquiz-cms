@@ -38,8 +38,10 @@ export const optionSchema = z.object({
 });
 
 export const questionSchema = z.object({
-	quizId: z.number(),
-	materialId: z.number(),
+	type: z.enum(["pretest", "quiz"]),
+	quizId: z.number().optional(),
+	chapterId: z.number().optional(),
+	materialId: z.number().optional(),
 	image: imageFileSchema,
 	description: z
 		.string()
@@ -59,8 +61,10 @@ export const questionSchema = z.object({
 });
 
 export const questionsSchema = z.object({
-	quizId: z.number(),
-	materialId: z.number(),
+	type: z.enum(["pretest", "quiz"]),
+	quizId: z.number().optional(),
+	chapterId: z.number().optional(),
+	materialId: z.number().optional(),
 	questions: z.array(questionSchema),
 });
 

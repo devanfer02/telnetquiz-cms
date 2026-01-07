@@ -15,6 +15,7 @@ import {
 import OptionsArray from "./options-form";
 import { Suspense } from "react";
 import QuizOptions from "@/components/quiz/quiz-options";
+import ChapterOptions from "@/components/chapters/chapter-options";
 import StudyMaterialOptions from "@/components/study-materials/study-material-options";
 import { useStore } from "@tanstack/react-form";
 
@@ -25,7 +26,9 @@ interface QuestionFormProps {
 
 function createEmptyQuestion(index: number): QuestionFormData {
 	return {
+		type: "quiz",
 		quizId: 0,
+		chapterId: 0,
 		materialId: 0,
 		description: "",
 		question: "",
@@ -34,6 +37,7 @@ function createEmptyQuestion(index: number): QuestionFormData {
 }
 export default function QuestionForm({ form, buttonText }: QuestionFormProps) {
 	const isSubmitting = useStore(form.store, (store) => store.isSubmitting);
+	const type = useStore(form.store, (state) => state.values.type);
 
 	return (
 		<form
@@ -45,31 +49,29 @@ export default function QuestionForm({ form, buttonText }: QuestionFormProps) {
 			className="space-y-6 mb-10"
 		>
 			<form.Field
-				name="quizId"
+				name="type"
 				validators={{
 					onChange: (value) =>
-						validateField(questionSchema, "quizId", value.value),
+						validateField(questionSchema, "type", value.value),
 				}}
 			>
 				{(field) => (
 					<div className="space-y-2">
-						<Label htmlFor={field.name}>Quiz</Label>
+						<Label htmlFor={field.name}>Type</Label>
 						<div className="relative">
 							<select
 								id={field.name}
 								value={field.state.value}
 								onBlur={field.handleBlur}
-								onChange={(e) => field.handleChange(Number(e.target.value))}
+								onChange={(e) =>
+									field.handleChange(
+										e.target.value as QuestionsFormData["type"],
+									)
+								}
 								className="flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1"
 							>
-								<option value={0} hidden>
-									Pilih Quiz
-								</option>
-								<Suspense
-									fallback={<option disabled>Loading quizzes...</option>}
-								>
-									<QuizOptions />
-								</Suspense>
+								<option value="quiz">Quiz</option>
+								<option value="pretest">Pretest</option>
 							</select>
 						</div>
 						{field.state.meta.errors && (
@@ -80,6 +82,83 @@ export default function QuestionForm({ form, buttonText }: QuestionFormProps) {
 					</div>
 				)}
 			</form.Field>
+
+			{type === "quiz" ? (
+				<form.Field
+					name="quizId"
+					validators={{
+						onChange: (value) =>
+							validateField(questionSchema, "quizId", value.value),
+					}}
+				>
+					{(field) => (
+						<div className="space-y-2">
+							<Label htmlFor={field.name}>Quiz</Label>
+							<div className="relative">
+								<select
+									id={field.name}
+									value={field.state.value}
+									onBlur={field.handleBlur}
+									onChange={(e) => field.handleChange(Number(e.target.value))}
+									className="flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1"
+								>
+									<option value={0} hidden>
+										Pilih Quiz
+									</option>
+									<Suspense
+										fallback={<option disabled>Loading quizzes...</option>}
+									>
+										<QuizOptions />
+									</Suspense>
+								</select>
+							</div>
+							{field.state.meta.errors && (
+								<p className="text-destructive text-sm">
+									{field.state.meta.errors}
+								</p>
+							)}
+						</div>
+					)}
+				</form.Field>
+			) : (
+				<form.Field
+					name="chapterId"
+					validators={{
+						onChange: (value) =>
+							validateField(questionSchema, "chapterId", value.value),
+					}}
+				>
+					{(field) => (
+						<div className="space-y-2">
+							<Label htmlFor={field.name}>Chapter</Label>
+							<div className="relative">
+								<select
+									id={field.name}
+									value={field.state.value}
+									onBlur={field.handleBlur}
+									onChange={(e) => field.handleChange(Number(e.target.value))}
+									className="flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1"
+								>
+									<option value={0} hidden>
+										Pilih Chapter
+									</option>
+									<Suspense
+										fallback={<option disabled>Loading chapters...</option>}
+									>
+										<ChapterOptions />
+									</Suspense>
+								</select>
+							</div>
+							{field.state.meta.errors && (
+								<p className="text-destructive text-sm">
+									{field.state.meta.errors}
+								</p>
+							)}
+						</div>
+					)}
+				</form.Field>
+			)}
+
 			<form.Field
 				name="materialId"
 				validators={{

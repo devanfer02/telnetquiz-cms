@@ -113,6 +113,8 @@ export const quizzes = pgTable(
 );
 export const questions = pgTable("questions", {
 	id: serial().primaryKey(),
+	type: varchar({ enum: ["pretest", "quiz"] }),
+	chapterId: integer().references(() => chapters.id, { onDelete: "cascade" }),
 	quizId: integer().references(() => quizzes.id, { onDelete: "cascade" }),
 	materialId: integer().references(() => studyMaterials.id, {
 		onDelete: "cascade",
@@ -154,6 +156,7 @@ export const usersRelations = relations(users, ({ many }) => ({
 
 export const chaptersRelations = relations(chapters, ({ many }) => ({
 	quizzes: many(quizzes),
+	questions: many(questions),
 	submissions: many(submissions),
 }));
 
@@ -170,6 +173,10 @@ export const questionsRelations = relations(questions, ({ one, many }) => ({
 	quiz: one(quizzes, {
 		fields: [questions.quizId],
 		references: [quizzes.id],
+	}),
+	chapter: one(chapters, {
+		fields: [questions.chapterId],
+		references: [chapters.id],
 	}),
 	studyMaterial: one(studyMaterials, {
 		fields: [questions.materialId],

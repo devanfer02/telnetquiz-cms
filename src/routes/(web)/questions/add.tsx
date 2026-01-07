@@ -20,7 +20,9 @@ export default function RouteComponent() {
 
 	const form = useCustomForm({
 		defaultValues: {
+			type: "quiz",
 			quizId: 0,
+			chapterId: 0,
 			materialId: 0,
 			questions: [],
 		} as QuestionsFormData,
@@ -31,8 +33,12 @@ export default function RouteComponent() {
 			}));
 
 			const formData = new FormData();
-			formData.append("quizId", String(value.quizId));
-			formData.append("materialId", String(value.materialId));
+			formData.append("type", value.type);
+			if (value.quizId) formData.append("quizId", String(value.quizId));
+			if (value.chapterId)
+				formData.append("chapterId", String(value.chapterId));
+			if (value.materialId)
+				formData.append("materialId", String(value.materialId));
 			formData.append("questions", JSON.stringify(questionsPayload));
 
 			value.questions.forEach((q, index) => {
