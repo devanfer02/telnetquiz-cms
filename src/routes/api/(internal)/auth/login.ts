@@ -1,28 +1,27 @@
-import { HttpStatus, response } from "@/lib/http";
-import { parseBody } from "@/lib/http";
-import { registerUser } from "@/services/auth";
+import { HttpStatus, parseBody, response } from "@/lib/http";
+import { loginUser } from "@/services/auth";
 import { AuthError, ValidationError } from "@/services/errors/errors";
-import { registerUserSchema } from "@/types/zod.api";
+import { loginUserSchema } from "@/types/zod.api";
 import { createFileRoute } from "@tanstack/react-router";
 import { Effect } from "effect";
 
-export const Route = createFileRoute("/api/auth/register")({
+export const Route = createFileRoute("/api/(internal)/auth/login")({
 	server: {
 		handlers: {
 			POST: async ({ request }) =>
 				Effect.runPromise(
 					Effect.gen(function* () {
 						const body = yield* Effect.tryPromise(() => request.json());
-						const data = yield* parseBody(registerUserSchema, body);
+						const data = yield* parseBody(loginUserSchema, body);
 
-						const result = yield* registerUser(data);
+						const result = yield* loginUser(data);
 
 						return response(
 							{
-								message: "Successfully register user",
+								message: "Successfully login user",
 								token: result.token,
 							},
-							HttpStatus.CREATED,
+							HttpStatus.OK,
 						);
 					}).pipe(
 						Effect.catchTags({
