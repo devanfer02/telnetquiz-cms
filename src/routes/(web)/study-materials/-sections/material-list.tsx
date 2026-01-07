@@ -5,21 +5,21 @@ import TableLink from "@/components/global/table-link";
 import TanstackTable from "@/components/global/ts-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { filterColumns } from "@/lib/utils";
 import { setFlashState } from "@/store/use-flash";
 import { useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { QUERY_KEYS } from "@/lib/constant";
 import {
-	ColumnDef,
+	type ColumnDef,
 	getCoreRowModel,
 	getFilteredRowModel,
 	getPaginationRowModel,
 	getSortedRowModel,
-	SortingState,
+	type SortingState,
+	type VisibilityState,
 	useReactTable,
 } from "@tanstack/react-table";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 interface StudyMaterialListProps {
 	studyMaterials: StudyMaterial[];
@@ -33,6 +33,14 @@ export default function StudyMaterialList({
 	const queryClient = useQueryClient();
 	const [keyword, setKeyword] = useState("");
 	const [sorting, setSorting] = useState<SortingState>([]);
+
+	const columnVisibility: VisibilityState = useMemo(() => {
+		const visibility: VisibilityState = {};
+		disableKey?.forEach((key) => {
+			visibility[key] = false;
+		});
+		return visibility;
+	}, [disableKey]);
 
 	const columns: ColumnDef<StudyMaterial>[] = [
 		{
@@ -111,8 +119,8 @@ export default function StudyMaterialList({
 
 	const table = useReactTable({
 		data: studyMaterials,
-		columns: filterColumns(columns, disableKey),
-		state: { globalFilter: keyword, sorting },
+		columns: columns,
+		state: { globalFilter: keyword, sorting, columnVisibility },
 		onGlobalFilterChange: setKeyword,
 		globalFilterFn: "includesString",
 		onSortingChange: setSorting,

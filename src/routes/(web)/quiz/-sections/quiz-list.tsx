@@ -6,16 +6,16 @@ import {
 	getPaginationRowModel,
 	getSortedRowModel,
 	type SortingState,
+	type VisibilityState,
 	useReactTable,
 } from "@tanstack/react-table";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import ActionCell from "@/components/global/action-cell";
 import { SortableHeader } from "@/components/global/sortable-header";
 import TableLink from "@/components/global/table-link";
 import TanstackTable from "@/components/global/ts-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { filterColumns } from "@/lib/utils";
 import { removeQuiz } from "@/actions/quizzes";
 import { setFlashState } from "@/store/use-flash";
 import { useQueryClient } from "@tanstack/react-query";
@@ -30,6 +30,14 @@ export default function QuizList({ quizzes, disableKey }: QuizListProps) {
 	const queryClient = useQueryClient();
 	const [keyword, setKeyword] = useState("");
 	const [sorting, setSorting] = useState<SortingState>([]);
+
+	const columnVisibility: VisibilityState = useMemo(() => {
+		const visibility: VisibilityState = {};
+		disableKey?.forEach((key) => {
+			visibility[key] = false;
+		});
+		return visibility;
+	}, [disableKey]);
 
 	const columns: ColumnDef<Quiz>[] = [
 		{
@@ -138,8 +146,8 @@ export default function QuizList({ quizzes, disableKey }: QuizListProps) {
 
 	const table = useReactTable({
 		data: quizzes,
-		columns: filterColumns(columns, disableKey),
-		state: { globalFilter: keyword, sorting },
+		columns: columns,
+		state: { globalFilter: keyword, sorting, columnVisibility },
 		onGlobalFilterChange: setKeyword,
 		globalFilterFn: "includesString",
 		onSortingChange: setSorting,
