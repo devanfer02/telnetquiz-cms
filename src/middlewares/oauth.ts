@@ -22,6 +22,15 @@ export const oauthMiddleware = createMiddleware().server(async ({ next }) => {
 		.where(eq(accounts.userId, session.user.id))
 		.limit(1);
 
+	if (account === null) {
+		throw redirect({
+			to: "/auth/sign-in",
+			search: {
+				error: "Can't find user account",
+			},
+		});
+	}
+
 	if (account.providerId !== "google") {
 		throw redirect({
 			to: "/auth/sign-in",
