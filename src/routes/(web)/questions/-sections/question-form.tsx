@@ -179,7 +179,7 @@ export default function QuestionForm({ form, buttonText }: QuestionFormProps) {
 			>
 				{(field) => (
 					<div className="space-y-2">
-						<Label htmlFor={field.name}>Study Material</Label>
+						<Label htmlFor={field.name}>Study Material (Optional)</Label>
 						<div className="relative">
 							<select
 								id={field.name}
