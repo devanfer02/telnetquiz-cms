@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as webRouteRouteImport } from './routes/(web)/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
 import { Route as ApiinternalRouteRouteImport } from './routes/api/(internal)/route'
 import { Route as webDashboardRouteRouteImport } from './routes/(web)/dashboard/route'
 import { Route as webUsersIndexRouteImport } from './routes/(web)/users/index'
@@ -27,7 +28,6 @@ import { Route as webQuizIdRouteImport } from './routes/(web)/quiz/$id'
 import { Route as webQuestionsAddRouteImport } from './routes/(web)/questions/add'
 import { Route as webChaptersAddRouteImport } from './routes/(web)/chapters/add'
 import { Route as webChaptersIdRouteImport } from './routes/(web)/chapters/$id'
-import { Route as authAuthSignInRouteImport } from './routes/(auth)/auth/sign-in'
 import { Route as ApipublicAuthSplatRouteImport } from './routes/api/(public)/auth/$'
 import { Route as ApiinternalAuthRegisterRouteImport } from './routes/api/(internal)/auth/register'
 import { Route as ApiinternalAuthLoginRouteImport } from './routes/api/(internal)/auth/login'
@@ -43,6 +43,11 @@ const webRouteRoute = webRouteRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthSignInRoute = AuthSignInRouteImport.update({
+  id: '/auth/sign-in',
+  path: '/auth/sign-in',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiinternalRouteRoute = ApiinternalRouteRouteImport.update({
@@ -125,11 +130,6 @@ const webChaptersIdRoute = webChaptersIdRouteImport.update({
   path: '/chapters/$id',
   getParentRoute: () => webRouteRoute,
 } as any)
-const authAuthSignInRoute = authAuthSignInRouteImport.update({
-  id: '/(auth)/auth/sign-in',
-  path: '/auth/sign-in',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ApipublicAuthSplatRoute = ApipublicAuthSplatRouteImport.update({
   id: '/api/(public)/auth/$',
   path: '/api/auth/$',
@@ -170,7 +170,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof webDashboardRouteRoute
   '/api': typeof ApiinternalRouteRouteWithChildren
-  '/auth/sign-in': typeof authAuthSignInRoute
+  '/auth/sign-in': typeof AuthSignInRoute
   '/chapters/$id': typeof webChaptersIdRoute
   '/chapters/add': typeof webChaptersAddRoute
   '/questions/add': typeof webQuestionsAddRoute
@@ -197,7 +197,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof webDashboardRouteRoute
   '/api': typeof ApiinternalRouteRouteWithChildren
-  '/auth/sign-in': typeof authAuthSignInRoute
+  '/auth/sign-in': typeof AuthSignInRoute
   '/chapters/$id': typeof webChaptersIdRoute
   '/chapters/add': typeof webChaptersAddRoute
   '/questions/add': typeof webQuestionsAddRoute
@@ -226,7 +226,7 @@ export interface FileRoutesById {
   '/(web)': typeof webRouteRouteWithChildren
   '/(web)/dashboard': typeof webDashboardRouteRoute
   '/api/(internal)': typeof ApiinternalRouteRouteWithChildren
-  '/(auth)/auth/sign-in': typeof authAuthSignInRoute
+  '/auth/sign-in': typeof AuthSignInRoute
   '/(web)/chapters/$id': typeof webChaptersIdRoute
   '/(web)/chapters/add': typeof webChaptersAddRoute
   '/(web)/questions/add': typeof webQuestionsAddRoute
@@ -310,7 +310,7 @@ export interface FileRouteTypes {
     | '/(web)'
     | '/(web)/dashboard'
     | '/api/(internal)'
-    | '/(auth)/auth/sign-in'
+    | '/auth/sign-in'
     | '/(web)/chapters/$id'
     | '/(web)/chapters/add'
     | '/(web)/questions/add'
@@ -338,7 +338,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   webRouteRoute: typeof webRouteRouteWithChildren
   ApiinternalRouteRoute: typeof ApiinternalRouteRouteWithChildren
-  authAuthSignInRoute: typeof authAuthSignInRoute
+  AuthSignInRoute: typeof AuthSignInRoute
   ApipublicHealthRoute: typeof ApipublicHealthRoute
   ApipublicAuthSplatRoute: typeof ApipublicAuthSplatRoute
 }
@@ -357,6 +357,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/sign-in': {
+      id: '/auth/sign-in'
+      path: '/auth/sign-in'
+      fullPath: '/auth/sign-in'
+      preLoaderRoute: typeof AuthSignInRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/(internal)': {
@@ -470,13 +477,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/chapters/$id'
       preLoaderRoute: typeof webChaptersIdRouteImport
       parentRoute: typeof webRouteRoute
-    }
-    '/(auth)/auth/sign-in': {
-      id: '/(auth)/auth/sign-in'
-      path: '/auth/sign-in'
-      fullPath: '/auth/sign-in'
-      preLoaderRoute: typeof authAuthSignInRouteImport
-      parentRoute: typeof rootRouteImport
     }
     '/api/(public)/auth/$': {
       id: '/api/(public)/auth/$'
@@ -593,7 +593,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   webRouteRoute: webRouteRouteWithChildren,
   ApiinternalRouteRoute: ApiinternalRouteRouteWithChildren,
-  authAuthSignInRoute: authAuthSignInRoute,
+  AuthSignInRoute: AuthSignInRoute,
   ApipublicHealthRoute: ApipublicHealthRoute,
   ApipublicAuthSplatRoute: ApipublicAuthSplatRoute,
 }
