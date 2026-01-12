@@ -1,6 +1,7 @@
 import { accounts } from "@/database/schema";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { HttpStatus, response } from "@/lib/http";
 import { redirect } from "@tanstack/react-router";
 import { createMiddleware } from "@tanstack/react-start";
 import { getRequestHeaders } from "@tanstack/react-start/server";
@@ -15,6 +16,8 @@ export const oauthMiddleware = createMiddleware().server(async ({ next }) => {
 			to: "/auth/sign-in",
 		});
 	}
+
+  console.log(session)
 
 	const [account] = await db
 		.select({ providerId: accounts.providerId })
@@ -42,3 +45,20 @@ export const oauthMiddleware = createMiddleware().server(async ({ next }) => {
 
 	return await next();
 });
+
+export const authMiddleware = createMiddleware().server(async ({ next }) => {
+  const headers = getRequestHeaders();
+  const session = await auth.api.getSession({ headers })
+
+  if (session === null) {
+    return response({
+      message: "Unauthorized" 
+    }, HttpStatus.UNAUTHORIZED)
+  }
+
+  return await next({
+    context: {
+      user: session.user 
+    }
+  });
+})
