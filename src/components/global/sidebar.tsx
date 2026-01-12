@@ -22,7 +22,7 @@ const isActive = (currentPath: string, itemUrl: string) => {
 };
 
 export default function AppSidebar() {
-  const { session, isPending } = useAuth()
+	const { session, isPending } = useAuth();
 	const routerState = useRouterState();
 	const navigate = useNavigate();
 

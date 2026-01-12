@@ -69,3 +69,8 @@ type StudyMaterial = {
 	createdAt: Date;
 	updatedAt: Date;
 };
+
+type PretestSubmissionItem = {
+	question_id: number;
+	answered_option_id: number;
+};

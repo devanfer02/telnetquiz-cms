@@ -47,6 +47,7 @@ export const addQuestions = createServerFn({
 })
 	.inputValidator(z.instanceof(FormData))
 	.handler(async ({ data }) => {
+		const type = data.get("type") as "pretest" | "quiz";
 		const quizId = Number(data.get("quizId"));
 		const materialId = Number(data.get("materialId"));
 		const questionsRaw = JSON.parse(data.get("questions") as string);
@@ -60,6 +61,7 @@ export const addQuestions = createServerFn({
 		});
 
 		const parsedData = {
+			type,
 			quizId,
 			materialId,
 			questions,
@@ -83,6 +85,7 @@ export const updateQuestion = createServerFn({
 	.inputValidator(z.instanceof(FormData))
 	.handler(async ({ data }) => {
 		const id = Number(data.get("id"));
+		const type = data.get("type") as "pretest" | "quiz";
 		const quizId = Number(data.get("quizId"));
 		const materialId = Number(data.get("materialId"));
 		const description = data.get("description") as string;
@@ -91,6 +94,7 @@ export const updateQuestion = createServerFn({
 		const image = data.get("image");
 
 		const parsedData = {
+			type,
 			quizId,
 			materialId,
 			description,

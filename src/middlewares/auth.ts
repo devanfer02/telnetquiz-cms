@@ -17,8 +17,6 @@ export const oauthMiddleware = createMiddleware().server(async ({ next }) => {
 		});
 	}
 
-  console.log(session)
-
 	const [account] = await db
 		.select({ providerId: accounts.providerId })
 		.from(accounts)
@@ -47,18 +45,21 @@ export const oauthMiddleware = createMiddleware().server(async ({ next }) => {
 });
 
 export const authMiddleware = createMiddleware().server(async ({ next }) => {
-  const headers = getRequestHeaders();
-  const session = await auth.api.getSession({ headers })
+	const headers = getRequestHeaders();
+	const session = await auth.api.getSession({ headers });
 
-  if (session === null) {
-    return response({
-      message: "Unauthorized" 
-    }, HttpStatus.UNAUTHORIZED)
-  }
+	if (session === null) {
+		return response(
+			{
+				message: "Unauthorized",
+			},
+			HttpStatus.UNAUTHORIZED,
+		);
+	}
 
-  return await next({
-    context: {
-      user: session.user 
-    }
-  });
-})
+	return await next({
+		context: {
+			user: session.user,
+		},
+	});
+});
