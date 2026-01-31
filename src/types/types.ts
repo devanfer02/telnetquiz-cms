@@ -74,3 +74,8 @@ type PretestSubmissionItem = {
 	question_id: number;
 	answered_option_id: number;
 };
+
+type QuizAnswerItem = {
+	question_id: number;
+	answered_option_id: number;
+};

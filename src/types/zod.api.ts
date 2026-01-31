@@ -28,6 +28,15 @@ export const questionQuerySchema = z.object({
 	type: z.enum(["pretest", "quiz"]),
 });
 
+export const quizSubmissionSchema = z.object({
+	answers: z.array(
+		z.object({
+			question_id: z.number(),
+			answered_option_id: z.number(),
+		}),
+	),
+});
+
 export type RegisterUserFormData = z.infer<typeof registerUserSchema>;
 
 export type LoginUserFormData = z.infer<typeof loginUserSchema>;
@@ -35,3 +44,5 @@ export type LoginUserFormData = z.infer<typeof loginUserSchema>;
 export type PretestSubmissionFormData = z.infer<typeof pretestSubmissionSchema>;
 
 export type QuestionQueryData = z.infer<typeof questionQuerySchema>;
+
+export type QuizSubmissionFormData = z.infer<typeof quizSubmissionSchema>;
