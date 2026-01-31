@@ -2,13 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Effect } from "effect";
 import { DbLayer } from "@/lib/db";
 import { HttpStatus, response } from "@/lib/http";
-import { authMiddleware } from "@/middlewares/auth";
 import { fetchChapterById } from "@/services/chapters";
 import type { DatabaseError, NotFoundError } from "@/services/errors/errors";
 
 export const Route = createFileRoute("/api/(internal)/chapters/$id")({
 	server: {
-		middleware: [authMiddleware],
 		handlers: {
 			GET: async ({ params }) =>
 				Effect.runPromise(
