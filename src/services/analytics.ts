@@ -8,7 +8,7 @@ import {
 	accounts,
 } from "@/database/schema";
 import { Db } from "@/lib/db";
-import { desc, eq, ne, sql } from "drizzle-orm";
+import { and, desc, eq, exists, ne, sql } from "drizzle-orm";
 import { Effect } from "effect";
 import { DatabaseError } from "./errors/errors";
 
@@ -20,9 +20,20 @@ export const fetchAllUsers = Effect.gen(function* () {
 			db
 				.select()
 				.from(users)
-				.innerJoin(accounts, eq(accounts.userId, users.id))
-				.orderBy(desc(users.createdAt))
-				.where(ne(accounts.providerId, "google")),
+				.where(
+					exists(
+						db
+							.select({ one: sql`1` })
+							.from(accounts)
+							.where(
+								and(
+									eq(accounts.userId, users.id),
+									ne(accounts.providerId, "google"),
+								),
+							),
+					),
+				)
+				.orderBy(desc(users.createdAt)),
 		catch: (err) =>
 			new DatabaseError({
 				cause: err,
