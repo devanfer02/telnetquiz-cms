@@ -1,6 +1,6 @@
 import { APIError, betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { admin } from "better-auth/plugins";
+import { admin, bearer } from "better-auth/plugins";
 import { db } from "./db";
 import * as schema from "../database/schema";
 import { Context, Layer } from "effect";
@@ -16,11 +16,12 @@ export const auth = betterAuth({
 	}),
 	emailAndPassword: {
 		enabled: true,
+		minPasswordLength: 6,
 	},
 	pages: {
 		signIn: "/auth/sign-in",
 	},
-	plugins: [admin()],
+	plugins: [admin(), bearer()],
 	socialProviders: {
 		google: {
 			prompt: "select_account",
