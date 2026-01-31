@@ -39,13 +39,19 @@ async function main() {
 					.replace(".ts", "")
 					.replace("/index", "");
 
+        let type = ""
+
 				// Handle dynamic routes (TanStack Router style)
 				routePath = routePath.replace(/\$/g, "*");				
         // Fix windows path separators if running on windows (though user is on linux)
         routePath = routePath.replace(/\\/g, "/");
+        // Remove unnecessary folder name 
+        type = routePath.substring(routePath.indexOf("("), routePath.indexOf(")"))
+        routePath = routePath.replace(routePath.substring(routePath.indexOf("("), routePath.indexOf(")") + 2), "")
 				routes.push({
 					path: routePath,
 					methods: methods.join(", "),
+          type: type.substring(1) 
 				});
 			}
 		}
