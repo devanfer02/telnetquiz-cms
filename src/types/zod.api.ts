@@ -37,6 +37,11 @@ export const quizSubmissionSchema = z.object({
 	),
 });
 
+export const updateProfileSchema = z.object({
+	fullname: z.string().min(3).max(255).optional(),
+	image: z.string().url().optional(),
+});
+
 export type RegisterUserFormData = z.infer<typeof registerUserSchema>;
 
 export type LoginUserFormData = z.infer<typeof loginUserSchema>;
@@ -46,3 +51,5 @@ export type PretestSubmissionFormData = z.infer<typeof pretestSubmissionSchema>;
 export type QuestionQueryData = z.infer<typeof questionQuerySchema>;
 
 export type QuizSubmissionFormData = z.infer<typeof quizSubmissionSchema>;
+
+export type UpdateProfileFormData = z.infer<typeof updateProfileSchema>;
