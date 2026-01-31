@@ -5,9 +5,10 @@ import {
 	quizzes,
 	studyMaterials,
 	questions,
+	accounts,
 } from "@/database/schema";
 import { Db } from "@/lib/db";
-import { desc, eq, sql } from "drizzle-orm";
+import { desc, eq, ne, sql } from "drizzle-orm";
 import { Effect } from "effect";
 import { DatabaseError } from "./errors/errors";
 
@@ -15,7 +16,13 @@ export const fetchAllUsers = Effect.gen(function* () {
 	const { db } = yield* Db;
 
 	return yield* Effect.tryPromise({
-		try: () => db.select().from(users).orderBy(desc(users.createdAt)),
+		try: () =>
+			db
+				.select()
+				.from(users)
+				.innerJoin(accounts, eq(accounts.userId, users.id))
+				.orderBy(desc(users.createdAt))
+				.where(ne(accounts.providerId, "google")),
 		catch: (err) =>
 			new DatabaseError({
 				cause: err,
