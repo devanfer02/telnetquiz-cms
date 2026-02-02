@@ -1,11 +1,11 @@
 import { desc, eq, sql } from "drizzle-orm";
-import { submissions, users } from "@/database/schema";
-import { Db } from "@/lib/db";
-import { EditUserFormData } from "@/types/zod";
 import { Effect } from "effect";
-import { AuthError, DatabaseError, NotFoundError } from "./errors/errors";
+import { sessions, submissions, users } from "@/database/schema";
 import { Auth } from "@/lib/auth";
+import { Db } from "@/lib/db";
+import type { EditUserFormData } from "@/types/zod";
 import type { UpdateProfileFormData } from "@/types/zod.api";
+import { AuthError, DatabaseError, NotFoundError } from "./errors/errors";
 
 export const patchUser = (id: string, user: EditUserFormData) =>
 	Effect.gen(function* () {
@@ -262,4 +262,64 @@ export const updateUserProfile = (
 			createdAt: user.createdAt,
 			updatedAt: user.updatedAt,
 		};
+	});
+
+export const fetchUserSessions = (userId: string) =>
+	Effect.gen(function* () {
+		const { db } = yield* Db;
+
+		const result = yield* Effect.tryPromise({
+			try: () =>
+				db
+					.select()
+					.from(sessions)
+					.where(eq(sessions.userId, userId))
+					.orderBy(desc(sessions.createdAt)),
+			catch: (error) =>
+				new DatabaseError({
+					cause: error,
+					message: `Failed to fetch sessions for user ${userId}`,
+				}),
+		});
+
+		return result;
+	});
+
+export const revokeSession = (sessionId: string) =>
+	Effect.gen(function* () {
+		const { db } = yield* Db;
+
+		const result = yield* Effect.tryPromise({
+			try: () =>
+				db.delete(sessions).where(eq(sessions.id, sessionId)).returning(),
+			catch: (error) =>
+				new DatabaseError({
+					cause: error,
+					message: `Failed to revoke session ${sessionId}`,
+				}),
+		});
+
+		if (result.length === 0) {
+			return yield* Effect.fail(
+				new NotFoundError({ id: sessionId, entity: "Session" }),
+			);
+		}
+
+		return { success: true, id: sessionId };
+	});
+
+export const revokeAllUserSessions = (userId: string) =>
+	Effect.gen(function* () {
+		const { db } = yield* Db;
+
+		yield* Effect.tryPromise({
+			try: () => db.delete(sessions).where(eq(sessions.userId, userId)),
+			catch: (error) =>
+				new DatabaseError({
+					cause: error,
+					message: `Failed to revoke all sessions for user ${userId}`,
+				}),
+		});
+
+		return { success: true, userId };
 	});
