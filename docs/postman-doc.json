@@ -1292,6 +1292,963 @@
 					]
 				}
 			]
+		},
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "Get User Profile",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{API_KEY}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/api/users/profile",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"profile"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Successfully fetch user profile",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{TOKEN}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/users/profile",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"users",
+										"profile"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Successfully fetch user profile\",\n    \"data\": {\n        \"id\": \"user-uuid-123\",\n        \"fullname\": \"Devan Ferrel\",\n        \"email\": \"devan@gmail.com\",\n        \"image\": \"https://example.com/avatar.jpg\",\n        \"createdAt\": \"2026-01-12T05:15:12.000Z\",\n        \"updatedAt\": \"2026-01-12T05:15:12.000Z\"\n    }\n}"
+						},
+						{
+							"name": "User not found",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{TOKEN}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/users/profile",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"users",
+										"profile"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"User not found\"\n}"
+						},
+						{
+							"name": "Unauthorized - Missing or invalid token",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/users/profile",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"users",
+										"profile"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Unauthorized\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Update User Profile",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{API_KEY}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"fullname\": \"Devan Ferrel Updated\",\n    \"image\": \"https://example.com/new-avatar.jpg\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/users/profile",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"profile"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Successfully updated user profile",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{TOKEN}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"fullname\": \"Devan Ferrel Updated\",\n    \"image\": \"https://example.com/new-avatar.jpg\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/users/profile",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"users",
+										"profile"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Successfully updated user profile\",\n    \"data\": {\n        \"id\": \"user-uuid-123\",\n        \"fullname\": \"Devan Ferrel Updated\",\n        \"email\": \"devan@gmail.com\",\n        \"image\": \"https://example.com/new-avatar.jpg\",\n        \"createdAt\": \"2026-01-12T05:15:12.000Z\",\n        \"updatedAt\": \"2026-01-15T10:30:00.000Z\"\n    }\n}"
+						},
+						{
+							"name": "Validation error - fullname too short",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{TOKEN}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"fullname\": \"AB\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/users/profile",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"users",
+										"profile"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Validation failed\",\n    \"error\": [\n        {\n            \"path\": [\"fullname\"],\n            \"message\": \"String must contain at least 3 character(s)\"\n        }\n    ]\n}"
+						},
+						{
+							"name": "Validation error - invalid image URL",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{TOKEN}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"image\": \"not-a-valid-url\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/users/profile",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"users",
+										"profile"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Validation failed\",\n    \"error\": [\n        {\n            \"path\": [\"image\"],\n            \"message\": \"Invalid url\"\n        }\n    ]\n}"
+						},
+						{
+							"name": "User not found",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{TOKEN}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"fullname\": \"New Name\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/users/profile",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"users",
+										"profile"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"User not found\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "leaderboard",
+			"item": [
+				{
+					"name": "Get Leaderboard",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{API_KEY}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/api/leaderboard?limit=10",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"leaderboard"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "Number of users to return (1-100, default: 10)"
+								},
+								{
+									"key": "cursor",
+									"value": "0",
+									"description": "Pagination cursor (offset)",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Successfully fetch leaderboard",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{TOKEN}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/leaderboard?limit=10",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"leaderboard"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "10"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Successfully fetch leaderboard\",\n    \"data\": {\n        \"leaderboard\": [\n            {\n                \"rank\": 1,\n                \"userId\": \"user-uuid-1\",\n                \"fullname\": \"Top User\",\n                \"image\": \"https://example.com/avatar1.jpg\",\n                \"totalScore\": 950\n            },\n            {\n                \"rank\": 2,\n                \"userId\": \"user-uuid-2\",\n                \"fullname\": \"Second User\",\n                \"image\": \"https://example.com/avatar2.jpg\",\n                \"totalScore\": 820\n            },\n            {\n                \"rank\": 3,\n                \"userId\": \"user-uuid-3\",\n                \"fullname\": \"Third User\",\n                \"image\": null,\n                \"totalScore\": 750\n            }\n        ],\n        \"currentUser\": {\n            \"rank\": 5,\n            \"fullname\": \"Devan Ferrel\",\n            \"image\": \"https://example.com/my-avatar.jpg\",\n            \"totalScore\": 500\n        },\n        \"pagination\": {\n            \"nextCursor\": 10,\n            \"hasNextPage\": true\n        }\n    }\n}"
+						},
+						{
+							"name": "Successfully fetch leaderboard with cursor",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{TOKEN}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/leaderboard?limit=10&cursor=10",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"leaderboard"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "10"
+										},
+										{
+											"key": "cursor",
+											"value": "10"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Successfully fetch leaderboard\",\n    \"data\": {\n        \"leaderboard\": [\n            {\n                \"rank\": 11,\n                \"userId\": \"user-uuid-11\",\n                \"fullname\": \"User Eleven\",\n                \"image\": null,\n                \"totalScore\": 400\n            },\n            {\n                \"rank\": 12,\n                \"userId\": \"user-uuid-12\",\n                \"fullname\": \"User Twelve\",\n                \"image\": null,\n                \"totalScore\": 380\n            }\n        ],\n        \"currentUser\": {\n            \"rank\": 5,\n            \"fullname\": \"Devan Ferrel\",\n            \"image\": \"https://example.com/my-avatar.jpg\",\n            \"totalScore\": 500\n        },\n        \"pagination\": {\n            \"nextCursor\": null,\n            \"hasNextPage\": false\n        }\n    }\n}"
+						},
+						{
+							"name": "Invalid limit parameter",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{TOKEN}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/leaderboard?limit=200",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"leaderboard"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "200"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Invalid limit parameter. Must be between 1 and 100.\"\n}"
+						},
+						{
+							"name": "Invalid cursor parameter",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{TOKEN}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/leaderboard?limit=10&cursor=-5",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"leaderboard"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "10"
+										},
+										{
+											"key": "cursor",
+											"value": "-5"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Invalid cursor parameter.\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "questions",
+			"item": [
+				{
+					"name": "Get Questions by Type",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{API_KEY}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/api/questions?type=pretest",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"questions"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "pretest",
+									"description": "Question type: 'pretest' or 'quiz'"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Successfully fetch pretest questions",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/questions?type=pretest",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"questions"
+									],
+									"query": [
+										{
+											"key": "type",
+											"value": "pretest"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Successfully fetch questions\",\n    \"data\": {\n        \"questions\": [\n            {\n                \"id\": 1,\n                \"type\": \"pretest\",\n                \"chapter_id\": 1,\n                \"image_link\": null,\n                \"description\": \"Pertanyaan tentang dasar jaringan komputer\",\n                \"question\": \"Apa kepanjangan dari TCP?\",\n                \"options\": [\n                    {\n                        \"id\": 1,\n                        \"text\": \"Transmission Control Protocol\"\n                    },\n                    {\n                        \"id\": 2,\n                        \"text\": \"Transfer Control Protocol\"\n                    },\n                    {\n                        \"id\": 3,\n                        \"text\": \"Transmission Communication Protocol\"\n                    },\n                    {\n                        \"id\": 4,\n                        \"text\": \"Transfer Communication Protocol\"\n                    }\n                ]\n            },\n            {\n                \"id\": 2,\n                \"type\": \"pretest\",\n                \"chapter_id\": 1,\n                \"image_link\": null,\n                \"description\": \"Pertanyaan tentang OSI Layer\",\n                \"question\": \"Layer berapa yang bertanggung jawab untuk routing?\",\n                \"options\": [\n                    {\n                        \"id\": 5,\n                        \"text\": \"Layer 1 - Physical\"\n                    },\n                    {\n                        \"id\": 6,\n                        \"text\": \"Layer 2 - Data Link\"\n                    },\n                    {\n                        \"id\": 7,\n                        \"text\": \"Layer 3 - Network\"\n                    },\n                    {\n                        \"id\": 8,\n                        \"text\": \"Layer 4 - Transport\"\n                    }\n                ]\n            }\n        ]\n    }\n}"
+						},
+						{
+							"name": "Successfully fetch quiz questions",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/questions?type=quiz",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"questions"
+									],
+									"query": [
+										{
+											"key": "type",
+											"value": "quiz"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Successfully fetch questions\",\n    \"data\": {\n        \"questions\": [\n            {\n                \"id\": 3,\n                \"type\": \"quiz\",\n                \"chapter_id\": 1,\n                \"image_link\": null,\n                \"description\": \"Pertanyaan tentang definisi dan fungsi alamat IP.\",\n                \"question\": \"Apa fungsi utama dari alamat IP dalam jaringan komputer?\",\n                \"options\": [\n                    {\n                        \"id\": 9,\n                        \"text\": \"Mengenkripsi data yang dikirim melalui jaringan\"\n                    },\n                    {\n                        \"id\": 10,\n                        \"text\": \"Memberikan identitas unik pada setiap perangkat dalam jaringan\"\n                    },\n                    {\n                        \"id\": 11,\n                        \"text\": \"Mempercepat koneksi internet\"\n                    },\n                    {\n                        \"id\": 12,\n                        \"text\": \"Menyimpan data pengguna\"\n                    }\n                ]\n            }\n        ]\n    }\n}"
+						},
+						{
+							"name": "Missing type parameter",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/questions",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"questions"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Invalid or missing type search params\"\n}"
+						},
+						{
+							"name": "Invalid type parameter",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/questions?type=invalid",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"questions"
+									],
+									"query": [
+										{
+											"key": "type",
+											"value": "invalid"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Invalid or missing type search params\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "sessions",
+			"item": [
+				{
+					"name": "Revoke Session",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{API_KEY}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/api/sessions/:id",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"sessions",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "session-uuid-123",
+									"description": "Session ID to revoke"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Successfully revoked session",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/sessions/session-uuid-123",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"sessions",
+										"session-uuid-123"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Session revoked successfully\",\n    \"data\": {\n        \"success\": true,\n        \"id\": \"session-uuid-123\"\n    }\n}"
+						},
+						{
+							"name": "Session not found",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/sessions/non-existent-session",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"sessions",
+										"non-existent-session"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Session with id non-existent-session not found\"\n}"
+						},
+						{
+							"name": "Invalid session id - empty",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/sessions/   ",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"sessions",
+										"   "
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Invalid session id\"\n}"
+						}
+					]
+				}
+			]
 		}
 	]
 }
