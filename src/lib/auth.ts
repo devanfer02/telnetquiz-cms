@@ -1,6 +1,6 @@
 import { APIError, betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { admin, bearer } from "better-auth/plugins";
+import { admin, bearer, createAuthMiddleware } from "better-auth/plugins";
 import { db } from "./db";
 import * as schema from "../database/schema";
 import { Context, Layer } from "effect";
@@ -33,15 +33,25 @@ export const auth = betterAuth({
 		user: {
 			create: {
 				before: async (user, ctx) => {
-					if (ctx?.path === "/callback/:id") {
-						const allowedEmails = env.WHITELIST_GMAILS;
+					const allowedEmails = env.WHITELIST_GMAILS;
+					const isWhitelisted = allowedEmails.includes(user.email);
 
-						if (!allowedEmails.includes(user.email)) {
+					if (ctx?.path === "/callback/:id") {
+						if (!isWhitelisted) {
 							throw new APIError("FORBIDDEN", {
 								message: "This Google account isn't authorized to sign in.",
 								code: "WKKW",
 							});
 						}
+					}
+
+					if (isWhitelisted) {
+						return {
+							data: {
+								...user,
+								role: "admin",
+							},
+						};
 					}
 				},
 			},
@@ -49,6 +59,6 @@ export const auth = betterAuth({
 	},
 });
 
-export class Auth extends Context.Tag("Db")<Auth, { auth: typeof auth }>() {}
+export class Auth extends Context.Tag("Auth")<Auth, { auth: typeof auth }>() {}
 
 export const AuthLayer = Layer.succeed(Auth, { auth });

@@ -60,6 +60,7 @@ export const authMiddleware = createMiddleware().server(async ({ next }) => {
 	return await next({
 		context: {
 			user: session.user,
+			session: session.session,
 		},
 	});
 });

@@ -1,35 +1,30 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { Effect } from "effect";
 import { DbLayer } from "@/lib/db";
 import { HttpStatus, response } from "@/lib/http";
-import type { DatabaseError, NotFoundError } from "@/services/errors/errors";
+import { authMiddleware } from "@/middlewares/auth";
+import { DatabaseError, NotFoundError } from "@/services/errors/errors";
 import { revokeSession } from "@/services/users";
+import { createFileRoute } from "@tanstack/react-router";
+import { Effect } from "effect";
 
-export const Route = createFileRoute("/api/(internal)/sessions/$id")({
+export const Route = createFileRoute("/api/(internal)/sessions")({
 	server: {
+		middleware: [authMiddleware],
 		handlers: {
-			DELETE: async ({ params }) =>
+			DELETE: async ({ context }) =>
 				Effect.runPromise(
 					Effect.gen(function* () {
-						const { id } = params;
+						const sessionId = context.session.id;
 
-						if (!id || id.trim() === "") {
-							return response(
+						const result = yield* revokeSession(sessionId);
+
+						return yield* Effect.succeed(
+							response(
 								{
-									message: "Invalid session id",
+									message: "Session revoked successfully",
+									data: result,
 								},
-								HttpStatus.BAD_REQUEST,
-							);
-						}
-
-						const result = yield* revokeSession(id);
-
-						return response(
-							{
-								message: "Session revoked successfully",
-								data: result,
-							},
-							HttpStatus.OK,
+								HttpStatus.OK,
+							),
 						);
 					}).pipe(
 						Effect.provide(DbLayer),
@@ -38,7 +33,8 @@ export const Route = createFileRoute("/api/(internal)/sessions/$id")({
 								Effect.succeed(
 									response(
 										{
-											message: `${err.entity} with id ${err.id} not found`,
+											message: "Failed to find specific session id",
+											error: err.message,
 										},
 										HttpStatus.NOT_FOUND,
 									),
@@ -47,10 +43,10 @@ export const Route = createFileRoute("/api/(internal)/sessions/$id")({
 								Effect.succeed(
 									response(
 										{
-											message: "Failed to revoke session",
+											message: `Failed to delete session`,
 											error: err.message,
 										},
-										HttpStatus.INTERNAL_SERVER_ERROR,
+										HttpStatus.NOT_FOUND,
 									),
 								),
 						}),

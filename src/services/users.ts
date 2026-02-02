@@ -6,6 +6,7 @@ import { Db } from "@/lib/db";
 import type { EditUserFormData } from "@/types/zod";
 import type { UpdateProfileFormData } from "@/types/zod.api";
 import { AuthError, DatabaseError, NotFoundError } from "./errors/errors";
+import { getRequestHeaders } from "@tanstack/react-start/server";
 
 export const patchUser = (id: string, user: EditUserFormData) =>
 	Effect.gen(function* () {
@@ -34,6 +35,8 @@ export const patchUser = (id: string, user: EditUserFormData) =>
 		}
 
 		const password = user.password;
+		const headers = getRequestHeaders();
+		console.log(headers);
 
 		if (password) {
 			yield* Effect.tryPromise({
@@ -43,9 +46,10 @@ export const patchUser = (id: string, user: EditUserFormData) =>
 							newPassword: password,
 							userId: result[0].id,
 						},
+						headers: headers,
 					}),
 				catch: (err) => {
-					new AuthError({
+					return new AuthError({
 						message: (err as Error).message,
 					});
 				},
