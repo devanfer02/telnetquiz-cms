@@ -13,7 +13,6 @@ export const Route = createFileRoute("/api/(internal)/auth/login")({
 					Effect.gen(function* () {
 						const body = yield* Effect.tryPromise(() => request.json());
 						const data = yield* parseBody(loginUserSchema, body);
-
 						const result = yield* loginUser(data);
 
 						return response(

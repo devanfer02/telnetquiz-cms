@@ -1,7 +1,7 @@
 import { options, questions } from "@/database/schema";
 import { Db } from "@/lib/db";
 import type { QuestionFormData, QuestionsFormData } from "@/types/zod";
-import { desc, eq } from "drizzle-orm";
+import { asc, desc, eq } from "drizzle-orm";
 import { Effect } from "effect";
 import { DatabaseError, NotFoundError } from "./errors/errors";
 import { deleteFile, uploadFile } from "./image";
@@ -24,6 +24,27 @@ export const fetchAllQuestions = Effect.gen(function* () {
 			}),
 	});
 });
+
+export const fetchQuestionsByType = (type: "pretest" | "quiz") =>
+	Effect.gen(function* () {
+		const { db } = yield* Db;
+
+		return yield* Effect.tryPromise({
+			try: () =>
+				db.query.questions.findMany({
+					where: eq(questions.type, type),
+					orderBy: [asc(questions.chapterId), asc(questions.id)],
+					with: {
+						options: true,
+					},
+				}),
+			catch: (err) =>
+				new DatabaseError({
+					cause: err,
+					message: `Failed to fetch questions of type ${type}`,
+				}),
+		});
+	});
 
 export const fetchQuestionById = (id: number) =>
 	Effect.gen(function* () {
@@ -62,7 +83,13 @@ export const createQuestions = (data: QuestionsFormData) =>
 					if (q.image instanceof File) {
 						imageLink = yield* uploadFile(q.image);
 					}
-					return { ...q, imageLink };
+					return {
+						...q,
+						imageLink,
+						quizId: q.quizId === 0 ? null : q.quizId,
+						chapterId: q.chapterId === 0 ? null : q.chapterId,
+						materialId: q.materialId === 0 ? null : q.materialId,
+					};
 				}),
 			),
 			{ concurrency: 5 },
@@ -78,9 +105,9 @@ export const createQuestions = (data: QuestionsFormData) =>
 						.values(
 							questionsWithImages.map((q) => ({
 								type: data.type,
-								quizId: data.quizId,
-								chapterId: data.chapterId,
-								materialId: data.materialId,
+								quizId: q.quizId,
+								chapterId: q.chapterId,
+								materialId: q.materialId,
 								description: q.description,
 								question: q.question,
 								imageLink: q.imageLink,

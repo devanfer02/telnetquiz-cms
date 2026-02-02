@@ -13,7 +13,7 @@ import { z } from "zod";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 
-export const Route = createFileRoute("/(auth)/auth/sign-in")({
+export const Route = createFileRoute("/auth/sign-in")({
 	component: SignInComponent,
 	validateSearch: z.object({
 		error: z.string().optional(),
@@ -21,7 +21,7 @@ export const Route = createFileRoute("/(auth)/auth/sign-in")({
 });
 
 function SignInComponent() {
-	const search = useSearch({ from: "/(auth)/auth/sign-in" });
+	const search = useSearch({ from: "/auth/sign-in" });
 	const [isLoading, setIsLoading] = useState(false);
 
 	const handleGoogleSignIn = async () => {

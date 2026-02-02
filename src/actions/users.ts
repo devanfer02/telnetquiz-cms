@@ -1,10 +1,16 @@
-import { AuthLayer } from "@/lib/auth";
-import { DbLayer } from "@/lib/db";
-import { deleteUser, patchUser } from "@/services/users";
-import { idStringSchema, editUserSchema } from "@/types/zod";
 import { createServerFn } from "@tanstack/react-start";
 import { Effect } from "effect";
 import z from "zod";
+import { AuthLayer } from "@/lib/auth";
+import { DbLayer } from "@/lib/db";
+import {
+	deleteUser,
+	fetchUserSessions,
+	patchUser,
+	revokeAllUserSessions,
+	revokeSession,
+} from "@/services/users";
+import { editUserSchema, idStringSchema } from "@/types/zod";
 
 export const updateUser = createServerFn({
 	method: "POST",
@@ -40,6 +46,63 @@ export const removeUser = createServerFn({
 				Effect.provide(DbLayer),
 				Effect.catchAll((err) => {
 					console.error("Failed to delete user. ERR:", err);
+
+					return Effect.succeed(null);
+				}),
+			),
+		);
+	});
+
+export const getUserSessions = createServerFn({
+	method: "GET",
+})
+	.inputValidator(idStringSchema)
+	.handler(async ({ data }) => {
+		const { id } = data;
+
+		return Effect.runPromise(
+			fetchUserSessions(id).pipe(
+				Effect.provide(DbLayer),
+				Effect.catchAll((err) => {
+					console.error("Failed to fetch user sessions. ERR:", err);
+
+					return Effect.succeed([]);
+				}),
+			),
+		);
+	});
+
+export const deleteSession = createServerFn({
+	method: "POST",
+})
+	.inputValidator(idStringSchema)
+	.handler(async ({ data }) => {
+		const { id } = data;
+
+		return Effect.runPromise(
+			revokeSession(id).pipe(
+				Effect.provide(DbLayer),
+				Effect.catchAll((err) => {
+					console.error("Failed to revoke session. ERR:", err);
+
+					return Effect.succeed(null);
+				}),
+			),
+		);
+	});
+
+export const deleteAllUserSessions = createServerFn({
+	method: "POST",
+})
+	.inputValidator(idStringSchema)
+	.handler(async ({ data }) => {
+		const { id } = data;
+
+		return Effect.runPromise(
+			revokeAllUserSessions(id).pipe(
+				Effect.provide(DbLayer),
+				Effect.catchAll((err) => {
+					console.error("Failed to revoke all user sessions. ERR:", err);
 
 					return Effect.succeed(null);
 				}),

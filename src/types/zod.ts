@@ -39,9 +39,9 @@ export const optionSchema = z.object({
 
 export const questionSchema = z.object({
 	type: z.enum(["pretest", "quiz"]),
-	quizId: z.number().optional(),
-	chapterId: z.number().optional(),
-	materialId: z.number().optional(),
+	quizId: z.number().optional().nullable(),
+	chapterId: z.number().optional().nullable(),
+	materialId: z.number().optional().nullable(),
 	image: imageFileSchema,
 	description: z
 		.string()
@@ -62,8 +62,8 @@ export const questionSchema = z.object({
 
 export const questionsSchema = z.object({
 	type: z.enum(["pretest", "quiz"]),
-	quizId: z.number().optional(),
-	chapterId: z.number().optional(),
+	quizId: z.number().optional().nullable(),
+	chapterId: z.number().optional().nullable(),
 	materialId: z.number().optional(),
 	questions: z.array(questionSchema),
 });

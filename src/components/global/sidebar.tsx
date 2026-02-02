@@ -15,13 +15,14 @@ import {
 	SidebarMenuItem,
 } from "../ui/sidebar";
 import { authClient } from "@/lib/auth-client";
+import { useAuth } from "@/providers/auth";
 
 const isActive = (currentPath: string, itemUrl: string) => {
 	return currentPath === itemUrl || currentPath.startsWith(itemUrl + "/");
 };
 
 export default function AppSidebar() {
-	const { data: session, isPending } = authClient.useSession();
+	const { session, isPending } = useAuth();
 	const routerState = useRouterState();
 	const navigate = useNavigate();
 

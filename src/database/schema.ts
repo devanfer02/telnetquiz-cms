@@ -142,6 +142,28 @@ export const submissions = pgTable("submissions", {
 	...timestamps,
 });
 
+export const pretestSubmissions = pgTable(
+	"pretest_submissions",
+	{
+		id: serial().primaryKey(),
+		userId: text("user_id")
+			.notNull()
+			.references(() => users.id, { onDelete: "cascade" }),
+		questionId: integer("question_id")
+			.notNull()
+			.references(() => questions.id, { onDelete: "cascade" }),
+		answeredOptionId: integer("answered_option_id")
+			.notNull()
+			.references(() => options.id, { onDelete: "cascade" }),
+		isCorrect: boolean("is_correct").notNull(),
+		...timestamps,
+	},
+	(table) => [
+		index("pretest_submissions_userId_idx").on(table.userId),
+		index("pretest_submissions_questionId_idx").on(table.questionId),
+	],
+);
+
 export const studyMaterials = pgTable("study_materials", {
 	id: serial().primaryKey(),
 	title: varchar().notNull(),
@@ -204,6 +226,24 @@ export const submissionsRelations = relations(submissions, ({ one }) => ({
 		references: [quizzes.id],
 	}),
 }));
+
+export const pretestSubmissionsRelations = relations(
+	pretestSubmissions,
+	({ one }) => ({
+		user: one(users, {
+			fields: [pretestSubmissions.userId],
+			references: [users.id],
+		}),
+		question: one(questions, {
+			fields: [pretestSubmissions.questionId],
+			references: [questions.id],
+		}),
+		answeredOption: one(options, {
+			fields: [pretestSubmissions.answeredOptionId],
+			references: [options.id],
+		}),
+	}),
+);
 
 export const userRelations = relations(users, ({ many }) => ({
 	sessions: many(sessions),

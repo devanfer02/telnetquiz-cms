@@ -24,11 +24,14 @@ interface QuestionFormProps {
 	buttonText: string;
 }
 
-function createEmptyQuestion(index: number): QuestionFormData {
+function createEmptyQuestion(
+	index: number,
+	type: "pretest" | "quiz",
+): QuestionFormData {
 	return {
-		type: "quiz",
-		quizId: 0,
-		chapterId: 0,
+		type: type,
+		quizId: null,
+		chapterId: null,
 		materialId: 0,
 		description: "",
 		question: "",
@@ -97,9 +100,13 @@ export default function QuestionForm({ form, buttonText }: QuestionFormProps) {
 							<div className="relative">
 								<select
 									id={field.name}
-									value={field.state.value}
+									value={field.state.value ?? ""}
 									onBlur={field.handleBlur}
-									onChange={(e) => field.handleChange(Number(e.target.value))}
+									onChange={(e) =>
+										field.handleChange(
+											e.target.value === "" ? null : Number(e.target.value),
+										)
+									}
 									className="flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1"
 								>
 									<option value={0} hidden>
@@ -134,9 +141,13 @@ export default function QuestionForm({ form, buttonText }: QuestionFormProps) {
 							<div className="relative">
 								<select
 									id={field.name}
-									value={field.state.value}
+									value={field.state.value ?? ""}
 									onBlur={field.handleBlur}
-									onChange={(e) => field.handleChange(Number(e.target.value))}
+									onChange={(e) =>
+										field.handleChange(
+											e.target.value === "" ? null : Number(e.target.value),
+										)
+									}
 									className="flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1"
 								>
 									<option value={0} hidden>
@@ -168,7 +179,7 @@ export default function QuestionForm({ form, buttonText }: QuestionFormProps) {
 			>
 				{(field) => (
 					<div className="space-y-2">
-						<Label htmlFor={field.name}>Study Material</Label>
+						<Label htmlFor={field.name}>Study Material (Optional)</Label>
 						<div className="relative">
 							<select
 								id={field.name}
@@ -208,7 +219,10 @@ export default function QuestionForm({ form, buttonText }: QuestionFormProps) {
 						onClick={() => {
 							form.pushFieldValue(
 								"questions",
-								createEmptyQuestion(form.getFieldValue("questions").length),
+								createEmptyQuestion(
+									form.getFieldValue("questions").length,
+									type,
+								),
 							);
 						}}
 					>

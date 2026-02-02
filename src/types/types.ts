@@ -69,3 +69,24 @@ type StudyMaterial = {
 	createdAt: Date;
 	updatedAt: Date;
 };
+
+type PretestSubmissionItem = {
+	question_id: number;
+	answered_option_id: number;
+};
+
+type QuizAnswerItem = {
+	question_id: number;
+	answered_option_id: number;
+};
+
+type Session = {
+	id: string;
+	userId: string;
+	token: string;
+	expiresAt: Date;
+	ipAddress: string | null;
+	userAgent: string | null;
+	createdAt: Date;
+	updatedAt: Date;
+};

@@ -1,3 +1,7 @@
+import { useQueryClient } from "@tanstack/react-query";
+import { Edit, Trash2 } from "lucide-react";
+import { useState } from "react";
+import { removeUser, updateUser } from "@/actions/users";
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -9,6 +13,7 @@ import {
 	AlertDialogTitle,
 	AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 import {
 	Sheet,
 	SheetContent,
@@ -17,16 +22,12 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
-import { Edit, Trash2 } from "lucide-react";
-import { useState } from "react";
 import { useCustomForm } from "@/hooks/use-custom-form";
-import UserForm from "./user-form";
-import { updateUser, removeUser } from "@/actions/users";
-import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@/lib/constant";
 import { setFlashState } from "@/store/use-flash";
-import { EditUserFormData } from "@/types/zod";
+import type { EditUserFormData } from "@/types/zod";
+import UserForm from "./user-form";
+import UserSessions from "./user-sessions";
 
 interface UserActionsProps {
 	user: User;
@@ -84,6 +85,8 @@ export default function UserActions({ user }: UserActionsProps) {
 
 	return (
 		<div className="flex gap-2">
+			<UserSessions user={user} />
+
 			<Sheet open={open} onOpenChange={setOpen}>
 				<SheetTrigger asChild>
 					<Button

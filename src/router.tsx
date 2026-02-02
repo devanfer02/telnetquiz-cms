@@ -14,6 +14,7 @@ export const getRouter = () => {
 		context: {
 			queryClient: rqContext.queryClient,
 			user: null,
+			session: null,
 		},
 		defaultPreload: "intent",
 		Wrap: (props: { children: React.ReactNode }) => {
