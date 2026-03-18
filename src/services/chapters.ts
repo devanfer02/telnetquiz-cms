@@ -168,7 +168,7 @@ export const fetchChaptersWithUserPerformance = (userId: string) =>
 		};
 	});
 
-export const fetchChapterById = (id: number) =>
+export const fetchChapterById = (id: number, userId?: string) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
@@ -199,7 +199,27 @@ export const fetchChapterById = (id: number) =>
 			return yield* Effect.fail(new NotFoundError({ id, entity: "Chapter" }));
 		}
 
-		return result;
+		let completedQuizIds: number[] = [];
+		if (userId) {
+			const completedQuizzes = yield* dbTryPromise({
+				try: () =>
+					db
+						.select({ quizId: submissions.quizId })
+						.from(submissions)
+						.where(eq(submissions.userId, userId)),
+				catch: (err) =>
+					new DatabaseError({
+						cause: err,
+						message: `Failed to fetch completed quizzes for chapter ${id}`,
+					}),
+			});
+
+			completedQuizIds = completedQuizzes
+				.filter((s) => s.quizId !== null)
+				.map((s) => s.quizId as number);
+		}
+
+		return { ...result, completedQuizIds };
 	});
 
 export const createChapter = (chapter: ChapterFormData) =>

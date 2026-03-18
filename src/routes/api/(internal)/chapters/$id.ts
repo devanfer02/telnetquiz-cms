@@ -2,13 +2,15 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Effect } from "effect";
 import { DbLayer } from "@/lib/db";
 import { HttpStatus, response } from "@/lib/http";
+import { authMiddleware } from "@/middlewares/auth";
 import { fetchChapterById } from "@/services/chapters";
 import type { DatabaseError, NotFoundError } from "@/services/errors/errors";
 
 export const Route = createFileRoute("/api/(internal)/chapters/$id")({
 	server: {
+		middleware: [authMiddleware],
 		handlers: {
-			GET: async ({ params }) =>
+			GET: async ({ params, context }) =>
 				Effect.runPromise(
 					Effect.gen(function* () {
 						const id = Number(params.id);
@@ -22,7 +24,7 @@ export const Route = createFileRoute("/api/(internal)/chapters/$id")({
 							);
 						}
 
-						const result = yield* fetchChapterById(id);
+						const result = yield* fetchChapterById(id, context.user.id);
 
 						return response(
 							{

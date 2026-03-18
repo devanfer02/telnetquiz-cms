@@ -212,6 +212,75 @@ export const fetchUserProfile = (userId: string) =>
 
 		const user = result[0];
 
+		// Fetch stats: totalScore and levelsCompleted
+		const scoreResult = yield* dbTryPromise({
+			try: () =>
+				db
+					.select({
+						totalScore: sql<number>`COALESCE(SUM(${submissions.score}), 0)`,
+						levelsCompleted: sql<number>`COUNT(DISTINCT ${submissions.quizId})`,
+					})
+					.from(submissions)
+					.where(eq(submissions.userId, userId)),
+			catch: (error) =>
+				new DatabaseError({
+					cause: error,
+					message: "Failed to fetch user stats",
+				}),
+		});
+
+		// Fetch chaptersCompleted: chapters where user completed ALL quizzes
+		const allChaptersData = yield* dbTryPromise({
+			try: () =>
+				db
+					.select({
+						id: chapters.id,
+						quizCount: sql<number>`count(${quizzes.id})`.as("quiz_count"),
+					})
+					.from(chapters)
+					.leftJoin(quizzes, eq(chapters.id, quizzes.chapterId))
+					.groupBy(chapters.id),
+			catch: (error) =>
+				new DatabaseError({
+					cause: error,
+					message: "Failed to fetch chapters for stats",
+				}),
+		});
+
+		const userSubmissions = yield* dbTryPromise({
+			try: () =>
+				db
+					.select({
+						chapterId: submissions.chapterId,
+						quizId: submissions.quizId,
+					})
+					.from(submissions)
+					.where(eq(submissions.userId, userId)),
+			catch: (error) =>
+				new DatabaseError({
+					cause: error,
+					message: "Failed to fetch user submissions for stats",
+				}),
+		});
+
+		const completedByChapter = new Map<number, Set<number>>();
+		for (const sub of userSubmissions) {
+			if (sub.chapterId == null || sub.quizId == null) continue;
+			const set = completedByChapter.get(sub.chapterId) ?? new Set();
+			set.add(sub.quizId);
+			completedByChapter.set(sub.chapterId, set);
+		}
+
+		let chaptersCompleted = 0;
+		for (const chapter of allChaptersData) {
+			const quizCount = Number(chapter.quizCount);
+			if (quizCount === 0) continue;
+			const completed = completedByChapter.get(chapter.id);
+			if (completed && completed.size >= quizCount) {
+				chaptersCompleted++;
+			}
+		}
+
 		return {
 			id: user.id,
 			fullname: user.name,
@@ -219,6 +288,11 @@ export const fetchUserProfile = (userId: string) =>
 			image: user.image,
 			createdAt: user.createdAt,
 			updatedAt: user.updatedAt,
+			stats: {
+				total_score: Number(scoreResult[0]?.totalScore ?? 0),
+				levels_completed: Number(scoreResult[0]?.levelsCompleted ?? 0),
+				chapters_completed: chaptersCompleted,
+			},
 		};
 	});
 
@@ -264,16 +338,7 @@ export const updateUserProfile = (
 			);
 		}
 
-		const user = result[0];
-
-		return {
-			id: user.id,
-			fullname: user.name,
-			email: user.email,
-			image: user.image,
-			createdAt: user.createdAt,
-			updatedAt: user.updatedAt,
-		};
+		return yield* fetchUserProfile(userId);
 	});
 
 export const fetchUserSessions = (userId: string) =>
