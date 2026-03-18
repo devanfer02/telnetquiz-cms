@@ -1,19 +1,27 @@
-import { desc, eq, sql } from "drizzle-orm";
+import { getRequestHeaders } from "@tanstack/react-start/server";
+import { and, desc, eq, sql } from "drizzle-orm";
 import { Effect } from "effect";
-import { sessions, submissions, users } from "@/database/schema";
+import {
+	chapters,
+	pretestSubmissions,
+	quizzes,
+	sessions,
+	submissions,
+	users,
+} from "@/database/schema";
 import { Auth } from "@/lib/auth";
 import { Db } from "@/lib/db";
+import { dbTryPromise } from "@/lib/retry";
 import type { EditUserFormData } from "@/types/zod";
 import type { UpdateProfileFormData } from "@/types/zod.api";
 import { AuthError, DatabaseError, NotFoundError } from "./errors/errors";
-import { getRequestHeaders } from "@tanstack/react-start/server";
 
 export const patchUser = (id: string, user: EditUserFormData) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 		const { auth } = yield* Auth;
 
-		const result = yield* Effect.tryPromise({
+		const result = yield* dbTryPromise({
 			try: () =>
 				db
 					.update(users)
@@ -63,7 +71,7 @@ export const deleteUser = (id: string) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
-		yield* Effect.tryPromise({
+		yield* dbTryPromise({
 			try: () => db.delete(users).where(eq(users.id, id)),
 			catch: (error) =>
 				new DatabaseError({
@@ -99,7 +107,7 @@ export const fetchLeaderboard = (
 			.orderBy(desc(sql`total_score`), users.id)
 			.limit(limit + 1);
 
-		const leaderboard = yield* Effect.tryPromise({
+		const leaderboard = yield* dbTryPromise({
 			try: () => (cursor ? leaderboardQuery.offset(cursor) : leaderboardQuery),
 			catch: (error) =>
 				new DatabaseError({
@@ -114,7 +122,7 @@ export const fetchLeaderboard = (
 		const nextCursor = hasNextPage ? (cursor ?? 0) + limit : null;
 
 		// Get current user's rank
-		const userRankResult = yield* Effect.tryPromise({
+		const userRankResult = yield* dbTryPromise({
 			try: () =>
 				db.execute(sql`
 					SELECT rank FROM (
@@ -137,7 +145,7 @@ export const fetchLeaderboard = (
 		const userRank = userRankResult.rows[0]?.rank as number | null;
 
 		// Get current user's total score
-		const userScoreResult = yield* Effect.tryPromise({
+		const userScoreResult = yield* dbTryPromise({
 			try: () =>
 				db
 					.select({
@@ -187,7 +195,7 @@ export const fetchUserProfile = (userId: string) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
-		const result = yield* Effect.tryPromise({
+		const result = yield* dbTryPromise({
 			try: () => db.select().from(users).where(eq(users.id, userId)).limit(1),
 			catch: (error) =>
 				new DatabaseError({
@@ -236,7 +244,7 @@ export const updateUserProfile = (
 			return yield* fetchUserProfile(userId);
 		}
 
-		const result = yield* Effect.tryPromise({
+		const result = yield* dbTryPromise({
 			try: () =>
 				db
 					.update(users)
@@ -272,7 +280,7 @@ export const fetchUserSessions = (userId: string) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
-		const result = yield* Effect.tryPromise({
+		const result = yield* dbTryPromise({
 			try: () =>
 				db
 					.select()
@@ -293,7 +301,7 @@ export const revokeSession = (sessionId: string) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
-		const result = yield* Effect.tryPromise({
+		const result = yield* dbTryPromise({
 			try: () =>
 				db.delete(sessions).where(eq(sessions.id, sessionId)).returning(),
 			catch: (error) =>
@@ -316,7 +324,7 @@ export const revokeAllUserSessions = (userId: string) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
-		yield* Effect.tryPromise({
+		yield* dbTryPromise({
 			try: () => db.delete(sessions).where(eq(sessions.userId, userId)),
 			catch: (error) =>
 				new DatabaseError({
@@ -326,4 +334,169 @@ export const revokeAllUserSessions = (userId: string) =>
 		});
 
 		return { success: true, userId };
+	});
+
+export const fetchUserAchievements = (userId: string) =>
+	Effect.gen(function* () {
+		const { db } = yield* Db;
+
+		type Achievement = {
+			id: string;
+			title: string;
+			description: string;
+			unlocked: boolean;
+			unlockedAt: string | null;
+		};
+
+		const achievements: Achievement[] = [];
+
+		// 1. "Penjelajah Pretest" - completed pretest
+		const pretestEntry = yield* dbTryPromise({
+			try: () =>
+				db.query.pretestSubmissions.findFirst({
+					where: eq(pretestSubmissions.userId, userId),
+					columns: { createdAt: true },
+				}),
+			catch: (err) =>
+				new DatabaseError({
+					cause: err,
+					message: "Failed to check pretest submissions",
+				}),
+		});
+
+		achievements.push({
+			id: "pretest_complete",
+			title: "Penjelajah Pretest",
+			description: "Menyelesaikan pretest",
+			unlocked: pretestEntry !== undefined,
+			unlockedAt: pretestEntry?.createdAt?.toISOString() ?? null,
+		});
+
+		// 2. "Kuis Pertama" - completed first quiz
+		const firstSubmission = yield* dbTryPromise({
+			try: () =>
+				db.query.submissions.findFirst({
+					where: eq(submissions.userId, userId),
+					orderBy: submissions.createdAt,
+					columns: { createdAt: true },
+				}),
+			catch: (err) =>
+				new DatabaseError({
+					cause: err,
+					message: "Failed to check quiz submissions",
+				}),
+		});
+
+		achievements.push({
+			id: "first_quiz",
+			title: "Kuis Pertama",
+			description: "Menyelesaikan kuis pertama",
+			unlocked: firstSubmission !== undefined,
+			unlockedAt: firstSubmission?.createdAt?.toISOString() ?? null,
+		});
+
+		// 3. "Nilai Sempurna" - got 100% on any quiz
+		const perfectScore = yield* dbTryPromise({
+			try: () =>
+				db.query.submissions.findFirst({
+					where: and(
+						eq(submissions.userId, userId),
+						eq(submissions.score, 100),
+					),
+					columns: { createdAt: true },
+				}),
+			catch: (err) =>
+				new DatabaseError({
+					cause: err,
+					message: "Failed to check perfect scores",
+				}),
+		});
+
+		achievements.push({
+			id: "perfect_score",
+			title: "Nilai Sempurna",
+			description: "Mendapatkan nilai 100 pada kuis",
+			unlocked: perfectScore !== undefined,
+			unlockedAt: perfectScore?.createdAt?.toISOString() ?? null,
+		});
+
+		// 4. "Penguasa Bab" - completed all quizzes in any chapter
+		const allChapters = yield* dbTryPromise({
+			try: () =>
+				db
+					.select({
+						id: chapters.id,
+						quizCount: sql<number>`count(${quizzes.id})`.as("quiz_count"),
+					})
+					.from(chapters)
+					.leftJoin(quizzes, eq(chapters.id, quizzes.chapterId))
+					.groupBy(chapters.id),
+			catch: (err) =>
+				new DatabaseError({
+					cause: err,
+					message: "Failed to fetch chapters with quiz counts",
+				}),
+		});
+
+		const userSubmissions = yield* dbTryPromise({
+			try: () =>
+				db
+					.select({
+						chapterId: submissions.chapterId,
+						quizId: submissions.quizId,
+						createdAt: submissions.createdAt,
+					})
+					.from(submissions)
+					.where(eq(submissions.userId, userId)),
+			catch: (err) =>
+				new DatabaseError({
+					cause: err,
+					message: "Failed to fetch user submissions for chapter mastery",
+				}),
+		});
+
+		// Group user's completed quizzes by chapter
+		const completedQuizzesByChapter = new Map<
+			number,
+			{ quizIds: Set<number>; latestDate: Date }
+		>();
+		for (const sub of userSubmissions) {
+			if (sub.chapterId == null || sub.quizId == null) continue;
+			const entry = completedQuizzesByChapter.get(sub.chapterId);
+			if (entry) {
+				entry.quizIds.add(sub.quizId);
+				if (sub.createdAt && sub.createdAt > entry.latestDate) {
+					entry.latestDate = sub.createdAt;
+				}
+			} else {
+				completedQuizzesByChapter.set(sub.chapterId, {
+					quizIds: new Set([sub.quizId]),
+					latestDate: sub.createdAt ?? new Date(),
+				});
+			}
+		}
+
+		let chapterMasteryUnlocked = false;
+		let chapterMasteryDate: string | null = null;
+
+		for (const chapter of allChapters) {
+			const quizCount = Number(chapter.quizCount);
+			if (quizCount === 0) continue;
+			const completed = completedQuizzesByChapter.get(chapter.id);
+			if (completed && completed.quizIds.size >= quizCount) {
+				chapterMasteryUnlocked = true;
+				chapterMasteryDate = completed.latestDate.toISOString();
+				break;
+			}
+		}
+
+		achievements.push({
+			id: "chapter_master",
+			title: "Penguasa Bab",
+			description: "Menyelesaikan semua kuis dalam satu bab",
+			unlocked: chapterMasteryUnlocked,
+			unlockedAt: chapterMasteryDate,
+		});
+
+		return { achievements };
 	});

@@ -1,14 +1,15 @@
-import { questions, quizzes, submissions } from "@/database/schema";
-import { Db } from "@/lib/db";
 import { desc, eq, sql } from "drizzle-orm";
 import { Effect } from "effect";
+import { questions, quizzes, submissions } from "@/database/schema";
+import { Db } from "@/lib/db";
+import { dbTryPromise } from "@/lib/retry";
+import type { QuizFormData } from "@/types/zod";
 import { DatabaseError, NotFoundError, ValidationError } from "./errors/errors";
-import { QuizFormData } from "@/types/zod";
 
 export const fetchAllQuizzes = Effect.gen(function* () {
 	const { db } = yield* Db;
 
-	return yield* Effect.tryPromise({
+	return yield* dbTryPromise({
 		try: () =>
 			db.query.quizzes.findMany({
 				orderBy: desc(quizzes.createdAt),
@@ -35,7 +36,7 @@ export const fetchQuizById = (id: number) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
-		const result = yield* Effect.tryPromise({
+		const result = yield* dbTryPromise({
 			try: () =>
 				db.query.quizzes.findFirst({
 					where: eq(quizzes.id, id),
@@ -68,7 +69,7 @@ export const createQuiz = (quiz: QuizFormData) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
-		const result = yield* Effect.tryPromise({
+		const result = yield* dbTryPromise({
 			try: () => db.insert(quizzes).values(quiz).returning(),
 			catch: (err) =>
 				new DatabaseError({
@@ -84,7 +85,7 @@ export const patchQuiz = (id: number, quiz: QuizFormData) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
-		const result = yield* Effect.tryPromise({
+		const result = yield* dbTryPromise({
 			try: () =>
 				db.update(quizzes).set(quiz).where(eq(quizzes.id, id)).returning(),
 			catch: (err) =>
@@ -105,7 +106,7 @@ export const deleteQuiz = (id: number) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
-		yield* Effect.tryPromise({
+		yield* dbTryPromise({
 			try: () => db.delete(quizzes).where(eq(quizzes.id, id)),
 			catch: (err) =>
 				new DatabaseError({
@@ -121,7 +122,7 @@ export const fetchQuizByIdWithQuestionsAndOptions = (id: number) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
-		const result = yield* Effect.tryPromise({
+		const result = yield* dbTryPromise({
 			try: () =>
 				db.query.quizzes.findFirst({
 					where: eq(quizzes.id, id),
@@ -155,7 +156,7 @@ export const submitQuizAnswers = (
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
-		const quiz = yield* Effect.tryPromise({
+		const quiz = yield* dbTryPromise({
 			try: () =>
 				db.query.quizzes.findFirst({
 					where: eq(quizzes.id, quizId),
@@ -212,7 +213,7 @@ export const submitQuizAnswers = (
 		const score =
 			totalQuestions > 0 ? (correctCount / totalQuestions) * 100 : 0;
 
-		yield* Effect.tryPromise({
+		yield* dbTryPromise({
 			try: () =>
 				db.insert(submissions).values({
 					userId,

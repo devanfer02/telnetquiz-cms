@@ -1,15 +1,16 @@
-import { studyMaterials } from "@/database/schema";
-import { Db } from "@/lib/db";
 import { desc, eq } from "drizzle-orm";
 import { Effect } from "effect";
+import { studyMaterials } from "@/database/schema";
+import { Db } from "@/lib/db";
+import { dbTryPromise } from "@/lib/retry";
+import type { StudyMaterialFormData } from "@/types/zod";
 import { DatabaseError, NotFoundError } from "./errors/errors";
-import { StudyMaterialFormData } from "@/types/zod";
 import { deleteFile, uploadFile } from "./image";
 
 export const fetchAllStudyMaterials = Effect.gen(function* () {
 	const { db } = yield* Db;
 
-	return yield* Effect.tryPromise({
+	return yield* dbTryPromise({
 		try: () =>
 			db.select().from(studyMaterials).orderBy(desc(studyMaterials.createdAt)),
 		catch: (err) =>
@@ -24,7 +25,7 @@ export const fetchStudyMaterialById = (id: number) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
-		const result = yield* Effect.tryPromise({
+		const result = yield* dbTryPromise({
 			try: () =>
 				db.query.studyMaterials.findFirst({
 					where: eq(studyMaterials.id, id),
@@ -58,7 +59,7 @@ export const createStudyMaterial = (studyMaterial: StudyMaterialFormData) =>
 			imageLink = yield* uploadFile(studyMaterial.imageFile);
 		}
 
-		const [material] = yield* Effect.tryPromise({
+		const [material] = yield* dbTryPromise({
 			try: () =>
 				db
 					.insert(studyMaterials)
@@ -100,7 +101,7 @@ export const patchStudyMaterial = (
 			payload.imageLink = yield* uploadFile(studyMaterial.imageFile);
 		}
 
-		const result = yield* Effect.tryPromise({
+		const result = yield* dbTryPromise({
 			try: () =>
 				db
 					.update(studyMaterials)
@@ -127,7 +128,7 @@ export const deleteStudyMaterialById = (id: number) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
-		const result = yield* Effect.tryPromise({
+		const result = yield* dbTryPromise({
 			try: () =>
 				db.delete(studyMaterials).where(eq(studyMaterials.id, id)).returning(),
 			catch: (err) =>

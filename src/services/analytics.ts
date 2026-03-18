@@ -1,21 +1,22 @@
-import {
-	submissions,
-	users,
-	chapters,
-	quizzes,
-	studyMaterials,
-	questions,
-	accounts,
-} from "@/database/schema";
-import { Db } from "@/lib/db";
 import { and, desc, eq, exists, ne, sql } from "drizzle-orm";
 import { Effect } from "effect";
+import {
+	accounts,
+	chapters,
+	questions,
+	quizzes,
+	studyMaterials,
+	submissions,
+	users,
+} from "@/database/schema";
+import { Db } from "@/lib/db";
+import { dbTryPromise } from "@/lib/retry";
 import { DatabaseError } from "./errors/errors";
 
 export const fetchAllUsers = Effect.gen(function* () {
 	const { db } = yield* Db;
 
-	return yield* Effect.tryPromise({
+	return yield* dbTryPromise({
 		try: () =>
 			db
 				.select()
@@ -45,7 +46,7 @@ export const fetchAllUsers = Effect.gen(function* () {
 export const fetchAllSubmissions = Effect.gen(function* () {
 	const { db } = yield* Db;
 
-	const results = yield* Effect.tryPromise({
+	const results = yield* dbTryPromise({
 		try: () =>
 			db.query.submissions.findMany({
 				orderBy: desc(submissions.createdAt),
@@ -77,7 +78,7 @@ export const fetchAllSubmissions = Effect.gen(function* () {
 export const fetchAverageScores = Effect.gen(function* () {
 	const { db } = yield* Db;
 
-	const results = yield* Effect.tryPromise({
+	const results = yield* dbTryPromise({
 		try: () =>
 			db
 				.select({
@@ -100,7 +101,7 @@ export const fetchAverageScores = Effect.gen(function* () {
 export const fetchLeaderboard = Effect.gen(function* () {
 	const { db } = yield* Db;
 
-	const results = yield* Effect.tryPromise({
+	const results = yield* dbTryPromise({
 		try: () =>
 			db
 				.select({
@@ -131,7 +132,7 @@ export const fetchLeaderboard = Effect.gen(function* () {
 export const fetchDashboardStats = Effect.gen(function* () {
 	const { db } = yield* Db;
 
-	const stats = yield* Effect.tryPromise({
+	const stats = yield* dbTryPromise({
 		try: () =>
 			Promise.all([
 				db.select({ count: sql<number>`count(*)` }).from(chapters),

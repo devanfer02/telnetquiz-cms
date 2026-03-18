@@ -25,6 +25,7 @@ import { Route as ApiinternalSessionsRouteImport } from './routes/api/(internal)
 import { Route as ApiinternalQuestionsRouteImport } from './routes/api/(internal)/questions'
 import { Route as ApiinternalPretestRouteImport } from './routes/api/(internal)/pretest'
 import { Route as ApiinternalLeaderboardRouteImport } from './routes/api/(internal)/leaderboard'
+import { Route as ApiinternalAchievementsRouteImport } from './routes/api/(internal)/achievements'
 import { Route as webStudyMaterialsAddRouteImport } from './routes/(web)/study-materials/add'
 import { Route as webStudyMaterialsIdRouteImport } from './routes/(web)/study-materials/$id'
 import { Route as webQuizAddRouteImport } from './routes/(web)/quiz/add'
@@ -36,6 +37,8 @@ import { Route as ApiinternalChaptersIndexRouteImport } from './routes/api/(inte
 import { Route as ApipublicAuthSplatRouteImport } from './routes/api/(public)/auth/$'
 import { Route as ApiinternalUsersProfileRouteImport } from './routes/api/(internal)/users/profile'
 import { Route as ApiinternalQuizIdRouteImport } from './routes/api/(internal)/quiz/$id'
+import { Route as ApiinternalPretestStatusRouteImport } from './routes/api/(internal)/pretest/status'
+import { Route as ApiinternalMaterialsIdRouteImport } from './routes/api/(internal)/materials/$id'
 import { Route as ApiinternalChaptersIdRouteImport } from './routes/api/(internal)/chapters/$id'
 import { Route as ApiinternalAuthRegisterRouteImport } from './routes/api/(internal)/auth/register'
 import { Route as ApiinternalAuthLoginRouteImport } from './routes/api/(internal)/auth/login'
@@ -123,6 +126,11 @@ const ApiinternalLeaderboardRoute = ApiinternalLeaderboardRouteImport.update({
   path: '/leaderboard',
   getParentRoute: () => ApiinternalRouteRoute,
 } as any)
+const ApiinternalAchievementsRoute = ApiinternalAchievementsRouteImport.update({
+  id: '/achievements',
+  path: '/achievements',
+  getParentRoute: () => ApiinternalRouteRoute,
+} as any)
 const webStudyMaterialsAddRoute = webStudyMaterialsAddRouteImport.update({
   id: '/study-materials/add',
   path: '/study-materials/add',
@@ -179,6 +187,17 @@ const ApiinternalQuizIdRoute = ApiinternalQuizIdRouteImport.update({
   path: '/quiz/$id',
   getParentRoute: () => ApiinternalRouteRoute,
 } as any)
+const ApiinternalPretestStatusRoute =
+  ApiinternalPretestStatusRouteImport.update({
+    id: '/status',
+    path: '/status',
+    getParentRoute: () => ApiinternalPretestRoute,
+  } as any)
+const ApiinternalMaterialsIdRoute = ApiinternalMaterialsIdRouteImport.update({
+  id: '/materials/$id',
+  path: '/materials/$id',
+  getParentRoute: () => ApiinternalRouteRoute,
+} as any)
 const ApiinternalChaptersIdRoute = ApiinternalChaptersIdRouteImport.update({
   id: '/chapters/$id',
   path: '/chapters/$id',
@@ -227,8 +246,9 @@ export interface FileRoutesByFullPath {
   '/quiz/add': typeof webQuizAddRoute
   '/study-materials/$id': typeof webStudyMaterialsIdRoute
   '/study-materials/add': typeof webStudyMaterialsAddRoute
+  '/api/achievements': typeof ApiinternalAchievementsRoute
   '/api/leaderboard': typeof ApiinternalLeaderboardRoute
-  '/api/pretest': typeof ApiinternalPretestRoute
+  '/api/pretest': typeof ApiinternalPretestRouteWithChildren
   '/api/questions': typeof ApiinternalQuestionsRoute
   '/api/sessions': typeof ApiinternalSessionsRoute
   '/api/health': typeof ApipublicHealthRoute
@@ -245,6 +265,8 @@ export interface FileRoutesByFullPath {
   '/api/auth/login': typeof ApiinternalAuthLoginRoute
   '/api/auth/register': typeof ApiinternalAuthRegisterRoute
   '/api/chapters/$id': typeof ApiinternalChaptersIdRoute
+  '/api/materials/$id': typeof ApiinternalMaterialsIdRoute
+  '/api/pretest/status': typeof ApiinternalPretestStatusRoute
   '/api/quiz/$id': typeof ApiinternalQuizIdRoute
   '/api/users/profile': typeof ApiinternalUsersProfileRoute
   '/api/auth/$': typeof ApipublicAuthSplatRoute
@@ -262,8 +284,9 @@ export interface FileRoutesByTo {
   '/quiz/add': typeof webQuizAddRoute
   '/study-materials/$id': typeof webStudyMaterialsIdRoute
   '/study-materials/add': typeof webStudyMaterialsAddRoute
+  '/api/achievements': typeof ApiinternalAchievementsRoute
   '/api/leaderboard': typeof ApiinternalLeaderboardRoute
-  '/api/pretest': typeof ApiinternalPretestRoute
+  '/api/pretest': typeof ApiinternalPretestRouteWithChildren
   '/api/questions': typeof ApiinternalQuestionsRoute
   '/api/sessions': typeof ApiinternalSessionsRoute
   '/api/health': typeof ApipublicHealthRoute
@@ -280,6 +303,8 @@ export interface FileRoutesByTo {
   '/api/auth/login': typeof ApiinternalAuthLoginRoute
   '/api/auth/register': typeof ApiinternalAuthRegisterRoute
   '/api/chapters/$id': typeof ApiinternalChaptersIdRoute
+  '/api/materials/$id': typeof ApiinternalMaterialsIdRoute
+  '/api/pretest/status': typeof ApiinternalPretestStatusRoute
   '/api/quiz/$id': typeof ApiinternalQuizIdRoute
   '/api/users/profile': typeof ApiinternalUsersProfileRoute
   '/api/auth/$': typeof ApipublicAuthSplatRoute
@@ -299,8 +324,9 @@ export interface FileRoutesById {
   '/(web)/quiz/add': typeof webQuizAddRoute
   '/(web)/study-materials/$id': typeof webStudyMaterialsIdRoute
   '/(web)/study-materials/add': typeof webStudyMaterialsAddRoute
+  '/api/(internal)/achievements': typeof ApiinternalAchievementsRoute
   '/api/(internal)/leaderboard': typeof ApiinternalLeaderboardRoute
-  '/api/(internal)/pretest': typeof ApiinternalPretestRoute
+  '/api/(internal)/pretest': typeof ApiinternalPretestRouteWithChildren
   '/api/(internal)/questions': typeof ApiinternalQuestionsRoute
   '/api/(internal)/sessions': typeof ApiinternalSessionsRoute
   '/api/(public)/health': typeof ApipublicHealthRoute
@@ -317,6 +343,8 @@ export interface FileRoutesById {
   '/api/(internal)/auth/login': typeof ApiinternalAuthLoginRoute
   '/api/(internal)/auth/register': typeof ApiinternalAuthRegisterRoute
   '/api/(internal)/chapters/$id': typeof ApiinternalChaptersIdRoute
+  '/api/(internal)/materials/$id': typeof ApiinternalMaterialsIdRoute
+  '/api/(internal)/pretest/status': typeof ApiinternalPretestStatusRoute
   '/api/(internal)/quiz/$id': typeof ApiinternalQuizIdRoute
   '/api/(internal)/users/profile': typeof ApiinternalUsersProfileRoute
   '/api/(public)/auth/$': typeof ApipublicAuthSplatRoute
@@ -336,6 +364,7 @@ export interface FileRouteTypes {
     | '/quiz/add'
     | '/study-materials/$id'
     | '/study-materials/add'
+    | '/api/achievements'
     | '/api/leaderboard'
     | '/api/pretest'
     | '/api/questions'
@@ -354,6 +383,8 @@ export interface FileRouteTypes {
     | '/api/auth/login'
     | '/api/auth/register'
     | '/api/chapters/$id'
+    | '/api/materials/$id'
+    | '/api/pretest/status'
     | '/api/quiz/$id'
     | '/api/users/profile'
     | '/api/auth/$'
@@ -371,6 +402,7 @@ export interface FileRouteTypes {
     | '/quiz/add'
     | '/study-materials/$id'
     | '/study-materials/add'
+    | '/api/achievements'
     | '/api/leaderboard'
     | '/api/pretest'
     | '/api/questions'
@@ -389,6 +421,8 @@ export interface FileRouteTypes {
     | '/api/auth/login'
     | '/api/auth/register'
     | '/api/chapters/$id'
+    | '/api/materials/$id'
+    | '/api/pretest/status'
     | '/api/quiz/$id'
     | '/api/users/profile'
     | '/api/auth/$'
@@ -407,6 +441,7 @@ export interface FileRouteTypes {
     | '/(web)/quiz/add'
     | '/(web)/study-materials/$id'
     | '/(web)/study-materials/add'
+    | '/api/(internal)/achievements'
     | '/api/(internal)/leaderboard'
     | '/api/(internal)/pretest'
     | '/api/(internal)/questions'
@@ -425,6 +460,8 @@ export interface FileRouteTypes {
     | '/api/(internal)/auth/login'
     | '/api/(internal)/auth/register'
     | '/api/(internal)/chapters/$id'
+    | '/api/(internal)/materials/$id'
+    | '/api/(internal)/pretest/status'
     | '/api/(internal)/quiz/$id'
     | '/api/(internal)/users/profile'
     | '/api/(public)/auth/$'
@@ -554,6 +591,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiinternalLeaderboardRouteImport
       parentRoute: typeof ApiinternalRouteRoute
     }
+    '/api/(internal)/achievements': {
+      id: '/api/(internal)/achievements'
+      path: '/achievements'
+      fullPath: '/api/achievements'
+      preLoaderRoute: typeof ApiinternalAchievementsRouteImport
+      parentRoute: typeof ApiinternalRouteRoute
+    }
     '/(web)/study-materials/add': {
       id: '/(web)/study-materials/add'
       path: '/study-materials/add'
@@ -629,6 +673,20 @@ declare module '@tanstack/react-router' {
       path: '/quiz/$id'
       fullPath: '/api/quiz/$id'
       preLoaderRoute: typeof ApiinternalQuizIdRouteImport
+      parentRoute: typeof ApiinternalRouteRoute
+    }
+    '/api/(internal)/pretest/status': {
+      id: '/api/(internal)/pretest/status'
+      path: '/status'
+      fullPath: '/api/pretest/status'
+      preLoaderRoute: typeof ApiinternalPretestStatusRouteImport
+      parentRoute: typeof ApiinternalPretestRoute
+    }
+    '/api/(internal)/materials/$id': {
+      id: '/api/(internal)/materials/$id'
+      path: '/materials/$id'
+      fullPath: '/api/materials/$id'
+      preLoaderRoute: typeof ApiinternalMaterialsIdRouteImport
       parentRoute: typeof ApiinternalRouteRoute
     }
     '/api/(internal)/chapters/$id': {
@@ -729,27 +787,42 @@ const webRouteRouteWithChildren = webRouteRoute._addFileChildren(
   webRouteRouteChildren,
 )
 
+interface ApiinternalPretestRouteChildren {
+  ApiinternalPretestStatusRoute: typeof ApiinternalPretestStatusRoute
+}
+
+const ApiinternalPretestRouteChildren: ApiinternalPretestRouteChildren = {
+  ApiinternalPretestStatusRoute: ApiinternalPretestStatusRoute,
+}
+
+const ApiinternalPretestRouteWithChildren =
+  ApiinternalPretestRoute._addFileChildren(ApiinternalPretestRouteChildren)
+
 interface ApiinternalRouteRouteChildren {
+  ApiinternalAchievementsRoute: typeof ApiinternalAchievementsRoute
   ApiinternalLeaderboardRoute: typeof ApiinternalLeaderboardRoute
-  ApiinternalPretestRoute: typeof ApiinternalPretestRoute
+  ApiinternalPretestRoute: typeof ApiinternalPretestRouteWithChildren
   ApiinternalQuestionsRoute: typeof ApiinternalQuestionsRoute
   ApiinternalSessionsRoute: typeof ApiinternalSessionsRoute
   ApiinternalAuthLoginRoute: typeof ApiinternalAuthLoginRoute
   ApiinternalAuthRegisterRoute: typeof ApiinternalAuthRegisterRoute
   ApiinternalChaptersIdRoute: typeof ApiinternalChaptersIdRoute
+  ApiinternalMaterialsIdRoute: typeof ApiinternalMaterialsIdRoute
   ApiinternalQuizIdRoute: typeof ApiinternalQuizIdRoute
   ApiinternalUsersProfileRoute: typeof ApiinternalUsersProfileRoute
   ApiinternalChaptersIndexRoute: typeof ApiinternalChaptersIndexRoute
 }
 
 const ApiinternalRouteRouteChildren: ApiinternalRouteRouteChildren = {
+  ApiinternalAchievementsRoute: ApiinternalAchievementsRoute,
   ApiinternalLeaderboardRoute: ApiinternalLeaderboardRoute,
-  ApiinternalPretestRoute: ApiinternalPretestRoute,
+  ApiinternalPretestRoute: ApiinternalPretestRouteWithChildren,
   ApiinternalQuestionsRoute: ApiinternalQuestionsRoute,
   ApiinternalSessionsRoute: ApiinternalSessionsRoute,
   ApiinternalAuthLoginRoute: ApiinternalAuthLoginRoute,
   ApiinternalAuthRegisterRoute: ApiinternalAuthRegisterRoute,
   ApiinternalChaptersIdRoute: ApiinternalChaptersIdRoute,
+  ApiinternalMaterialsIdRoute: ApiinternalMaterialsIdRoute,
   ApiinternalQuizIdRoute: ApiinternalQuizIdRoute,
   ApiinternalUsersProfileRoute: ApiinternalUsersProfileRoute,
   ApiinternalChaptersIndexRoute: ApiinternalChaptersIndexRoute,

@@ -1,8 +1,30 @@
-import { pretestSubmissions, questions, chapters } from "@/database/schema";
-import { Db } from "@/lib/db";
 import { eq, inArray } from "drizzle-orm";
 import { Effect } from "effect";
+import { chapters, pretestSubmissions, questions } from "@/database/schema";
+import { Db } from "@/lib/db";
+import { dbTryPromise } from "@/lib/retry";
 import { DatabaseError, ValidationError } from "./errors/errors";
+
+export const checkPretestStatus = (userId: string) =>
+	Effect.gen(function* () {
+		const { db } = yield* Db;
+
+		const existing = yield* dbTryPromise({
+			try: () =>
+				db.query.pretestSubmissions.findFirst({
+					where: eq(pretestSubmissions.userId, userId),
+				}),
+			catch: (err) =>
+				new DatabaseError({
+					cause: err,
+					message: "Failed to check pretest status",
+				}),
+		});
+
+		return {
+			has_taken_pretest: existing !== undefined,
+		};
+	});
 
 export const submitPretest = (
 	userId: string,
@@ -12,7 +34,7 @@ export const submitPretest = (
 		const { db } = yield* Db;
 
 		// Check if user already submitted
-		const existingSubmission = yield* Effect.tryPromise({
+		const existingSubmission = yield* dbTryPromise({
 			try: () =>
 				db.query.pretestSubmissions.findFirst({
 					where: eq(pretestSubmissions.userId, userId),
@@ -42,7 +64,7 @@ export const submitPretest = (
 			);
 		}
 
-		const validQuestions = yield* Effect.tryPromise({
+		const validQuestions = yield* dbTryPromise({
 			try: () =>
 				db.query.questions.findMany({
 					where: inArray(questions.id, questionIds),
@@ -125,7 +147,7 @@ export const submitPretest = (
 		}
 
 		// Insert submissions
-		yield* Effect.tryPromise({
+		yield* dbTryPromise({
 			try: () => db.insert(pretestSubmissions).values(submissionsToInsert),
 			catch: (err) =>
 				new DatabaseError({
@@ -139,7 +161,7 @@ export const submitPretest = (
 		let chapterDetails: { id: number; title: string }[] = [];
 
 		if (chapterIds.length > 0) {
-			chapterDetails = yield* Effect.tryPromise({
+			chapterDetails = yield* dbTryPromise({
 				try: () =>
 					db
 						.select({

@@ -1,19 +1,20 @@
-import { sql, eq, desc } from "drizzle-orm";
+import { desc, eq, sql } from "drizzle-orm";
+import { Effect } from "effect";
 import {
 	chapters,
-	questions,
 	pretestSubmissions,
+	questions,
 	submissions,
 } from "@/database/schema";
 import { Db } from "@/lib/db";
-import { ChapterFormData } from "@/types/zod";
-import { Effect } from "effect";
+import { dbTryPromise } from "@/lib/retry";
+import type { ChapterFormData } from "@/types/zod";
 import { DatabaseError, NotFoundError } from "./errors/errors";
 
 export const fetchAllChapters = Effect.gen(function* () {
 	const { db } = yield* Db;
 
-	return yield* Effect.tryPromise({
+	return yield* dbTryPromise({
 		try: () => db.select().from(chapters).orderBy(desc(chapters.createdAt)),
 		catch: (err) =>
 			new DatabaseError({
@@ -28,7 +29,7 @@ export const fetchChaptersWithUserPerformance = (userId: string) =>
 		const { db } = yield* Db;
 
 		// Check if user has taken pretest
-		const pretestCount = yield* Effect.tryPromise({
+		const pretestCount = yield* dbTryPromise({
 			try: () =>
 				db
 					.select({ count: sql<number>`count(*)` })
@@ -44,7 +45,7 @@ export const fetchChaptersWithUserPerformance = (userId: string) =>
 		const hasTakenPretest = pretestCount[0].count > 0;
 
 		// Fetch chapters with quizzes count
-		const chaptersData = yield* Effect.tryPromise({
+		const chaptersData = yield* dbTryPromise({
 			try: () =>
 				db.query.chapters.findMany({
 					with: {
@@ -59,7 +60,7 @@ export const fetchChaptersWithUserPerformance = (userId: string) =>
 		});
 
 		// Fetch completed quizzes count per chapter
-		const completedQuizzes = yield* Effect.tryPromise({
+		const completedQuizzes = yield* dbTryPromise({
 			try: () =>
 				db
 					.select({
@@ -97,7 +98,7 @@ export const fetchChaptersWithUserPerformance = (userId: string) =>
 		}
 
 		// Calculate performance
-		const userPretestSubmissions = yield* Effect.tryPromise({
+		const userPretestSubmissions = yield* dbTryPromise({
 			try: () =>
 				db
 					.select({
@@ -171,7 +172,7 @@ export const fetchChapterById = (id: number) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
-		const result = yield* Effect.tryPromise({
+		const result = yield* dbTryPromise({
 			try: () =>
 				db.query.chapters.findFirst({
 					where: eq(chapters.id, id),
@@ -205,7 +206,7 @@ export const createChapter = (chapter: ChapterFormData) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
-		const result = yield* Effect.tryPromise({
+		const result = yield* dbTryPromise({
 			try: () => db.insert(chapters).values(chapter).returning(),
 			catch: (error) =>
 				new DatabaseError({
@@ -221,7 +222,7 @@ export const patchChapter = (id: number, chapter: ChapterFormData) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
-		const result = yield* Effect.tryPromise({
+		const result = yield* dbTryPromise({
 			try: () =>
 				db.update(chapters).set(chapter).where(eq(chapters.id, id)).returning(),
 			catch: (error) =>
@@ -242,7 +243,7 @@ export const deleteChapter = (id: number) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
-		yield* Effect.tryPromise({
+		yield* dbTryPromise({
 			try: () => db.delete(chapters).where(eq(chapters.id, id)),
 			catch: (error) =>
 				new DatabaseError({

@@ -1,15 +1,16 @@
-import { options, questions } from "@/database/schema";
-import { Db } from "@/lib/db";
-import type { QuestionFormData, QuestionsFormData } from "@/types/zod";
 import { asc, desc, eq } from "drizzle-orm";
 import { Effect } from "effect";
+import { options, questions } from "@/database/schema";
+import { Db } from "@/lib/db";
+import { dbTryPromise } from "@/lib/retry";
+import type { QuestionFormData, QuestionsFormData } from "@/types/zod";
 import { DatabaseError, NotFoundError } from "./errors/errors";
 import { deleteFile, uploadFile } from "./image";
 
 export const fetchAllQuestions = Effect.gen(function* () {
 	const { db } = yield* Db;
 
-	return yield* Effect.tryPromise({
+	return yield* dbTryPromise({
 		try: () =>
 			db.query.questions.findMany({
 				orderBy: desc(questions.createdAt),
@@ -29,7 +30,7 @@ export const fetchQuestionsByType = (type: "pretest" | "quiz") =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
-		return yield* Effect.tryPromise({
+		return yield* dbTryPromise({
 			try: () =>
 				db.query.questions.findMany({
 					where: eq(questions.type, type),
@@ -50,7 +51,7 @@ export const fetchQuestionById = (id: number) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
-		const result = yield* Effect.tryPromise({
+		const result = yield* dbTryPromise({
 			try: () =>
 				db.query.questions.findFirst({
 					where: eq(questions.id, id),
@@ -95,7 +96,7 @@ export const createQuestions = (data: QuestionsFormData) =>
 			{ concurrency: 5 },
 		);
 
-		yield* Effect.tryPromise({
+		yield* dbTryPromise({
 			try: () =>
 				db.transaction(async (tx) => {
 					if (questionsWithImages.length === 0) return;
@@ -162,7 +163,7 @@ export const patchQuestion = (id: number, data: QuestionFormData) =>
 			payload.imageLink = yield* uploadFile(data.image);
 		}
 
-		yield* Effect.tryPromise({
+		yield* dbTryPromise({
 			try: () =>
 				db.transaction(async (tx) => {
 					const [updatedQuestion] = await tx
@@ -199,7 +200,7 @@ export const deleteQuestionById = (id: number) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
-		const result = yield* Effect.tryPromise({
+		const result = yield* dbTryPromise({
 			try: () => db.delete(questions).where(eq(questions.id, id)).returning(),
 			catch: (err) =>
 				new DatabaseError({
