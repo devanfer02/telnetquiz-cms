@@ -42,6 +42,7 @@ import { Route as ApiinternalMaterialsIdRouteImport } from './routes/api/(intern
 import { Route as ApiinternalChaptersIdRouteImport } from './routes/api/(internal)/chapters/$id'
 import { Route as ApiinternalAuthRegisterRouteImport } from './routes/api/(internal)/auth/register'
 import { Route as ApiinternalAuthLoginRouteImport } from './routes/api/(internal)/auth/login'
+import { Route as ApiinternalActivityRecentRouteImport } from './routes/api/(internal)/activity/recent'
 import { Route as webStudyMaterialsEditIdRouteImport } from './routes/(web)/study-materials/edit.$id'
 import { Route as webQuizEditIdRouteImport } from './routes/(web)/quiz/edit.$id'
 import { Route as webQuestionsEditIdRouteImport } from './routes/(web)/questions/edit.$id'
@@ -213,6 +214,12 @@ const ApiinternalAuthLoginRoute = ApiinternalAuthLoginRouteImport.update({
   path: '/auth/login',
   getParentRoute: () => ApiinternalRouteRoute,
 } as any)
+const ApiinternalActivityRecentRoute =
+  ApiinternalActivityRecentRouteImport.update({
+    id: '/activity/recent',
+    path: '/activity/recent',
+    getParentRoute: () => ApiinternalRouteRoute,
+  } as any)
 const webStudyMaterialsEditIdRoute = webStudyMaterialsEditIdRouteImport.update({
   id: '/study-materials/edit/$id',
   path: '/study-materials/edit/$id',
@@ -262,6 +269,7 @@ export interface FileRoutesByFullPath {
   '/questions/edit/$id': typeof webQuestionsEditIdRoute
   '/quiz/edit/$id': typeof webQuizEditIdRoute
   '/study-materials/edit/$id': typeof webStudyMaterialsEditIdRoute
+  '/api/activity/recent': typeof ApiinternalActivityRecentRoute
   '/api/auth/login': typeof ApiinternalAuthLoginRoute
   '/api/auth/register': typeof ApiinternalAuthRegisterRoute
   '/api/chapters/$id': typeof ApiinternalChaptersIdRoute
@@ -300,6 +308,7 @@ export interface FileRoutesByTo {
   '/questions/edit/$id': typeof webQuestionsEditIdRoute
   '/quiz/edit/$id': typeof webQuizEditIdRoute
   '/study-materials/edit/$id': typeof webStudyMaterialsEditIdRoute
+  '/api/activity/recent': typeof ApiinternalActivityRecentRoute
   '/api/auth/login': typeof ApiinternalAuthLoginRoute
   '/api/auth/register': typeof ApiinternalAuthRegisterRoute
   '/api/chapters/$id': typeof ApiinternalChaptersIdRoute
@@ -340,6 +349,7 @@ export interface FileRoutesById {
   '/(web)/questions/edit/$id': typeof webQuestionsEditIdRoute
   '/(web)/quiz/edit/$id': typeof webQuizEditIdRoute
   '/(web)/study-materials/edit/$id': typeof webStudyMaterialsEditIdRoute
+  '/api/(internal)/activity/recent': typeof ApiinternalActivityRecentRoute
   '/api/(internal)/auth/login': typeof ApiinternalAuthLoginRoute
   '/api/(internal)/auth/register': typeof ApiinternalAuthRegisterRoute
   '/api/(internal)/chapters/$id': typeof ApiinternalChaptersIdRoute
@@ -380,6 +390,7 @@ export interface FileRouteTypes {
     | '/questions/edit/$id'
     | '/quiz/edit/$id'
     | '/study-materials/edit/$id'
+    | '/api/activity/recent'
     | '/api/auth/login'
     | '/api/auth/register'
     | '/api/chapters/$id'
@@ -418,6 +429,7 @@ export interface FileRouteTypes {
     | '/questions/edit/$id'
     | '/quiz/edit/$id'
     | '/study-materials/edit/$id'
+    | '/api/activity/recent'
     | '/api/auth/login'
     | '/api/auth/register'
     | '/api/chapters/$id'
@@ -457,6 +469,7 @@ export interface FileRouteTypes {
     | '/(web)/questions/edit/$id'
     | '/(web)/quiz/edit/$id'
     | '/(web)/study-materials/edit/$id'
+    | '/api/(internal)/activity/recent'
     | '/api/(internal)/auth/login'
     | '/api/(internal)/auth/register'
     | '/api/(internal)/chapters/$id'
@@ -710,6 +723,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiinternalAuthLoginRouteImport
       parentRoute: typeof ApiinternalRouteRoute
     }
+    '/api/(internal)/activity/recent': {
+      id: '/api/(internal)/activity/recent'
+      path: '/activity/recent'
+      fullPath: '/api/activity/recent'
+      preLoaderRoute: typeof ApiinternalActivityRecentRouteImport
+      parentRoute: typeof ApiinternalRouteRoute
+    }
     '/(web)/study-materials/edit/$id': {
       id: '/(web)/study-materials/edit/$id'
       path: '/study-materials/edit/$id'
@@ -804,6 +824,7 @@ interface ApiinternalRouteRouteChildren {
   ApiinternalPretestRoute: typeof ApiinternalPretestRouteWithChildren
   ApiinternalQuestionsRoute: typeof ApiinternalQuestionsRoute
   ApiinternalSessionsRoute: typeof ApiinternalSessionsRoute
+  ApiinternalActivityRecentRoute: typeof ApiinternalActivityRecentRoute
   ApiinternalAuthLoginRoute: typeof ApiinternalAuthLoginRoute
   ApiinternalAuthRegisterRoute: typeof ApiinternalAuthRegisterRoute
   ApiinternalChaptersIdRoute: typeof ApiinternalChaptersIdRoute
@@ -819,6 +840,7 @@ const ApiinternalRouteRouteChildren: ApiinternalRouteRouteChildren = {
   ApiinternalPretestRoute: ApiinternalPretestRouteWithChildren,
   ApiinternalQuestionsRoute: ApiinternalQuestionsRoute,
   ApiinternalSessionsRoute: ApiinternalSessionsRoute,
+  ApiinternalActivityRecentRoute: ApiinternalActivityRecentRoute,
   ApiinternalAuthLoginRoute: ApiinternalAuthLoginRoute,
   ApiinternalAuthRegisterRoute: ApiinternalAuthRegisterRoute,
   ApiinternalChaptersIdRoute: ApiinternalChaptersIdRoute,
