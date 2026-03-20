@@ -1,15 +1,14 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { Effect } from "effect";
 import { DbLayer } from "@/lib/db";
-import { HttpStatus, response } from "@/lib/http";
-import { parseBody } from "@/lib/http";
+import { HttpStatus, parseBody, response } from "@/lib/http";
 import { registerUser } from "@/services/auth";
-import {
+import type {
 	AuthError,
 	DatabaseError,
 	ValidationError,
 } from "@/services/errors/errors";
 import { registerUserSchema } from "@/types/zod.api";
-import { createFileRoute } from "@tanstack/react-router";
-import { Effect } from "effect";
 
 export const Route = createFileRoute("/api/(internal)/auth/register")({
 	server: {

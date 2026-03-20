@@ -1,10 +1,10 @@
+import { eq } from "drizzle-orm";
+import { Effect } from "effect";
 import { users } from "@/database/schema";
 import { auth } from "@/lib/auth";
 import { Db } from "@/lib/db";
 import { dbTryPromise } from "@/lib/retry";
-import { LoginUserFormData, RegisterUserFormData } from "@/types/zod.api";
-import { eq } from "drizzle-orm";
-import { Effect } from "effect";
+import type { LoginUserFormData, RegisterUserFormData } from "@/types/zod.api";
 import { AuthError, DatabaseError } from "./errors/errors";
 
 export const registerUser = (userForm: RegisterUserFormData) =>
