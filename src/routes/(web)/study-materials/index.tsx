@@ -6,6 +6,12 @@ import { QUERY_KEYS } from "@/lib/constant";
 import StudyMaterialList from "./-sections/material-list";
 
 export const Route = createFileRoute("/(web)/study-materials/")({
+	loader: async ({ context }) => {
+		await context.queryClient.prefetchQuery({
+			queryKey: [QUERY_KEYS.STUDY_MATERIALS],
+			queryFn: () => getAllStudyMaterials(),
+		});
+	},
 	component: RouteComponent,
 });
 
