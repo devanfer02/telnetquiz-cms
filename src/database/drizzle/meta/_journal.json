@@ -92,6 +92,13 @@
 			"when": 1774002283874,
 			"tag": "0012_giant_anthem",
 			"breakpoints": true
+		},
+		{
+			"idx": 13,
+			"version": "7",
+			"when": 1774009555779,
+			"tag": "0013_woozy_psylocke",
+			"breakpoints": true
 		}
 	]
 }
