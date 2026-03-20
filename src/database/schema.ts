@@ -1,15 +1,15 @@
+import { relations } from "drizzle-orm";
 import {
-	pgTable,
-	varchar,
-	timestamp,
-	serial,
-	text,
-	integer,
 	boolean,
 	index,
+	integer,
+	pgTable,
+	serial,
+	text,
+	timestamp,
 	unique,
+	varchar,
 } from "drizzle-orm/pg-core";
-import { relations } from "drizzle-orm";
 
 export const timestamps = {
 	createdAt: timestamp("created_at").notNull().defaultNow(),
