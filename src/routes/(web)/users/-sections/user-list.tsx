@@ -82,7 +82,7 @@ export default function UserList({ users }: UserListProps) {
 		getSortedRowModel: getSortedRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
 		getFilteredRowModel: getFilteredRowModel(),
-	} as any);
+	});
 
 	return (
 		<>

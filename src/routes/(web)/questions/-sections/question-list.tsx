@@ -166,6 +166,7 @@ export default function QuestionList({
 							<AccordionContent>
 								<div className="flex flex-col gap-1">
 									{options.map((opt, i) => (
+										// biome-ignore lint/suspicious/noArrayIndexKey: options have no stable id
 										<div key={i} className="flex items-center gap-2 text-sm">
 											{opt.isCorrect ? (
 												<Check className="w-4 h-4 text-green-500" />
@@ -200,7 +201,7 @@ export default function QuestionList({
 				return (
 					<img
 						src={row.original.imageLink}
-						alt="image description"
+						alt="Question attachment"
 						className="w-18 h-18"
 					/>
 				);
@@ -247,7 +248,7 @@ export default function QuestionList({
 		getSortedRowModel: getSortedRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
 		getFilteredRowModel: getFilteredRowModel(),
-	} as any);
+	});
 
 	return (
 		<>

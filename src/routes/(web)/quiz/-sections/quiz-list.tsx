@@ -57,7 +57,7 @@ export default function QuizList({ quizzes, disableKey }: QuizListProps) {
 			),
 			size: 10,
 			cell: ({ row }) => {
-				const chapterId = row.original.chapter?.id.toString();
+				const chapterId = row.original.chapter?.id?.toString() ?? "";
 
 				return (
 					<TableLink to="/chapters/$id" paramKey="id" paramValue={chapterId} />
@@ -155,7 +155,7 @@ export default function QuizList({ quizzes, disableKey }: QuizListProps) {
 		getSortedRowModel: getSortedRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
 		getFilteredRowModel: getFilteredRowModel(),
-	} as any);
+	});
 
 	return (
 		<>

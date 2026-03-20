@@ -32,7 +32,7 @@ export function filterColumns<T>(
 }
 
 export function validateField<
-	T extends z.ZodObject<any>,
+	T extends z.ZodObject<z.ZodRawShape>,
 	K extends keyof T["shape"],
 >(schema: T, key: K, value: unknown) {
 	const fieldSchema = schema.shape[key];

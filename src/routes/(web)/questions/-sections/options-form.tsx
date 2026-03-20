@@ -25,6 +25,7 @@ export default function OptionsArray({
 						<Label>Options</Label>
 						<div className="space-y-3 mt-3">
 							{options.map((_, optionIndex) => (
+								// biome-ignore lint/suspicious/noArrayIndexKey: dynamic form array uses index
 								<div key={optionIndex} className="flex items-center gap-2">
 									{/* Radio button (mark correct) */}
 									<form.Field

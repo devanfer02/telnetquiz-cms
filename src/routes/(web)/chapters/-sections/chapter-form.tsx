@@ -96,6 +96,7 @@ export default function ChapterForm({ form, buttonText }: ChapterFormProps) {
 										>
 											<img
 												src={`/assets/mascot/chap${index}.png`}
+												alt={`Mascot ${index}`}
 												draggable="false"
 												className={`w-28 h-28 object-contain rounded-xl border p-3 transition-all group-hover:scale-105 ${
 													field.state.value === index

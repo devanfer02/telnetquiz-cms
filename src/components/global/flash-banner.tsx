@@ -40,6 +40,7 @@ function FlashBanner({ flash, clear, duration = 5000 }: FlashBannerProps) {
 			<p className="text-sm leading-relaxed">{flash.message}</p>
 			<div className="flex flex-col justify-center items-center">
 				<button
+					type="button"
 					onClick={clear}
 					aria-label="Dismiss"
 					className="rounded p-1 text-current opacity-70 transition hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-current cursor-pointer"

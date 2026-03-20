@@ -52,13 +52,15 @@ export const addQuestions = createServerFn({
 		const materialId = Number(data.get("materialId"));
 		const questionsRaw = JSON.parse(data.get("questions") as string);
 
-		const questions = questionsRaw.map((q: any, index: number) => {
-			const image = data.get(`image_${index}`);
-			return {
-				...q,
-				image: image instanceof File ? image : undefined,
-			};
-		});
+		const questions = questionsRaw.map(
+			(q: Record<string, unknown>, index: number) => {
+				const image = data.get(`image_${index}`);
+				return {
+					...q,
+					image: image instanceof File ? image : undefined,
+				};
+			},
+		);
 
 		const parsedData = {
 			type,

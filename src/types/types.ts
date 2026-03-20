@@ -11,11 +11,6 @@ type User = {
 	createdAt: Date;
 };
 
-type AverageScoreChapter = {
-	chapter: string;
-	averageScore: number;
-};
-
 type Chapter = {
 	id: number;
 	title: string;
@@ -38,6 +33,12 @@ type Quiz = {
 	updatedAt: Date;
 };
 
+type Option = {
+	questionId: number;
+	text: string;
+	isCorrect: boolean;
+};
+
 type Question = {
 	id: number;
 	quizId: number | null;
@@ -49,12 +50,6 @@ type Question = {
 	description: string;
 	question: string;
 	options?: Option[];
-};
-
-type Option = {
-	questionId: number;
-	text: string;
-	isCorrect: boolean;
 };
 
 type Submission = {
@@ -84,6 +79,13 @@ type PretestSubmissionItem = {
 type QuizAnswerItem = {
 	question_id: number;
 	answered_option_id: number;
+};
+
+type School = {
+	id: number;
+	name: string;
+	createdAt: Date;
+	updatedAt: Date;
 };
 
 type Session = {

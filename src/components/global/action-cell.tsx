@@ -42,7 +42,10 @@ export default function ActionCell<T, K extends keyof T>({
 				</Link>
 
 				<AlertDialogTrigger asChild>
-					<button className="p-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm cursor-pointer">
+					<button
+						type="button"
+						className="p-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm cursor-pointer"
+					>
 						<Trash2 size="18" />
 					</button>
 				</AlertDialogTrigger>

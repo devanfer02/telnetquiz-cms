@@ -97,6 +97,7 @@ export default function MaterialForm({
 										<div className="relative inline-block">
 											<img
 												src={oldImageLink}
+												alt="Current study material"
 												className="w-48 h-48 object-cover rounded-lg border-2 border-border shadow-sm"
 											/>
 											<span className="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded">

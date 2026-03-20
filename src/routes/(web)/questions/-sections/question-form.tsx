@@ -235,6 +235,7 @@ export default function QuestionForm({ form, buttonText }: QuestionFormProps) {
 					{(questionsField) => (
 						<div className="space-y-6">
 							{questionsField.state.value.map((_question, index) => (
+								// biome-ignore lint/suspicious/noArrayIndexKey: dynamic form array uses index
 								<Card key={index}>
 									<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
 										<CardTitle className="text-base font-semibold">

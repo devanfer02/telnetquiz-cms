@@ -10,7 +10,7 @@ export const Route = createFileRoute("/api/(internal)/pretest/status")({
 	server: {
 		middleware: [authMiddleware],
 		handlers: {
-			GET: async ({ request, context }) =>
+			GET: async ({ context }) =>
 				Effect.runPromise(
 					Effect.gen(function* () {
 						const result = yield* checkPretestStatus(context.user.id);

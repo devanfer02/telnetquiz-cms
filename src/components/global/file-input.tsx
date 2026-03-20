@@ -25,7 +25,8 @@ export default function FileInput({ id, htmlFor, action }: FileInputProps) {
 				Gambar
 			</Label>
 
-			<div
+			<section
+				aria-label="File drop zone"
 				onDrop={(e) => {
 					e.preventDefault();
 					setIsDragging(false);
@@ -103,7 +104,7 @@ export default function FileInput({ id, htmlFor, action }: FileInputProps) {
 						</button>
 					</div>
 				)}
-			</div>
+			</section>
 		</div>
 	);
 }

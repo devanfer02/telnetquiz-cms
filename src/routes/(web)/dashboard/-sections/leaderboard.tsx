@@ -74,7 +74,7 @@ export default function Leaderboard({ className }: LeaderboardProps) {
 		getCoreRowModel: getCoreRowModel(),
 		getSortedRowModel: getSortedRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
-	} as any);
+	});
 
 	return (
 		<Card className={cn("px-5 h-full", className)}>

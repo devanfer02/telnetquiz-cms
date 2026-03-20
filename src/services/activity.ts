@@ -75,7 +75,8 @@ export const fetchRecentActivity = (userId: string) =>
 			if (!dayMap.has(dateKey)) {
 				dayMap.set(dateKey, new Map());
 			}
-			const quizMap = dayMap.get(dateKey)!;
+			const quizMap = dayMap.get(dateKey);
+			if (!quizMap) continue;
 
 			const existing = quizMap.get(row.quizId);
 			if (existing) {

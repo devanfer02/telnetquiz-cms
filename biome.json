@@ -16,6 +16,28 @@
 			"!**/src/css/styles.css"
 		]
 	},
+	"overrides": [
+		{
+			"includes": ["**/src/types/types.ts"],
+			"linter": {
+				"rules": {
+					"correctness": {
+						"noUnusedVariables": "off"
+					}
+				}
+			}
+		},
+		{
+			"includes": ["**/src/hooks/use-custom-form.ts", "**/src/lib/http.ts"],
+			"linter": {
+				"rules": {
+					"suspicious": {
+						"noExplicitAny": "off"
+					}
+				}
+			}
+		}
+	],
 	"formatter": {
 		"enabled": true,
 		"indentStyle": "tab"

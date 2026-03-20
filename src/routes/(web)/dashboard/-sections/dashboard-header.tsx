@@ -22,9 +22,12 @@ export default function DashboardHeader() {
 					<div className="flex items-start gap-5 max-w-2xl">
 						<div className="p-3 bg-white shadow-sm rounded-xl border border-orange-100 ring-4 ring-orange-50 hidden sm:block">
 							{isValidElement(icon) &&
-								cloneElement(icon as React.ReactElement<any>, {
-									className: "w-8 h-8 text-telnet-primary",
-								})}
+								cloneElement(
+									icon as React.ReactElement<Record<string, unknown>>,
+									{
+										className: "w-8 h-8 text-telnet-primary",
+									},
+								)}
 						</div>
 						<div className="space-y-2">
 							<h1 className="text-3xl font-bold tracking-tight text-foreground flex items-center gap-3">

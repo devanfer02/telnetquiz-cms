@@ -12,18 +12,15 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { authClient } from "@/lib/auth-client";
-
 export const Route = createFileRoute("/auth/sign-in")({
 	component: SignInComponent,
 	validateSearch: z.object({
 		error: z.string().optional(),
 	}),
 });
-
 function SignInComponent() {
 	const search = useSearch({ from: "/auth/sign-in" });
 	const [isLoading, setIsLoading] = useState(false);
-
 	const handleGoogleSignIn = async () => {
 		setIsLoading(true);
 		await authClient.signIn.social({
@@ -31,7 +28,6 @@ function SignInComponent() {
 			callbackURL: "/dashboard",
 		});
 	};
-
 	return (
 		<div className="w-full lg:grid lg:min-h-screen lg:grid-cols-2">
 			<style>
@@ -85,7 +81,6 @@ function SignInComponent() {
 							</CardDescription>
 						</div>
 					</CardHeader>
-
 					<CardContent className="space-y-6">
 						<Button
 							variant="outline"
@@ -99,6 +94,7 @@ function SignInComponent() {
 									<Loader2 className="size-6 animate-spin text-telnet-primary" />
 								) : (
 									<svg
+										aria-hidden="true"
 										className="size-6 transition-transform group-hover:scale-110"
 										viewBox="0 0 24 24"
 										xmlns="http://www.w3.org/2000/svg"
@@ -137,23 +133,16 @@ function SignInComponent() {
 							</div>
 							<div className="relative flex justify-center text-xs uppercase"></div>
 						</div>
-
 						<div className="text-center text-sm text-muted-foreground py-2">
 							<p className="max-w-100 mx-auto">
 								By signing in, you agree to our{" "}
-								<a
-									href="#"
-									className="underline underline-offset-4 hover:text-telnet-primary font-medium"
-								>
+								<span className="underline underline-offset-4 hover:text-telnet-primary font-medium">
 									Terms
-								</a>{" "}
+								</span>{" "}
 								and{" "}
-								<a
-									href="#"
-									className="underline underline-offset-4 hover:text-telnet-primary font-medium"
-								>
+								<span className="underline underline-offset-4 hover:text-telnet-primary font-medium">
 									Privacy
-								</a>
+								</span>
 								.
 							</p>
 						</div>

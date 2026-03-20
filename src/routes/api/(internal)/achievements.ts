@@ -10,7 +10,7 @@ export const Route = createFileRoute("/api/(internal)/achievements")({
 	server: {
 		middleware: [authMiddleware],
 		handlers: {
-			GET: async ({ request, context }) =>
+			GET: async ({ context }) =>
 				Effect.runPromise(
 					Effect.gen(function* () {
 						const result = yield* fetchUserAchievements(context.user.id);

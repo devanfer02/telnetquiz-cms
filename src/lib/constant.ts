@@ -4,6 +4,7 @@ import {
 	Brain,
 	FileQuestionIcon,
 	LayoutDashboard,
+	School,
 	Upload,
 	Users,
 } from "lucide-react";
@@ -44,6 +45,11 @@ export const sidebarItems = [
 		url: "/users",
 		icon: Users,
 	},
+	{
+		title: "Schools",
+		url: "/schools",
+		icon: School,
+	},
 ];
 
 export const dashboardItems = sidebarItems
@@ -65,4 +71,5 @@ export const QUERY_KEYS = {
 	AVERAGE_SCORES: "average-scores",
 	LEADERBOARD: "leaderboard",
 	DASHBOARD_STATS: "dashboard-stats",
+	SCHOOLS: "school-list",
 };

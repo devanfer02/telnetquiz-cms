@@ -17,6 +17,7 @@ import { Route as webDashboardRouteRouteImport } from './routes/(web)/dashboard/
 import { Route as webUsersIndexRouteImport } from './routes/(web)/users/index'
 import { Route as webSubmissionsIndexRouteImport } from './routes/(web)/submissions/index'
 import { Route as webStudyMaterialsIndexRouteImport } from './routes/(web)/study-materials/index'
+import { Route as webSchoolsIndexRouteImport } from './routes/(web)/schools/index'
 import { Route as webQuizIndexRouteImport } from './routes/(web)/quiz/index'
 import { Route as webQuestionsIndexRouteImport } from './routes/(web)/questions/index'
 import { Route as webChaptersIndexRouteImport } from './routes/(web)/chapters/index'
@@ -29,6 +30,7 @@ import { Route as ApiinternalAchievementsRouteImport } from './routes/api/(inter
 import { Route as webUsersIdRouteImport } from './routes/(web)/users/$id'
 import { Route as webStudyMaterialsAddRouteImport } from './routes/(web)/study-materials/add'
 import { Route as webStudyMaterialsIdRouteImport } from './routes/(web)/study-materials/$id'
+import { Route as webSchoolsAddRouteImport } from './routes/(web)/schools/add'
 import { Route as webQuizAddRouteImport } from './routes/(web)/quiz/add'
 import { Route as webQuizIdRouteImport } from './routes/(web)/quiz/$id'
 import { Route as webQuestionsAddRouteImport } from './routes/(web)/questions/add'
@@ -49,6 +51,7 @@ import { Route as ApiinternalAuthRegisterRouteImport } from './routes/api/(inter
 import { Route as ApiinternalAuthLoginRouteImport } from './routes/api/(internal)/auth/login'
 import { Route as ApiinternalActivityRecentRouteImport } from './routes/api/(internal)/activity/recent'
 import { Route as webStudyMaterialsEditIdRouteImport } from './routes/(web)/study-materials/edit.$id'
+import { Route as webSchoolsEditIdRouteImport } from './routes/(web)/schools/edit.$id'
 import { Route as webQuizEditIdRouteImport } from './routes/(web)/quiz/edit.$id'
 import { Route as webQuestionsEditIdRouteImport } from './routes/(web)/questions/edit.$id'
 import { Route as webChaptersEditIdRouteImport } from './routes/(web)/chapters/edit.$id'
@@ -90,6 +93,11 @@ const webSubmissionsIndexRoute = webSubmissionsIndexRouteImport.update({
 const webStudyMaterialsIndexRoute = webStudyMaterialsIndexRouteImport.update({
   id: '/study-materials/',
   path: '/study-materials/',
+  getParentRoute: () => webRouteRoute,
+} as any)
+const webSchoolsIndexRoute = webSchoolsIndexRouteImport.update({
+  id: '/schools/',
+  path: '/schools/',
   getParentRoute: () => webRouteRoute,
 } as any)
 const webQuizIndexRoute = webQuizIndexRouteImport.update({
@@ -150,6 +158,11 @@ const webStudyMaterialsAddRoute = webStudyMaterialsAddRouteImport.update({
 const webStudyMaterialsIdRoute = webStudyMaterialsIdRouteImport.update({
   id: '/study-materials/$id',
   path: '/study-materials/$id',
+  getParentRoute: () => webRouteRoute,
+} as any)
+const webSchoolsAddRoute = webSchoolsAddRouteImport.update({
+  id: '/schools/add',
+  path: '/schools/add',
   getParentRoute: () => webRouteRoute,
 } as any)
 const webQuizAddRoute = webQuizAddRouteImport.update({
@@ -256,6 +269,11 @@ const webStudyMaterialsEditIdRoute = webStudyMaterialsEditIdRouteImport.update({
   path: '/study-materials/edit/$id',
   getParentRoute: () => webRouteRoute,
 } as any)
+const webSchoolsEditIdRoute = webSchoolsEditIdRouteImport.update({
+  id: '/schools/edit/$id',
+  path: '/schools/edit/$id',
+  getParentRoute: () => webRouteRoute,
+} as any)
 const webQuizEditIdRoute = webQuizEditIdRouteImport.update({
   id: '/quiz/edit/$id',
   path: '/quiz/edit/$id',
@@ -282,6 +300,7 @@ export interface FileRoutesByFullPath {
   '/questions/add': typeof webQuestionsAddRoute
   '/quiz/$id': typeof webQuizIdRoute
   '/quiz/add': typeof webQuizAddRoute
+  '/schools/add': typeof webSchoolsAddRoute
   '/study-materials/$id': typeof webStudyMaterialsIdRoute
   '/study-materials/add': typeof webStudyMaterialsAddRoute
   '/users/$id': typeof webUsersIdRoute
@@ -294,12 +313,14 @@ export interface FileRoutesByFullPath {
   '/chapters': typeof webChaptersIndexRoute
   '/questions': typeof webQuestionsIndexRoute
   '/quiz': typeof webQuizIndexRoute
+  '/schools': typeof webSchoolsIndexRoute
   '/study-materials': typeof webStudyMaterialsIndexRoute
   '/submissions': typeof webSubmissionsIndexRoute
   '/users': typeof webUsersIndexRoute
   '/chapters/edit/$id': typeof webChaptersEditIdRoute
   '/questions/edit/$id': typeof webQuestionsEditIdRoute
   '/quiz/edit/$id': typeof webQuizEditIdRoute
+  '/schools/edit/$id': typeof webSchoolsEditIdRoute
   '/study-materials/edit/$id': typeof webStudyMaterialsEditIdRoute
   '/api/activity/recent': typeof ApiinternalActivityRecentRoute
   '/api/auth/login': typeof ApiinternalAuthLoginRoute
@@ -326,6 +347,7 @@ export interface FileRoutesByTo {
   '/questions/add': typeof webQuestionsAddRoute
   '/quiz/$id': typeof webQuizIdRoute
   '/quiz/add': typeof webQuizAddRoute
+  '/schools/add': typeof webSchoolsAddRoute
   '/study-materials/$id': typeof webStudyMaterialsIdRoute
   '/study-materials/add': typeof webStudyMaterialsAddRoute
   '/users/$id': typeof webUsersIdRoute
@@ -338,12 +360,14 @@ export interface FileRoutesByTo {
   '/chapters': typeof webChaptersIndexRoute
   '/questions': typeof webQuestionsIndexRoute
   '/quiz': typeof webQuizIndexRoute
+  '/schools': typeof webSchoolsIndexRoute
   '/study-materials': typeof webStudyMaterialsIndexRoute
   '/submissions': typeof webSubmissionsIndexRoute
   '/users': typeof webUsersIndexRoute
   '/chapters/edit/$id': typeof webChaptersEditIdRoute
   '/questions/edit/$id': typeof webQuestionsEditIdRoute
   '/quiz/edit/$id': typeof webQuizEditIdRoute
+  '/schools/edit/$id': typeof webSchoolsEditIdRoute
   '/study-materials/edit/$id': typeof webStudyMaterialsEditIdRoute
   '/api/activity/recent': typeof ApiinternalActivityRecentRoute
   '/api/auth/login': typeof ApiinternalAuthLoginRoute
@@ -372,6 +396,7 @@ export interface FileRoutesById {
   '/(web)/questions/add': typeof webQuestionsAddRoute
   '/(web)/quiz/$id': typeof webQuizIdRoute
   '/(web)/quiz/add': typeof webQuizAddRoute
+  '/(web)/schools/add': typeof webSchoolsAddRoute
   '/(web)/study-materials/$id': typeof webStudyMaterialsIdRoute
   '/(web)/study-materials/add': typeof webStudyMaterialsAddRoute
   '/(web)/users/$id': typeof webUsersIdRoute
@@ -384,12 +409,14 @@ export interface FileRoutesById {
   '/(web)/chapters/': typeof webChaptersIndexRoute
   '/(web)/questions/': typeof webQuestionsIndexRoute
   '/(web)/quiz/': typeof webQuizIndexRoute
+  '/(web)/schools/': typeof webSchoolsIndexRoute
   '/(web)/study-materials/': typeof webStudyMaterialsIndexRoute
   '/(web)/submissions/': typeof webSubmissionsIndexRoute
   '/(web)/users/': typeof webUsersIndexRoute
   '/(web)/chapters/edit/$id': typeof webChaptersEditIdRoute
   '/(web)/questions/edit/$id': typeof webQuestionsEditIdRoute
   '/(web)/quiz/edit/$id': typeof webQuizEditIdRoute
+  '/(web)/schools/edit/$id': typeof webSchoolsEditIdRoute
   '/(web)/study-materials/edit/$id': typeof webStudyMaterialsEditIdRoute
   '/api/(internal)/activity/recent': typeof ApiinternalActivityRecentRoute
   '/api/(internal)/auth/login': typeof ApiinternalAuthLoginRoute
@@ -418,6 +445,7 @@ export interface FileRouteTypes {
     | '/questions/add'
     | '/quiz/$id'
     | '/quiz/add'
+    | '/schools/add'
     | '/study-materials/$id'
     | '/study-materials/add'
     | '/users/$id'
@@ -430,12 +458,14 @@ export interface FileRouteTypes {
     | '/chapters'
     | '/questions'
     | '/quiz'
+    | '/schools'
     | '/study-materials'
     | '/submissions'
     | '/users'
     | '/chapters/edit/$id'
     | '/questions/edit/$id'
     | '/quiz/edit/$id'
+    | '/schools/edit/$id'
     | '/study-materials/edit/$id'
     | '/api/activity/recent'
     | '/api/auth/login'
@@ -462,6 +492,7 @@ export interface FileRouteTypes {
     | '/questions/add'
     | '/quiz/$id'
     | '/quiz/add'
+    | '/schools/add'
     | '/study-materials/$id'
     | '/study-materials/add'
     | '/users/$id'
@@ -474,12 +505,14 @@ export interface FileRouteTypes {
     | '/chapters'
     | '/questions'
     | '/quiz'
+    | '/schools'
     | '/study-materials'
     | '/submissions'
     | '/users'
     | '/chapters/edit/$id'
     | '/questions/edit/$id'
     | '/quiz/edit/$id'
+    | '/schools/edit/$id'
     | '/study-materials/edit/$id'
     | '/api/activity/recent'
     | '/api/auth/login'
@@ -507,6 +540,7 @@ export interface FileRouteTypes {
     | '/(web)/questions/add'
     | '/(web)/quiz/$id'
     | '/(web)/quiz/add'
+    | '/(web)/schools/add'
     | '/(web)/study-materials/$id'
     | '/(web)/study-materials/add'
     | '/(web)/users/$id'
@@ -519,12 +553,14 @@ export interface FileRouteTypes {
     | '/(web)/chapters/'
     | '/(web)/questions/'
     | '/(web)/quiz/'
+    | '/(web)/schools/'
     | '/(web)/study-materials/'
     | '/(web)/submissions/'
     | '/(web)/users/'
     | '/(web)/chapters/edit/$id'
     | '/(web)/questions/edit/$id'
     | '/(web)/quiz/edit/$id'
+    | '/(web)/schools/edit/$id'
     | '/(web)/study-materials/edit/$id'
     | '/api/(internal)/activity/recent'
     | '/api/(internal)/auth/login'
@@ -609,6 +645,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof webStudyMaterialsIndexRouteImport
       parentRoute: typeof webRouteRoute
     }
+    '/(web)/schools/': {
+      id: '/(web)/schools/'
+      path: '/schools'
+      fullPath: '/schools'
+      preLoaderRoute: typeof webSchoolsIndexRouteImport
+      parentRoute: typeof webRouteRoute
+    }
     '/(web)/quiz/': {
       id: '/(web)/quiz/'
       path: '/quiz'
@@ -691,6 +734,13 @@ declare module '@tanstack/react-router' {
       path: '/study-materials/$id'
       fullPath: '/study-materials/$id'
       preLoaderRoute: typeof webStudyMaterialsIdRouteImport
+      parentRoute: typeof webRouteRoute
+    }
+    '/(web)/schools/add': {
+      id: '/(web)/schools/add'
+      path: '/schools/add'
+      fullPath: '/schools/add'
+      preLoaderRoute: typeof webSchoolsAddRouteImport
       parentRoute: typeof webRouteRoute
     }
     '/(web)/quiz/add': {
@@ -833,6 +883,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof webStudyMaterialsEditIdRouteImport
       parentRoute: typeof webRouteRoute
     }
+    '/(web)/schools/edit/$id': {
+      id: '/(web)/schools/edit/$id'
+      path: '/schools/edit/$id'
+      fullPath: '/schools/edit/$id'
+      preLoaderRoute: typeof webSchoolsEditIdRouteImport
+      parentRoute: typeof webRouteRoute
+    }
     '/(web)/quiz/edit/$id': {
       id: '/(web)/quiz/edit/$id'
       path: '/quiz/edit/$id'
@@ -864,18 +921,21 @@ interface webRouteRouteChildren {
   webQuestionsAddRoute: typeof webQuestionsAddRoute
   webQuizIdRoute: typeof webQuizIdRoute
   webQuizAddRoute: typeof webQuizAddRoute
+  webSchoolsAddRoute: typeof webSchoolsAddRoute
   webStudyMaterialsIdRoute: typeof webStudyMaterialsIdRoute
   webStudyMaterialsAddRoute: typeof webStudyMaterialsAddRoute
   webUsersIdRoute: typeof webUsersIdRoute
   webChaptersIndexRoute: typeof webChaptersIndexRoute
   webQuestionsIndexRoute: typeof webQuestionsIndexRoute
   webQuizIndexRoute: typeof webQuizIndexRoute
+  webSchoolsIndexRoute: typeof webSchoolsIndexRoute
   webStudyMaterialsIndexRoute: typeof webStudyMaterialsIndexRoute
   webSubmissionsIndexRoute: typeof webSubmissionsIndexRoute
   webUsersIndexRoute: typeof webUsersIndexRoute
   webChaptersEditIdRoute: typeof webChaptersEditIdRoute
   webQuestionsEditIdRoute: typeof webQuestionsEditIdRoute
   webQuizEditIdRoute: typeof webQuizEditIdRoute
+  webSchoolsEditIdRoute: typeof webSchoolsEditIdRoute
   webStudyMaterialsEditIdRoute: typeof webStudyMaterialsEditIdRoute
 }
 
@@ -886,18 +946,21 @@ const webRouteRouteChildren: webRouteRouteChildren = {
   webQuestionsAddRoute: webQuestionsAddRoute,
   webQuizIdRoute: webQuizIdRoute,
   webQuizAddRoute: webQuizAddRoute,
+  webSchoolsAddRoute: webSchoolsAddRoute,
   webStudyMaterialsIdRoute: webStudyMaterialsIdRoute,
   webStudyMaterialsAddRoute: webStudyMaterialsAddRoute,
   webUsersIdRoute: webUsersIdRoute,
   webChaptersIndexRoute: webChaptersIndexRoute,
   webQuestionsIndexRoute: webQuestionsIndexRoute,
   webQuizIndexRoute: webQuizIndexRoute,
+  webSchoolsIndexRoute: webSchoolsIndexRoute,
   webStudyMaterialsIndexRoute: webStudyMaterialsIndexRoute,
   webSubmissionsIndexRoute: webSubmissionsIndexRoute,
   webUsersIndexRoute: webUsersIndexRoute,
   webChaptersEditIdRoute: webChaptersEditIdRoute,
   webQuestionsEditIdRoute: webQuestionsEditIdRoute,
   webQuizEditIdRoute: webQuizEditIdRoute,
+  webSchoolsEditIdRoute: webSchoolsEditIdRoute,
   webStudyMaterialsEditIdRoute: webStudyMaterialsEditIdRoute,
 }
 

@@ -32,7 +32,7 @@ function RouteComponent() {
 			<div className="mt-8">
 				<QuestionList
 					questions={studyMaterial.questions}
-					disableKey={["materialId"] as any}
+					disableKey={["materialId"] as (keyof Question)[]}
 				/>
 			</div>
 		</div>

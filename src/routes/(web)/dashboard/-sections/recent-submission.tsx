@@ -65,7 +65,7 @@ export default function RecentSubmission() {
 		getCoreRowModel: getCoreRowModel(),
 		getSortedRowModel: getSortedRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
-	} as any);
+	});
 
 	return (
 		<TanstackTable

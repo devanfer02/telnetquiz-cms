@@ -103,6 +103,11 @@ export const editUserSchema = z.object({
 	grade: z.string().max(10).optional().or(z.literal("")),
 });
 
+export const schoolSchema = z.object({
+	name: z.string().min(2, "Nama sekolah minimal 2 karakter"),
+});
+
+export type SchoolFormData = z.infer<typeof schoolSchema>;
 export type EditUserFormData = z.infer<typeof editUserSchema>;
 export type QuizFormData = z.infer<typeof quizSchema>;
 export type OptionFormData = z.infer<typeof optionSchema>;

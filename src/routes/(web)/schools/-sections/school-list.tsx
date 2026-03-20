@@ -10,64 +10,42 @@ import {
 	useReactTable,
 } from "@tanstack/react-table";
 import { useState } from "react";
-import { removeChapter } from "@/actions/chapters";
+import { removeSchool } from "@/actions/schools";
 import ActionCell from "@/components/global/action-cell";
 import { SortableHeader } from "@/components/global/sortable-header";
-import TableLink from "@/components/global/table-link";
 import TanstackTable from "@/components/global/ts-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { QUERY_KEYS } from "@/lib/constant";
 import { setFlashState } from "@/store/use-flash";
 
-interface ChapterListProps {
-	chapters: Chapter[];
+interface SchoolListProps {
+	schools: School[];
 }
 
-export default function ChapterList({ chapters }: ChapterListProps) {
+export default function SchoolList({ schools }: SchoolListProps) {
 	const queryClient = useQueryClient();
 	const [keyword, setKeyword] = useState("");
 	const [sorting, setSorting] = useState<SortingState>([]);
 
-	const columns: ColumnDef<Chapter>[] = [
+	const columns: ColumnDef<School>[] = [
 		{
 			accessorKey: "id",
 			header: ({ column }) => <SortableHeader column={column} title="ID" />,
 			size: 10,
-			cell: ({ row }) => {
-				const id = row.original.id.toString();
-
-				return <TableLink to="/chapters/$id" paramKey="id" paramValue={id} />;
-			},
 		},
 		{
-			accessorKey: "title",
-			header: ({ column }) => <SortableHeader column={column} title="Title" />,
-			size: 50,
-		},
-		{
-			accessorKey: "description",
-			header: "Description",
-			size: 200,
-			cell: ({ row }) => (
-				<div
-					className="max-h-20 overflow-y-auto prose prose-sm"
-					dangerouslySetInnerHTML={{ __html: row.original.description }}
-				/>
+			accessorKey: "name",
+			header: ({ column }) => (
+				<SortableHeader column={column} title="Nama Sekolah" />
 			),
+			size: 200,
 		},
 		{
-			accessorKey: "mascotId",
-			header: "Mascot",
-			cell: ({ row }) => {
-				const mascotId = row.original.mascotId.toString();
-
-				const url = `/assets/mascot/chap${mascotId}.png`;
-
-				return (
-					<img className="max-w-10" src={url} alt={`Mascot ${mascotId}`} />
-				);
-			},
+			accessorKey: "createdAt",
+			header: "Created At",
+			cell: ({ row }) =>
+				new Date(row.original.createdAt).toLocaleDateString("id-ID"),
 		},
 		{
 			id: "actions",
@@ -80,16 +58,16 @@ export default function ChapterList({ chapters }: ChapterListProps) {
 					<ActionCell
 						row={row}
 						keyName="id"
-						editHref="/chapters/edit/$id"
+						editHref="/schools/edit/$id"
 						handleDelete={async () => {
-							const result = await removeChapter({ data: { id } });
+							const result = await removeSchool({ data: { id } });
 							await queryClient.invalidateQueries({
-								queryKey: [QUERY_KEYS.CHAPTERS],
+								queryKey: [QUERY_KEYS.SCHOOLS],
 							});
 							if (result !== null) {
 								setFlashState({
 									type: "success",
-									message: "Successfully deleted chapter",
+									message: "Successfully deleted school",
 								});
 							}
 						}}
@@ -100,7 +78,7 @@ export default function ChapterList({ chapters }: ChapterListProps) {
 	];
 
 	const table = useReactTable({
-		data: chapters,
+		data: schools,
 		columns,
 		state: { globalFilter: keyword, sorting },
 		onGlobalFilterChange: setKeyword,
@@ -116,20 +94,20 @@ export default function ChapterList({ chapters }: ChapterListProps) {
 		<>
 			<div className="flex items-center justify-between mb-4 gap-x-5">
 				<Input
-					placeholder="Cari chapter..."
+					placeholder="Cari sekolah..."
 					value={keyword ?? ""}
 					onChange={(e) => setKeyword(e.target.value)}
 					className="w-full"
 				/>
 				<Button className="px-4 py-2 rounded-md bg-primary border border-telnet-primary bg-telnet-primary text-white hover:bg-white hover:text-telnet-primary duration-200 cursor-pointer">
-					<Link to="/chapters/add">Tambah Chapter</Link>
+					<Link to="/schools/add">Tambah Sekolah</Link>
 				</Button>
 			</div>
 			<TanstackTable
 				table={table}
 				columns={columns}
-				title="List Chapters"
-				fallbackMessage="No Chapter created yet"
+				title="List Schools"
+				fallbackMessage="No School created yet"
 			/>
 		</>
 	);

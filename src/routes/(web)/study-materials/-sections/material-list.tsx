@@ -81,7 +81,7 @@ export default function StudyMaterialList({
 				return (
 					<img
 						src={row.original.imageLink}
-						alt="image material"
+						alt="Study material"
 						className="w-18 h-18"
 					/>
 				);
@@ -128,7 +128,7 @@ export default function StudyMaterialList({
 		getSortedRowModel: getSortedRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
 		getFilteredRowModel: getFilteredRowModel(),
-	} as any);
+	});
 
 	return (
 		<>
