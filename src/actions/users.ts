@@ -7,6 +7,7 @@ import {
 	deleteUser,
 	fetchUserSessions,
 	patchUser,
+	resetUserProgress,
 	revokeAllUserSessions,
 	revokeSession,
 } from "@/services/users";
@@ -103,6 +104,25 @@ export const deleteAllUserSessions = createServerFn({
 				Effect.provide(DbLayer),
 				Effect.catchAll((err) => {
 					console.error("Failed to revoke all user sessions. ERR:", err);
+
+					return Effect.succeed(null);
+				}),
+			),
+		);
+	});
+
+export const resetUserProgressAction = createServerFn({
+	method: "POST",
+})
+	.inputValidator(idStringSchema)
+	.handler(async ({ data }) => {
+		const { id } = data;
+
+		return Effect.runPromise(
+			resetUserProgress(id).pipe(
+				Effect.provide(DbLayer),
+				Effect.catchAll((err) => {
+					console.error("Failed to reset user progress. ERR:", err);
 
 					return Effect.succeed(null);
 				}),

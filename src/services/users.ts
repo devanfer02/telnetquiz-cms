@@ -401,6 +401,34 @@ export const revokeAllUserSessions = (userId: string) =>
 		return { success: true, userId };
 	});
 
+export const resetUserProgress = (userId: string) =>
+	Effect.gen(function* () {
+		const { db } = yield* Db;
+
+		yield* dbTryPromise({
+			try: () => db.delete(submissions).where(eq(submissions.userId, userId)),
+			catch: (error) =>
+				new DatabaseError({
+					cause: error,
+					message: `Failed to delete submissions for user ${userId}`,
+				}),
+		});
+
+		yield* dbTryPromise({
+			try: () =>
+				db
+					.delete(pretestSubmissions)
+					.where(eq(pretestSubmissions.userId, userId)),
+			catch: (error) =>
+				new DatabaseError({
+					cause: error,
+					message: `Failed to delete pretest submissions for user ${userId}`,
+				}),
+		});
+
+		return { success: true, userId };
+	});
+
 export const fetchUserAchievements = (userId: string) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;

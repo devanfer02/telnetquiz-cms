@@ -1,7 +1,11 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { Edit, Trash2 } from "lucide-react";
+import { Edit, RotateCcw, Trash2 } from "lucide-react";
 import { useState } from "react";
-import { removeUser, updateUser } from "@/actions/users";
+import {
+	removeUser,
+	resetUserProgressAction,
+	updateUser,
+} from "@/actions/users";
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -67,6 +71,22 @@ export default function UserActions({ user }: UserActionsProps) {
 		},
 	});
 
+	const handleResetProgress = async () => {
+		const result = await resetUserProgressAction({ data: { id: user.id } });
+		if (result) {
+			setFlashState({
+				type: "success",
+				message: "User progress has been reset",
+			});
+			await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.USERS] });
+		} else {
+			setFlashState({
+				type: "error",
+				message: "Failed to reset user progress",
+			});
+		}
+	};
+
 	const handleDelete = async () => {
 		const result = await removeUser({ data: { id: user.id } });
 		if (result) {
@@ -106,6 +126,40 @@ export default function UserActions({ user }: UserActionsProps) {
 					</div>
 				</SheetContent>
 			</Sheet>
+
+			<AlertDialog>
+				<AlertDialogTrigger asChild>
+					<Button
+						size="icon"
+						className="bg-amber-600 hover:bg-amber-700 text-white cursor-pointer"
+						title="Reset Progress"
+					>
+						<RotateCcw size={18} />
+					</Button>
+				</AlertDialogTrigger>
+				<AlertDialogContent>
+					<AlertDialogHeader>
+						<AlertDialogTitle>Reset User Progress?</AlertDialogTitle>
+						<AlertDialogDescription>
+							This will delete all quiz submissions and pretest submissions for{" "}
+							<span className="font-semibold">{user.name}</span>. Their scores,
+							level completions, and achievements will be reset. This action
+							cannot be undone.
+						</AlertDialogDescription>
+					</AlertDialogHeader>
+					<AlertDialogFooter>
+						<AlertDialogCancel className="cursor-pointer">
+							Cancel
+						</AlertDialogCancel>
+						<AlertDialogAction
+							onClick={handleResetProgress}
+							className="bg-amber-600 text-white hover:bg-amber-700 cursor-pointer"
+						>
+							Reset Progress
+						</AlertDialogAction>
+					</AlertDialogFooter>
+				</AlertDialogContent>
+			</AlertDialog>
 
 			<AlertDialog>
 				<AlertDialogTrigger asChild>

@@ -52,4 +52,18 @@ export type QuestionQueryData = z.infer<typeof questionQuerySchema>;
 
 export type QuizSubmissionFormData = z.infer<typeof quizSubmissionSchema>;
 
+export const verifyAnswerSchema = z.object({
+	quiz_id: z.number(),
+	question_id: z.number(),
+	answered_option_id: z.number(),
+});
+
 export type UpdateProfileFormData = z.infer<typeof updateProfileSchema>;
+
+export type VerifyAnswerData = z.infer<typeof verifyAnswerSchema>;
+
+export const quizMaterialsSchema = z.object({
+	quiz_id: z.number(),
+});
+
+export type QuizMaterialsData = z.infer<typeof quizMaterialsSchema>;
