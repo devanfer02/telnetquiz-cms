@@ -304,6 +304,39 @@ export const fetchUserProfile = (userId: string) =>
 			}
 		}
 
+		// Compute daily streak from submissions
+		const streakDates = yield* dbTryPromise({
+			try: () =>
+				db
+					.selectDistinct({
+						date: sql<string>`DATE(${submissions.createdAt})`,
+					})
+					.from(submissions)
+					.where(eq(submissions.userId, userId))
+					.orderBy(sql`DATE(${submissions.createdAt}) DESC`),
+			catch: (error) =>
+				new DatabaseError({
+					cause: error,
+					message: "Failed to fetch streak data",
+				}),
+		});
+
+		let dailyStreak = 0;
+		const today = new Date();
+		today.setHours(0, 0, 0, 0);
+
+		for (const row of streakDates) {
+			const d = new Date(row.date);
+			d.setHours(0, 0, 0, 0);
+			const expectedDate = new Date(today);
+			expectedDate.setDate(expectedDate.getDate() - dailyStreak);
+			if (d.getTime() === expectedDate.getTime()) {
+				dailyStreak++;
+			} else {
+				break;
+			}
+		}
+
 		return {
 			id: user.id,
 			fullname: user.name,
@@ -321,6 +354,8 @@ export const fetchUserProfile = (userId: string) =>
 				total_score: Number(scoreResult[0]?.totalScore ?? 0),
 				levels_completed: Number(scoreResult[0]?.levelsCompleted ?? 0),
 				chapters_completed: chaptersCompleted,
+				total_chapters: allChaptersData.length,
+				daily_streak: dailyStreak,
 			},
 		};
 	});

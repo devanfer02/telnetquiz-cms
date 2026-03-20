@@ -10,6 +10,7 @@ Read the relevant section **before** writing code. These are mandatory, not sugg
 
 | Section | What it covers |
 |---------|---------------|
+| [Rules](#rules) | **Must** check for running build processes before starting a new build |
 | [Auto-Imports](#auto-imports-srctypes) | **Do NOT** manually export/import from `src/types/` — handled by `unplugin-auto-import` |
 | [Code Quality](#code-quality--bun-run-check) | Fix ALL Biome warnings (`noExplicitAny`, `noUnusedVariables`, etc.) |
 | [Code Quality > Exceptions](#exceptions) | Files to skip when fixing warnings (e.g. `use-custom-form.ts`, `http.ts`) |
@@ -47,6 +48,13 @@ These files will report Biome warnings but **must not be modified** to fix them:
 
 - `src/hooks/use-custom-form.ts` — custom form hook with intentional API shape; ignore its warnings
 - `src/lib/http.ts` — `response()` uses `Record<string, any>` intentionally because API routes return varying data shapes; do not change its signature
+
+## Rules
+
+### Build Safety
+
+**BEFORE running `bun run build`, check for conflicts:**
+1. Run `pgrep -f 'bun run build'` — if a build process is already running, **DO NOT** run another build. Notify the user that a build is already in progress.
 
 ## Build Verification
 
