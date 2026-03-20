@@ -5,6 +5,7 @@ import { AuthLayer } from "@/lib/auth";
 import { DbLayer } from "@/lib/db";
 import {
 	deleteUser,
+	fetchUserDetail,
 	fetchUserSessions,
 	patchUser,
 	resetUserProgress,
@@ -12,6 +13,25 @@ import {
 	revokeSession,
 } from "@/services/users";
 import { editUserSchema, idStringSchema } from "@/types/zod";
+
+export const getUserDetail = createServerFn({
+	method: "GET",
+})
+	.inputValidator(idStringSchema)
+	.handler(async ({ data }) => {
+		const { id } = data;
+
+		return Effect.runPromise(
+			fetchUserDetail(id).pipe(
+				Effect.provide(DbLayer),
+				Effect.catchAll((err) => {
+					console.error("Failed to fetch user detail. ERR:", err);
+
+					return Effect.succeed(null);
+				}),
+			),
+		);
+	});
 
 export const updateUser = createServerFn({
 	method: "POST",

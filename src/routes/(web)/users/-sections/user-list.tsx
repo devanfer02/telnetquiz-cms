@@ -7,6 +7,7 @@ import {
 	type SortingState,
 	useReactTable,
 } from "@tanstack/react-table";
+import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { SortableHeader } from "@/components/global/sortable-header";
 import TanstackTable from "@/components/global/ts-table";
@@ -27,6 +28,15 @@ export const columns: ColumnDef<User>[] = [
 	{
 		accessorKey: "name",
 		header: ({ column }) => <SortableHeader column={column} title="Fullname" />,
+		cell: ({ row }) => (
+			<Link
+				to="/users/$id"
+				params={{ id: row.original.id }}
+				className="text-orange-600 hover:underline font-medium"
+			>
+				{row.original.name}
+			</Link>
+		),
 	},
 	{
 		accessorKey: "email",

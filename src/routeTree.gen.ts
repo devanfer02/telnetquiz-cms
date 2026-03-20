@@ -26,6 +26,7 @@ import { Route as ApiinternalQuestionsRouteImport } from './routes/api/(internal
 import { Route as ApiinternalPretestRouteImport } from './routes/api/(internal)/pretest'
 import { Route as ApiinternalLeaderboardRouteImport } from './routes/api/(internal)/leaderboard'
 import { Route as ApiinternalAchievementsRouteImport } from './routes/api/(internal)/achievements'
+import { Route as webUsersIdRouteImport } from './routes/(web)/users/$id'
 import { Route as webStudyMaterialsAddRouteImport } from './routes/(web)/study-materials/add'
 import { Route as webStudyMaterialsIdRouteImport } from './routes/(web)/study-materials/$id'
 import { Route as webQuizAddRouteImport } from './routes/(web)/quiz/add'
@@ -133,6 +134,11 @@ const ApiinternalAchievementsRoute = ApiinternalAchievementsRouteImport.update({
   id: '/achievements',
   path: '/achievements',
   getParentRoute: () => ApiinternalRouteRoute,
+} as any)
+const webUsersIdRoute = webUsersIdRouteImport.update({
+  id: '/users/$id',
+  path: '/users/$id',
+  getParentRoute: () => webRouteRoute,
 } as any)
 const webStudyMaterialsAddRoute = webStudyMaterialsAddRouteImport.update({
   id: '/study-materials/add',
@@ -266,6 +272,7 @@ export interface FileRoutesByFullPath {
   '/quiz/add': typeof webQuizAddRoute
   '/study-materials/$id': typeof webStudyMaterialsIdRoute
   '/study-materials/add': typeof webStudyMaterialsAddRoute
+  '/users/$id': typeof webUsersIdRoute
   '/api/achievements': typeof ApiinternalAchievementsRoute
   '/api/leaderboard': typeof ApiinternalLeaderboardRoute
   '/api/pretest': typeof ApiinternalPretestRouteWithChildren
@@ -307,6 +314,7 @@ export interface FileRoutesByTo {
   '/quiz/add': typeof webQuizAddRoute
   '/study-materials/$id': typeof webStudyMaterialsIdRoute
   '/study-materials/add': typeof webStudyMaterialsAddRoute
+  '/users/$id': typeof webUsersIdRoute
   '/api/achievements': typeof ApiinternalAchievementsRoute
   '/api/leaderboard': typeof ApiinternalLeaderboardRoute
   '/api/pretest': typeof ApiinternalPretestRouteWithChildren
@@ -350,6 +358,7 @@ export interface FileRoutesById {
   '/(web)/quiz/add': typeof webQuizAddRoute
   '/(web)/study-materials/$id': typeof webStudyMaterialsIdRoute
   '/(web)/study-materials/add': typeof webStudyMaterialsAddRoute
+  '/(web)/users/$id': typeof webUsersIdRoute
   '/api/(internal)/achievements': typeof ApiinternalAchievementsRoute
   '/api/(internal)/leaderboard': typeof ApiinternalLeaderboardRoute
   '/api/(internal)/pretest': typeof ApiinternalPretestRouteWithChildren
@@ -393,6 +402,7 @@ export interface FileRouteTypes {
     | '/quiz/add'
     | '/study-materials/$id'
     | '/study-materials/add'
+    | '/users/$id'
     | '/api/achievements'
     | '/api/leaderboard'
     | '/api/pretest'
@@ -434,6 +444,7 @@ export interface FileRouteTypes {
     | '/quiz/add'
     | '/study-materials/$id'
     | '/study-materials/add'
+    | '/users/$id'
     | '/api/achievements'
     | '/api/leaderboard'
     | '/api/pretest'
@@ -476,6 +487,7 @@ export interface FileRouteTypes {
     | '/(web)/quiz/add'
     | '/(web)/study-materials/$id'
     | '/(web)/study-materials/add'
+    | '/(web)/users/$id'
     | '/api/(internal)/achievements'
     | '/api/(internal)/leaderboard'
     | '/api/(internal)/pretest'
@@ -635,6 +647,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/achievements'
       preLoaderRoute: typeof ApiinternalAchievementsRouteImport
       parentRoute: typeof ApiinternalRouteRoute
+    }
+    '/(web)/users/$id': {
+      id: '/(web)/users/$id'
+      path: '/users/$id'
+      fullPath: '/users/$id'
+      preLoaderRoute: typeof webUsersIdRouteImport
+      parentRoute: typeof webRouteRoute
     }
     '/(web)/study-materials/add': {
       id: '/(web)/study-materials/add'
@@ -809,6 +828,7 @@ interface webRouteRouteChildren {
   webQuizAddRoute: typeof webQuizAddRoute
   webStudyMaterialsIdRoute: typeof webStudyMaterialsIdRoute
   webStudyMaterialsAddRoute: typeof webStudyMaterialsAddRoute
+  webUsersIdRoute: typeof webUsersIdRoute
   webChaptersIndexRoute: typeof webChaptersIndexRoute
   webQuestionsIndexRoute: typeof webQuestionsIndexRoute
   webQuizIndexRoute: typeof webQuizIndexRoute
@@ -830,6 +850,7 @@ const webRouteRouteChildren: webRouteRouteChildren = {
   webQuizAddRoute: webQuizAddRoute,
   webStudyMaterialsIdRoute: webStudyMaterialsIdRoute,
   webStudyMaterialsAddRoute: webStudyMaterialsAddRoute,
+  webUsersIdRoute: webUsersIdRoute,
   webChaptersIndexRoute: webChaptersIndexRoute,
   webQuestionsIndexRoute: webQuestionsIndexRoute,
   webQuizIndexRoute: webQuizIndexRoute,

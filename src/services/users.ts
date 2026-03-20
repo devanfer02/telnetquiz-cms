@@ -401,6 +401,149 @@ export const revokeAllUserSessions = (userId: string) =>
 		return { success: true, userId };
 	});
 
+export const fetchUserDetail = (userId: string) =>
+	Effect.gen(function* () {
+		const { db } = yield* Db;
+
+		const result = yield* dbTryPromise({
+			try: () => db.select().from(users).where(eq(users.id, userId)).limit(1),
+			catch: (error) =>
+				new DatabaseError({
+					cause: error,
+					message: "Failed to fetch user",
+				}),
+		});
+
+		if (result.length === 0) {
+			return yield* Effect.fail(
+				new NotFoundError({ id: userId, entity: "User" }),
+			);
+		}
+
+		const user = result[0];
+
+		// Fetch quiz submissions with chapter and quiz info
+		const userSubmissions = yield* dbTryPromise({
+			try: () =>
+				db.query.submissions.findMany({
+					where: eq(submissions.userId, userId),
+					orderBy: desc(submissions.createdAt),
+					with: {
+						chapter: true,
+						quiz: true,
+					},
+				}),
+			catch: (error) =>
+				new DatabaseError({
+					cause: error,
+					message: "Failed to fetch user submissions",
+				}),
+		});
+
+		// Fetch pretest submissions
+		const userPretestSubmissions = yield* dbTryPromise({
+			try: () =>
+				db.query.pretestSubmissions.findMany({
+					where: eq(pretestSubmissions.userId, userId),
+					with: {
+						question: true,
+						answeredOption: true,
+					},
+				}),
+			catch: (error) =>
+				new DatabaseError({
+					cause: error,
+					message: "Failed to fetch user pretest submissions",
+				}),
+		});
+
+		// Compute stats
+		const totalScore = userSubmissions.reduce(
+			(sum, s) => sum + (s.score ?? 0),
+			0,
+		);
+		const levelsCompleted = new Set(userSubmissions.map((s) => s.quizId)).size;
+
+		// Chapters completed: chapters where user has completed ALL quizzes
+		const allChaptersData = yield* dbTryPromise({
+			try: () =>
+				db
+					.select({
+						id: chapters.id,
+						quizCount: sql<number>`count(${quizzes.id})`.as("quiz_count"),
+					})
+					.from(chapters)
+					.leftJoin(quizzes, eq(chapters.id, quizzes.chapterId))
+					.groupBy(chapters.id),
+			catch: (error) =>
+				new DatabaseError({
+					cause: error,
+					message: "Failed to fetch chapters for stats",
+				}),
+		});
+
+		const completedByChapter = new Map<number, Set<number>>();
+		for (const sub of userSubmissions) {
+			if (sub.chapterId == null || sub.quizId == null) continue;
+			const set = completedByChapter.get(sub.chapterId) ?? new Set();
+			set.add(sub.quizId);
+			completedByChapter.set(sub.chapterId, set);
+		}
+
+		let chaptersCompleted = 0;
+		for (const chapter of allChaptersData) {
+			const quizCount = Number(chapter.quizCount);
+			if (quizCount === 0) continue;
+			const completed = completedByChapter.get(chapter.id);
+			if (completed && completed.size >= quizCount) {
+				chaptersCompleted++;
+			}
+		}
+
+		const pretestCorrect = userPretestSubmissions.filter(
+			(p) => p.isCorrect,
+		).length;
+		const pretestTotal = userPretestSubmissions.length;
+
+		return {
+			user: {
+				id: user.id,
+				name: user.name,
+				email: user.email,
+				image: user.image,
+				createdAt: user.createdAt,
+				updatedAt: user.updatedAt,
+			},
+			stats: {
+				totalScore,
+				levelsCompleted,
+				chaptersCompleted,
+				totalSubmissions: userSubmissions.length,
+				pretestTaken: pretestTotal > 0,
+				pretestScore:
+					pretestTotal > 0
+						? Math.round((pretestCorrect / pretestTotal) * 100)
+						: null,
+				pretestCorrect,
+				pretestTotal,
+			},
+			submissions: userSubmissions.map((s) => ({
+				id: s.id,
+				chapterTitle: s.chapter?.title ?? "-",
+				quizLevel: s.quiz?.level ?? 0,
+				score: s.score ?? 0,
+				createdAt: s.createdAt?.toISOString() ?? "",
+			})),
+			pretestSubmissions: userPretestSubmissions.map((p) => ({
+				id: p.id,
+				question: p.question?.question ?? "-",
+				description: p.question?.description ?? "",
+				answeredOption: p.answeredOption?.text ?? "-",
+				isCorrect: p.isCorrect,
+			})),
+		};
+	});
+
 export const resetUserProgress = (userId: string) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;

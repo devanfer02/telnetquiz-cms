@@ -59,6 +59,7 @@ export const QUERY_KEYS = {
 	QUESTIONS: "question-list",
 	STUDY_MATERIALS: "study-material-list",
 	USERS: "user-list",
+	USER_DETAIL: "user-detail",
 	USER_SESSIONS: "user-sessions",
 	SUBMISSIONS: "submission-list",
 	AVERAGE_SCORES: "average-scores",
