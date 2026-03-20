@@ -163,6 +163,10 @@ API Route → parseBody + service (Effect.gen) → db (Drizzle) → schema
                 ↑ middleware: apiKey + logger (+ auth if needed)
 ```
 
+## Gotchas
+
+- **Don't add `authMiddleware` to public-facing API endpoints.** If an endpoint doesn't need the user's session/context (e.g. `/api/schools` is called during registration before login), only rely on the parent route's `apiKeyMiddleware`. Adding `authMiddleware` to these endpoints causes 401 responses, which triggers the mobile app's global session-expiration handler and kicks the user back to the login screen.
+
 ### Key Infrastructure Files (don't re-read these, patterns are stable)
 
 | File | Purpose |

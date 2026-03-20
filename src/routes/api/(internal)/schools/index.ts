@@ -2,13 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Effect } from "effect";
 import { DbLayer } from "@/lib/db";
 import { HttpStatus, response } from "@/lib/http";
-import { authMiddleware } from "@/middlewares/auth";
 import type { DatabaseError } from "@/services/errors/errors";
 import { fetchSchoolsPaginated, fetchVisibleSchools } from "@/services/schools";
 
 export const Route = createFileRoute("/api/(internal)/schools/")({
 	server: {
-		middleware: [authMiddleware],
 		handlers: {
 			GET: async ({ request }) => {
 				const url = new URL(request.url);
