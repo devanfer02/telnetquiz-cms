@@ -85,6 +85,13 @@
 			"when": 1768186745671,
 			"tag": "0011_neat_wild_child",
 			"breakpoints": true
+		},
+		{
+			"idx": 12,
+			"version": "7",
+			"when": 1774002283874,
+			"tag": "0012_giant_anthem",
+			"breakpoints": true
 		}
 	]
 }

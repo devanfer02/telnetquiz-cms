@@ -8,6 +8,9 @@ export const registerUserSchema = z.object({
 		.min(6)
 		.max(255)
 		.regex(/\d/, "Must contain at least one number"),
+	school_id: z.number(),
+	gender: z.boolean(),
+	grade: z.string().min(1).max(10),
 });
 
 export const loginUserSchema = z.object({
@@ -40,6 +43,7 @@ export const quizSubmissionSchema = z.object({
 export const updateProfileSchema = z.object({
 	fullname: z.string().min(3).max(255).optional(),
 	image: z.string().url().optional(),
+	bio: z.string().max(500).optional(),
 });
 
 export type RegisterUserFormData = z.infer<typeof registerUserSchema>;

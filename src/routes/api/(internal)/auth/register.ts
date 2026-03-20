@@ -1,7 +1,12 @@
+import { DbLayer } from "@/lib/db";
 import { HttpStatus, response } from "@/lib/http";
 import { parseBody } from "@/lib/http";
 import { registerUser } from "@/services/auth";
-import { AuthError, ValidationError } from "@/services/errors/errors";
+import {
+	AuthError,
+	DatabaseError,
+	ValidationError,
+} from "@/services/errors/errors";
 import { registerUserSchema } from "@/types/zod.api";
 import { createFileRoute } from "@tanstack/react-router";
 import { Effect } from "effect";
@@ -25,6 +30,7 @@ export const Route = createFileRoute("/api/(internal)/auth/register")({
 							HttpStatus.CREATED,
 						);
 					}).pipe(
+						Effect.provide(DbLayer),
 						Effect.catchTags({
 							ValidationError: (err: ValidationError) =>
 								Effect.succeed(
@@ -44,6 +50,16 @@ export const Route = createFileRoute("/api/(internal)/auth/register")({
 											errors: err.message,
 										},
 										HttpStatus.BAD_REQUEST,
+									),
+								),
+							DatabaseError: (err: DatabaseError) =>
+								Effect.succeed(
+									response(
+										{
+											message: "Failed to register user",
+											errors: err.message,
+										},
+										HttpStatus.INTERNAL_SERVER_ERROR,
 									),
 								),
 						}),

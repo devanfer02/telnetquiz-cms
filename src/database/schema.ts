@@ -16,6 +16,12 @@ export const timestamps = {
 	updatedAt: timestamp("updated_at").notNull().defaultNow(),
 };
 
+export const schools = pgTable("schools", {
+	id: serial().primaryKey(),
+	name: varchar().notNull(),
+	...timestamps,
+});
+
 export const users = pgTable("users", {
 	id: text("id").primaryKey(),
 	name: varchar("fullname").notNull(),
@@ -23,6 +29,10 @@ export const users = pgTable("users", {
 	emailVerified: boolean("email_verified").default(false).notNull(),
 	image: text("image"),
 	role: text("role"),
+	schoolId: integer("school_id").references(() => schools.id),
+	gender: boolean("gender"),
+	grade: varchar("grade"),
+	bio: text("bio"),
 	createdAt: timestamp("created_at").defaultNow().notNull(),
 	updatedAt: timestamp("updated_at")
 		.defaultNow()
@@ -172,7 +182,12 @@ export const studyMaterials = pgTable("study_materials", {
 	...timestamps,
 });
 
-export const usersRelations = relations(users, ({ many }) => ({
+export const schoolsRelations = relations(schools, ({ many }) => ({
+	users: many(users),
+}));
+
+export const usersRelations = relations(users, ({ one, many }) => ({
+	school: one(schools, { fields: [users.schoolId], references: [schools.id] }),
 	submissions: many(submissions),
 }));
 
