@@ -1,9 +1,9 @@
-import { generateFilename, getFileExtension } from "@/lib/utils";
-import { Effect } from "effect";
-import { CloudflareR2Error, InternalServerError } from "./errors/errors";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { Effect } from "effect";
 import { env } from "@/lib/env";
 import { S3 } from "@/lib/s3";
+import { generateFilename, getFileExtension } from "@/lib/utils";
+import { CloudflareR2Error, InternalServerError } from "./errors/errors";
 
 export const uploadAvatar = (file: File) =>
 	Effect.gen(function* () {

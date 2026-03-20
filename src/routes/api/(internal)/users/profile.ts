@@ -1,15 +1,15 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { Effect } from "effect";
 import { DbLayer } from "@/lib/db";
 import { HttpStatus, parseBody, response } from "@/lib/http";
 import { authMiddleware } from "@/middlewares/auth";
-import {
+import type {
 	DatabaseError,
 	NotFoundError,
 	ValidationError,
 } from "@/services/errors/errors";
 import { fetchUserProfile, updateUserProfile } from "@/services/users";
 import { updateProfileSchema } from "@/types/zod.api";
-import { createFileRoute } from "@tanstack/react-router";
-import { Effect } from "effect";
 
 export const Route = createFileRoute("/api/(internal)/users/profile")({
 	server: {

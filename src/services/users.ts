@@ -29,6 +29,10 @@ export const patchUser = (id: string, user: EditUserFormData) =>
 					.set({
 						name: user.fullname,
 						email: user.email,
+						...(user.schoolId !== undefined && { schoolId: user.schoolId }),
+						...(user.gender !== undefined && { gender: user.gender }),
+						...(user.grade !== undefined &&
+							user.grade !== "" && { grade: user.grade }),
 					})
 					.where(eq(users.id, id))
 					.returning(),
@@ -309,7 +313,7 @@ export const fetchUserProfile = (userId: string) =>
 			gender: user.gender,
 			grade: user.grade,
 			school: user.schoolName
-				? { id: user.schoolId!, name: user.schoolName }
+				? { id: user.schoolId ?? 0, name: user.schoolName }
 				: null,
 			createdAt: user.createdAt,
 			updatedAt: user.updatedAt,
@@ -436,7 +440,25 @@ export const fetchUserDetail = (userId: string) =>
 		const { db } = yield* Db;
 
 		const result = yield* dbTryPromise({
-			try: () => db.select().from(users).where(eq(users.id, userId)).limit(1),
+			try: () =>
+				db
+					.select({
+						id: users.id,
+						name: users.name,
+						email: users.email,
+						image: users.image,
+						bio: users.bio,
+						gender: users.gender,
+						grade: users.grade,
+						schoolId: users.schoolId,
+						schoolName: schools.name,
+						createdAt: users.createdAt,
+						updatedAt: users.updatedAt,
+					})
+					.from(users)
+					.leftJoin(schools, eq(users.schoolId, schools.id))
+					.where(eq(users.id, userId))
+					.limit(1),
 			catch: (error) =>
 				new DatabaseError({
 					cause: error,
@@ -541,6 +563,12 @@ export const fetchUserDetail = (userId: string) =>
 				name: user.name,
 				email: user.email,
 				image: user.image,
+				bio: user.bio,
+				gender: user.gender,
+				grade: user.grade,
+				school: user.schoolName
+					? { id: user.schoolId ?? 0, name: user.schoolName }
+					: null,
 				createdAt: user.createdAt,
 				updatedAt: user.updatedAt,
 			},

@@ -1,11 +1,11 @@
-import { DbLayer } from "@/lib/db";
-import { HttpStatus, response } from "@/lib/http";
-import { authMiddleware } from "@/middlewares/auth";
-import { DatabaseError } from "@/services/errors/errors";
-import { uploadAvatar } from "@/services/avatar";
 import { createFileRoute } from "@tanstack/react-router";
 import { Effect } from "effect";
+import { DbLayer } from "@/lib/db";
+import { HttpStatus, response } from "@/lib/http";
 import { S3Layer } from "@/lib/s3";
+import { authMiddleware } from "@/middlewares/auth";
+import { uploadAvatar } from "@/services/avatar";
+import type { DatabaseError } from "@/services/errors/errors";
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
 const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "image/png"];
