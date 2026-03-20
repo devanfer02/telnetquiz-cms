@@ -46,6 +46,8 @@ export default function UserActions({ user }: UserActionsProps) {
 			fullname: user.name,
 			email: user.email,
 			password: "",
+			gender: user.gender ?? undefined,
+			grade: user.grade ?? "",
 		} as EditUserFormData,
 		onSubmit: async ({ value }) => {
 			const result = await updateUser({

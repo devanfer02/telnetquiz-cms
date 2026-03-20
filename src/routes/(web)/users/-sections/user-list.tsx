@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import {
 	type ColumnDef,
 	getCoreRowModel,
@@ -7,7 +8,6 @@ import {
 	type SortingState,
 	useReactTable,
 } from "@tanstack/react-table";
-import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { SortableHeader } from "@/components/global/sortable-header";
 import TanstackTable from "@/components/global/ts-table";
@@ -41,6 +41,16 @@ export const columns: ColumnDef<User>[] = [
 	{
 		accessorKey: "email",
 		header: "Email",
+	},
+	{
+		accessorKey: "schoolName",
+		header: "School",
+		cell: ({ row }) => row.original.schoolName ?? "-",
+	},
+	{
+		accessorKey: "grade",
+		header: "Grade",
+		cell: ({ row }) => row.original.grade ?? "-",
 	},
 	{
 		accessorKey: "createdAt",

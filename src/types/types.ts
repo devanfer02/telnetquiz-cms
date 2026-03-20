@@ -2,6 +2,12 @@ type User = {
 	id: string;
 	name: string;
 	email: string;
+	schoolId: number | null;
+	schoolName: string | null;
+	gender: boolean | null;
+	grade: string | null;
+	bio: string | null;
+	image: string | null;
 	createdAt: Date;
 };
 

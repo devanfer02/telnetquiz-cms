@@ -98,6 +98,9 @@ export const editUserSchema = z.object({
 		.regex(/\d/, "Must contain at least one number")
 		.optional()
 		.or(z.literal("")),
+	schoolId: z.number().optional(),
+	gender: z.boolean().optional(),
+	grade: z.string().max(10).optional().or(z.literal("")),
 });
 
 export type EditUserFormData = z.infer<typeof editUserSchema>;

@@ -6,8 +6,10 @@ import {
 	Calendar,
 	GraduationCap,
 	Mail,
+	School,
 	Trophy,
 	User,
+	UserCircle,
 } from "lucide-react";
 import { getUserDetail } from "@/actions/users";
 import { Badge } from "@/components/ui/badge";
@@ -105,6 +107,26 @@ function UserDetailPage() {
 								<Mail className="h-3.5 w-3.5" />
 								{user.email}
 							</CardDescription>
+							{user.school && (
+								<p className="text-xs text-muted-foreground flex items-center gap-1.5 mt-1">
+									<School className="h-3 w-3" />
+									{user.school.name}
+								</p>
+							)}
+							<div className="flex items-center gap-3 mt-1">
+								{user.grade && (
+									<p className="text-xs text-muted-foreground flex items-center gap-1.5">
+										<GraduationCap className="h-3 w-3" />
+										Kelas {user.grade}
+									</p>
+								)}
+								{user.gender !== null && user.gender !== undefined && (
+									<p className="text-xs text-muted-foreground flex items-center gap-1.5">
+										<UserCircle className="h-3 w-3" />
+										{user.gender ? "Laki-Laki" : "Perempuan"}
+									</p>
+								)}
+							</div>
 							<p className="text-xs text-muted-foreground flex items-center gap-1.5 mt-1">
 								<Calendar className="h-3 w-3" />
 								Registered{" "}
@@ -116,6 +138,11 @@ function UserDetailPage() {
 										})
 									: "-"}
 							</p>
+							{user.bio && (
+								<p className="text-sm text-muted-foreground mt-2 italic">
+									"{user.bio}"
+								</p>
+							)}
 						</div>
 					</div>
 				</CardHeader>
@@ -265,7 +292,7 @@ function UserDetailPage() {
 								variant="outline"
 							>
 								{stats.pretestCorrect}/{stats.pretestTotal} benar (
-								{stats.pretestScore}%)
+								{stats.pretestScore}%)b
 							</Badge>
 						)}
 					</CardTitle>

@@ -5,6 +5,7 @@ import {
 	chapters,
 	questions,
 	quizzes,
+	schools,
 	studyMaterials,
 	submissions,
 	users,
@@ -19,8 +20,20 @@ export const fetchAllUsers = Effect.gen(function* () {
 	return yield* dbTryPromise({
 		try: () =>
 			db
-				.select()
+				.select({
+					id: users.id,
+					name: users.name,
+					email: users.email,
+					image: users.image,
+					schoolId: users.schoolId,
+					schoolName: schools.name,
+					gender: users.gender,
+					grade: users.grade,
+					bio: users.bio,
+					createdAt: users.createdAt,
+				})
 				.from(users)
+				.leftJoin(schools, eq(users.schoolId, schools.id))
 				.where(
 					exists(
 						db
