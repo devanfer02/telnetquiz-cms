@@ -69,6 +69,11 @@
     "zod": "^4.2.1",
     "zustand": "^5.0.9"
   },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,json,css}": [
+      "biome check --write --no-errors-on-unmatched"
+    ]
+  },
   "devDependencies": {
     "@biomejs/biome": "2.2.4",
     "@tanstack/devtools-event-client": "^0.3.2",
