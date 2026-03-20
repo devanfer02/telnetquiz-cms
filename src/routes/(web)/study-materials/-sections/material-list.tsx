@@ -1,14 +1,5 @@
-import { removeStudyMaterial } from "@/actions/study-material";
-import ActionCell from "@/components/global/action-cell";
-import { SortableHeader } from "@/components/global/sortable-header";
-import TableLink from "@/components/global/table-link";
-import TanstackTable from "@/components/global/ts-table";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { setFlashState } from "@/store/use-flash";
 import { useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import { QUERY_KEYS } from "@/lib/constant";
 import {
 	type ColumnDef,
 	getCoreRowModel,
@@ -16,10 +7,19 @@ import {
 	getPaginationRowModel,
 	getSortedRowModel,
 	type SortingState,
-	type VisibilityState,
 	useReactTable,
+	type VisibilityState,
 } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
+import { removeStudyMaterial } from "@/actions/study-material";
+import ActionCell from "@/components/global/action-cell";
+import { SortableHeader } from "@/components/global/sortable-header";
+import TableLink from "@/components/global/table-link";
+import TanstackTable from "@/components/global/ts-table";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { QUERY_KEYS } from "@/lib/constant";
+import { setFlashState } from "@/store/use-flash";
 
 interface StudyMaterialListProps {
 	studyMaterials: StudyMaterial[];

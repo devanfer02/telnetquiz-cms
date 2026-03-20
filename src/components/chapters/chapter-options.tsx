@@ -1,6 +1,6 @@
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { getAllChapters } from "@/actions/chapters";
 import { QUERY_KEYS } from "@/lib/constant";
-import { useSuspenseQuery } from "@tanstack/react-query";
 
 export default function ChapterOptions() {
 	const { data: chapters } = useSuspenseQuery({

@@ -1,3 +1,4 @@
+import { useSuspenseQuery } from "@tanstack/react-query";
 import {
 	type ColumnDef,
 	getCoreRowModel,
@@ -7,11 +8,10 @@ import {
 	useReactTable,
 } from "@tanstack/react-table";
 import { useState } from "react";
-import TanstackTable from "@/components/global/ts-table";
-import { SortableHeader } from "../../../../components/global/sortable-header";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { QUERY_KEYS } from "@/lib/constant";
 import { getAllSubmissions } from "@/actions/analytics";
+import TanstackTable from "@/components/global/ts-table";
+import { QUERY_KEYS } from "@/lib/constant";
+import { SortableHeader } from "../../../../components/global/sortable-header";
 
 export const columns: ColumnDef<Submission>[] = [
 	{

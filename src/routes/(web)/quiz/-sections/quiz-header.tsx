@@ -1,7 +1,7 @@
-import { MetadataTable } from "@/components/global/date-metadata";
-import { Button } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
 import { Brain, Pencil, Trophy } from "lucide-react";
+import { MetadataTable } from "@/components/global/date-metadata";
+import { Button } from "@/components/ui/button";
 
 const difficultyStyles = {
 	easy: "bg-green-100 text-green-700 border-green-200",

@@ -1,3 +1,4 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import {
 	type ColumnDef,
@@ -6,20 +7,19 @@ import {
 	getPaginationRowModel,
 	getSortedRowModel,
 	type SortingState,
-	type VisibilityState,
 	useReactTable,
+	type VisibilityState,
 } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
+import { removeQuiz } from "@/actions/quizzes";
 import ActionCell from "@/components/global/action-cell";
 import { SortableHeader } from "@/components/global/sortable-header";
 import TableLink from "@/components/global/table-link";
 import TanstackTable from "@/components/global/ts-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { removeQuiz } from "@/actions/quizzes";
-import { setFlashState } from "@/store/use-flash";
-import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@/lib/constant";
+import { setFlashState } from "@/store/use-flash";
 
 interface QuizListProps {
 	quizzes: Quiz[];
@@ -57,7 +57,7 @@ export default function QuizList({ quizzes, disableKey }: QuizListProps) {
 			),
 			size: 10,
 			cell: ({ row }) => {
-				const chapterId = row.original.chapter!.id.toString();
+				const chapterId = row.original.chapter?.id.toString();
 
 				return (
 					<TableLink to="/chapters/$id" paramKey="id" paramValue={chapterId} />

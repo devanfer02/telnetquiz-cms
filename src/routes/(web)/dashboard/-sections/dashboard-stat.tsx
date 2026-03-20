@@ -1,8 +1,8 @@
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { getDashboardStats } from "@/actions/analytics";
 import { QUERY_KEYS, sidebarItems } from "@/lib/constant";
 import CardStat from "../../../../components/global/card-stat";
 import { Card } from "../../../../components/ui/card";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { getDashboardStats } from "@/actions/analytics";
 
 export default function DashboardStats() {
 	const { data: stats } = useSuspenseQuery({

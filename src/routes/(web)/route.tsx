@@ -1,8 +1,8 @@
+import { createFileRoute, Outlet } from "@tanstack/react-router";
+import FlashContainer from "@/components/global/flash-banner";
 import GlobalLoader from "@/components/global/global-loading";
 import AppSidebar from "@/components/global/sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { createFileRoute, Outlet } from "@tanstack/react-router";
-import FlashContainer from "@/components/global/flash-banner";
 import { oauthMiddleware } from "@/middlewares/auth";
 import { AuthProvider } from "@/providers/auth";
 
@@ -16,21 +16,19 @@ export const Route = createFileRoute("/(web)")({
 
 function RouteComponent() {
 	return (
-		<>
-			<AuthProvider>
-				<SidebarProvider>
-					<AppSidebar />
-					<div className="relative flex-1">
-						<GlobalLoader />
+		<AuthProvider>
+			<SidebarProvider>
+				<AppSidebar />
+				<div className="relative flex-1">
+					<GlobalLoader />
 
-						<main className="px-6 mt-8 w-full">
-							<FlashContainer />
-							<Outlet />
-						</main>
-					</div>
-				</SidebarProvider>
-			</AuthProvider>
-		</>
+					<main className="px-6 mt-8 w-full">
+						<FlashContainer />
+						<Outlet />
+					</main>
+				</div>
+			</SidebarProvider>
+		</AuthProvider>
 	);
 }
 

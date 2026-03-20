@@ -1,3 +1,4 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import {
 	type ColumnDef,
@@ -9,16 +10,15 @@ import {
 	useReactTable,
 } from "@tanstack/react-table";
 import { useState } from "react";
+import { removeChapter } from "@/actions/chapters";
 import ActionCell from "@/components/global/action-cell";
 import { SortableHeader } from "@/components/global/sortable-header";
 import TableLink from "@/components/global/table-link";
 import TanstackTable from "@/components/global/ts-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { removeChapter } from "@/actions/chapters";
-import { useQueryClient } from "@tanstack/react-query";
-import { setFlashState } from "@/store/use-flash";
 import { QUERY_KEYS } from "@/lib/constant";
+import { setFlashState } from "@/store/use-flash";
 
 interface ChapterListProps {
 	chapters: Chapter[];

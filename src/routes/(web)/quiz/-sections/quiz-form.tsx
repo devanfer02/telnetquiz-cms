@@ -1,3 +1,5 @@
+import { useStore } from "@tanstack/react-form";
+import { Suspense } from "react";
 import ChapterOptions from "@/components/chapters/chapter-options";
 import SubmitButton from "@/components/global/submit-button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -6,8 +8,6 @@ import { Label } from "@/components/ui/label";
 import type { useCustomForm } from "@/hooks/use-custom-form";
 import { validateField } from "@/lib/utils";
 import { type QuizFormData, quizSchema } from "@/types/zod";
-import { useStore } from "@tanstack/react-form";
-import { Suspense } from "react";
 
 interface QuizFormProps {
 	form: ReturnType<typeof useCustomForm<QuizFormData>>;

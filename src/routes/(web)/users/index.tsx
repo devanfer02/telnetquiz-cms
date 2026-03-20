@@ -1,9 +1,9 @@
-import { getAllUsers } from "@/actions/analytics";
-import { QUERY_KEYS } from "@/lib/constant";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import UserList from "./-sections/user-list";
+import { getAllUsers } from "@/actions/analytics";
 import PageHeader from "@/components/global/page-header";
+import { QUERY_KEYS } from "@/lib/constant";
+import UserList from "./-sections/user-list";
 
 export const Route = createFileRoute("/(web)/users/")({
 	loader: async ({ context }) => {

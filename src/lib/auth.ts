@@ -1,9 +1,9 @@
 import { APIError, betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { admin, bearer, createAuthMiddleware } from "better-auth/plugins";
-import { db } from "./db";
-import * as schema from "../database/schema";
+import { admin, bearer } from "better-auth/plugins";
 import { Context, Layer } from "effect";
+import * as schema from "../database/schema";
+import { db } from "./db";
 import { env } from "./env";
 
 export const auth = betterAuth({

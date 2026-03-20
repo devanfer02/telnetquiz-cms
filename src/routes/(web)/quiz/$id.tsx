@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import QuestionList from "../questions/-sections/question-list";
 import { getQuizById } from "@/actions/quizzes";
+import QuestionList from "../questions/-sections/question-list";
 import QuizHeader from "./-sections/quiz-header";
 
 export const Route = createFileRoute("/(web)/quiz/$id")({

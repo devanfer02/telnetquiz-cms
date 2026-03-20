@@ -1,19 +1,19 @@
+import { useQueryClient } from "@tanstack/react-query";
 import {
 	createFileRoute,
+	Link,
 	redirect,
 	useNavigate,
-	Link,
 } from "@tanstack/react-router";
+import { ArrowLeft } from "lucide-react";
+import { getChapterById, updateChapter } from "@/actions/chapters";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { useCustomForm } from "@/hooks/use-custom-form";
+import { QUERY_KEYS } from "@/lib/constant";
+import { setFlashState } from "@/store/use-flash";
 import type { ChapterFormData } from "@/types/zod";
 import ChapterForm from "./-sections/chapter-form";
-import { getChapterById, updateChapter } from "@/actions/chapters";
-import { setFlashState } from "@/store/use-flash";
-import { useQueryClient } from "@tanstack/react-query";
-import { QUERY_KEYS } from "@/lib/constant";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
 
 export const Route = createFileRoute("/(web)/chapters/edit/$id")({
 	loader: async ({ params }) => {

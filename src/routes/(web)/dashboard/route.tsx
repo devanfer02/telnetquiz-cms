@@ -1,18 +1,18 @@
-import Footer from "@/components/global/footer";
-import { QUERY_KEYS } from "@/lib/constant";
-import AverageChapterBarChart from "@/routes/(web)/dashboard/-sections/average-chapter-chart";
-import DashboardStats from "@/routes/(web)/dashboard/-sections/dashboard-stat";
-import Leaderboard from "@/routes/(web)/dashboard/-sections/leaderboard";
-import RecentSubmission from "@/routes/(web)/dashboard/-sections/recent-submission";
 import { createFileRoute } from "@tanstack/react-router";
+import { Suspense } from "react";
 import {
 	getAllSubmissions,
 	getAverageScores,
 	getDashboardStats,
 	getLeaderboard,
 } from "@/actions/analytics";
-import { Suspense } from "react";
+import Footer from "@/components/global/footer";
 import { Skeleton } from "@/components/ui/skeleton";
+import { QUERY_KEYS } from "@/lib/constant";
+import AverageChapterBarChart from "@/routes/(web)/dashboard/-sections/average-chapter-chart";
+import DashboardStats from "@/routes/(web)/dashboard/-sections/dashboard-stat";
+import Leaderboard from "@/routes/(web)/dashboard/-sections/leaderboard";
+import RecentSubmission from "@/routes/(web)/dashboard/-sections/recent-submission";
 import DashboardHeader from "./-sections/dashboard-header";
 
 export const Route = createFileRoute("/(web)/dashboard")({

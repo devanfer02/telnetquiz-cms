@@ -1,6 +1,6 @@
+import { Separator } from "@/components/ui/separator";
 import { sidebarItems } from "@/lib/constant";
 import { cn } from "@/lib/utils";
-import { Separator } from "@/components/ui/separator";
 
 interface PageHeaderProps {
 	title: string;

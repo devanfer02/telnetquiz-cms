@@ -1,5 +1,5 @@
-import { response } from "@/lib/http";
 import { createFileRoute } from "@tanstack/react-router";
+import { response } from "@/lib/http";
 
 export const Route = createFileRoute("/api/(public)/health")({
 	server: {

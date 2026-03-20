@@ -1,19 +1,19 @@
+import { useQueryClient } from "@tanstack/react-query";
 import {
 	createFileRoute,
+	Link,
 	redirect,
 	useNavigate,
-	Link,
 } from "@tanstack/react-router";
-import { useCustomForm } from "@/hooks/use-custom-form";
-import QuestionForm from "./-sections/question-form";
-import type { QuestionsFormData } from "@/types/zod";
-import { getQuestionById, updateQuestion } from "@/actions/questions";
-import { setFlashState } from "@/store/use-flash";
-import { useQueryClient } from "@tanstack/react-query";
-import { QUERY_KEYS } from "@/lib/constant";
-import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
+import { getQuestionById, updateQuestion } from "@/actions/questions";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { useCustomForm } from "@/hooks/use-custom-form";
+import { QUERY_KEYS } from "@/lib/constant";
+import { setFlashState } from "@/store/use-flash";
+import type { QuestionsFormData } from "@/types/zod";
+import QuestionForm from "./-sections/question-form";
 
 export const Route = createFileRoute("/(web)/questions/edit/$id")({
 	loader: async ({ params }) => {
@@ -49,7 +49,7 @@ export default function RouteComponent() {
 					options: question.options.map((opt) => ({
 						text: opt.text,
 						isCorrect: opt.isCorrect,
-						questionId: opt.questionId!.toString(),
+						questionId: opt.questionId?.toString(),
 					})),
 					quizId: question.quizId,
 					materialId: question.materialId,

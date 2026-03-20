@@ -1,9 +1,9 @@
-import { HttpStatus, response } from "@/lib/http";
-import { fetchQuestionsByType } from "@/services/questions";
-import { DatabaseError } from "@/services/errors/errors";
 import { createFileRoute } from "@tanstack/react-router";
 import { Effect } from "effect";
 import { DbLayer } from "@/lib/db";
+import { HttpStatus, response } from "@/lib/http";
+import type { DatabaseError } from "@/services/errors/errors";
+import { fetchQuestionsByType } from "@/services/questions";
 
 export const Route = createFileRoute("/api/(internal)/questions")({
 	server: {

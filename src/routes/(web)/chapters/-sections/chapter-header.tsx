@@ -1,7 +1,8 @@
 import { Link } from "@tanstack/react-router";
-import { Pencil, BookMarked } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { BookMarked, Pencil } from "lucide-react";
 import { MetadataTable } from "@/components/global/date-metadata";
+import { Button } from "@/components/ui/button";
+
 interface ChapterHeaderProps {
 	chapter: Chapter;
 }

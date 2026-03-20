@@ -1,5 +1,5 @@
-import { ChangeEvent, useState } from "react";
-import { Upload, X, File } from "lucide-react";
+import { File, Upload, X } from "lucide-react";
+import { type ChangeEvent, useState } from "react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 

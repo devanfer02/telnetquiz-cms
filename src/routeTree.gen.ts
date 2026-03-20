@@ -34,9 +34,11 @@ import { Route as webQuizIdRouteImport } from './routes/(web)/quiz/$id'
 import { Route as webQuestionsAddRouteImport } from './routes/(web)/questions/add'
 import { Route as webChaptersAddRouteImport } from './routes/(web)/chapters/add'
 import { Route as webChaptersIdRouteImport } from './routes/(web)/chapters/$id'
+import { Route as ApiinternalSchoolsIndexRouteImport } from './routes/api/(internal)/schools/index'
 import { Route as ApiinternalChaptersIndexRouteImport } from './routes/api/(internal)/chapters/index'
 import { Route as ApipublicAuthSplatRouteImport } from './routes/api/(public)/auth/$'
 import { Route as ApiinternalUsersProfileRouteImport } from './routes/api/(internal)/users/profile'
+import { Route as ApiinternalUsersAvatarRouteImport } from './routes/api/(internal)/users/avatar'
 import { Route as ApiinternalQuizVerifyRouteImport } from './routes/api/(internal)/quiz/verify'
 import { Route as ApiinternalQuizMaterialsRouteImport } from './routes/api/(internal)/quiz/materials'
 import { Route as ApiinternalQuizIdRouteImport } from './routes/api/(internal)/quiz/$id'
@@ -175,6 +177,11 @@ const webChaptersIdRoute = webChaptersIdRouteImport.update({
   path: '/chapters/$id',
   getParentRoute: () => webRouteRoute,
 } as any)
+const ApiinternalSchoolsIndexRoute = ApiinternalSchoolsIndexRouteImport.update({
+  id: '/schools/',
+  path: '/schools/',
+  getParentRoute: () => ApiinternalRouteRoute,
+} as any)
 const ApiinternalChaptersIndexRoute =
   ApiinternalChaptersIndexRouteImport.update({
     id: '/chapters/',
@@ -189,6 +196,11 @@ const ApipublicAuthSplatRoute = ApipublicAuthSplatRouteImport.update({
 const ApiinternalUsersProfileRoute = ApiinternalUsersProfileRouteImport.update({
   id: '/users/profile',
   path: '/users/profile',
+  getParentRoute: () => ApiinternalRouteRoute,
+} as any)
+const ApiinternalUsersAvatarRoute = ApiinternalUsersAvatarRouteImport.update({
+  id: '/users/avatar',
+  path: '/users/avatar',
   getParentRoute: () => ApiinternalRouteRoute,
 } as any)
 const ApiinternalQuizVerifyRoute = ApiinternalQuizVerifyRouteImport.update({
@@ -298,9 +310,11 @@ export interface FileRoutesByFullPath {
   '/api/quiz/$id': typeof ApiinternalQuizIdRoute
   '/api/quiz/materials': typeof ApiinternalQuizMaterialsRoute
   '/api/quiz/verify': typeof ApiinternalQuizVerifyRoute
+  '/api/users/avatar': typeof ApiinternalUsersAvatarRoute
   '/api/users/profile': typeof ApiinternalUsersProfileRoute
   '/api/auth/$': typeof ApipublicAuthSplatRoute
   '/api/chapters': typeof ApiinternalChaptersIndexRoute
+  '/api/schools': typeof ApiinternalSchoolsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -340,9 +354,11 @@ export interface FileRoutesByTo {
   '/api/quiz/$id': typeof ApiinternalQuizIdRoute
   '/api/quiz/materials': typeof ApiinternalQuizMaterialsRoute
   '/api/quiz/verify': typeof ApiinternalQuizVerifyRoute
+  '/api/users/avatar': typeof ApiinternalUsersAvatarRoute
   '/api/users/profile': typeof ApiinternalUsersProfileRoute
   '/api/auth/$': typeof ApipublicAuthSplatRoute
   '/api/chapters': typeof ApiinternalChaptersIndexRoute
+  '/api/schools': typeof ApiinternalSchoolsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -384,9 +400,11 @@ export interface FileRoutesById {
   '/api/(internal)/quiz/$id': typeof ApiinternalQuizIdRoute
   '/api/(internal)/quiz/materials': typeof ApiinternalQuizMaterialsRoute
   '/api/(internal)/quiz/verify': typeof ApiinternalQuizVerifyRoute
+  '/api/(internal)/users/avatar': typeof ApiinternalUsersAvatarRoute
   '/api/(internal)/users/profile': typeof ApiinternalUsersProfileRoute
   '/api/(public)/auth/$': typeof ApipublicAuthSplatRoute
   '/api/(internal)/chapters/': typeof ApiinternalChaptersIndexRoute
+  '/api/(internal)/schools/': typeof ApiinternalSchoolsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -428,9 +446,11 @@ export interface FileRouteTypes {
     | '/api/quiz/$id'
     | '/api/quiz/materials'
     | '/api/quiz/verify'
+    | '/api/users/avatar'
     | '/api/users/profile'
     | '/api/auth/$'
     | '/api/chapters'
+    | '/api/schools'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -470,9 +490,11 @@ export interface FileRouteTypes {
     | '/api/quiz/$id'
     | '/api/quiz/materials'
     | '/api/quiz/verify'
+    | '/api/users/avatar'
     | '/api/users/profile'
     | '/api/auth/$'
     | '/api/chapters'
+    | '/api/schools'
   id:
     | '__root__'
     | '/'
@@ -513,9 +535,11 @@ export interface FileRouteTypes {
     | '/api/(internal)/quiz/$id'
     | '/api/(internal)/quiz/materials'
     | '/api/(internal)/quiz/verify'
+    | '/api/(internal)/users/avatar'
     | '/api/(internal)/users/profile'
     | '/api/(public)/auth/$'
     | '/api/(internal)/chapters/'
+    | '/api/(internal)/schools/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -704,6 +728,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof webChaptersIdRouteImport
       parentRoute: typeof webRouteRoute
     }
+    '/api/(internal)/schools/': {
+      id: '/api/(internal)/schools/'
+      path: '/schools'
+      fullPath: '/api/schools'
+      preLoaderRoute: typeof ApiinternalSchoolsIndexRouteImport
+      parentRoute: typeof ApiinternalRouteRoute
+    }
     '/api/(internal)/chapters/': {
       id: '/api/(internal)/chapters/'
       path: '/chapters'
@@ -723,6 +754,13 @@ declare module '@tanstack/react-router' {
       path: '/users/profile'
       fullPath: '/api/users/profile'
       preLoaderRoute: typeof ApiinternalUsersProfileRouteImport
+      parentRoute: typeof ApiinternalRouteRoute
+    }
+    '/api/(internal)/users/avatar': {
+      id: '/api/(internal)/users/avatar'
+      path: '/users/avatar'
+      fullPath: '/api/users/avatar'
+      preLoaderRoute: typeof ApiinternalUsersAvatarRouteImport
       parentRoute: typeof ApiinternalRouteRoute
     }
     '/api/(internal)/quiz/verify': {
@@ -892,8 +930,10 @@ interface ApiinternalRouteRouteChildren {
   ApiinternalQuizIdRoute: typeof ApiinternalQuizIdRoute
   ApiinternalQuizMaterialsRoute: typeof ApiinternalQuizMaterialsRoute
   ApiinternalQuizVerifyRoute: typeof ApiinternalQuizVerifyRoute
+  ApiinternalUsersAvatarRoute: typeof ApiinternalUsersAvatarRoute
   ApiinternalUsersProfileRoute: typeof ApiinternalUsersProfileRoute
   ApiinternalChaptersIndexRoute: typeof ApiinternalChaptersIndexRoute
+  ApiinternalSchoolsIndexRoute: typeof ApiinternalSchoolsIndexRoute
 }
 
 const ApiinternalRouteRouteChildren: ApiinternalRouteRouteChildren = {
@@ -910,8 +950,10 @@ const ApiinternalRouteRouteChildren: ApiinternalRouteRouteChildren = {
   ApiinternalQuizIdRoute: ApiinternalQuizIdRoute,
   ApiinternalQuizMaterialsRoute: ApiinternalQuizMaterialsRoute,
   ApiinternalQuizVerifyRoute: ApiinternalQuizVerifyRoute,
+  ApiinternalUsersAvatarRoute: ApiinternalUsersAvatarRoute,
   ApiinternalUsersProfileRoute: ApiinternalUsersProfileRoute,
   ApiinternalChaptersIndexRoute: ApiinternalChaptersIndexRoute,
+  ApiinternalSchoolsIndexRoute: ApiinternalSchoolsIndexRoute,
 }
 
 const ApiinternalRouteRouteWithChildren =

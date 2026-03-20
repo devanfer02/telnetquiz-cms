@@ -1,17 +1,17 @@
 import { createFileRoute, useSearch } from "@tanstack/react-router";
+import { Loader2 } from "lucide-react";
+import { useState } from "react";
+import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
+	CardContent,
+	CardDescription,
 	CardHeader,
 	CardTitle,
-	CardDescription,
-	CardContent,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { authClient } from "@/lib/auth-client";
-import { z } from "zod";
-import { useState } from "react";
-import { Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/auth/sign-in")({
 	component: SignInComponent,

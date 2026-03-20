@@ -1,14 +1,14 @@
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Bar, BarChart, Cell, Label, Tooltip, XAxis, YAxis } from "recharts";
+import { getAverageScores } from "@/actions/analytics";
+import { QUERY_KEYS } from "@/lib/constant";
 import { cn } from "@/lib/utils";
 import { Card } from "../../../../components/ui/card";
 import {
 	type ChartConfig,
 	ChartContainer,
 } from "../../../../components/ui/chart";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { QUERY_KEYS } from "@/lib/constant";
-import { getAverageScores } from "@/actions/analytics";
 
 interface AverageChapterBarChartProps {
 	className?: string;

@@ -1,9 +1,9 @@
-import { getAllStudyMaterials } from "@/actions/study-material";
-import { QUERY_KEYS } from "@/lib/constant";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import StudyMaterialList from "./-sections/material-list";
+import { getAllStudyMaterials } from "@/actions/study-material";
 import PageHeader from "@/components/global/page-header";
+import { QUERY_KEYS } from "@/lib/constant";
+import StudyMaterialList from "./-sections/material-list";
 
 export const Route = createFileRoute("/(web)/study-materials/")({
 	component: RouteComponent,

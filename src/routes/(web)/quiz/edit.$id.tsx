@@ -1,19 +1,19 @@
+import { useQueryClient } from "@tanstack/react-query";
 import {
 	createFileRoute,
+	Link,
 	redirect,
 	useNavigate,
-	Link,
 } from "@tanstack/react-router";
+import { ArrowLeft } from "lucide-react";
+import { getQuizById, updateQuiz } from "@/actions/quizzes";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { useCustomForm } from "@/hooks/use-custom-form";
+import { QUERY_KEYS } from "@/lib/constant";
+import { setFlashState } from "@/store/use-flash";
 import type { QuizFormData } from "@/types/zod";
 import QuizForm from "./-sections/quiz-form";
-import { getQuizById, updateQuiz } from "@/actions/quizzes";
-import { useQueryClient } from "@tanstack/react-query";
-import { setFlashState } from "@/store/use-flash";
-import { QUERY_KEYS } from "@/lib/constant";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
 
 export const Route = createFileRoute("/(web)/quiz/edit/$id")({
 	loader: async ({ params }) => {

@@ -1,4 +1,6 @@
+import { useStore } from "@tanstack/react-form";
 import FileInput from "@/components/global/file-input";
+import { RichTextarea } from "@/components/global/quill-textarea";
 import SubmitButton from "@/components/global/submit-button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -6,8 +8,6 @@ import { Label } from "@/components/ui/label";
 import type { useCustomForm } from "@/hooks/use-custom-form";
 import { validateField } from "@/lib/utils";
 import { type StudyMaterialFormData, studyMaterialSchema } from "@/types/zod";
-import { useStore } from "@tanstack/react-form";
-import { RichTextarea } from "@/components/global/quill-textarea";
 
 interface MaterialFormProps {
 	form: ReturnType<typeof useCustomForm<StudyMaterialFormData>>;

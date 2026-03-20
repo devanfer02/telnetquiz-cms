@@ -1,10 +1,10 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { Effect } from "effect";
 import { DbLayer } from "@/lib/db";
 import { HttpStatus, response } from "@/lib/http";
 import { authMiddleware } from "@/middlewares/auth";
 import { fetchRecentActivity } from "@/services/activity";
 import type { DatabaseError } from "@/services/errors/errors";
-import { createFileRoute } from "@tanstack/react-router";
-import { Effect } from "effect";
 
 export const Route = createFileRoute("/api/(internal)/activity/recent")({
 	server: {

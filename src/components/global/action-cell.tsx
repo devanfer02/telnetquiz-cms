@@ -1,3 +1,6 @@
+import { Link } from "@tanstack/react-router";
+import type { Row } from "@tanstack/react-table";
+import { Edit, Trash2 } from "lucide-react";
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -9,9 +12,6 @@ import {
 	AlertDialogTitle,
 	AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Link } from "@tanstack/react-router";
-import type { Row } from "@tanstack/react-table";
-import { Edit, Trash2 } from "lucide-react";
 
 interface ActionCellProps<T, K extends keyof T> {
 	row: Row<T>;

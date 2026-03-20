@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Effect } from "effect";
 import { DbLayer } from "@/lib/db";
 import { HttpStatus, parseBody, response } from "@/lib/http";
+import { authMiddleware } from "@/middlewares/auth";
 import type {
 	DatabaseError,
 	NotFoundError,
@@ -12,7 +13,6 @@ import {
 	submitQuizAnswers,
 } from "@/services/quizzes";
 import { quizSubmissionSchema } from "@/types/zod.api";
-import { authMiddleware } from "@/middlewares/auth";
 
 export const Route = createFileRoute("/api/(internal)/quiz/$id")({
 	server: {

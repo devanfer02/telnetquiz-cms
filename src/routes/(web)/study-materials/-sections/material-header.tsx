@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
-import { Pencil, BookOpen } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { BookOpen, Pencil } from "lucide-react";
 import { MetadataTable } from "@/components/global/date-metadata";
+import { Button } from "@/components/ui/button";
 
 interface MaterialHeaderProps {
 	studyMaterial: StudyMaterial;

@@ -1,14 +1,14 @@
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { useQueryClient } from "@tanstack/react-query";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { ArrowLeft } from "lucide-react";
+import { addStudyMaterial } from "@/actions/study-material";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { useCustomForm } from "@/hooks/use-custom-form";
+import { QUERY_KEYS } from "@/lib/constant";
+import { setFlashState } from "@/store/use-flash";
 import type { StudyMaterialFormData } from "@/types/zod";
 import MaterialForm from "./-sections/material-form";
-import { addStudyMaterial } from "@/actions/study-material";
-import { setFlashState } from "@/store/use-flash";
-import { useQueryClient } from "@tanstack/react-query";
-import { QUERY_KEYS } from "@/lib/constant";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
 
 export const Route = createFileRoute("/(web)/study-materials/add")({
 	component: RouteComponent,

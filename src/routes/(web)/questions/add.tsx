@@ -1,14 +1,14 @@
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useCustomForm } from "@/hooks/use-custom-form";
-import QuestionForm from "@/routes/(web)/questions/-sections/question-form";
-import type { QuestionsFormData } from "@/types/zod";
-import { addQuestions } from "@/actions/questions";
-import { setFlashState } from "@/store/use-flash";
 import { useQueryClient } from "@tanstack/react-query";
-import { QUERY_KEYS } from "@/lib/constant";
-import { Button } from "@/components/ui/button";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
+import { addQuestions } from "@/actions/questions";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { useCustomForm } from "@/hooks/use-custom-form";
+import { QUERY_KEYS } from "@/lib/constant";
+import QuestionForm from "@/routes/(web)/questions/-sections/question-form";
+import { setFlashState } from "@/store/use-flash";
+import type { QuestionsFormData } from "@/types/zod";
 
 export const Route = createFileRoute("/(web)/questions/add")({
 	component: RouteComponent,

@@ -1,10 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
-import ChapterList from "./-sections/chapter-list";
-import { getAllChapters } from "@/actions/chapters";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { createFileRoute } from "@tanstack/react-router";
 import { Suspense } from "react";
-import { QUERY_KEYS } from "@/lib/constant";
+import { getAllChapters } from "@/actions/chapters";
 import PageHeader from "@/components/global/page-header";
+import { QUERY_KEYS } from "@/lib/constant";
+import ChapterList from "./-sections/chapter-list";
 
 export const Route = createFileRoute("/(web)/chapters/")({
 	loader: async ({ context }) => {

@@ -1,7 +1,7 @@
-import { Context, Layer } from "effect";
-import { env } from "@/lib/env";
 import { drizzle } from "drizzle-orm/node-postgres";
+import { Context, Layer } from "effect";
 import { Pool } from "pg";
+import { env } from "@/lib/env";
 import * as schema from "../database/schema";
 
 const pool = new Pool({

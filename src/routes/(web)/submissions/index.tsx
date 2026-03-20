@@ -1,9 +1,8 @@
-import { getAllSubmissions } from "@/actions/analytics";
-import { QUERY_KEYS } from "@/lib/constant";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import RecentSubmission from "../dashboard/-sections/recent-submission";
+import { getAllSubmissions } from "@/actions/analytics";
 import PageHeader from "@/components/global/page-header";
+import { QUERY_KEYS } from "@/lib/constant";
+import RecentSubmission from "../dashboard/-sections/recent-submission";
 
 export const Route = createFileRoute("/(web)/submissions/")({
 	loader: async ({ context }) => {

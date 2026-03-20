@@ -1,10 +1,10 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { Effect } from "effect";
 import { DbLayer } from "@/lib/db";
 import { HttpStatus, response } from "@/lib/http";
 import { authMiddleware } from "@/middlewares/auth";
 import type { DatabaseError } from "@/services/errors/errors";
 import { fetchUserAchievements } from "@/services/users";
-import { createFileRoute } from "@tanstack/react-router";
-import { Effect } from "effect";
 
 export const Route = createFileRoute("/api/(internal)/achievements")({
 	server: {

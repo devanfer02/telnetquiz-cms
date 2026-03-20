@@ -1,6 +1,6 @@
-import { Flash, useFlashStore } from "@/store/use-flash";
 import { X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { type Flash, useFlashStore } from "@/store/use-flash";
 
 const flashStyles: Record<Flash["type"], string> = {
 	error: "bg-red-50 text-red-800 border-red-300",

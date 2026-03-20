@@ -1,10 +1,15 @@
+import { useStore } from "@tanstack/react-form";
 import { Plus, Trash2 } from "lucide-react";
+import { Suspense } from "react";
+import ChapterOptions from "@/components/chapters/chapter-options";
+import { RichTextarea } from "@/components/global/quill-textarea";
 import SubmitButton from "@/components/global/submit-button";
+import QuizOptions from "@/components/quiz/quiz-options";
+import StudyMaterialOptions from "@/components/study-materials/study-material-options";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { RichTextarea } from "@/components/global/quill-textarea";
 import type { useCustomForm } from "@/hooks/use-custom-form";
 import { validateField } from "@/lib/utils";
 import {
@@ -13,11 +18,6 @@ import {
 	questionSchema,
 } from "@/types/zod";
 import OptionsArray from "./options-form";
-import { Suspense } from "react";
-import QuizOptions from "@/components/quiz/quiz-options";
-import ChapterOptions from "@/components/chapters/chapter-options";
-import StudyMaterialOptions from "@/components/study-materials/study-material-options";
-import { useStore } from "@tanstack/react-form";
 
 interface QuestionFormProps {
 	form: ReturnType<typeof useCustomForm<QuestionsFormData>>;

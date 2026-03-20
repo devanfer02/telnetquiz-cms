@@ -1,9 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
-import QuestionList from "./-sections/question-list";
-import { getAllQuestions } from "@/actions/questions";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { QUERY_KEYS } from "@/lib/constant";
+import { createFileRoute } from "@tanstack/react-router";
+import { getAllQuestions } from "@/actions/questions";
 import PageHeader from "@/components/global/page-header";
+import { QUERY_KEYS } from "@/lib/constant";
+import QuestionList from "./-sections/question-list";
 
 export const Route = createFileRoute("/(web)/questions/")({
 	loader: async ({ context }) => {

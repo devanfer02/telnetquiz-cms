@@ -1,3 +1,4 @@
+import { useSuspenseQuery } from "@tanstack/react-query";
 import {
 	type ColumnDef,
 	flexRender,
@@ -8,22 +9,20 @@ import {
 	useReactTable,
 } from "@tanstack/react-table";
 import { useState } from "react";
+import { getLeaderboard } from "@/actions/analytics";
 import {
 	Table,
 	TableBody,
-	TableCaption,
 	TableCell,
 	TableHead,
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import { QUERY_KEYS } from "@/lib/constant";
 import { cn } from "@/lib/utils";
 import { SortableHeader } from "../../../../components/global/sortable-header";
 import { Button } from "../../../../components/ui/button";
 import { Card } from "../../../../components/ui/card";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { QUERY_KEYS } from "@/lib/constant";
-import { getLeaderboard } from "@/actions/analytics";
 
 type LeaderboardEntry = {
 	rank: number;

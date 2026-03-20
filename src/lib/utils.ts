@@ -1,9 +1,9 @@
+import path from "node:path";
 import type { ColumnDef } from "@tanstack/react-table";
 import { type ClassValue, clsx } from "clsx";
-import path from "path";
 import { twMerge } from "tailwind-merge";
 import { ulid } from "ulid";
-import { z } from "zod";
+import type { z } from "zod";
 
 const EXTENSION_MAP = {
 	".jpg": "image/jpg",

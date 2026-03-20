@@ -1,7 +1,7 @@
-import { ValidationError } from "@/services/errors/errors";
 import { json } from "@tanstack/react-start";
 import { Effect } from "effect";
 import z from "zod";
+import { ValidationError } from "@/services/errors/errors";
 
 export const HttpStatus = {
 	OK: 200,

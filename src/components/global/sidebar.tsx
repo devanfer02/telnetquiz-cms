@@ -1,7 +1,9 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { LogOut } from "lucide-react";
-import { sidebarItems } from "@/lib/constant";
 import { Skeleton } from "@/components/ui/skeleton";
+import { authClient } from "@/lib/auth-client";
+import { sidebarItems } from "@/lib/constant";
+import { useAuth } from "@/providers/auth";
 import {
 	Sidebar,
 	SidebarContent,
@@ -14,11 +16,9 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from "../ui/sidebar";
-import { authClient } from "@/lib/auth-client";
-import { useAuth } from "@/providers/auth";
 
 const isActive = (currentPath: string, itemUrl: string) => {
-	return currentPath === itemUrl || currentPath.startsWith(itemUrl + "/");
+	return currentPath === itemUrl || currentPath.startsWith(`${itemUrl}/`);
 };
 
 export default function AppSidebar() {

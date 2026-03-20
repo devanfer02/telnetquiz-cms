@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import QuestionList from "../questions/-sections/question-list";
 import { getStudyMaterialById } from "@/actions/study-material";
 import NotFound from "@/components/global/not-found";
+import QuestionList from "../questions/-sections/question-list";
 import MaterialHeader from "./-sections/material-header";
 
 export const Route = createFileRoute("/(web)/study-materials/$id")({

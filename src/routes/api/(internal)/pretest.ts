@@ -1,12 +1,12 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { Effect } from "effect";
 import { DbLayer } from "@/lib/db";
 import { HttpStatus, parseBody, response } from "@/lib/http";
 import { authMiddleware } from "@/middlewares/auth";
-import { DatabaseError, ValidationError } from "@/services/errors/errors";
+import type { DatabaseError, ValidationError } from "@/services/errors/errors";
 import { submitPretest } from "@/services/pretest";
 import { fetchQuestionsByType } from "@/services/questions";
 import { pretestSubmissionSchema } from "@/types/zod.api";
-import { createFileRoute } from "@tanstack/react-router";
-import { Effect } from "effect";
 
 export const Route = createFileRoute("/api/(internal)/pretest")({
 	server: {

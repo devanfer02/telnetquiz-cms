@@ -1,3 +1,5 @@
+import { useStore } from "@tanstack/react-form";
+import { RichTextarea } from "@/components/global/quill-textarea";
 import SubmitButton from "@/components/global/submit-button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -5,9 +7,6 @@ import { Label } from "@/components/ui/label";
 import type { useCustomForm } from "@/hooks/use-custom-form";
 import { validateField } from "@/lib/utils";
 import { type ChapterFormData, chapterSchema } from "@/types/zod";
-import { useStore } from "@tanstack/react-form";
-
-import { RichTextarea } from "@/components/global/quill-textarea";
 
 const MASCOTS = [1, 2, 3, 4];
 

@@ -1,7 +1,7 @@
-import { useGreeting } from "@/hooks/use-greeting";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Separator } from "@/components/ui/separator";
 import { cloneElement, isValidElement } from "react";
+import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useGreeting } from "@/hooks/use-greeting";
 
 export default function DashboardHeader() {
 	const { mounted, greeting, icon } = useGreeting();

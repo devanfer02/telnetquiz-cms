@@ -1,6 +1,6 @@
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { getAllQuizzes } from "@/actions/quizzes";
 import { QUERY_KEYS } from "@/lib/constant";
-import { useSuspenseQuery } from "@tanstack/react-query";
 
 export default function QuizOptions() {
 	const { data: quizzes } = useSuspenseQuery({
