@@ -19,6 +19,7 @@ export const timestamps = {
 export const schools = pgTable("schools", {
 	id: serial().primaryKey(),
 	name: varchar().notNull(),
+	isHidden: boolean("is_hidden").default(false).notNull(),
 	...timestamps,
 });
 
@@ -107,6 +108,7 @@ export const chapters = pgTable("chapters", {
 	title: varchar().notNull(),
 	description: text().notNull(),
 	mascotId: integer().notNull(),
+	isHidden: boolean("is_hidden").default(false).notNull(),
 	...timestamps,
 });
 export const quizzes = pgTable(

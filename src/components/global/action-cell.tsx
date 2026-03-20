@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import type { Row } from "@tanstack/react-table";
 import { Edit, Trash2 } from "lucide-react";
+import type { ReactNode } from "react";
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -18,6 +19,11 @@ interface ActionCellProps<T, K extends keyof T> {
 	keyName: K;
 	editHref: string;
 	handleDelete?: () => void;
+	deleteLabel?: string;
+	deleteIcon?: ReactNode;
+	deleteClassName?: string;
+	confirmTitle?: string;
+	confirmDescription?: string;
 }
 
 export default function ActionCell<T, K extends keyof T>({
@@ -27,6 +33,10 @@ export default function ActionCell<T, K extends keyof T>({
 	handleDelete = () => {
 		console.log("deleted");
 	},
+	deleteIcon,
+	deleteClassName,
+	confirmTitle,
+	confirmDescription,
 }: ActionCellProps<T, K>) {
 	const id = row.original[keyName];
 
@@ -44,24 +54,31 @@ export default function ActionCell<T, K extends keyof T>({
 				<AlertDialogTrigger asChild>
 					<button
 						type="button"
-						className="p-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm cursor-pointer"
+						className={
+							deleteClassName ??
+							"p-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm cursor-pointer"
+						}
 					>
-						<Trash2 size="18" />
+						{deleteIcon ?? <Trash2 size="18" />}
 					</button>
 				</AlertDialogTrigger>
 			</div>
 			<AlertDialogContent className="border border-telnet-primary">
 				<AlertDialogHeader>
 					<AlertDialogTitle className="text-telnet-primary">
-						Are you absolutely sure?
+						{confirmTitle ?? "Are you absolutely sure?"}
 					</AlertDialogTitle>
 					<AlertDialogDescription>
-						This action cannot be undone. This will permanently delete this data
-						with ID{" "}
-						<span className="font-semibold text-telnet-tertiary">
-							{String(id)}
-						</span>{" "}
-						from our servers.
+						{confirmDescription ?? (
+							<>
+								This action cannot be undone. This will permanently delete this
+								data with ID{" "}
+								<span className="font-semibold text-telnet-tertiary">
+									{String(id)}
+								</span>{" "}
+								from our servers.
+							</>
+						)}
 					</AlertDialogDescription>
 				</AlertDialogHeader>
 				<AlertDialogFooter>

@@ -4,6 +4,7 @@ import {
 	chapters,
 	pretestSubmissions,
 	questions,
+	quizzes,
 	submissions,
 } from "@/database/schema";
 import { Db } from "@/lib/db";
@@ -44,10 +45,11 @@ export const fetchChaptersWithUserPerformance = (userId: string) =>
 
 		const hasTakenPretest = pretestCount[0].count > 0;
 
-		// Fetch chapters with quizzes count
+		// Fetch chapters with quizzes count (exclude hidden)
 		const chaptersData = yield* dbTryPromise({
 			try: () =>
 				db.query.chapters.findMany({
+					where: eq(chapters.isHidden, false),
 					with: {
 						quizzes: true,
 					},
@@ -259,18 +261,81 @@ export const patchChapter = (id: number, chapter: ChapterFormData) =>
 		return result[0];
 	});
 
-export const deleteChapter = (id: number) =>
+export const hideChapter = (id: number) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
+		// Delete child records: submissions, questions (cascades options), quizzes
 		yield* dbTryPromise({
-			try: () => db.delete(chapters).where(eq(chapters.id, id)),
-			catch: (error) =>
+			try: () => db.delete(submissions).where(eq(submissions.chapterId, id)),
+			catch: (err) =>
 				new DatabaseError({
-					cause: error,
-					message: `Failed to delete chapter with id ${id}`,
+					cause: err,
+					message: `Failed to delete submissions for chapter ${id}`,
 				}),
 		});
 
-		return { success: true, id };
+		yield* dbTryPromise({
+			try: () => db.delete(questions).where(eq(questions.chapterId, id)),
+			catch: (err) =>
+				new DatabaseError({
+					cause: err,
+					message: `Failed to delete questions for chapter ${id}`,
+				}),
+		});
+
+		yield* dbTryPromise({
+			try: () => db.delete(quizzes).where(eq(quizzes.chapterId, id)),
+			catch: (err) =>
+				new DatabaseError({
+					cause: err,
+					message: `Failed to delete quizzes for chapter ${id}`,
+				}),
+		});
+
+		// Mark chapter as hidden
+		const result = yield* dbTryPromise({
+			try: () =>
+				db
+					.update(chapters)
+					.set({ isHidden: true })
+					.where(eq(chapters.id, id))
+					.returning(),
+			catch: (error) =>
+				new DatabaseError({
+					cause: error,
+					message: `Failed to hide chapter with id ${id}`,
+				}),
+		});
+
+		if (result.length === 0) {
+			return yield* Effect.fail(new NotFoundError({ id, entity: "Chapter" }));
+		}
+
+		return result[0];
+	});
+
+export const unhideChapter = (id: number) =>
+	Effect.gen(function* () {
+		const { db } = yield* Db;
+
+		const result = yield* dbTryPromise({
+			try: () =>
+				db
+					.update(chapters)
+					.set({ isHidden: false })
+					.where(eq(chapters.id, id))
+					.returning(),
+			catch: (error) =>
+				new DatabaseError({
+					cause: error,
+					message: `Failed to unhide chapter with id ${id}`,
+				}),
+		});
+
+		if (result.length === 0) {
+			return yield* Effect.fail(new NotFoundError({ id, entity: "Chapter" }));
+		}
+
+		return result[0];
 	});

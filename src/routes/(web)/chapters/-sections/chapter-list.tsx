@@ -9,12 +9,14 @@ import {
 	type SortingState,
 	useReactTable,
 } from "@tanstack/react-table";
+import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
-import { removeChapter } from "@/actions/chapters";
+import { toggleChapterVisibility } from "@/actions/chapters";
 import ActionCell from "@/components/global/action-cell";
 import { SortableHeader } from "@/components/global/sortable-header";
 import TableLink from "@/components/global/table-link";
 import TanstackTable from "@/components/global/ts-table";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { QUERY_KEYS } from "@/lib/constant";
@@ -44,6 +46,19 @@ export default function ChapterList({ chapters }: ChapterListProps) {
 			accessorKey: "title",
 			header: ({ column }) => <SortableHeader column={column} title="Title" />,
 			size: 50,
+			cell: ({ row }) => (
+				<div className="flex items-center gap-2">
+					<span>{row.original.title}</span>
+					{row.original.isHidden && (
+						<Badge
+							variant="outline"
+							className="text-xs bg-yellow-50 text-yellow-700 border-yellow-200"
+						>
+							Hidden
+						</Badge>
+					)}
+				</div>
+			),
 		},
 		{
 			accessorKey: "description",
@@ -74,22 +89,41 @@ export default function ChapterList({ chapters }: ChapterListProps) {
 			header: "Actions",
 			size: 100,
 			cell: ({ row }) => {
-				const id = row.original.id;
+				const { id, isHidden } = row.original;
 
 				return (
 					<ActionCell
 						row={row}
 						keyName="id"
 						editHref="/chapters/edit/$id"
+						deleteLabel={isHidden ? "Show" : "Hide"}
+						deleteIcon={isHidden ? <Eye size="18" /> : <EyeOff size="18" />}
+						deleteClassName={
+							isHidden
+								? "p-2 bg-green-600 hover:bg-green-700 text-white rounded-md text-sm cursor-pointer"
+								: "p-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-md text-sm cursor-pointer"
+						}
+						confirmTitle={
+							isHidden ? "Tampilkan chapter ini?" : "Sembunyikan chapter ini?"
+						}
+						confirmDescription={
+							isHidden
+								? `Chapter "${row.original.title}" akan ditampilkan kembali ke pengguna.`
+								: `Chapter "${row.original.title}" akan disembunyikan. Semua quiz, soal, dan submission terkait akan dihapus permanen.`
+						}
 						handleDelete={async () => {
-							const result = await removeChapter({ data: { id } });
+							const result = await toggleChapterVisibility({
+								data: { id, isHidden },
+							});
 							await queryClient.invalidateQueries({
 								queryKey: [QUERY_KEYS.CHAPTERS],
 							});
 							if (result !== null) {
 								setFlashState({
 									type: "success",
-									message: "Successfully deleted chapter",
+									message: isHidden
+										? "Chapter berhasil ditampilkan"
+										: "Chapter berhasil disembunyikan",
 								});
 							}
 						}}

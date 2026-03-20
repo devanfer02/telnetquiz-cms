@@ -1,6 +1,6 @@
-import { asc, count, eq, ilike, sql } from "drizzle-orm";
+import { and, asc, count, eq, ilike } from "drizzle-orm";
 import { Effect } from "effect";
-import { schools, users } from "@/database/schema";
+import { schools } from "@/database/schema";
 import { Db } from "@/lib/db";
 import { dbTryPromise } from "@/lib/retry";
 import type { SchoolFormData } from "@/types/zod";
@@ -15,6 +15,24 @@ export const fetchAllSchools = Effect.gen(function* () {
 			new DatabaseError({
 				cause: err,
 				message: "Failed to fetch schools",
+			}),
+	});
+});
+
+export const fetchVisibleSchools = Effect.gen(function* () {
+	const { db } = yield* Db;
+
+	return yield* dbTryPromise({
+		try: () =>
+			db
+				.select()
+				.from(schools)
+				.where(eq(schools.isHidden, false))
+				.orderBy(asc(schools.name)),
+		catch: (err) =>
+			new DatabaseError({
+				cause: err,
+				message: "Failed to fetch visible schools",
 			}),
 	});
 });
@@ -76,42 +94,54 @@ export const patchSchool = (id: number, data: SchoolFormData) =>
 		return result[0];
 	});
 
-export const deleteSchool = (id: number) =>
+export const hideSchool = (id: number) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
-		const userCount = yield* dbTryPromise({
+		const result = yield* dbTryPromise({
 			try: () =>
 				db
-					.select({ count: sql<number>`count(*)` })
-					.from(users)
-					.where(eq(users.schoolId, id)),
-			catch: (err) =>
-				new DatabaseError({
-					cause: err,
-					message: `Failed to check users for school ${id}`,
-				}),
-		});
-
-		if (userCount[0].count > 0) {
-			return yield* Effect.fail(
-				new DatabaseError({
-					cause: null,
-					message: "Cannot delete school with existing users",
-				}),
-			);
-		}
-
-		yield* dbTryPromise({
-			try: () => db.delete(schools).where(eq(schools.id, id)),
+					.update(schools)
+					.set({ isHidden: true })
+					.where(eq(schools.id, id))
+					.returning(),
 			catch: (error) =>
 				new DatabaseError({
 					cause: error,
-					message: `Failed to delete school with id ${id}`,
+					message: `Failed to hide school with id ${id}`,
 				}),
 		});
 
-		return { success: true, id };
+		if (result.length === 0) {
+			return yield* Effect.fail(new NotFoundError({ id, entity: "School" }));
+		}
+
+		return result[0];
+	});
+
+export const unhideSchool = (id: number) =>
+	Effect.gen(function* () {
+		const { db } = yield* Db;
+
+		const result = yield* dbTryPromise({
+			try: () =>
+				db
+					.update(schools)
+					.set({ isHidden: false })
+					.where(eq(schools.id, id))
+					.returning(),
+			catch: (error) =>
+				new DatabaseError({
+					cause: error,
+					message: `Failed to unhide school with id ${id}`,
+				}),
+		});
+
+		if (result.length === 0) {
+			return yield* Effect.fail(new NotFoundError({ id, entity: "School" }));
+		}
+
+		return result[0];
 	});
 
 export const fetchSchoolsPaginated = (
@@ -122,7 +152,10 @@ export const fetchSchoolsPaginated = (
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
-		const whereClause = search ? ilike(schools.name, `%${search}%`) : undefined;
+		const notHidden = eq(schools.isHidden, false);
+		const whereClause = search
+			? and(notHidden, ilike(schools.name, `%${search}%`))
+			: notHidden;
 
 		const totalResult = yield* dbTryPromise({
 			try: () => db.select({ count: count() }).from(schools).where(whereClause),

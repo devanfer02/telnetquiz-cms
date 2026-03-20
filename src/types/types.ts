@@ -16,6 +16,7 @@ type Chapter = {
 	title: string;
 	description: string;
 	mascotId: number;
+	isHidden: boolean;
 	createdAt: Date;
 	updatedAt: Date;
 };
@@ -84,6 +85,7 @@ type QuizAnswerItem = {
 type School = {
 	id: number;
 	name: string;
+	isHidden: boolean;
 	createdAt: Date;
 	updatedAt: Date;
 };

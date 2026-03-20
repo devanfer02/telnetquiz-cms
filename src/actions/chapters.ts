@@ -4,10 +4,11 @@ import z from "zod";
 import { DbLayer } from "@/lib/db";
 import {
 	createChapter,
-	deleteChapter,
 	fetchAllChapters,
 	fetchChapterById,
+	hideChapter,
 	patchChapter,
+	unhideChapter,
 } from "@/services/chapters";
 import { chapterSchema, idNumberSchema } from "@/types/zod";
 
@@ -81,18 +82,19 @@ export const updateChapter = createServerFn({
 		);
 	});
 
-export const removeChapter = createServerFn({
+export const toggleChapterVisibility = createServerFn({
 	method: "POST",
 })
-	.inputValidator(idNumberSchema)
+	.inputValidator(idNumberSchema.extend({ isHidden: z.boolean() }))
 	.handler(async ({ data }) => {
-		const { id } = data;
+		const { id, isHidden } = data;
+		const action = isHidden ? unhideChapter : hideChapter;
 
 		return Effect.runPromise(
-			deleteChapter(id).pipe(
+			action(id).pipe(
 				Effect.provide(DbLayer),
 				Effect.catchAll((err) => {
-					console.error("Failed to delete chapter. ERR:", err);
+					console.error("Failed to toggle chapter visibility. ERR:", err);
 
 					return Effect.succeed(null);
 				}),

@@ -9,11 +9,13 @@ import {
 	type SortingState,
 	useReactTable,
 } from "@tanstack/react-table";
+import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
-import { removeSchool } from "@/actions/schools";
+import { toggleSchoolVisibility } from "@/actions/schools";
 import ActionCell from "@/components/global/action-cell";
 import { SortableHeader } from "@/components/global/sortable-header";
 import TanstackTable from "@/components/global/ts-table";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { QUERY_KEYS } from "@/lib/constant";
@@ -40,6 +42,19 @@ export default function SchoolList({ schools }: SchoolListProps) {
 				<SortableHeader column={column} title="Nama Sekolah" />
 			),
 			size: 200,
+			cell: ({ row }) => (
+				<div className="flex items-center gap-2">
+					<span>{row.original.name}</span>
+					{row.original.isHidden && (
+						<Badge
+							variant="outline"
+							className="text-xs bg-yellow-50 text-yellow-700 border-yellow-200"
+						>
+							Hidden
+						</Badge>
+					)}
+				</div>
+			),
 		},
 		{
 			accessorKey: "createdAt",
@@ -52,22 +67,41 @@ export default function SchoolList({ schools }: SchoolListProps) {
 			header: "Actions",
 			size: 100,
 			cell: ({ row }) => {
-				const id = row.original.id;
+				const { id, isHidden } = row.original;
 
 				return (
 					<ActionCell
 						row={row}
 						keyName="id"
 						editHref="/schools/edit/$id"
+						deleteLabel={isHidden ? "Show" : "Hide"}
+						deleteIcon={isHidden ? <Eye size="18" /> : <EyeOff size="18" />}
+						deleteClassName={
+							isHidden
+								? "p-2 bg-green-600 hover:bg-green-700 text-white rounded-md text-sm cursor-pointer"
+								: "p-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-md text-sm cursor-pointer"
+						}
+						confirmTitle={
+							isHidden ? "Tampilkan sekolah ini?" : "Sembunyikan sekolah ini?"
+						}
+						confirmDescription={
+							isHidden
+								? `Sekolah "${row.original.name}" akan ditampilkan kembali di daftar sekolah.`
+								: `Sekolah "${row.original.name}" akan disembunyikan dari daftar sekolah.`
+						}
 						handleDelete={async () => {
-							const result = await removeSchool({ data: { id } });
+							const result = await toggleSchoolVisibility({
+								data: { id, isHidden },
+							});
 							await queryClient.invalidateQueries({
 								queryKey: [QUERY_KEYS.SCHOOLS],
 							});
 							if (result !== null) {
 								setFlashState({
 									type: "success",
-									message: "Successfully deleted school",
+									message: isHidden
+										? "Sekolah berhasil ditampilkan"
+										: "Sekolah berhasil disembunyikan",
 								});
 							}
 						}}

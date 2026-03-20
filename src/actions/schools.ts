@@ -4,10 +4,11 @@ import z from "zod";
 import { DbLayer } from "@/lib/db";
 import {
 	createSchool,
-	deleteSchool,
 	fetchAllSchools,
 	fetchSchoolById,
+	hideSchool,
 	patchSchool,
+	unhideSchool,
 } from "@/services/schools";
 import { idNumberSchema, schoolSchema } from "@/types/zod";
 
@@ -81,18 +82,19 @@ export const updateSchool = createServerFn({
 		);
 	});
 
-export const removeSchool = createServerFn({
+export const toggleSchoolVisibility = createServerFn({
 	method: "POST",
 })
-	.inputValidator(idNumberSchema)
+	.inputValidator(idNumberSchema.extend({ isHidden: z.boolean() }))
 	.handler(async ({ data }) => {
-		const { id } = data;
+		const { id, isHidden } = data;
+		const action = isHidden ? unhideSchool : hideSchool;
 
 		return Effect.runPromise(
-			deleteSchool(id).pipe(
+			action(id).pipe(
 				Effect.provide(DbLayer),
 				Effect.catchAll((err) => {
-					console.error("Failed to delete school. ERR:", err);
+					console.error("Failed to toggle school visibility. ERR:", err);
 
 					return Effect.succeed(null);
 				}),

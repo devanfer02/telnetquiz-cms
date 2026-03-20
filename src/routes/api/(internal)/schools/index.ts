@@ -4,7 +4,7 @@ import { DbLayer } from "@/lib/db";
 import { HttpStatus, response } from "@/lib/http";
 import { authMiddleware } from "@/middlewares/auth";
 import type { DatabaseError } from "@/services/errors/errors";
-import { fetchAllSchools, fetchSchoolsPaginated } from "@/services/schools";
+import { fetchSchoolsPaginated, fetchVisibleSchools } from "@/services/schools";
 
 export const Route = createFileRoute("/api/(internal)/schools/")({
 	server: {
@@ -69,7 +69,7 @@ export const Route = createFileRoute("/api/(internal)/schools/")({
 
 				return Effect.runPromise(
 					Effect.gen(function* () {
-						const schools = yield* fetchAllSchools;
+						const schools = yield* fetchVisibleSchools;
 
 						return response(
 							{
