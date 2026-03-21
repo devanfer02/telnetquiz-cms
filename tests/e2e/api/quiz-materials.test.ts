@@ -43,8 +43,15 @@ describe("POST /api/quiz/materials", () => {
 		expect(res.status).toBe(200);
 		expect(res.body.message).toContain("successfully");
 		expect(res.body.data).toBeDefined();
-		expect(res.body.data.materials).toBeDefined();
+		expect(res.body.data).toHaveProperty("materials");
 		expect(Array.isArray(res.body.data.materials)).toBe(true);
+
+		const material = res.body.data.materials[0];
+		if (material) {
+			expect(material).toHaveProperty("id");
+			expect(material).toHaveProperty("title");
+			expect(material).toHaveProperty("content");
+		}
 	});
 
 	// --- Negative ---

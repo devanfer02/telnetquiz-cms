@@ -23,6 +23,17 @@ describe("GET /api/achievements", () => {
 		expect(res.status).toBe(200);
 		expect(res.body.message).toContain("Successfully");
 		expect(res.body.data).toBeDefined();
+		expect(res.body.data.achievements).toBeDefined();
+		expect(Array.isArray(res.body.data.achievements)).toBe(true);
+
+		const achievement = res.body.data.achievements[0];
+		if (achievement) {
+			expect(achievement).toHaveProperty("id");
+			expect(achievement).toHaveProperty("title");
+			expect(achievement).toHaveProperty("description");
+			expect(achievement).toHaveProperty("unlocked");
+			expect(achievement).toHaveProperty("unlockedAt");
+		}
 	});
 
 	// --- Negative ---

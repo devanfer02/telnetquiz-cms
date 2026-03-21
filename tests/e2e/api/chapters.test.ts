@@ -23,7 +23,19 @@ describe("GET /api/chapters", () => {
 		expect(res.status).toBe(200);
 		expect(res.body.message).toContain("Successfully");
 		expect(res.body.data).toBeDefined();
-		expect(typeof res.body.data).toBe("object");
+		expect(res.body.data).toHaveProperty("has_taken_pretest");
+		expect(res.body.data).toHaveProperty("chapters");
+		expect(Array.isArray(res.body.data.chapters)).toBe(true);
+
+		const chapter = res.body.data.chapters[0];
+		if (chapter) {
+			expect(chapter).toHaveProperty("id");
+			expect(chapter).toHaveProperty("title");
+			expect(chapter).toHaveProperty("description");
+			expect(chapter).toHaveProperty("mascot_id");
+			expect(chapter).toHaveProperty("quiz_count");
+			expect(chapter).toHaveProperty("completed_quizzes");
+		}
 	});
 
 	// --- Negative ---

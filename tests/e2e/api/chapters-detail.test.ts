@@ -34,9 +34,24 @@ describe("GET /api/chapters/$id", () => {
 		expect(res.status).toBe(200);
 		expect(res.body.message).toContain("Successfully");
 		expect(res.body.data).toBeDefined();
+		expect(res.body.data).toHaveProperty("id");
 		expect(res.body.data.id).toBe(chapterId);
-		expect(res.body.data.quizzes).toBeDefined();
+		expect(res.body.data).toHaveProperty("title");
+		expect(res.body.data).toHaveProperty("description");
+		expect(res.body.data).toHaveProperty("mascotId");
+		expect(res.body.data).toHaveProperty("quizzes");
+		expect(res.body.data).toHaveProperty("completedQuizIds");
 		expect(Array.isArray(res.body.data.quizzes)).toBe(true);
+		expect(Array.isArray(res.body.data.completedQuizIds)).toBe(true);
+
+		const quiz = res.body.data.quizzes[0];
+		if (quiz) {
+			expect(quiz).toHaveProperty("id");
+			expect(quiz).toHaveProperty("title");
+			expect(quiz).toHaveProperty("level");
+			expect(quiz).toHaveProperty("difficulty");
+			expect(quiz).toHaveProperty("numberOfQuestions");
+		}
 	});
 
 	// --- Negative ---
