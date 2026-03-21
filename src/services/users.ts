@@ -328,6 +328,7 @@ export const fetchUserProfile = (userId: string) =>
 			school: user.schoolName
 				? { id: user.schoolId ?? 0, name: user.schoolName }
 				: null,
+			has_taken_pretest: user.hasTakenPretest,
 			createdAt: user.createdAt,
 			updatedAt: user.updatedAt,
 			stats: {
@@ -498,6 +499,7 @@ export const updateUserProfile = (
 			school: schoolRow?.[0]
 				? { id: updatedUser.schoolId ?? 0, name: schoolRow[0].name }
 				: null,
+			has_taken_pretest: updatedUser.hasTakenPretest,
 			createdAt: updatedUser.createdAt,
 			updatedAt: updatedUser.updatedAt,
 			stats: {
@@ -587,6 +589,7 @@ export const fetchUserDetail = (userId: string) =>
 						grade: users.grade,
 						schoolId: users.schoolId,
 						schoolName: schools.name,
+						hasTakenPretest: users.hasTakenPretest,
 						createdAt: users.createdAt,
 						updatedAt: users.updatedAt,
 					})
@@ -759,6 +762,19 @@ export const resetUserProgress = (userId: string) =>
 				new DatabaseError({
 					cause: error,
 					message: `Failed to delete pretest submissions for user ${userId}`,
+				}),
+		});
+
+		yield* dbTryPromise({
+			try: () =>
+				db
+					.update(users)
+					.set({ hasTakenPretest: false })
+					.where(eq(users.id, userId)),
+			catch: (error) =>
+				new DatabaseError({
+					cause: error,
+					message: `Failed to reset pretest status for user ${userId}`,
 				}),
 		});
 

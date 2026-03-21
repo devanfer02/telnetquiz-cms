@@ -6,6 +6,7 @@ import {
 	questions,
 	quizzes,
 	submissions,
+	users,
 } from "@/database/schema";
 import { Db } from "@/lib/db";
 import { dbTryPromise } from "@/lib/retry";
@@ -30,14 +31,15 @@ export const fetchChaptersWithUserPerformance = (userId: string) =>
 		const { db } = yield* Db;
 
 		// Run all 4 independent queries in parallel
-		const [pretestCount, chaptersData, completedQuizzes, userPretestSubmissions] =
+		const [userRow, chaptersData, completedQuizzes, userPretestSubmissions] =
 			yield* Effect.all([
 				dbTryPromise({
 					try: () =>
 						db
-							.select({ count: sql<number>`count(*)` })
-							.from(pretestSubmissions)
-							.where(eq(pretestSubmissions.userId, userId)),
+							.select({ hasTakenPretest: users.hasTakenPretest })
+							.from(users)
+							.where(eq(users.id, userId))
+							.limit(1),
 					catch: (err) =>
 						new DatabaseError({
 							cause: err,
@@ -92,7 +94,7 @@ export const fetchChaptersWithUserPerformance = (userId: string) =>
 				}),
 			]);
 
-		const hasTakenPretest = pretestCount[0].count > 0;
+		const hasTakenPretest = userRow[0]?.hasTakenPretest ?? false;
 
 		const completedMap = new Map(
 			completedQuizzes.map((c) => [c.chapterId, c.count]),
