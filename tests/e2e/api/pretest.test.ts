@@ -18,6 +18,23 @@ describe("GET /api/pretest", () => {
 		expect(res.body.message).toContain("Successfully");
 		expect(res.body.data).toBeDefined();
 		expect(res.body.data.questions).toBeDefined();
+		expect(Array.isArray(res.body.data.questions)).toBe(true);
+
+		const question = res.body.data.questions[0];
+		if (question) {
+			expect(question).toHaveProperty("id");
+			expect(question).toHaveProperty("type");
+			expect(question).toHaveProperty("question");
+			expect(question).toHaveProperty("description");
+			expect(question).toHaveProperty("options");
+			expect(Array.isArray(question.options)).toBe(true);
+
+			const option = question.options[0];
+			if (option) {
+				expect(option).toHaveProperty("id");
+				expect(option).toHaveProperty("text");
+			}
+		}
 	});
 
 	// --- Negative ---

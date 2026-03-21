@@ -15,6 +15,14 @@ describe("GET /api/schools", () => {
 		expect(res.status).toBe(200);
 		expect(res.body.message).toContain("Successfully");
 		expect(res.body.data).toBeDefined();
+		expect(res.body.data.schools).toBeDefined();
+		expect(Array.isArray(res.body.data.schools)).toBe(true);
+
+		const school = res.body.data.schools[0];
+		if (school) {
+			expect(school).toHaveProperty("id");
+			expect(school).toHaveProperty("name");
+		}
 	});
 
 	it("supports paginated mode with search", async () => {

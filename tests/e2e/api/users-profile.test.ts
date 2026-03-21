@@ -23,6 +23,20 @@ describe("GET /api/users/profile", () => {
 		expect(res.status).toBe(200);
 		expect(res.body.message).toContain("Successfully");
 		expect(res.body.data).toBeDefined();
+		expect(res.body.data).toHaveProperty("id");
+		expect(res.body.data).toHaveProperty("fullname");
+		expect(res.body.data).toHaveProperty("email");
+		expect(res.body.data).toHaveProperty("image");
+		expect(res.body.data).toHaveProperty("bio");
+		expect(res.body.data).toHaveProperty("gender");
+		expect(res.body.data).toHaveProperty("grade");
+		expect(res.body.data).toHaveProperty("school");
+		expect(res.body.data).toHaveProperty("stats");
+		expect(res.body.data.stats).toHaveProperty("total_score");
+		expect(res.body.data.stats).toHaveProperty("levels_completed");
+		expect(res.body.data.stats).toHaveProperty("chapters_completed");
+		expect(res.body.data.stats).toHaveProperty("total_chapters");
+		expect(res.body.data.stats).toHaveProperty("daily_streak");
 	});
 
 	// --- Negative ---
@@ -81,6 +95,13 @@ describe("PATCH /api/users/profile", () => {
 		expect(res.status).toBe(200);
 		expect(res.body.message).toContain("Successfully");
 		expect(res.body.data).toBeDefined();
+		expect(res.body.data).toHaveProperty("id");
+		expect(res.body.data).toHaveProperty("fullname");
+		expect(res.body.data.fullname).toBe("E2E Test User");
+		expect(res.body.data).toHaveProperty("email");
+		expect(res.body.data).toHaveProperty("stats");
+		expect(res.body.data.stats).toHaveProperty("total_score");
+		expect(res.body.data.stats).toHaveProperty("levels_completed");
 	});
 
 	// --- Negative ---

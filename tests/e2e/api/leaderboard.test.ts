@@ -23,6 +23,26 @@ describe("GET /api/leaderboard", () => {
 		expect(res.status).toBe(200);
 		expect(res.body.message).toContain("Successfully");
 		expect(res.body.data).toBeDefined();
+		expect(res.body.data).toHaveProperty("leaderboard");
+		expect(res.body.data).toHaveProperty("currentUser");
+		expect(res.body.data).toHaveProperty("pagination");
+		expect(Array.isArray(res.body.data.leaderboard)).toBe(true);
+		expect(res.body.data.pagination).toHaveProperty("nextCursor");
+		expect(res.body.data.pagination).toHaveProperty("hasNextPage");
+
+		const entry = res.body.data.leaderboard[0];
+		if (entry) {
+			expect(entry).toHaveProperty("rank");
+			expect(entry).toHaveProperty("userId");
+			expect(entry).toHaveProperty("fullname");
+			expect(entry).toHaveProperty("totalScore");
+		}
+
+		if (res.body.data.currentUser) {
+			expect(res.body.data.currentUser).toHaveProperty("rank");
+			expect(res.body.data.currentUser).toHaveProperty("fullname");
+			expect(res.body.data.currentUser).toHaveProperty("totalScore");
+		}
 	});
 
 	it("supports limit query parameter", async () => {
