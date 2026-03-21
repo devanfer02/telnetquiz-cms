@@ -1,6 +1,7 @@
 import { createRouter } from "@tanstack/react-router";
 import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query";
 import * as TanstackQuery from "./components/global/root-provider";
+import { initSentry } from "./lib/sentry/client";
 
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
@@ -26,6 +27,10 @@ export const getRouter = () => {
 		router,
 		queryClient: rqContext.queryClient,
 	});
+
+	if (typeof window !== "undefined") {
+		initSentry(router);
+	}
 
 	return router;
 };

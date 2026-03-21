@@ -1,6 +1,12 @@
 import * as Sentry from "@sentry/react";
+import { tanstackRouterBrowserTracingIntegration } from "@sentry/react";
+import type { AnyRouter } from "@tanstack/react-router";
 
-Sentry.init({
-	dsn: import.meta.env.VITE_SENTRY_DSN,
-	environment: import.meta.env.NODE_ENV,
-});
+export function initSentry(router: AnyRouter) {
+	Sentry.init({
+		dsn: import.meta.env.VITE_SENTRY_DSN,
+		environment: import.meta.env.MODE,
+		integrations: [tanstackRouterBrowserTracingIntegration(router)],
+		tracesSampleRate: 1.0,
+	});
+}
