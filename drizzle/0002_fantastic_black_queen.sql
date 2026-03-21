@@ -1,1 +1,0 @@
-ALTER TABLE "submissions" ALTER COLUMN "userId" SET DATA TYPE varchar;

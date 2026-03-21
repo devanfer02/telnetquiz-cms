@@ -1,13 +1,14 @@
 type User = {
 	id: string;
-	fullname: string;
+	name: string;
 	email: string;
-	createdAt: string;
-};
-
-type AverageScoreChapter = {
-	chapter: string;
-	averageScore: number;
+	schoolId: number | null;
+	schoolName: string | null;
+	gender: boolean | null;
+	grade: string | null;
+	bio: string | null;
+	image: string | null;
+	createdAt: Date;
 };
 
 type Chapter = {
@@ -15,35 +16,41 @@ type Chapter = {
 	title: string;
 	description: string;
 	mascotId: number;
+	isHidden: boolean;
+	createdAt: Date;
+	updatedAt: Date;
 };
 
 type Quiz = {
 	id: number;
-	chapterId?: number;
-	chapterName?: string;
 	title: string;
 	difficulty: "easy" | "medium" | "hard";
 	numberOfQuestions: number;
-};
-
-type Question = {
-	id: string;
-	quizId: string;
-	imageLink: string;
-	image?: File | null;
-	description: string;
-	question: string;
-	options: Option[];
-};
-
-type QuestionSerialized = Omit<Question, "image"> & {
-	image?: string | null;
+	level: number;
+	chapter?: Chapter | null;
+	chapterId?: number | null;
+	chapterTitle?: string;
+	createdAt: Date;
+	updatedAt: Date;
 };
 
 type Option = {
-	questionId: string;
+	questionId: number;
 	text: string;
 	isCorrect: boolean;
+};
+
+type Question = {
+	id: number;
+	quizId: number | null;
+	chapterId: number | null;
+	materialId: number | null;
+	imageLink: string | null;
+	image?: File | null;
+	type: string | null;
+	description: string;
+	question: string;
+	options?: Option[];
 };
 
 type Submission = {
@@ -54,4 +61,42 @@ type Submission = {
 	score: number;
 	startedAt: string;
 	completedAt: string;
+};
+
+type StudyMaterial = {
+	id: number;
+	title: string;
+	imageLink: string | null;
+	content: string;
+	createdAt: Date;
+	updatedAt: Date;
+};
+
+type PretestSubmissionItem = {
+	question_id: number;
+	answered_option_id: number;
+};
+
+type QuizAnswerItem = {
+	question_id: number;
+	answered_option_id: number;
+};
+
+type School = {
+	id: number;
+	name: string;
+	isHidden: boolean;
+	createdAt: Date;
+	updatedAt: Date;
+};
+
+type Session = {
+	id: string;
+	userId: string;
+	token: string;
+	expiresAt: Date;
+	ipAddress: string | null;
+	userAgent: string | null;
+	createdAt: Date;
+	updatedAt: Date;
 };

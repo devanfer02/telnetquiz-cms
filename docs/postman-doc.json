@@ -1,0 +1,2254 @@
+{
+	"info": {
+		"_postman_id": "73647df1-c543-41de-a264-b201b141296d",
+		"name": "TelNetQuiz",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27789368",
+		"_collection_link": "https://hology-7-pit-be.postman.co/workspace/My-Workspace~81b67140-c43a-4564-8f4c-51c5ec9da07b/collection/27789368-73647df1-c543-41de-a264-b201b141296d?action=share&source=collection_link&creator=27789368"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "Register User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{API_KEY}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"fullname\": \"Devan Ferrel\",\n    \"email\": \"devan@gmail.com\",\n    \"password\": \"coba123321\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/auth/register",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Successfully register user",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"fullname\": \"Devan Ferrel\",\n    \"email\": \"devan@gmail.com\",\n    \"password\": \"coba123321\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/auth/register",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"register"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "date",
+									"value": "Mon, 12 Jan 2026 05:15:12 GMT"
+								},
+								{
+									"key": "keep-alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "transfer-encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Successfully register user\",\n    \"token\": \"0nKVl31Py76LjnWCciAeKVYCjfbpjUPK\"\n}"
+						},
+						{
+							"name": "Error email already exists",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"fullname\": \"Devan Ferrel\",\n    \"email\": \"devan@gmail.com\",\n    \"password\": \"coba123321\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/auth/register",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"register"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "date",
+									"value": "Mon, 12 Jan 2026 05:15:57 GMT"
+								},
+								{
+									"key": "keep-alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "transfer-encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Failed to register user\",\n    \"errors\": \"User already exists. Use another email.\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Login User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{API_KEY}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"devan@gmail.com\",\n    \"password\": \"coba123321\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/auth/login",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Successfully login user",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"devan@gmail.com\",\n    \"password\": \"coba123321\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/auth/login",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "date",
+									"value": "Mon, 12 Jan 2026 05:16:59 GMT"
+								},
+								{
+									"key": "keep-alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "transfer-encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Successfully login user\",\n    \"token\": \"nmDpX99DlIwVWpTlbdTFheXw9CLe4tYj\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "pretest",
+			"item": [
+				{
+					"name": "Get Pretest Questions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{API_KEY}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/api/pretest",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"pretest"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Successfully fetch pretest questions",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/pretest",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"pretest"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "keep-alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "transfer-encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Successfully fetch pretest questions\",\n    \"data\": {\n        \"questions\": [\n            {\n                \"id\": 1,\n                \"type\": \"pretest\",\n                \"chapter_id\": 1,\n                \"image_link\": null,\n                \"description\": \"Pertanyaan tentang dasar jaringan komputer\",\n                \"question\": \"Apa kepanjangan dari TCP?\",\n                \"options\": [\n                    {\n                        \"id\": 1,\n                        \"text\": \"Transmission Control Protocol\"\n                    },\n                    {\n                        \"id\": 2,\n                        \"text\": \"Transfer Control Protocol\"\n                    },\n                    {\n                        \"id\": 3,\n                        \"text\": \"Transmission Communication Protocol\"\n                    },\n                    {\n                        \"id\": 4,\n                        \"text\": \"Transfer Communication Protocol\"\n                    }\n                ]\n            },\n            {\n                \"id\": 2,\n                \"type\": \"pretest\",\n                \"chapter_id\": 1,\n                \"image_link\": null,\n                \"description\": \"Pertanyaan tentang OSI Layer\",\n                \"question\": \"Layer berapa yang bertanggung jawab untuk routing?\",\n                \"options\": [\n                    {\n                        \"id\": 5,\n                        \"text\": \"Layer 1 - Physical\"\n                    },\n                    {\n                        \"id\": 6,\n                        \"text\": \"Layer 2 - Data Link\"\n                    },\n                    {\n                        \"id\": 7,\n                        \"text\": \"Layer 3 - Network\"\n                    },\n                    {\n                        \"id\": 8,\n                        \"text\": \"Layer 4 - Transport\"\n                    }\n                ]\n            }\n        ]\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Submit Pretest Answers",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{API_KEY}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"pretest_submissions\": [\n        {\n            \"question_id\": 1,\n            \"answered_option_id\": 1\n        },\n        {\n            \"question_id\": 2,\n            \"answered_option_id\": 5\n        },\n        {\n            \"question_id\": 3,\n            \"answered_option_id\": 9\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/pretest",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"pretest"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Successfully submit pretest",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"pretest_submissions\": [\n        {\n            \"question_id\": 1,\n            \"answered_option_id\": 1\n        },\n        {\n            \"question_id\": 2,\n            \"answered_option_id\": 5\n        },\n        {\n            \"question_id\": 3,\n            \"answered_option_id\": 9\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/pretest",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"pretest"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "keep-alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "transfer-encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Successfully judged user pretest submission\",\n    \"data\": {\n        \"score\": 80,\n        \"correctCount\": 8,\n        \"totalQuestions\": 10,\n        \"weakChapters\": [\n            {\n                \"chapterId\": 2,\n                \"chapterName\": \"Model OSI Layer\",\n                \"incorrectCount\": 2\n            }\n        ]\n    }\n}"
+						},
+						{
+							"name": "Validation error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"pretest_submissions\": [\n        {\n            \"question_id\": \"invalid\"\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/pretest",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"pretest"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "keep-alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "transfer-encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Validation failed\",\n    \"error\": [\n        {\n            \"path\": [\"pretest_submissions\", 0, \"question_id\"],\n            \"message\": \"Expected number, received string\"\n        },\n        {\n            \"path\": [\"pretest_submissions\", 0, \"answered_option_id\"],\n            \"message\": \"Required\"\n        }\n    ]\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "chapters",
+			"item": [
+				{
+					"name": "Get Personalized Chapters",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{API_KEY}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/api/chapters",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"chapters"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "User has not taken pretest",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/chapters",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"chapters"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "date",
+									"value": "Sat, 31 Jan 2026 11:29:34 GMT"
+								},
+								{
+									"key": "keep-alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "transfer-encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "vary",
+									"value": "Accept-Encoding"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Successfully fetch chapters by user's preference\",\n    \"data\": {\n        \"has_taken_pretest\": false,\n        \"chapters\": [\n            {\n                \"id\": 1,\n                \"title\": \"Protokol Internet (IP)\",\n                \"description\": \"Mempelajari konsep dasar pengalamatan IP, termasuk IPv4, IPv6, subnetting, dan teknik pembagian jaringan.\",\n                \"mascot_id\": 1,\n                \"user_performance\": null,\n                \"quiz_count\": 6,\n                \"completed_quizzes\": 0\n            },\n            {\n                \"id\": 2,\n                \"title\": \"Topologi Jaringan\",\n                \"description\": \"Memahami berbagai jenis topologi jaringan komputer, karakteristik, kelebihan, dan kekurangan masing-masing topologi.\",\n                \"mascot_id\": 2,\n                \"user_performance\": null,\n                \"quiz_count\": 6,\n                \"completed_quizzes\": 0\n            }\n        ]\n    }\n}"
+						},
+						{
+							"name": "User has taken pretest",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/chapters",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"chapters"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "date",
+									"value": "Sat, 31 Jan 2026 11:52:47 GMT"
+								},
+								{
+									"key": "keep-alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "transfer-encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "vary",
+									"value": "Accept-Encoding"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Successfully fetch chapters by user's preference\",\n    \"data\": {\n        \"has_taken_pretest\": true,\n        \"chapters\": [\n            {\n                \"id\": 1,\n                \"title\": \"Protokol Internet (IP)\",\n                \"description\": \"Mempelajari konsep dasar pengalamatan IP, termasuk IPv4, IPv6, subnetting, dan teknik pembagian jaringan.\",\n                \"mascot_id\": 1,\n                \"user_performance\": {\n                    \"wrong_answers\": 1,\n                    \"total_pretest_questions\": 1,\n                    \"accuracy_percentage\": 0\n                },\n                \"quiz_count\": 6,\n                \"completed_quizzes\": 0\n            },\n            {\n                \"id\": 2,\n                \"title\": \"Topologi Jaringan\",\n                \"description\": \"Memahami berbagai jenis topologi jaringan komputer, karakteristik, kelebihan, dan kekurangan masing-masing topologi.\",\n                \"mascot_id\": 2,\n                \"user_performance\": {\n                    \"wrong_answers\": 0,\n                    \"total_pretest_questions\": 1,\n                    \"accuracy_percentage\": 100\n                },\n                \"quiz_count\": 6,\n                \"completed_quizzes\": 0\n            }\n        ]\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Chapter by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{API_KEY}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/api/chapters/:id",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"chapters",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Chapter ID"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Successfully fetch chapter by id",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/chapters/1",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"chapters",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "keep-alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "transfer-encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Successfully fetch chapter by id\",\n    \"data\": {\n        \"id\": 1,\n        \"title\": \"Protokol Internet (IP)\",\n        \"description\": \"Mempelajari konsep dasar pengalamatan IP, termasuk IPv4, IPv6, subnetting, dan teknik pembagian jaringan.\",\n        \"mascotId\": 1,\n        \"createdAt\": \"2026-01-31T11:14:31.853Z\",\n        \"updatedAt\": \"2026-01-31T11:14:31.853Z\",\n        \"quizzes\": [\n            {\n                \"id\": 1,\n                \"chapterId\": 1,\n                \"title\": \"Pengenalan Alamat IP\",\n                \"level\": 1,\n                \"difficulty\": \"easy\",\n                \"createdAt\": \"2026-01-31T11:14:32.434Z\",\n                \"updatedAt\": \"2026-01-31T11:14:32.434Z\",\n                \"numberOfQuestions\": 6\n            },\n            {\n                \"id\": 2,\n                \"chapterId\": 1,\n                \"title\": \"Struktur Alamat IPv4\",\n                \"level\": 2,\n                \"difficulty\": \"easy\",\n                \"createdAt\": \"2026-01-31T11:14:33.764Z\",\n                \"updatedAt\": \"2026-01-31T11:14:33.764Z\",\n                \"numberOfQuestions\": 8\n            },\n            {\n                \"id\": 3,\n                \"chapterId\": 1,\n                \"title\": \"Konsep Subnetting\",\n                \"level\": 3,\n                \"difficulty\": \"medium\",\n                \"createdAt\": \"2026-01-31T11:14:35.492Z\",\n                \"updatedAt\": \"2026-01-31T11:14:35.492Z\",\n                \"numberOfQuestions\": 8\n            },\n            {\n                \"id\": 4,\n                \"chapterId\": 1,\n                \"title\": \"Alamat IPv6\",\n                \"level\": 4,\n                \"difficulty\": \"medium\",\n                \"createdAt\": \"2026-01-31T11:14:37.220Z\",\n                \"updatedAt\": \"2026-01-31T11:14:37.220Z\",\n                \"numberOfQuestions\": 8\n            },\n            {\n                \"id\": 5,\n                \"chapterId\": 1,\n                \"title\": \"Alamat IP Privat dan Publik\",\n                \"level\": 5,\n                \"difficulty\": \"medium\",\n                \"createdAt\": \"2026-01-31T11:14:38.933Z\",\n                \"updatedAt\": \"2026-01-31T11:14:38.933Z\",\n                \"numberOfQuestions\": 7\n            },\n            {\n                \"id\": 6,\n                \"chapterId\": 1,\n                \"title\": \"CIDR (Classless Inter-Domain Routing)\",\n                \"level\": 6,\n                \"difficulty\": \"hard\",\n                \"createdAt\": \"2026-01-31T11:14:40.440Z\",\n                \"updatedAt\": \"2026-01-31T11:14:40.440Z\",\n                \"numberOfQuestions\": 7\n            }\n        ]\n    }\n}"
+						},
+						{
+							"name": "Chapter not found",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/chapters/:id",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"chapters",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "999"
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "keep-alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "transfer-encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Chapter with id 999 not found\"\n}"
+						},
+						{
+							"name": "Invalid chapter id",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/chapters/:id",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"chapters",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "abc"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "keep-alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "transfer-encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Invalid chapter id\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "quiz",
+			"item": [
+				{
+					"name": "Get Quiz by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{API_KEY}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/api/quiz/:id",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"quiz",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Quiz ID"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Successfully fetch quiz by id",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/quiz/:id",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"quiz",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "keep-alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "transfer-encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Successfully fetch quiz by id\",\n    \"data\": {\n        \"id\": 1,\n        \"chapterId\": 1,\n        \"title\": \"Pengenalan Alamat IP\",\n        \"level\": 1,\n        \"difficulty\": \"easy\",\n        \"createdAt\": \"2026-01-31T11:14:32.434Z\",\n        \"updatedAt\": \"2026-01-31T11:14:32.434Z\",\n        \"questions\": [\n            {\n                \"id\": 3,\n                \"type\": \"quiz\",\n                \"chapterId\": 1,\n                \"quizId\": 1,\n                \"materialId\": 1,\n                \"imageLink\": null,\n                \"description\": \"Pertanyaan tentang definisi dan fungsi alamat IP.\",\n                \"question\": \"Apa fungsi utama dari alamat IP dalam jaringan komputer?\",\n                \"createdAt\": \"2026-01-31T11:14:32.547Z\",\n                \"updatedAt\": \"2026-01-31T11:14:32.547Z\",\n                \"options\": [\n                    {\n                        \"id\": 9,\n                        \"questionId\": 3,\n                        \"text\": \"Mengenkripsi data yang dikirim melalui jaringan\",\n                        \"createdAt\": \"2026-01-31T11:14:32.648Z\",\n                        \"updatedAt\": \"2026-01-31T11:14:32.648Z\"\n                    },\n                    {\n                        \"id\": 10,\n                        \"questionId\": 3,\n                        \"text\": \"Memberikan identitas unik pada setiap perangkat dalam jaringan\",\n                        \"createdAt\": \"2026-01-31T11:14:32.648Z\",\n                        \"updatedAt\": \"2026-01-31T11:14:32.648Z\"\n                    },\n                    {\n                        \"id\": 11,\n                        \"questionId\": 3,\n                        \"text\": \"Mempercepat koneksi internet\",\n                        \"createdAt\": \"2026-01-31T11:14:32.648Z\",\n                        \"updatedAt\": \"2026-01-31T11:14:32.648Z\"\n                    },\n                    {\n                        \"id\": 12,\n                        \"questionId\": 3,\n                        \"text\": \"Menyimpan data pengguna\",\n                        \"createdAt\": \"2026-01-31T11:14:32.648Z\",\n                        \"updatedAt\": \"2026-01-31T11:14:32.648Z\"\n                    }\n                ]\n            },\n            {\n                \"id\": 4,\n                \"type\": \"quiz\",\n                \"chapterId\": 1,\n                \"quizId\": 1,\n                \"materialId\": 1,\n                \"imageLink\": null,\n                \"description\": \"Pertanyaan tentang jenis-jenis alamat IP.\",\n                \"question\": \"Terdapat dua versi utama alamat IP yang digunakan saat ini. Apakah kedua versi tersebut?\",\n                \"createdAt\": \"2026-01-31T11:14:32.746Z\",\n                \"updatedAt\": \"2026-01-31T11:14:32.746Z\",\n                \"options\": [\n                    {\n                        \"id\": 13,\n                        \"questionId\": 4,\n                        \"text\": \"IPv3 dan IPv4\",\n                        \"createdAt\": \"2026-01-31T11:14:32.852Z\",\n                        \"updatedAt\": \"2026-01-31T11:14:32.852Z\"\n                    },\n                    {\n                        \"id\": 14,\n                        \"questionId\": 4,\n                        \"text\": \"IPv4 dan IPv6\",\n                        \"createdAt\": \"2026-01-31T11:14:32.852Z\",\n                        \"updatedAt\": \"2026-01-31T11:14:32.852Z\"\n                    },\n                    {\n                        \"id\": 15,\n                        \"questionId\": 4,\n                        \"text\": \"IPv5 dan IPv6\",\n                        \"createdAt\": \"2026-01-31T11:14:32.852Z\",\n                        \"updatedAt\": \"2026-01-31T11:14:32.852Z\"\n                    },\n                    {\n                        \"id\": 16,\n                        \"questionId\": 4,\n                        \"text\": \"IPv1 dan IPv2\",\n                        \"createdAt\": \"2026-01-31T11:14:32.852Z\",\n                        \"updatedAt\": \"2026-01-31T11:14:32.852Z\"\n                    }\n                ]\n            },\n            {\n                \"id\": 5,\n                \"type\": \"quiz\",\n                \"chapterId\": 1,\n                \"quizId\": 1,\n                \"materialId\": 1,\n                \"imageLink\": null,\n                \"description\": \"Pertanyaan tentang analogi alamat IP.\",\n                \"question\": \"Alamat IP dapat dianalogikan dengan konsep apa dalam kehidupan sehari-hari?\",\n                \"createdAt\": \"2026-01-31T11:14:32.949Z\",\n                \"updatedAt\": \"2026-01-31T11:14:32.949Z\",\n                \"options\": [\n                    {\n                        \"id\": 17,\n                        \"questionId\": 5,\n                        \"text\": \"Alamat rumah yang memungkinkan surat dikirim ke tujuan yang tepat\",\n                        \"createdAt\": \"2026-01-31T11:14:33.047Z\",\n                        \"updatedAt\": \"2026-01-31T11:14:33.047Z\"\n                    },\n                    {\n                        \"id\": 18,\n                        \"questionId\": 5,\n                        \"text\": \"Nomor telepon yang digunakan untuk menelepon\",\n                        \"createdAt\": \"2026-01-31T11:14:33.047Z\",\n                        \"updatedAt\": \"2026-01-31T11:14:33.047Z\"\n                    },\n                    {\n                        \"id\": 19,\n                        \"questionId\": 5,\n                        \"text\": \"Kata sandi untuk mengakses akun\",\n                        \"createdAt\": \"2026-01-31T11:14:33.047Z\",\n                        \"updatedAt\": \"2026-01-31T11:14:33.047Z\"\n                    },\n                    {\n                        \"id\": 20,\n                        \"questionId\": 5,\n                        \"text\": \"Nama pengguna di media sosial\",\n                        \"createdAt\": \"2026-01-31T11:14:33.047Z\",\n                        \"updatedAt\": \"2026-01-31T11:14:33.047Z\"\n                    }\n                ]\n            },\n            {\n                \"id\": 6,\n                \"type\": \"quiz\",\n                \"chapterId\": 1,\n                \"quizId\": 1,\n                \"materialId\": 1,\n                \"imageLink\": null,\n                \"description\": \"Pertanyaan tentang protokol internet.\",\n                \"question\": \"Apa kepanjangan dari \\\"IP\\\" dalam alamat IP?\",\n                \"createdAt\": \"2026-01-31T11:14:33.146Z\",\n                \"updatedAt\": \"2026-01-31T11:14:33.146Z\",\n                \"options\": [\n                    {\n                        \"id\": 21,\n                        \"questionId\": 6,\n                        \"text\": \"Internal Protocol\",\n                        \"createdAt\": \"2026-01-31T11:14:33.248Z\",\n                        \"updatedAt\": \"2026-01-31T11:14:33.248Z\"\n                    },\n                    {\n                        \"id\": 22,\n                        \"questionId\": 6,\n                        \"text\": \"Internet Provider\",\n                        \"createdAt\": \"2026-01-31T11:14:33.248Z\",\n                        \"updatedAt\": \"2026-01-31T11:14:33.248Z\"\n                    },\n                    {\n                        \"id\": 23,\n                        \"questionId\": 6,\n                        \"text\": \"Internet Protocol\",\n                        \"createdAt\": \"2026-01-31T11:14:33.248Z\",\n                        \"updatedAt\": \"2026-01-31T11:14:33.248Z\"\n                    },\n                    {\n                        \"id\": 24,\n                        \"questionId\": 6,\n                        \"text\": \"Information Processing\",\n                        \"createdAt\": \"2026-01-31T11:14:33.248Z\",\n                        \"updatedAt\": \"2026-01-31T11:14:33.248Z\"\n                    }\n                ]\n            },\n            {\n                \"id\": 7,\n                \"type\": \"quiz\",\n                \"chapterId\": 1,\n                \"quizId\": 1,\n                \"materialId\": 1,\n                \"imageLink\": null,\n                \"description\": \"Pertanyaan tentang kegunaan alamat IP.\",\n                \"question\": \"Dalam proses routing, alamat IP digunakan oleh router untuk...\",\n                \"createdAt\": \"2026-01-31T11:14:33.346Z\",\n                \"updatedAt\": \"2026-01-31T11:14:33.346Z\",\n                \"options\": [\n                    {\n                        \"id\": 25,\n                        \"questionId\": 7,\n                        \"text\": \"Mengenkripsi paket data\",\n                        \"createdAt\": \"2026-01-31T11:14:33.448Z\",\n                        \"updatedAt\": \"2026-01-31T11:14:33.448Z\"\n                    },\n                    {\n                        \"id\": 26,\n                        \"questionId\": 7,\n                        \"text\": \"Mengarahkan paket data ke tujuan yang benar\",\n                        \"createdAt\": \"2026-01-31T11:14:33.448Z\",\n                        \"updatedAt\": \"2026-01-31T11:14:33.448Z\"\n                    },\n                    {\n                        \"id\": 27,\n                        \"questionId\": 7,\n                        \"text\": \"Menyimpan paket data sementara\",\n                        \"createdAt\": \"2026-01-31T11:14:33.448Z\",\n                        \"updatedAt\": \"2026-01-31T11:14:33.448Z\"\n                    },\n                    {\n                        \"id\": 28,\n                        \"questionId\": 7,\n                        \"text\": \"Menghapus paket data yang tidak valid\",\n                        \"createdAt\": \"2026-01-31T11:14:33.448Z\",\n                        \"updatedAt\": \"2026-01-31T11:14:33.448Z\"\n                    }\n                ]\n            },\n            {\n                \"id\": 8,\n                \"type\": \"quiz\",\n                \"chapterId\": 1,\n                \"quizId\": 1,\n                \"materialId\": 1,\n                \"imageLink\": null,\n                \"description\": \"Pertanyaan tentang karakteristik alamat IP.\",\n                \"question\": \"Manakah pernyataan berikut yang BENAR tentang alamat IP dalam sebuah jaringan?\",\n                \"createdAt\": \"2026-01-31T11:14:33.552Z\",\n                \"updatedAt\": \"2026-01-31T11:14:33.552Z\",\n                \"options\": [\n                    {\n                        \"id\": 29,\n                        \"questionId\": 8,\n                        \"text\": \"Setiap perangkat boleh memiliki alamat IP yang sama\",\n                        \"createdAt\": \"2026-01-31T11:14:33.655Z\",\n                        \"updatedAt\": \"2026-01-31T11:14:33.655Z\"\n                    },\n                    {\n                        \"id\": 30,\n                        \"questionId\": 8,\n                        \"text\": \"Alamat IP hanya diperlukan untuk komputer, bukan perangkat lain\",\n                        \"createdAt\": \"2026-01-31T11:14:33.655Z\",\n                        \"updatedAt\": \"2026-01-31T11:14:33.655Z\"\n                    },\n                    {\n                        \"id\": 31,\n                        \"questionId\": 8,\n                        \"text\": \"Setiap perangkat harus memiliki alamat IP yang unik dalam jaringan yang sama\",\n                        \"createdAt\": \"2026-01-31T11:14:33.655Z\",\n                        \"updatedAt\": \"2026-01-31T11:14:33.655Z\"\n                    },\n                    {\n                        \"id\": 32,\n                        \"questionId\": 8,\n                        \"text\": \"Alamat IP tidak diperlukan untuk koneksi internet\",\n                        \"createdAt\": \"2026-01-31T11:14:33.655Z\",\n                        \"updatedAt\": \"2026-01-31T11:14:33.655Z\"\n                    }\n                ]\n            }\n        ]\n    }\n}"
+						},
+						{
+							"name": "Quiz not found",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/quiz/:id",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"quiz",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "999"
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "keep-alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "transfer-encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Quiz with id 999 not found\"\n}"
+						},
+						{
+							"name": "Invalid quiz id",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/quiz/:id",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"quiz",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "abc"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "keep-alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "transfer-encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Invalid quiz id\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Submit Quiz Answers",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{API_KEY}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"answers\": [\n        {\n            \"question_id\": 1,\n            \"answered_option_id\": 1\n        },\n        {\n            \"question_id\": 2,\n            \"answered_option_id\": 7\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/quiz/:id",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"quiz",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Quiz ID"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Quiz passed",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"answers\": [\n        {\n            \"question_id\": 1,\n            \"answered_option_id\": 1\n        },\n        {\n            \"question_id\": 2,\n            \"answered_option_id\": 7\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/quiz/:id",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"quiz",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "keep-alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "transfer-encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Quiz completed successfully\",\n    \"data\": {\n        \"passed\": true,\n        \"score\": 100,\n        \"correctCount\": 2,\n        \"totalQuestions\": 2\n    }\n}"
+						},
+						{
+							"name": "Quiz failed",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"answers\": [\n        {\n            \"question_id\": 1,\n            \"answered_option_id\": 2\n        },\n        {\n            \"question_id\": 2,\n            \"answered_option_id\": 5\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/quiz/:id",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"quiz",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "keep-alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "transfer-encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Quiz completed with some wrong answers\",\n    \"data\": {\n        \"passed\": false,\n        \"score\": 0,\n        \"correctCount\": 0,\n        \"totalQuestions\": 2\n    }\n}"
+						},
+						{
+							"name": "Validation error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"answers\": [\n        {\n            \"question_id\": \"invalid\"\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/quiz/:id",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"quiz",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "keep-alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "transfer-encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Validation failed\",\n    \"error\": [\n        {\n            \"path\": [\"answers\", 0, \"question_id\"],\n            \"message\": \"Expected number, received string\"\n        },\n        {\n            \"path\": [\"answers\", 0, \"answered_option_id\"],\n            \"message\": \"Required\"\n        }\n    ]\n}"
+						},
+						{
+							"name": "Quiz not found",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"answers\": [\n        {\n            \"question_id\": 1,\n            \"answered_option_id\": 1\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/quiz/:id",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"quiz",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "999"
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "keep-alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "transfer-encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Quiz with id 999 not found\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "Get User Profile",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{API_KEY}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/api/users/profile",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"profile"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Successfully fetch user profile",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{TOKEN}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/users/profile",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"users",
+										"profile"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Successfully fetch user profile\",\n    \"data\": {\n        \"id\": \"user-uuid-123\",\n        \"fullname\": \"Devan Ferrel\",\n        \"email\": \"devan@gmail.com\",\n        \"image\": \"https://example.com/avatar.jpg\",\n        \"createdAt\": \"2026-01-12T05:15:12.000Z\",\n        \"updatedAt\": \"2026-01-12T05:15:12.000Z\"\n    }\n}"
+						},
+						{
+							"name": "User not found",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{TOKEN}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/users/profile",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"users",
+										"profile"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"User not found\"\n}"
+						},
+						{
+							"name": "Unauthorized - Missing or invalid token",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/users/profile",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"users",
+										"profile"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Unauthorized\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Update User Profile",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{API_KEY}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"fullname\": \"Devan Ferrel Updated\",\n    \"image\": \"https://example.com/new-avatar.jpg\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/users/profile",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"profile"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Successfully updated user profile",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{TOKEN}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"fullname\": \"Devan Ferrel Updated\",\n    \"image\": \"https://example.com/new-avatar.jpg\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/users/profile",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"users",
+										"profile"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Successfully updated user profile\",\n    \"data\": {\n        \"id\": \"user-uuid-123\",\n        \"fullname\": \"Devan Ferrel Updated\",\n        \"email\": \"devan@gmail.com\",\n        \"image\": \"https://example.com/new-avatar.jpg\",\n        \"createdAt\": \"2026-01-12T05:15:12.000Z\",\n        \"updatedAt\": \"2026-01-15T10:30:00.000Z\"\n    }\n}"
+						},
+						{
+							"name": "Validation error - fullname too short",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{TOKEN}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"fullname\": \"AB\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/users/profile",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"users",
+										"profile"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Validation failed\",\n    \"error\": [\n        {\n            \"path\": [\"fullname\"],\n            \"message\": \"String must contain at least 3 character(s)\"\n        }\n    ]\n}"
+						},
+						{
+							"name": "Validation error - invalid image URL",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{TOKEN}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"image\": \"not-a-valid-url\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/users/profile",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"users",
+										"profile"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Validation failed\",\n    \"error\": [\n        {\n            \"path\": [\"image\"],\n            \"message\": \"Invalid url\"\n        }\n    ]\n}"
+						},
+						{
+							"name": "User not found",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{TOKEN}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"fullname\": \"New Name\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/users/profile",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"users",
+										"profile"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"User not found\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "leaderboard",
+			"item": [
+				{
+					"name": "Get Leaderboard",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{API_KEY}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/api/leaderboard?limit=10",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"leaderboard"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "Number of users to return (1-100, default: 10)"
+								},
+								{
+									"key": "cursor",
+									"value": "0",
+									"description": "Pagination cursor (offset)",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Successfully fetch leaderboard",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{TOKEN}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/leaderboard?limit=10",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"leaderboard"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "10"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Successfully fetch leaderboard\",\n    \"data\": {\n        \"leaderboard\": [\n            {\n                \"rank\": 1,\n                \"userId\": \"user-uuid-1\",\n                \"fullname\": \"Top User\",\n                \"image\": \"https://example.com/avatar1.jpg\",\n                \"totalScore\": 950\n            },\n            {\n                \"rank\": 2,\n                \"userId\": \"user-uuid-2\",\n                \"fullname\": \"Second User\",\n                \"image\": \"https://example.com/avatar2.jpg\",\n                \"totalScore\": 820\n            },\n            {\n                \"rank\": 3,\n                \"userId\": \"user-uuid-3\",\n                \"fullname\": \"Third User\",\n                \"image\": null,\n                \"totalScore\": 750\n            }\n        ],\n        \"currentUser\": {\n            \"rank\": 5,\n            \"fullname\": \"Devan Ferrel\",\n            \"image\": \"https://example.com/my-avatar.jpg\",\n            \"totalScore\": 500\n        },\n        \"pagination\": {\n            \"nextCursor\": 10,\n            \"hasNextPage\": true\n        }\n    }\n}"
+						},
+						{
+							"name": "Successfully fetch leaderboard with cursor",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{TOKEN}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/leaderboard?limit=10&cursor=10",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"leaderboard"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "10"
+										},
+										{
+											"key": "cursor",
+											"value": "10"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Successfully fetch leaderboard\",\n    \"data\": {\n        \"leaderboard\": [\n            {\n                \"rank\": 11,\n                \"userId\": \"user-uuid-11\",\n                \"fullname\": \"User Eleven\",\n                \"image\": null,\n                \"totalScore\": 400\n            },\n            {\n                \"rank\": 12,\n                \"userId\": \"user-uuid-12\",\n                \"fullname\": \"User Twelve\",\n                \"image\": null,\n                \"totalScore\": 380\n            }\n        ],\n        \"currentUser\": {\n            \"rank\": 5,\n            \"fullname\": \"Devan Ferrel\",\n            \"image\": \"https://example.com/my-avatar.jpg\",\n            \"totalScore\": 500\n        },\n        \"pagination\": {\n            \"nextCursor\": null,\n            \"hasNextPage\": false\n        }\n    }\n}"
+						},
+						{
+							"name": "Invalid limit parameter",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{TOKEN}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/leaderboard?limit=200",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"leaderboard"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "200"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Invalid limit parameter. Must be between 1 and 100.\"\n}"
+						},
+						{
+							"name": "Invalid cursor parameter",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{TOKEN}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/leaderboard?limit=10&cursor=-5",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"leaderboard"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "10"
+										},
+										{
+											"key": "cursor",
+											"value": "-5"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Invalid cursor parameter.\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "questions",
+			"item": [
+				{
+					"name": "Get Questions by Type",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{API_KEY}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/api/questions?type=pretest",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"questions"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "pretest",
+									"description": "Question type: 'pretest' or 'quiz'"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Successfully fetch pretest questions",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/questions?type=pretest",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"questions"
+									],
+									"query": [
+										{
+											"key": "type",
+											"value": "pretest"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Successfully fetch questions\",\n    \"data\": {\n        \"questions\": [\n            {\n                \"id\": 1,\n                \"type\": \"pretest\",\n                \"chapter_id\": 1,\n                \"image_link\": null,\n                \"description\": \"Pertanyaan tentang dasar jaringan komputer\",\n                \"question\": \"Apa kepanjangan dari TCP?\",\n                \"options\": [\n                    {\n                        \"id\": 1,\n                        \"text\": \"Transmission Control Protocol\"\n                    },\n                    {\n                        \"id\": 2,\n                        \"text\": \"Transfer Control Protocol\"\n                    },\n                    {\n                        \"id\": 3,\n                        \"text\": \"Transmission Communication Protocol\"\n                    },\n                    {\n                        \"id\": 4,\n                        \"text\": \"Transfer Communication Protocol\"\n                    }\n                ]\n            },\n            {\n                \"id\": 2,\n                \"type\": \"pretest\",\n                \"chapter_id\": 1,\n                \"image_link\": null,\n                \"description\": \"Pertanyaan tentang OSI Layer\",\n                \"question\": \"Layer berapa yang bertanggung jawab untuk routing?\",\n                \"options\": [\n                    {\n                        \"id\": 5,\n                        \"text\": \"Layer 1 - Physical\"\n                    },\n                    {\n                        \"id\": 6,\n                        \"text\": \"Layer 2 - Data Link\"\n                    },\n                    {\n                        \"id\": 7,\n                        \"text\": \"Layer 3 - Network\"\n                    },\n                    {\n                        \"id\": 8,\n                        \"text\": \"Layer 4 - Transport\"\n                    }\n                ]\n            }\n        ]\n    }\n}"
+						},
+						{
+							"name": "Successfully fetch quiz questions",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/questions?type=quiz",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"questions"
+									],
+									"query": [
+										{
+											"key": "type",
+											"value": "quiz"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Successfully fetch questions\",\n    \"data\": {\n        \"questions\": [\n            {\n                \"id\": 3,\n                \"type\": \"quiz\",\n                \"chapter_id\": 1,\n                \"image_link\": null,\n                \"description\": \"Pertanyaan tentang definisi dan fungsi alamat IP.\",\n                \"question\": \"Apa fungsi utama dari alamat IP dalam jaringan komputer?\",\n                \"options\": [\n                    {\n                        \"id\": 9,\n                        \"text\": \"Mengenkripsi data yang dikirim melalui jaringan\"\n                    },\n                    {\n                        \"id\": 10,\n                        \"text\": \"Memberikan identitas unik pada setiap perangkat dalam jaringan\"\n                    },\n                    {\n                        \"id\": 11,\n                        \"text\": \"Mempercepat koneksi internet\"\n                    },\n                    {\n                        \"id\": 12,\n                        \"text\": \"Menyimpan data pengguna\"\n                    }\n                ]\n            }\n        ]\n    }\n}"
+						},
+						{
+							"name": "Missing type parameter",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/questions",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"questions"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Invalid or missing type search params\"\n}"
+						},
+						{
+							"name": "Invalid type parameter",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/questions?type=invalid",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"questions"
+									],
+									"query": [
+										{
+											"key": "type",
+											"value": "invalid"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Invalid or missing type search params\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "sessions",
+			"item": [
+				{
+					"name": "Revoke Session",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{API_KEY}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/api/sessions/:id",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"sessions",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "session-uuid-123",
+									"description": "Session ID to revoke"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Successfully revoked session",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/sessions/session-uuid-123",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"sessions",
+										"session-uuid-123"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Session revoked successfully\",\n    \"data\": {\n        \"success\": true,\n        \"id\": \"session-uuid-123\"\n    }\n}"
+						},
+						{
+							"name": "Session not found",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/sessions/non-existent-session",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"sessions",
+										"non-existent-session"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Session with id non-existent-session not found\"\n}"
+						},
+						{
+							"name": "Invalid session id - empty",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "{{API_KEY}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/api/sessions/   ",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"sessions",
+										"   "
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Invalid session id\"\n}"
+						}
+					]
+				}
+			]
+		}
+	]
+}

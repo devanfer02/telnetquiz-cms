@@ -1,0 +1,73 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { Effect } from "effect";
+import { DbLayer } from "@/lib/db";
+import { HttpStatus, parseBody, response } from "@/lib/http";
+import { withApiErrorHandling } from "@/lib/sentry/effect";
+import { authMiddleware } from "@/middlewares/auth";
+import { submitPretest } from "@/services/pretest";
+import { fetchQuestionsByType } from "@/services/questions";
+import { pretestSubmissionSchema } from "@/types/zod.api";
+
+export const Route = createFileRoute("/api/(internal)/pretest")({
+	server: {
+		handlers: ({ createHandlers }) =>
+			createHandlers({
+				GET: () =>
+					Effect.runPromise(
+						withApiErrorHandling(
+							Effect.gen(function* () {
+								const questions = yield* fetchQuestionsByType("pretest");
+
+								const formattedQuestions = questions.map((q) => ({
+									id: q.id,
+									type: q.type,
+									chapter_id: q.chapterId,
+									image_link: q.imageLink,
+									description: q.description,
+									question: q.question,
+									options: q.options.map((o) => ({
+										id: o.id,
+										text: o.text,
+									})),
+								}));
+
+								return response(
+									{
+										message: "Successfully fetch pretest questions",
+										data: {
+											questions: formattedQuestions,
+										},
+									},
+									HttpStatus.OK,
+								);
+							}).pipe(Effect.provide(DbLayer)),
+						),
+					),
+				POST: {
+					middleware: [authMiddleware],
+					handler: async ({ request, context }) =>
+						Effect.runPromise(
+							withApiErrorHandling(
+								Effect.gen(function* () {
+									const body = yield* Effect.tryPromise(() => request.json());
+									const data = yield* parseBody(pretestSubmissionSchema, body);
+
+									const result = yield* submitPretest(
+										context.user.id,
+										data.pretest_submissions,
+									);
+
+									return response(
+										{
+											message: "Successfully judged user pretest submission",
+											data: result,
+										},
+										HttpStatus.OK,
+									);
+								}).pipe(Effect.provide(DbLayer)),
+							),
+						),
+				},
+			}),
+	},
+});

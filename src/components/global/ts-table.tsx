@@ -16,7 +16,7 @@ import {
 import { Card } from "../ui/card";
 
 interface TanstackTableProps<T> {
-	table: ReactTable<any>;
+	table: ReactTable<T>;
 	columns: ColumnDef<T>[];
 	title: string;
 	fallbackMessage: string;
@@ -67,7 +67,10 @@ export default function TanstackTable<T>({
 						))
 					) : (
 						<TableRow>
-							<TableCell colSpan={columns.length} className="h-24 text-center">
+							<TableCell
+								colSpan={columns.length}
+								className="h-24 text-center text-muted-foreground italic"
+							>
 								{fallbackMessage}
 							</TableCell>
 						</TableRow>
@@ -77,6 +80,7 @@ export default function TanstackTable<T>({
 
 			<div className="flex items-center justify-between">
 				<button
+					type="button"
 					className="border rounded px-3 py-1 disabled:opacity-50"
 					onClick={() => table.previousPage()}
 					disabled={!table.getCanPreviousPage()}
@@ -88,6 +92,7 @@ export default function TanstackTable<T>({
 					{table.getPageCount()}
 				</span>
 				<button
+					type="button"
 					className="border rounded px-3 py-1 disabled:opacity-50"
 					onClick={() => table.nextPage()}
 					disabled={!table.getCanNextPage()}

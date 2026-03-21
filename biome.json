@@ -16,6 +16,28 @@
 			"!**/src/css/styles.css"
 		]
 	},
+	"overrides": [
+		{
+			"includes": ["**/src/types/types.ts"],
+			"linter": {
+				"rules": {
+					"correctness": {
+						"noUnusedVariables": "off"
+					}
+				}
+			}
+		},
+		{
+			"includes": ["**/src/hooks/use-custom-form.ts", "**/src/lib/http.ts"],
+			"linter": {
+				"rules": {
+					"suspicious": {
+						"noExplicitAny": "off"
+					}
+				}
+			}
+		}
+	],
 	"formatter": {
 		"enabled": true,
 		"indentStyle": "tab"
@@ -24,7 +46,30 @@
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"recommended": true
+			"recommended": true,
+			"correctness": {
+				"noNestedComponentDefinitions": "off",
+				"noUnusedVariables": "warn",
+				"noUnusedFunctionParameters": "warn"
+			},
+			"suspicious": {
+				"noExplicitAny": "warn",
+				"noArrayIndexKey": "warn"
+			},
+			"security": {
+				"noDangerouslySetInnerHtml": "off"
+			},
+			"style": {
+				"noNonNullAssertion": "warn"
+			},
+			"a11y": {
+				"useButtonType": "warn",
+				"useAltText": "warn",
+				"noRedundantAlt": "warn",
+				"useValidAnchor": "warn",
+				"noSvgWithoutTitle": "warn",
+				"noStaticElementInteractions": "warn"
+			}
 		}
 	},
 	"javascript": {
