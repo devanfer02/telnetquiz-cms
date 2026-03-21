@@ -126,51 +126,50 @@ export const fetchLeaderboard = (
 		const items = hasNextPage ? leaderboard.slice(0, limit) : leaderboard;
 		const nextCursor = hasNextPage ? (cursor ?? 0) + limit : null;
 
-		// Get current user's rank
-		const userRankResult = yield* dbTryPromise({
-			try: () =>
-				db.execute(sql`
-					SELECT rank FROM (
-						SELECT
-							${users.id} as user_id,
-							ROW_NUMBER() OVER (ORDER BY COALESCE(SUM(${submissions.score}), 0) DESC, ${users.id}) as rank
-						FROM ${users}
-						LEFT JOIN ${submissions} ON ${users.id} = ${submissions.userId}
-						GROUP BY ${users.id}
-					) ranked
-					WHERE user_id = ${userId}
-				`),
-			catch: (error) =>
-				new DatabaseError({
-					cause: error,
-					message: "Failed to fetch user rank",
-				}),
-		});
+		// Get current user's rank and score in parallel
+		const [userRankResult, userScoreResult] = yield* Effect.all([
+			dbTryPromise({
+				try: () =>
+					db.execute(sql`
+						SELECT rank FROM (
+							SELECT
+								${users.id} as user_id,
+								ROW_NUMBER() OVER (ORDER BY COALESCE(SUM(${submissions.score}), 0) DESC, ${users.id}) as rank
+							FROM ${users}
+							LEFT JOIN ${submissions} ON ${users.id} = ${submissions.userId}
+							GROUP BY ${users.id}
+						) ranked
+						WHERE user_id = ${userId}
+					`),
+				catch: (error) =>
+					new DatabaseError({
+						cause: error,
+						message: "Failed to fetch user rank",
+					}),
+			}),
+			dbTryPromise({
+				try: () =>
+					db
+						.select({
+							fullname: users.name,
+							image: users.image,
+							totalScore: sql<number>`COALESCE(SUM(${submissions.score}), 0)`.as(
+								"total_score",
+							),
+						})
+						.from(users)
+						.leftJoin(submissions, eq(users.id, submissions.userId))
+						.where(eq(users.id, userId))
+						.groupBy(users.id, users.name, users.image),
+				catch: (error) =>
+					new DatabaseError({
+						cause: error,
+						message: "Failed to fetch user score",
+					}),
+			}),
+		]);
 
 		const userRank = userRankResult.rows[0]?.rank as number | null;
-
-		// Get current user's total score
-		const userScoreResult = yield* dbTryPromise({
-			try: () =>
-				db
-					.select({
-						fullname: users.name,
-						image: users.image,
-						totalScore: sql<number>`COALESCE(SUM(${submissions.score}), 0)`.as(
-							"total_score",
-						),
-					})
-					.from(users)
-					.leftJoin(submissions, eq(users.id, submissions.userId))
-					.where(eq(users.id, userId))
-					.groupBy(users.id, users.name, users.image),
-			catch: (error) =>
-				new DatabaseError({
-					cause: error,
-					message: "Failed to fetch user score",
-				}),
-		});
-
 		const currentUser = userScoreResult[0] ?? null;
 
 		return {
@@ -200,6 +199,7 @@ export const fetchUserProfile = (userId: string) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
+		// Fetch user data first (needed for early return)
 		const result = yield* dbTryPromise({
 			try: () =>
 				db
@@ -235,56 +235,71 @@ export const fetchUserProfile = (userId: string) =>
 
 		const user = result[0];
 
-		// Fetch stats: totalScore and levelsCompleted
-		const scoreResult = yield* dbTryPromise({
-			try: () =>
-				db
-					.select({
-						totalScore: sql<number>`COALESCE(SUM(${submissions.score}), 0)`,
-						levelsCompleted: sql<number>`COUNT(DISTINCT ${submissions.quizId})`,
-					})
-					.from(submissions)
-					.where(eq(submissions.userId, userId)),
-			catch: (error) =>
-				new DatabaseError({
-					cause: error,
-					message: "Failed to fetch user stats",
+		// Run remaining 4 queries in parallel
+		const [scoreResult, allChaptersData, userSubmissions, streakDates] =
+			yield* Effect.all([
+				dbTryPromise({
+					try: () =>
+						db
+							.select({
+								totalScore: sql<number>`COALESCE(SUM(${submissions.score}), 0)`,
+								levelsCompleted: sql<number>`COUNT(DISTINCT ${submissions.quizId})`,
+							})
+							.from(submissions)
+							.where(eq(submissions.userId, userId)),
+					catch: (error) =>
+						new DatabaseError({
+							cause: error,
+							message: "Failed to fetch user stats",
+						}),
 				}),
-		});
-
-		// Fetch chaptersCompleted: chapters where user completed ALL quizzes
-		const allChaptersData = yield* dbTryPromise({
-			try: () =>
-				db
-					.select({
-						id: chapters.id,
-						quizCount: sql<number>`count(${quizzes.id})`.as("quiz_count"),
-					})
-					.from(chapters)
-					.leftJoin(quizzes, eq(chapters.id, quizzes.chapterId))
-					.groupBy(chapters.id),
-			catch: (error) =>
-				new DatabaseError({
-					cause: error,
-					message: "Failed to fetch chapters for stats",
+				dbTryPromise({
+					try: () =>
+						db
+							.select({
+								id: chapters.id,
+								quizCount: sql<number>`count(${quizzes.id})`.as("quiz_count"),
+							})
+							.from(chapters)
+							.leftJoin(quizzes, eq(chapters.id, quizzes.chapterId))
+							.groupBy(chapters.id),
+					catch: (error) =>
+						new DatabaseError({
+							cause: error,
+							message: "Failed to fetch chapters for stats",
+						}),
 				}),
-		});
-
-		const userSubmissions = yield* dbTryPromise({
-			try: () =>
-				db
-					.select({
-						chapterId: submissions.chapterId,
-						quizId: submissions.quizId,
-					})
-					.from(submissions)
-					.where(eq(submissions.userId, userId)),
-			catch: (error) =>
-				new DatabaseError({
-					cause: error,
-					message: "Failed to fetch user submissions for stats",
+				dbTryPromise({
+					try: () =>
+						db
+							.select({
+								chapterId: submissions.chapterId,
+								quizId: submissions.quizId,
+							})
+							.from(submissions)
+							.where(eq(submissions.userId, userId)),
+					catch: (error) =>
+						new DatabaseError({
+							cause: error,
+							message: "Failed to fetch user submissions for stats",
+						}),
 				}),
-		});
+				dbTryPromise({
+					try: () =>
+						db
+							.selectDistinct({
+								date: sql<string>`DATE(${submissions.createdAt})`,
+							})
+							.from(submissions)
+							.where(eq(submissions.userId, userId))
+							.orderBy(sql`DATE(${submissions.createdAt}) DESC`),
+					catch: (error) =>
+						new DatabaseError({
+							cause: error,
+							message: "Failed to fetch streak data",
+						}),
+				}),
+			]);
 
 		const completedByChapter = new Map<number, Set<number>>();
 		for (const sub of userSubmissions) {
@@ -303,23 +318,6 @@ export const fetchUserProfile = (userId: string) =>
 				chaptersCompleted++;
 			}
 		}
-
-		// Compute daily streak from submissions
-		const streakDates = yield* dbTryPromise({
-			try: () =>
-				db
-					.selectDistinct({
-						date: sql<string>`DATE(${submissions.createdAt})`,
-					})
-					.from(submissions)
-					.where(eq(submissions.userId, userId))
-					.orderBy(sql`DATE(${submissions.createdAt}) DESC`),
-			catch: (error) =>
-				new DatabaseError({
-					cause: error,
-					message: "Failed to fetch streak data",
-				}),
-		});
 
 		let dailyStreak = 0;
 		const today = new Date();
@@ -679,19 +677,49 @@ export const fetchUserAchievements = (userId: string) =>
 
 		const achievements: Achievement[] = [];
 
-		// 1. "Penjelajah Pretest" - completed pretest
-		const pretestEntry = yield* dbTryPromise({
-			try: () =>
-				db.query.pretestSubmissions.findFirst({
-					where: eq(pretestSubmissions.userId, userId),
-					columns: { createdAt: true },
-				}),
-			catch: (err) =>
-				new DatabaseError({
-					cause: err,
-					message: "Failed to check pretest submissions",
-				}),
-		});
+		// Run first 3 achievement checks in parallel
+		const [pretestEntry, firstSubmission, perfectScore] = yield* Effect.all([
+			dbTryPromise({
+				try: () =>
+					db.query.pretestSubmissions.findFirst({
+						where: eq(pretestSubmissions.userId, userId),
+						columns: { createdAt: true },
+					}),
+				catch: (err) =>
+					new DatabaseError({
+						cause: err,
+						message: "Failed to check pretest submissions",
+					}),
+			}),
+			dbTryPromise({
+				try: () =>
+					db.query.submissions.findFirst({
+						where: eq(submissions.userId, userId),
+						orderBy: submissions.createdAt,
+						columns: { createdAt: true },
+					}),
+				catch: (err) =>
+					new DatabaseError({
+						cause: err,
+						message: "Failed to check quiz submissions",
+					}),
+			}),
+			dbTryPromise({
+				try: () =>
+					db.query.submissions.findFirst({
+						where: and(
+							eq(submissions.userId, userId),
+							eq(submissions.score, 100),
+						),
+						columns: { createdAt: true },
+					}),
+				catch: (err) =>
+					new DatabaseError({
+						cause: err,
+						message: "Failed to check perfect scores",
+					}),
+			}),
+		]);
 
 		achievements.push({
 			id: "pretest_complete",
@@ -699,21 +727,6 @@ export const fetchUserAchievements = (userId: string) =>
 			description: "Menyelesaikan pretest",
 			unlocked: pretestEntry !== undefined,
 			unlockedAt: pretestEntry?.createdAt?.toISOString() ?? null,
-		});
-
-		// 2. "Kuis Pertama" - completed first quiz
-		const firstSubmission = yield* dbTryPromise({
-			try: () =>
-				db.query.submissions.findFirst({
-					where: eq(submissions.userId, userId),
-					orderBy: submissions.createdAt,
-					columns: { createdAt: true },
-				}),
-			catch: (err) =>
-				new DatabaseError({
-					cause: err,
-					message: "Failed to check quiz submissions",
-				}),
 		});
 
 		achievements.push({
@@ -724,23 +737,6 @@ export const fetchUserAchievements = (userId: string) =>
 			unlockedAt: firstSubmission?.createdAt?.toISOString() ?? null,
 		});
 
-		// 3. "Nilai Sempurna" - got 100% on any quiz
-		const perfectScore = yield* dbTryPromise({
-			try: () =>
-				db.query.submissions.findFirst({
-					where: and(
-						eq(submissions.userId, userId),
-						eq(submissions.score, 100),
-					),
-					columns: { createdAt: true },
-				}),
-			catch: (err) =>
-				new DatabaseError({
-					cause: err,
-					message: "Failed to check perfect scores",
-				}),
-		});
-
 		achievements.push({
 			id: "perfect_score",
 			title: "Nilai Sempurna",
@@ -749,40 +745,41 @@ export const fetchUserAchievements = (userId: string) =>
 			unlockedAt: perfectScore?.createdAt?.toISOString() ?? null,
 		});
 
-		// 4. "Penguasa Bab" - completed all quizzes in any chapter
-		const allChapters = yield* dbTryPromise({
-			try: () =>
-				db
-					.select({
-						id: chapters.id,
-						quizCount: sql<number>`count(${quizzes.id})`.as("quiz_count"),
-					})
-					.from(chapters)
-					.leftJoin(quizzes, eq(chapters.id, quizzes.chapterId))
-					.groupBy(chapters.id),
-			catch: (err) =>
-				new DatabaseError({
-					cause: err,
-					message: "Failed to fetch chapters with quiz counts",
-				}),
-		});
-
-		const userSubmissions = yield* dbTryPromise({
-			try: () =>
-				db
-					.select({
-						chapterId: submissions.chapterId,
-						quizId: submissions.quizId,
-						createdAt: submissions.createdAt,
-					})
-					.from(submissions)
-					.where(eq(submissions.userId, userId)),
-			catch: (err) =>
-				new DatabaseError({
-					cause: err,
-					message: "Failed to fetch user submissions for chapter mastery",
-				}),
-		});
+		// Run chapter mastery queries in parallel
+		const [allChapters, userSubmissions] = yield* Effect.all([
+			dbTryPromise({
+				try: () =>
+					db
+						.select({
+							id: chapters.id,
+							quizCount: sql<number>`count(${quizzes.id})`.as("quiz_count"),
+						})
+						.from(chapters)
+						.leftJoin(quizzes, eq(chapters.id, quizzes.chapterId))
+						.groupBy(chapters.id),
+				catch: (err) =>
+					new DatabaseError({
+						cause: err,
+						message: "Failed to fetch chapters with quiz counts",
+					}),
+			}),
+			dbTryPromise({
+				try: () =>
+					db
+						.select({
+							chapterId: submissions.chapterId,
+							quizId: submissions.quizId,
+							createdAt: submissions.createdAt,
+						})
+						.from(submissions)
+						.where(eq(submissions.userId, userId)),
+				catch: (err) =>
+					new DatabaseError({
+						cause: err,
+						message: "Failed to fetch user submissions for chapter mastery",
+					}),
+			}),
+		]);
 
 		// Group user's completed quizzes by chapter
 		const completedQuizzesByChapter = new Map<

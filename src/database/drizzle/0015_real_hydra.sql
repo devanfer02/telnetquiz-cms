@@ -1,0 +1,1 @@
+CREATE INDEX "questions_type_idx" ON "questions" USING btree ("type");

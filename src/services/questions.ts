@@ -30,21 +30,50 @@ export const fetchQuestionsByType = (type: "pretest" | "quiz") =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
-		return yield* dbTryPromise({
-			try: () =>
-				db.query.questions.findMany({
-					where: eq(questions.type, type),
-					orderBy: [asc(questions.chapterId), asc(questions.id)],
-					with: {
-						options: true,
-					},
-				}),
-			catch: (err) =>
-				new DatabaseError({
-					cause: err,
-					message: `Failed to fetch questions of type ${type}`,
-				}),
-		});
+		// Fetch questions and options in parallel, then assemble
+		const [questionRows, optionRows] = yield* Effect.all([
+			dbTryPromise({
+				try: () =>
+					db
+						.select()
+						.from(questions)
+						.where(eq(questions.type, type))
+						.orderBy(asc(questions.chapterId), asc(questions.id)),
+				catch: (err) =>
+					new DatabaseError({
+						cause: err,
+						message: `Failed to fetch questions of type ${type}`,
+					}),
+			}),
+			dbTryPromise({
+				try: () =>
+					db
+						.select()
+						.from(options)
+						.innerJoin(questions, eq(options.questionId, questions.id))
+						.where(eq(questions.type, type)),
+				catch: (err) =>
+					new DatabaseError({
+						cause: err,
+						message: `Failed to fetch options for ${type} questions`,
+					}),
+			}),
+		]);
+
+		const optionsByQuestionId = new Map<
+			number,
+			(typeof optionRows)[number]["options"][]
+		>();
+		for (const row of optionRows) {
+			const list = optionsByQuestionId.get(row.options.questionId) ?? [];
+			list.push(row.options);
+			optionsByQuestionId.set(row.options.questionId, list);
+		}
+
+		return questionRows.map((q) => ({
+			...q,
+			options: optionsByQuestionId.get(q.id) ?? [],
+		}));
 	});
 
 export const fetchQuestionById = (id: number) =>

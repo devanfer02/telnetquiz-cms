@@ -6,6 +6,9 @@ import * as schema from "../database/schema";
 
 const pool = new Pool({
 	connectionString: env.SUPABASE_DB_URL,
+	max: 20,
+	idleTimeoutMillis: 30000,
+	connectionTimeoutMillis: 5000,
 });
 
 export const db = drizzle(pool, { schema });

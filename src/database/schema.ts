@@ -123,36 +123,58 @@ export const quizzes = pgTable(
 	},
 	(t) => [unique("levels_quiz_unique").on(t.id, t.level)],
 );
-export const questions = pgTable("questions", {
-	id: serial().primaryKey(),
-	type: varchar({ enum: ["pretest", "quiz"] }),
-	chapterId: integer().references(() => chapters.id, { onDelete: "cascade" }),
-	quizId: integer().references(() => quizzes.id, { onDelete: "cascade" }),
-	materialId: integer().references(() => studyMaterials.id, {
-		onDelete: "cascade",
-	}),
-	imageLink: varchar(),
-	description: text().notNull(),
-	question: text().notNull(),
-	...timestamps,
-});
-export const options = pgTable("options", {
-	id: serial().primaryKey(),
-	questionId: integer()
-		.references(() => questions.id, { onDelete: "cascade" })
-		.notNull(),
-	text: varchar().notNull(),
-	isCorrect: boolean().notNull(),
-	...timestamps,
-});
-export const submissions = pgTable("submissions", {
-	id: serial().primaryKey(),
-	userId: varchar().references(() => users.id, { onDelete: "cascade" }),
-	chapterId: integer().references(() => chapters.id, { onDelete: "cascade" }),
-	quizId: integer().references(() => quizzes.id, { onDelete: "cascade" }),
-	score: integer(),
-	...timestamps,
-});
+export const questions = pgTable(
+	"questions",
+	{
+		id: serial().primaryKey(),
+		type: varchar({ enum: ["pretest", "quiz"] }),
+		chapterId: integer().references(() => chapters.id, { onDelete: "cascade" }),
+		quizId: integer().references(() => quizzes.id, { onDelete: "cascade" }),
+		materialId: integer().references(() => studyMaterials.id, {
+			onDelete: "cascade",
+		}),
+		imageLink: varchar(),
+		description: text().notNull(),
+		question: text().notNull(),
+		...timestamps,
+	},
+	(table) => [
+		index("questions_type_idx").on(table.type),
+		index("questions_chapterId_idx").on(table.chapterId),
+		index("questions_quizId_idx").on(table.quizId),
+	],
+);
+export const options = pgTable(
+	"options",
+	{
+		id: serial().primaryKey(),
+		questionId: integer()
+			.references(() => questions.id, { onDelete: "cascade" })
+			.notNull(),
+		text: varchar().notNull(),
+		isCorrect: boolean().notNull(),
+		...timestamps,
+	},
+	(table) => [index("options_questionId_idx").on(table.questionId)],
+);
+export const submissions = pgTable(
+	"submissions",
+	{
+		id: serial().primaryKey(),
+		userId: varchar().references(() => users.id, { onDelete: "cascade" }),
+		chapterId: integer().references(() => chapters.id, {
+			onDelete: "cascade",
+		}),
+		quizId: integer().references(() => quizzes.id, { onDelete: "cascade" }),
+		score: integer(),
+		...timestamps,
+	},
+	(table) => [
+		index("submissions_userId_idx").on(table.userId),
+		index("submissions_chapterId_idx").on(table.chapterId),
+		index("submissions_quizId_idx").on(table.quizId),
+	],
+);
 
 export const pretestSubmissions = pgTable(
 	"pretest_submissions",

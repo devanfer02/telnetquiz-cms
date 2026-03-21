@@ -29,55 +29,70 @@ export const fetchChaptersWithUserPerformance = (userId: string) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
-		// Check if user has taken pretest
-		const pretestCount = yield* dbTryPromise({
-			try: () =>
-				db
-					.select({ count: sql<number>`count(*)` })
-					.from(pretestSubmissions)
-					.where(eq(pretestSubmissions.userId, userId)),
-			catch: (err) =>
-				new DatabaseError({
-					cause: err,
-					message: "Failed to check pretest status",
+		// Run all 4 independent queries in parallel
+		const [pretestCount, chaptersData, completedQuizzes, userPretestSubmissions] =
+			yield* Effect.all([
+				dbTryPromise({
+					try: () =>
+						db
+							.select({ count: sql<number>`count(*)` })
+							.from(pretestSubmissions)
+							.where(eq(pretestSubmissions.userId, userId)),
+					catch: (err) =>
+						new DatabaseError({
+							cause: err,
+							message: "Failed to check pretest status",
+						}),
 				}),
-		});
+				dbTryPromise({
+					try: () =>
+						db.query.chapters.findMany({
+							where: eq(chapters.isHidden, false),
+							with: {
+								quizzes: true,
+							},
+						}),
+					catch: (err) =>
+						new DatabaseError({
+							cause: err,
+							message: "Failed to fetch chapters",
+						}),
+				}),
+				dbTryPromise({
+					try: () =>
+						db
+							.select({
+								chapterId: submissions.chapterId,
+								count: sql<number>`count(distinct ${submissions.quizId})`,
+							})
+							.from(submissions)
+							.where(eq(submissions.userId, userId))
+							.groupBy(submissions.chapterId),
+					catch: (err) =>
+						new DatabaseError({
+							cause: err,
+							message: "Failed to fetch completed quizzes",
+						}),
+				}),
+				dbTryPromise({
+					try: () =>
+						db
+							.select({
+								chapterId: questions.chapterId,
+								isCorrect: pretestSubmissions.isCorrect,
+							})
+							.from(pretestSubmissions)
+							.innerJoin(questions, eq(pretestSubmissions.questionId, questions.id))
+							.where(eq(pretestSubmissions.userId, userId)),
+					catch: (err) =>
+						new DatabaseError({
+							cause: err,
+							message: "Failed to fetch pretest submissions",
+						}),
+				}),
+			]);
 
 		const hasTakenPretest = pretestCount[0].count > 0;
-
-		// Fetch chapters with quizzes count (exclude hidden)
-		const chaptersData = yield* dbTryPromise({
-			try: () =>
-				db.query.chapters.findMany({
-					where: eq(chapters.isHidden, false),
-					with: {
-						quizzes: true,
-					},
-				}),
-			catch: (err) =>
-				new DatabaseError({
-					cause: err,
-					message: "Failed to fetch chapters",
-				}),
-		});
-
-		// Fetch completed quizzes count per chapter
-		const completedQuizzes = yield* dbTryPromise({
-			try: () =>
-				db
-					.select({
-						chapterId: submissions.chapterId,
-						count: sql<number>`count(distinct ${submissions.quizId})`,
-					})
-					.from(submissions)
-					.where(eq(submissions.userId, userId))
-					.groupBy(submissions.chapterId),
-			catch: (err) =>
-				new DatabaseError({
-					cause: err,
-					message: "Failed to fetch completed quizzes",
-				}),
-		});
 
 		const completedMap = new Map(
 			completedQuizzes.map((c) => [c.chapterId, c.count]),
@@ -98,24 +113,6 @@ export const fetchChaptersWithUserPerformance = (userId: string) =>
 				})),
 			};
 		}
-
-		// Calculate performance
-		const userPretestSubmissions = yield* dbTryPromise({
-			try: () =>
-				db
-					.select({
-						chapterId: questions.chapterId,
-						isCorrect: pretestSubmissions.isCorrect,
-					})
-					.from(pretestSubmissions)
-					.innerJoin(questions, eq(pretestSubmissions.questionId, questions.id))
-					.where(eq(pretestSubmissions.userId, userId)),
-			catch: (err) =>
-				new DatabaseError({
-					cause: err,
-					message: "Failed to fetch pretest submissions",
-				}),
-		});
 
 		const performanceMap = new Map<number, { wrong: number; total: number }>();
 

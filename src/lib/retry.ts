@@ -31,7 +31,7 @@ const isTransientDbError = (error: DatabaseError): boolean => {
 
 const dbRetrySchedule = Schedule.intersect(
 	Schedule.recurs(3),
-	Schedule.linear("10 seconds"),
+	Schedule.exponential("100 millis"),
 );
 
 export const dbTryPromise = <A>(opts: {
