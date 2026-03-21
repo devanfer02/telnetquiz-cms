@@ -171,51 +171,48 @@ export const fetchChapterById = (id: number, userId?: string) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
-		const result = yield* dbTryPromise({
-			try: () =>
-				db.query.chapters.findFirst({
-					where: eq(chapters.id, id),
-					with: {
-						quizzes: {
-							extras: {
-								numberOfQuestions: sql<number>`(
+		// Run chapter fetch and completed quizzes in parallel when userId is provided
+		const [result, completedQuizIds] = yield* Effect.all([
+			dbTryPromise({
+				try: () =>
+					db.query.chapters.findFirst({
+						where: eq(chapters.id, id),
+						with: {
+							quizzes: {
+								extras: {
+									numberOfQuestions: sql<number>`(
                 SELECT count(*)
                 FROM ${questions}
                 WHERE "questions"."quizId" = "chapters_quizzes"."id"
               )`.as("numberOfQuestions"),
+								},
 							},
 						},
-					},
-				}),
-			catch: (err) =>
-				new DatabaseError({
-					cause: err,
-					message: `Failed to fetch chapter with id ${id}`,
-				}),
-		});
-
-		if (result === undefined) {
-			return yield* Effect.fail(new NotFoundError({ id, entity: "Chapter" }));
-		}
-
-		let completedQuizIds: number[] = [];
-		if (userId) {
-			const completedQuizzes = yield* dbTryPromise({
-				try: () =>
-					db
-						.select({ quizId: submissions.quizId })
-						.from(submissions)
-						.where(eq(submissions.userId, userId)),
+					}),
 				catch: (err) =>
 					new DatabaseError({
 						cause: err,
-						message: `Failed to fetch completed quizzes for chapter ${id}`,
+						message: `Failed to fetch chapter with id ${id}`,
 					}),
-			});
+			}),
+			userId
+				? dbTryPromise({
+						try: () =>
+							db
+								.select({ quizId: submissions.quizId })
+								.from(submissions)
+								.where(eq(submissions.userId, userId)),
+						catch: (err) =>
+							new DatabaseError({
+								cause: err,
+								message: `Failed to fetch completed quizzes for chapter ${id}`,
+							}),
+					}).pipe(Effect.map((rows) => rows.map((s) => s.quizId)))
+				: Effect.succeed([] as number[]),
+		]);
 
-			completedQuizIds = completedQuizzes
-				.filter((s) => s.quizId !== null)
-				.map((s) => s.quizId as number);
+		if (result === undefined) {
+			return yield* Effect.fail(new NotFoundError({ id, entity: "Chapter" }));
 		}
 
 		return { ...result, completedQuizIds };

@@ -363,31 +363,151 @@ export const updateUserProfile = (
 		}
 
 		if (Object.keys(updateData).length === 0) {
-			// Nothing to update, just return current profile
 			return yield* fetchUserProfile(userId);
 		}
 
-		const result = yield* dbTryPromise({
-			try: () =>
-				db
-					.update(users)
-					.set(updateData)
-					.where(eq(users.id, userId))
-					.returning(),
-			catch: (error) =>
-				new DatabaseError({
-					cause: error,
-					message: "Failed to update user profile",
-				}),
-		});
+		// Run UPDATE + stats queries in parallel (stats don't depend on update)
+		const [updateResult, allChaptersData, rawSubmissions] = yield* Effect.all([
+			dbTryPromise({
+				try: () =>
+					db
+						.update(users)
+						.set(updateData)
+						.where(eq(users.id, userId))
+						.returning(),
+				catch: (error) =>
+					new DatabaseError({
+						cause: error,
+						message: "Failed to update user profile",
+					}),
+			}),
+			dbTryPromise({
+				try: () =>
+					db
+						.select({
+							id: chapters.id,
+							quizCount: sql<number>`count(${quizzes.id})`.as("quiz_count"),
+						})
+						.from(chapters)
+						.leftJoin(quizzes, eq(chapters.id, quizzes.chapterId))
+						.groupBy(chapters.id),
+				catch: (error) =>
+					new DatabaseError({
+						cause: error,
+						message: "Failed to fetch chapters for stats",
+					}),
+			}),
+			dbTryPromise({
+				try: () =>
+					db
+						.select({
+							chapterId: submissions.chapterId,
+							quizId: submissions.quizId,
+							score: submissions.score,
+							createdAt: submissions.createdAt,
+						})
+						.from(submissions)
+						.where(eq(submissions.userId, userId)),
+				catch: (error) =>
+					new DatabaseError({
+						cause: error,
+						message: "Failed to fetch user submissions",
+					}),
+			}),
+		]);
 
-		if (result.length === 0) {
+		if (updateResult.length === 0) {
 			return yield* Effect.fail(
 				new NotFoundError({ id: userId, entity: "User" }),
 			);
 		}
 
-		return yield* fetchUserProfile(userId);
+		const updatedUser = updateResult[0];
+
+		// Fetch school name (need join, can't get from returning())
+		const schoolRow = updatedUser.schoolId
+			? yield* dbTryPromise({
+					try: () =>
+						db
+							.select({ name: schools.name })
+							.from(schools)
+							.where(eq(schools.id, updatedUser.schoolId as number))
+							.limit(1),
+					catch: (error) =>
+						new DatabaseError({
+							cause: error,
+							message: "Failed to fetch school",
+						}),
+				})
+			: null;
+
+		// Derive stats from submissions
+		let totalScore = 0;
+		const uniqueQuizIds = new Set<number>();
+		const completedByChapter = new Map<number, Set<number>>();
+		const uniqueDates = new Set<string>();
+
+		for (const sub of rawSubmissions) {
+			totalScore += sub.score ?? 0;
+			if (sub.quizId != null) uniqueQuizIds.add(sub.quizId);
+			if (sub.chapterId != null && sub.quizId != null) {
+				const set = completedByChapter.get(sub.chapterId) ?? new Set();
+				set.add(sub.quizId);
+				completedByChapter.set(sub.chapterId, set);
+			}
+			if (sub.createdAt) {
+				uniqueDates.add(sub.createdAt.toISOString().split("T")[0]);
+			}
+		}
+
+		let chaptersCompleted = 0;
+		for (const chapter of allChaptersData) {
+			const quizCount = Number(chapter.quizCount);
+			if (quizCount === 0) continue;
+			const completed = completedByChapter.get(chapter.id);
+			if (completed && completed.size >= quizCount) {
+				chaptersCompleted++;
+			}
+		}
+
+		const sortedDates = [...uniqueDates].sort().reverse();
+		let dailyStreak = 0;
+		const today = new Date();
+		today.setHours(0, 0, 0, 0);
+
+		for (const dateStr of sortedDates) {
+			const d = new Date(dateStr);
+			d.setHours(0, 0, 0, 0);
+			const expectedDate = new Date(today);
+			expectedDate.setDate(expectedDate.getDate() - dailyStreak);
+			if (d.getTime() === expectedDate.getTime()) {
+				dailyStreak++;
+			} else {
+				break;
+			}
+		}
+
+		return {
+			id: updatedUser.id,
+			fullname: updatedUser.name,
+			email: updatedUser.email,
+			image: updatedUser.image,
+			bio: updatedUser.bio,
+			gender: updatedUser.gender,
+			grade: updatedUser.grade,
+			school: schoolRow?.[0]
+				? { id: updatedUser.schoolId ?? 0, name: schoolRow[0].name }
+				: null,
+			createdAt: updatedUser.createdAt,
+			updatedAt: updatedUser.updatedAt,
+			stats: {
+				total_score: totalScore,
+				levels_completed: uniqueQuizIds.size,
+				chapters_completed: chaptersCompleted,
+				total_chapters: allChaptersData.length,
+				daily_streak: dailyStreak,
+			},
+		};
 	});
 
 export const fetchUserSessions = (userId: string) =>
