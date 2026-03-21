@@ -90,6 +90,7 @@ export const withApiErrorHandling = <A>(
 		}),
 		Effect.catchAll((err) => {
 			Sentry.captureException(
+				// @ts-expect-error
 				err instanceof Error ? err : new Error(String(err)),
 			);
 			console.error("ERR: ", err);

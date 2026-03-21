@@ -80,7 +80,6 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.4",
-    "@sentry/react": "^10.45.0",
     "@tanstack/devtools-event-client": "^0.3.2",
     "@tanstack/devtools-vite": "^0.3.12",
     "@testing-library/dom": "^10.4.0",
