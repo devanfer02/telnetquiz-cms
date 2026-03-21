@@ -39,6 +39,7 @@ export const users = pgTable("users", {
 		.defaultNow()
 		.$onUpdate(() => /* @__PURE__ */ new Date())
 		.notNull(),
+	hasTakenPretest: boolean("has_taken_pretest").default(false).notNull(),
 	banned: boolean("banned").default(false),
 	banReason: text("ban_reason"),
 	banExpires: timestamp("ban_expires"),
