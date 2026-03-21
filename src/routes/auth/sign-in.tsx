@@ -11,7 +11,7 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth/client";
 export const Route = createFileRoute("/auth/sign-in")({
 	component: SignInComponent,
 	validateSearch: z.object({

@@ -3,7 +3,7 @@ import { createMiddleware } from "@tanstack/react-start";
 import { getRequestHeaders } from "@tanstack/react-start/server";
 import { eq } from "drizzle-orm";
 import { accounts } from "@/database/schema";
-import { auth } from "@/lib/auth";
+import { auth } from "@/lib/auth/server";
 import { db } from "@/lib/db";
 import { HttpStatus, response } from "@/lib/http";
 

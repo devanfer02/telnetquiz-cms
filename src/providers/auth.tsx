@@ -1,5 +1,5 @@
 import { createContext, type ReactNode, useContext } from "react";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth/client";
 
 type AuthContextValue = {
 	session: {

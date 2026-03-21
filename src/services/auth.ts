@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { Effect } from "effect";
 import { users } from "@/database/schema";
-import { auth } from "@/lib/auth";
+import { auth } from "@/lib/auth/server";
 import { Db } from "@/lib/db";
 import { dbTryPromise } from "@/lib/retry";
 import type { LoginUserFormData, RegisterUserFormData } from "@/types/zod.api";

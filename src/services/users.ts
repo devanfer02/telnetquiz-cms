@@ -10,7 +10,7 @@ import {
 	submissions,
 	users,
 } from "@/database/schema";
-import { Auth } from "@/lib/auth";
+import { Auth } from "@/lib/auth/server";
 import { Db } from "@/lib/db";
 import { dbTryPromise } from "@/lib/retry";
 import type { EditUserFormData } from "@/types/zod";

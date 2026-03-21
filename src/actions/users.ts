@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { Effect } from "effect";
 import z from "zod";
-import { AuthLayer } from "@/lib/auth";
+import { AuthLayer } from "@/lib/auth/server";
 import { DbLayer } from "@/lib/db";
 import {
 	deleteUser,
