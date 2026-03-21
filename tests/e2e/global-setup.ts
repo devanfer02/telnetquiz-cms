@@ -1,9 +1,15 @@
 const BASE_URL = "http://localhost:3000";
 const HEALTH_ENDPOINT = `${BASE_URL}/api/health`;
 
-const API_KEY = process.env.API_KEY ?? "";
-const E2E_TEST_EMAIL = process.env.E2E_TEST_EMAIL ?? "";
-const E2E_TEST_PASSWORD = process.env.E2E_TEST_PASSWORD ?? "";
+const API_KEY = process.env.API_KEY;
+const E2E_TEST_EMAIL = process.env.E2E_TEST_EMAIL;
+const E2E_TEST_PASSWORD = process.env.E2E_TEST_PASSWORD;
+
+if (!API_KEY || !E2E_TEST_EMAIL || !E2E_TEST_PASSWORD) {
+	throw new Error(
+		"[e2e] Missing critical environment variables: API_KEY, E2E_TEST_EMAIL, or E2E_TEST_PASSWORD. Please set them in your .env file.",
+	);
+}
 
 async function isServerRunning(): Promise<boolean> {
 	try {
@@ -40,7 +46,13 @@ async function registerTestUser(): Promise<void> {
 	const schoolsData = (await schoolsRes.json()) as {
 		data: { schools: { id: number }[] };
 	};
-	const schoolId = schoolsData.data.schools[0]?.id ?? 1;
+	const schoolId = schoolsData.data.schools[0]?.id;
+
+	if (!schoolId) {
+		throw new Error(
+			"[e2e] No schools found to register test user. Ensure /api/schools returns data.",
+		);
+	}
 
 	// Register the test user
 	const registerRes = await fetch(`${BASE_URL}/api/auth/register`, {

@@ -53,14 +53,13 @@ describe("GET /api/users/profile", () => {
 
 	// --- Benchmark ---
 
-	it("responds within 2000ms", async () => {
+	it("responds within the performance threshold", async () => {
 		const { response, durationMs } = await measureResponseTime(
 			"GET /api/users/profile",
 			() => withAuth(api().get("/api/users/profile"), token),
 		);
 
 		expect(response.status).toBe(200);
-		console.log(`[benchmark] GET /api/users/profile: ${durationMs}ms`);
 		expect(durationMs).toBeLessThan(RESPONSE_THRESHOLD_MS);
 	});
 });
@@ -114,7 +113,7 @@ describe("PATCH /api/users/profile", () => {
 
 	// --- Benchmark ---
 
-	it("responds within 2000ms", async () => {
+	it("responds within the performance threshold", async () => {
 		const { response, durationMs } = await measureResponseTime(
 			"PATCH /api/users/profile",
 			() => withAuth(api().patch("/api/users/profile"), token).send({
@@ -123,7 +122,6 @@ describe("PATCH /api/users/profile", () => {
 		);
 
 		expect(response.status).toBe(200);
-		console.log(`[benchmark] PATCH /api/users/profile: ${durationMs}ms`);
 		expect(durationMs).toBeLessThan(RESPONSE_THRESHOLD_MS);
 	});
 });

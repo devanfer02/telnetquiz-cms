@@ -31,14 +31,13 @@ describe("GET /api/pretest", () => {
 
 	// --- Benchmark ---
 
-	it("responds within 1000ms", async () => {
+	it("responds within the performance threshold", async () => {
 		const { response, durationMs } = await measureResponseTime(
 			"GET /api/pretest",
 			() => withApiKey(api().get("/api/pretest")),
 		);
 
 		expect(response.status).toBe(200);
-		console.log(`[benchmark] GET /api/pretest: ${durationMs}ms`);
 		expect(durationMs).toBeLessThan(RESPONSE_THRESHOLD_MS);
 	});
 });
@@ -74,5 +73,6 @@ describe("POST /api/pretest", () => {
 		const res = await withAuth(api().post("/api/pretest"), token).send({});
 
 		expect(res.status).toBe(400);
+		expect(res.body.message).toContain("Validation failed");
 	});
 });

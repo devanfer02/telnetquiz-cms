@@ -91,14 +91,13 @@ describe("GET /api/leaderboard", () => {
 
 	// --- Benchmark ---
 
-	it("responds within 1000ms", async () => {
+	it("responds within the performance threshold", async () => {
 		const { response, durationMs } = await measureResponseTime(
 			"GET /api/leaderboard",
 			() => withAuth(api().get("/api/leaderboard"), token),
 		);
 
 		expect(response.status).toBe(200);
-		console.log(`[benchmark] GET /api/leaderboard: ${durationMs}ms`);
 		expect(durationMs).toBeLessThan(RESPONSE_THRESHOLD_MS);
 	});
 });

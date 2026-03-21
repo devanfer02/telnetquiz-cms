@@ -46,14 +46,13 @@ describe("GET /api/schools", () => {
 
 	// --- Benchmark ---
 
-	it("responds within 1000ms", async () => {
+	it("responds within the performance threshold", async () => {
 		const { response, durationMs } = await measureResponseTime(
 			"GET /api/schools",
 			() => withApiKey(api().get("/api/schools")),
 		);
 
 		expect(response.status).toBe(200);
-		console.log(`[benchmark] GET /api/schools: ${durationMs}ms`);
 		expect(durationMs).toBeLessThan(RESPONSE_THRESHOLD_MS);
 	});
 });

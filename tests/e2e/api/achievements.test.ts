@@ -53,14 +53,13 @@ describe("GET /api/achievements", () => {
 
 	// --- Benchmark ---
 
-	it("responds within 2000ms", async () => {
+	it("responds within the performance threshold", async () => {
 		const { response, durationMs } = await measureResponseTime(
 			"GET /api/achievements",
 			() => withAuth(api().get("/api/achievements"), token),
 		);
 
 		expect(response.status).toBe(200);
-		console.log(`[benchmark] GET /api/achievements: ${durationMs}ms`);
 		expect(durationMs).toBeLessThan(RESPONSE_THRESHOLD_MS);
 	});
 });

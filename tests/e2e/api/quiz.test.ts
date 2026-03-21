@@ -55,5 +55,6 @@ describe("POST /api/quiz/$id", () => {
 		const res = await withAuth(api().post("/api/quiz/1"), token).send({});
 
 		expect(res.status).toBe(400);
+		expect(res.body.message).toContain("Validation failed");
 	});
 });

@@ -8,7 +8,7 @@ user-invocable: false
 
 ## Why Supertest + URL-based Testing
 
-TanStack Start + Nitro doesn't expose an Express `app` object. Tests target a running dev server via URL (`http://localhost:3000`), not by importing the app. The global setup handles server lifecycle automatically.
+TanStack Start + Nitro doesn't expose an Express `app` object. Tests target a running dev server via URL (`http://localhost:3000`), not by importing the app. The global setup checks for a running server and handles test user setup automatically.
 
 ## Project Structure
 
@@ -161,4 +161,4 @@ The e2e config (`vitest.config.e2e.ts`) is intentionally separate from the main 
 - **No** TanStack Start, Nitro, React, Tailwind, or auto-import plugins
 - **Only** `vite-tsconfig-paths` for `@/` alias resolution
 - `testTimeout: 30s`, `hookTimeout: 60s` — network requests need longer timeouts
-- `globalSetup` handles dev server start/stop automatically
+- `globalSetup` handles dev server detection and prints a benchmark summary on teardown
