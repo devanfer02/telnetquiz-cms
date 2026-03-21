@@ -1,6 +1,11 @@
 import { eq, inArray } from "drizzle-orm";
 import { Effect } from "effect";
-import { chapters, pretestSubmissions, questions } from "@/database/schema";
+import {
+	chapters,
+	pretestSubmissions,
+	questions,
+	users,
+} from "@/database/schema";
 import { Db } from "@/lib/db";
 import { dbTryPromise } from "@/lib/retry";
 import { DatabaseError, ValidationError } from "./errors/errors";
@@ -9,11 +14,13 @@ export const checkPretestStatus = (userId: string) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
-		const existing = yield* dbTryPromise({
+		const result = yield* dbTryPromise({
 			try: () =>
-				db.query.pretestSubmissions.findFirst({
-					where: eq(pretestSubmissions.userId, userId),
-				}),
+				db
+					.select({ hasTakenPretest: users.hasTakenPretest })
+					.from(users)
+					.where(eq(users.id, userId))
+					.limit(1),
 			catch: (err) =>
 				new DatabaseError({
 					cause: err,
@@ -22,7 +29,7 @@ export const checkPretestStatus = (userId: string) =>
 		});
 
 		return {
-			has_taken_pretest: existing !== undefined,
+			has_taken_pretest: result[0]?.hasTakenPretest ?? false,
 		};
 	});
 
@@ -146,13 +153,26 @@ export const submitPretest = (
 			});
 		}
 
-		// Insert submissions
+		// Insert submissions and set user flag
 		yield* dbTryPromise({
 			try: () => db.insert(pretestSubmissions).values(submissionsToInsert),
 			catch: (err) =>
 				new DatabaseError({
 					cause: err,
 					message: "Failed to save submissions",
+				}),
+		});
+
+		yield* dbTryPromise({
+			try: () =>
+				db
+					.update(users)
+					.set({ hasTakenPretest: true })
+					.where(eq(users.id, userId)),
+			catch: (err) =>
+				new DatabaseError({
+					cause: err,
+					message: "Failed to update pretest status",
 				}),
 		});
 

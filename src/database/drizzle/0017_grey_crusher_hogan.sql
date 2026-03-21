@@ -1,0 +1,1 @@
+ALTER TABLE "users" ADD COLUMN "has_taken_pretest" boolean DEFAULT false NOT NULL;
