@@ -48,7 +48,12 @@ export const fetchQuestionsByType = (type: "pretest" | "quiz") =>
 			dbTryPromise({
 				try: () =>
 					db
-						.select()
+						.select({
+							id: options.id,
+							questionId: options.questionId,
+							text: options.text,
+							isCorrect: options.isCorrect,
+						})
 						.from(options)
 						.innerJoin(questions, eq(options.questionId, questions.id))
 						.where(eq(questions.type, type)),
@@ -62,12 +67,12 @@ export const fetchQuestionsByType = (type: "pretest" | "quiz") =>
 
 		const optionsByQuestionId = new Map<
 			number,
-			(typeof optionRows)[number]["options"][]
+			(typeof optionRows)[number][]
 		>();
 		for (const row of optionRows) {
-			const list = optionsByQuestionId.get(row.options.questionId) ?? [];
-			list.push(row.options);
-			optionsByQuestionId.set(row.options.questionId, list);
+			const list = optionsByQuestionId.get(row.questionId) ?? [];
+			list.push(row);
+			optionsByQuestionId.set(row.questionId, list);
 		}
 
 		return questionRows.map((q) => ({
