@@ -153,9 +153,10 @@ export const fetchLeaderboard = (
 						.select({
 							fullname: users.name,
 							image: users.image,
-							totalScore: sql<number>`COALESCE(SUM(${submissions.score}), 0)`.as(
-								"total_score",
-							),
+							totalScore:
+								sql<number>`COALESCE(SUM(${submissions.score}), 0)`.as(
+									"total_score",
+								),
 						})
 						.from(users)
 						.leftJoin(submissions, eq(users.id, submissions.userId))
@@ -216,6 +217,7 @@ export const fetchUserProfile = (userId: string) =>
 							schoolName: schools.name,
 							createdAt: users.createdAt,
 							updatedAt: users.updatedAt,
+							hasTakenPretest: users.hasTakenPretest,
 						})
 						.from(users)
 						.leftJoin(schools, eq(users.schoolId, schools.id))

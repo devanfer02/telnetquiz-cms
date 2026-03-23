@@ -22,6 +22,7 @@ export const env = createEnv({
 				.filter(Boolean),
 		),
 		SENTRY_DSN: z.string().url().optional(),
+		SENTRY_ENABLED: z.string().optional(),
 	},
 
 	/**
