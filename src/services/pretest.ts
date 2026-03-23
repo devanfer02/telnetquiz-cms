@@ -40,7 +40,6 @@ export const submitPretest = (
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
-		// Check if user already submitted
 		const existingSubmission = yield* dbTryPromise({
 			try: () =>
 				db.query.pretestSubmissions.findFirst({
@@ -61,7 +60,6 @@ export const submitPretest = (
 			);
 		}
 
-		// Validate questions
 		const questionIds = submissions.map((s) => s.question_id);
 		if (questionIds.length === 0) {
 			return yield* Effect.fail(
@@ -87,7 +85,6 @@ export const submitPretest = (
 		});
 
 		if (validQuestions.length !== submissions.length) {
-			// Find missing ids
 			const fetchedIds = new Set(validQuestions.map((q) => q.id));
 			const missingId = questionIds.find((id) => !fetchedIds.has(id));
 			return yield* Effect.fail(
@@ -97,7 +94,6 @@ export const submitPretest = (
 			);
 		}
 
-		// Check if all are pretest type
 		const nonPretest = validQuestions.find((q) => q.type !== "pretest");
 		if (nonPretest) {
 			return yield* Effect.fail(
@@ -109,14 +105,12 @@ export const submitPretest = (
 			);
 		}
 
-		// Calculate results and prepare insert
 		const submissionsToInsert: (typeof pretestSubmissions.$inferInsert)[] = [];
 		let correctCount = 0;
 		let incorrectCount = 0;
 		const chapterWrongCounts: Record<number, number> = {};
 		const chapterTotalQuestions: Record<number, number> = {};
 
-		// Initialize chapter counters
 		validQuestions.forEach((q) => {
 			if (q.chapterId) {
 				chapterTotalQuestions[q.chapterId] =
@@ -153,7 +147,6 @@ export const submitPretest = (
 			});
 		}
 
-		// Insert submissions and set user flag
 		yield* dbTryPromise({
 			try: () => db.insert(pretestSubmissions).values(submissionsToInsert),
 			catch: (err) =>
@@ -176,7 +169,6 @@ export const submitPretest = (
 				}),
 		});
 
-		// Fetch chapter details for response
 		const chapterIds = Object.keys(chapterWrongCounts).map(Number);
 		let chapterDetails: { id: number; title: string }[] = [];
 

@@ -84,7 +84,10 @@ export const fetchChaptersWithUserPerformance = (userId: string) =>
 								isCorrect: pretestSubmissions.isCorrect,
 							})
 							.from(pretestSubmissions)
-							.innerJoin(questions, eq(pretestSubmissions.questionId, questions.id))
+							.innerJoin(
+								questions,
+								eq(pretestSubmissions.questionId, questions.id),
+							)
 							.where(eq(pretestSubmissions.userId, userId)),
 					catch: (err) =>
 						new DatabaseError({
@@ -100,7 +103,6 @@ export const fetchChaptersWithUserPerformance = (userId: string) =>
 			completedQuizzes.map((c) => [c.chapterId, c.count]),
 		);
 
-		// If not taken pretest, return default
 		if (!hasTakenPretest) {
 			return {
 				has_taken_pretest: false,
@@ -261,7 +263,6 @@ export const hideChapter = (id: number) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
-		// Delete child records: submissions, questions (cascades options), quizzes
 		yield* dbTryPromise({
 			try: () => db.delete(submissions).where(eq(submissions.chapterId, id)),
 			catch: (err) =>
@@ -289,7 +290,6 @@ export const hideChapter = (id: number) =>
 				}),
 		});
 
-		// Mark chapter as hidden
 		const result = yield* dbTryPromise({
 			try: () =>
 				db

@@ -76,7 +76,6 @@ export const fetchAllSubmissions = Effect.gen(function* () {
 			}),
 	});
 
-	// Transform data to match the expected Submission type in frontend
 	return results.map((sub) => ({
 		id: sub.id,
 		userName: sub.user?.name || "Unknown User",

@@ -96,7 +96,6 @@ export const fetchLeaderboard = (
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
-		// Get leaderboard with total scores
 		const leaderboardQuery = db
 			.select({
 				userId: users.id,
@@ -121,12 +120,10 @@ export const fetchLeaderboard = (
 				}),
 		});
 
-		// Check if there's a next page
 		const hasNextPage = leaderboard.length > limit;
 		const items = hasNextPage ? leaderboard.slice(0, limit) : leaderboard;
 		const nextCursor = hasNextPage ? (cursor ?? 0) + limit : null;
 
-		// Get current user's rank and score in parallel
 		const [userRankResult, userScoreResult] = yield* Effect.all([
 			dbTryPromise({
 				try: () =>
@@ -200,7 +197,6 @@ export const fetchUserProfile = (userId: string) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
-		// All 3 queries in parallel — user, submissions, chapters
 		const [userResult, allChaptersData, rawSubmissions] = yield* Effect.all([
 			dbTryPromise({
 				try: () =>
@@ -272,7 +268,6 @@ export const fetchUserProfile = (userId: string) =>
 
 		const user = userResult[0];
 
-		// Derive all stats from single submissions query
 		let totalScore = 0;
 		const uniqueQuizIds = new Set<number>();
 		const completedByChapter = new Map<number, Set<number>>();
@@ -301,7 +296,6 @@ export const fetchUserProfile = (userId: string) =>
 			}
 		}
 
-		// Compute daily streak from sorted unique dates
 		const sortedDates = [...uniqueDates].sort().reverse();
 		let dailyStreak = 0;
 		const today = new Date();
@@ -369,7 +363,6 @@ export const updateUserProfile = (
 			return yield* fetchUserProfile(userId);
 		}
 
-		// Run UPDATE + stats queries in parallel (stats don't depend on update)
 		const [updateResult, allChaptersData, rawSubmissions] = yield* Effect.all([
 			dbTryPromise({
 				try: () =>
@@ -614,7 +607,6 @@ export const fetchUserDetail = (userId: string) =>
 
 		const user = result[0];
 
-		// Fetch quiz submissions with chapter and quiz info
 		const userSubmissions = yield* dbTryPromise({
 			try: () =>
 				db.query.submissions.findMany({
@@ -632,7 +624,6 @@ export const fetchUserDetail = (userId: string) =>
 				}),
 		});
 
-		// Fetch pretest submissions
 		const userPretestSubmissions = yield* dbTryPromise({
 			try: () =>
 				db.query.pretestSubmissions.findMany({
@@ -649,14 +640,12 @@ export const fetchUserDetail = (userId: string) =>
 				}),
 		});
 
-		// Compute stats
 		const totalScore = userSubmissions.reduce(
 			(sum, s) => sum + (s.score ?? 0),
 			0,
 		);
 		const levelsCompleted = new Set(userSubmissions.map((s) => s.quizId)).size;
 
-		// Chapters completed: chapters where user has completed ALL quizzes
 		const allChaptersData = yield* dbTryPromise({
 			try: () =>
 				db
@@ -797,7 +786,6 @@ export const fetchUserAchievements = (userId: string) =>
 
 		const achievements: Achievement[] = [];
 
-		// Run first 3 achievement checks in parallel
 		const [pretestEntry, firstSubmission, perfectScore] = yield* Effect.all([
 			dbTryPromise({
 				try: () =>
@@ -865,7 +853,6 @@ export const fetchUserAchievements = (userId: string) =>
 			unlockedAt: perfectScore?.createdAt?.toISOString() ?? null,
 		});
 
-		// Run chapter mastery queries in parallel
 		const [allChapters, userSubmissions] = yield* Effect.all([
 			dbTryPromise({
 				try: () =>
@@ -901,7 +888,6 @@ export const fetchUserAchievements = (userId: string) =>
 			}),
 		]);
 
-		// Group user's completed quizzes by chapter
 		const completedQuizzesByChapter = new Map<
 			number,
 			{ quizIds: Set<number>; latestDate: Date }

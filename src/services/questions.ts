@@ -30,7 +30,6 @@ export const fetchQuestionsByType = (type: "pretest" | "quiz") =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
-		// Fetch questions and options in parallel, then assemble
 		const [questionRows, optionRows] = yield* Effect.all([
 			dbTryPromise({
 				try: () =>

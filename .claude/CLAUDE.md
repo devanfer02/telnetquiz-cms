@@ -18,6 +18,17 @@ Read the relevant section **before** writing code. These are mandatory, not sugg
 | [Implementation Patterns](#implementation-patterns--adding-a-new-module) | Step-by-step guide for adding a new module (schema → service → types → actions → routes) |
 | [Key Infrastructure Files](#key-infrastructure-files-dont-re-read-these-patterns-are-stable) | Stable files — don't re-read, patterns won't change |
 
+## Code Knowledge Graph
+
+This project has a **code-review-graph** knowledge graph at `.code-review-graph/graph.db`. Use it instead of scanning the whole codebase:
+
+- **Before exploring code**, query the graph (`query_graph_tool`, `semantic_search_nodes_tool`, `get_review_context_tool`) to find relevant files, functions, and their relationships.
+- **After every code change**, run `build_or_update_graph_tool` (incremental) with `repo_root` set to this project's directory to keep the graph in sync.
+- **For code reviews**, use `get_impact_radius_tool` to understand blast radius of changes instead of manually tracing imports/calls.
+- **To find large/complex functions**, use `find_large_functions_tool` instead of grepping the codebase.
+
+This saves significant time and tokens compared to re-reading files to understand the codebase structure.
+
 ## Auto-Imports (`src/types/`)
 
 **Do NOT manually `import` from `@/types/` in consuming files.** The project uses `unplugin-auto-import` (configured in `vite.config.ts` with `dirs: ["./src/types"]`), which makes all exports from `src/types/` available globally. Definitions in `src/types/` still need `export` — but consumers use them directly without an import statement.
@@ -50,6 +61,15 @@ These files will report Biome warnings but **must not be modified** to fix them:
 - `src/lib/http.ts` — `response()` uses `Record<string, any>` intentionally because API routes return varying data shapes; do not change its signature
 
 ## Rules
+
+### Code Comments
+
+**Do NOT add unnecessary comments to code.** Remove comments that merely restate what the code does (e.g., `// increment counter`, `// return result`). Only add comments when:
+- You are documenting a workaround for a bug or loop you ran into during implementation
+- You are explaining a non-obvious solution to a problem that was solved after investigation
+- The logic is genuinely subtle and would confuse a reader without context
+
+When editing existing code, remove any unnecessary comments you encounter in the lines you touch.
 
 ### Build Safety
 

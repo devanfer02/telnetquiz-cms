@@ -26,7 +26,6 @@ export const registerUser = (userForm: RegisterUserFormData) =>
 				}),
 		});
 
-		// Update user with additional profile fields
 		if (result.user?.id) {
 			yield* dbTryPromise({
 				try: () =>

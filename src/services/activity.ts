@@ -50,7 +50,6 @@ export const fetchRecentActivity = (userId: string) =>
 				}),
 		});
 
-		// Group by date + quizId
 		const dayMap = new Map<
 			string,
 			Map<
@@ -98,7 +97,6 @@ export const fetchRecentActivity = (userId: string) =>
 			}
 		}
 
-		// Build all 7 days (newest first)
 		const activities = [];
 		for (let i = 0; i < 7; i++) {
 			const d = new Date(
