@@ -37,32 +37,61 @@ bun run api:route    # List all API routes with methods
 
 ### Layered Structure
 
-1. **Routes** (`src/routes/`) - TanStack Router file-based routing
-   - `(web)/` - Admin UI pages (dashboard, chapters, quiz, questions, users, etc.)
-   - `api/(internal)/` - Protected API routes (requires x-api-key header)
-   - `api/(public)/` - Public API routes (health, OAuth callbacks)
-
-2. **Actions** (`src/actions/`) - Server functions using `createServerFn` from TanStack React Start
-
-3. **Services** (`src/services/`) - Business logic layer using Effect-TS
-   - Returns `Effect` computations with typed errors
-   - Consumed via `Effect.runPromise()` with `DbLayer` provided
-
-4. **Database** (`src/database/`) - Drizzle ORM with PostgreSQL (Supabase)
-   - Schema: `src/database/schema.ts`
-   - Migrations: `src/database/drizzle/`
+```
+src/
+├── routes/                          # TanStack Router file-based routing
+│   ├── (web)/                       # Admin UI pages
+│   │   ├── dashboard/
+│   │   ├── chapters/
+│   │   ├── quiz/
+│   │   ├── questions/
+│   │   ├── schools/
+│   │   ├── study-materials/
+│   │   ├── submissions/
+│   │   └── users/
+│   ├── api/(internal)/              # Protected API routes (x-api-key header)
+│   │   ├── activity/
+│   │   ├── auth/
+│   │   ├── chapters/
+│   │   ├── materials/
+│   │   ├── pretest/
+│   │   ├── quiz/
+│   │   ├── schools/
+│   │   └── users/
+│   └── api/(public)/                # Public API routes (health, OAuth)
+│       └── auth/
+├── actions/                         # Server functions (createServerFn)
+│   ├── chapters.ts
+│   ├── questions.ts
+│   ├── quizzes.ts
+│   ├── schools.ts
+│   ├── study-material.ts
+│   └── users.ts
+├── services/                        # Business logic (Effect-TS)
+│   ├── chapters.ts
+│   ├── questions.ts
+│   ├── quizzes.ts
+│   ├── schools.ts
+│   ├── study-material.ts
+│   ├── users.ts
+│   └── errors/
+├── database/                        # Drizzle ORM + PostgreSQL (Supabase)
+│   ├── schema.ts
+│   └── drizzle/                     # Generated migrations
+├── middlewares/                      # API middleware
+│   ├── api-key.ts
+│   ├── auth.ts
+│   ├── logger.ts
+│   └── sentry.ts
+├── components/                      # Shared UI components
+├── hooks/                           # Custom React hooks
+├── lib/                             # Utilities (db, http, retry, constants)
+├── types/                           # Zod schemas & TypeScript types
+└── store/                           # Client state
+```
 
 ## Tech Stack
 
-- **Framework:** TanStack Start + React 19 + Nitro
-- **Routing:** TanStack Router (file-based)
-- **State:** TanStack Query (server) + Zustand (client)
-- **Database:** Drizzle ORM + PostgreSQL (Supabase)
-- **Auth:** Better Auth (email/password + Google OAuth)
-- **Styling:** Tailwind CSS v4 + shadcn/ui
-- **Validation:** Zod v4
-- **Error Handling:** Effect-TS
-- **File Storage:** Cloudflare R2 (S3-compatible)
 
 ![TanstackStart](https://img.shields.io/badge/TanStack%20Start-00C7B7?style=for-the-badge&logo=tanstack&logoColor=white)
 ![Drizzle](https://img.shields.io/badge/Drizzle-%23000000?style=for-the-badge&logo=drizzle&logoColor=C5F74F)
@@ -72,16 +101,3 @@ bun run api:route    # List all API routes with methods
 ![Supabase](https://img.shields.io/badge/Supabase-181818?style=for-the-badge&logo=supabase&logoColor=white)
 ![Cloudflare R2](https://img.shields.io/badge/Cloudflare%20R2-F38020?style=for-the-badge&logo=cloudflare&logoColor=white)
 
-## Configuration
-
-- **Path Alias:** `@/*` maps to `./src/*`
-- **Formatter:** Biome with tabs, double quotes
-- **Environment:** See `.env.example` for required variables
-
-## Code Style
-
-- Use Biome for formatting (tabs) and linting
-- Zod schemas in `src/types/zod.ts` for form validation
-- Type definitions in `src/types/types.ts`
-- UI components from shadcn/ui are in `src/components/ui/` (excluded from linting)
-- Route-specific sections go in `-sections/` folders within route directories
