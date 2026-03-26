@@ -71,3 +71,9 @@ export const quizMaterialsSchema = z.object({
 });
 
 export type QuizMaterialsData = z.infer<typeof quizMaterialsSchema>;
+
+export const bulkMaterialsSchema = z.object({
+	material_ids: z.array(z.number()).min(1),
+});
+
+export type BulkMaterialsData = z.infer<typeof bulkMaterialsSchema>;

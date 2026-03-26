@@ -1,4 +1,4 @@
-import { desc, eq } from "drizzle-orm";
+import { desc, eq, inArray } from "drizzle-orm";
 import { Effect } from "effect";
 import { studyMaterials } from "@/database/schema";
 import { Db } from "@/lib/db";
@@ -47,6 +47,23 @@ export const fetchStudyMaterialById = (id: number) =>
 		}
 
 		return result;
+	});
+
+export const fetchStudyMaterialsByIds = (ids: number[]) =>
+	Effect.gen(function* () {
+		const { db } = yield* Db;
+
+		return yield* dbTryPromise({
+			try: () =>
+				db.query.studyMaterials.findMany({
+					where: inArray(studyMaterials.id, ids),
+				}),
+			catch: (err) =>
+				new DatabaseError({
+					cause: err,
+					message: "Failed to fetch study materials by ids",
+				}),
+		});
 	});
 
 export const createStudyMaterial = (studyMaterial: StudyMaterialFormData) =>

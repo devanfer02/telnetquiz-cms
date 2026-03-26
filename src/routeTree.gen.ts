@@ -45,6 +45,7 @@ import { Route as ApiinternalQuizVerifyRouteImport } from './routes/api/(interna
 import { Route as ApiinternalQuizMaterialsRouteImport } from './routes/api/(internal)/quiz/materials'
 import { Route as ApiinternalQuizIdRouteImport } from './routes/api/(internal)/quiz/$id'
 import { Route as ApiinternalPretestStatusRouteImport } from './routes/api/(internal)/pretest/status'
+import { Route as ApiinternalMaterialsBulkGetRouteImport } from './routes/api/(internal)/materials/bulk-get'
 import { Route as ApiinternalMaterialsIdRouteImport } from './routes/api/(internal)/materials/$id'
 import { Route as ApiinternalChaptersIdRouteImport } from './routes/api/(internal)/chapters/$id'
 import { Route as ApiinternalAuthRegisterRouteImport } from './routes/api/(internal)/auth/register'
@@ -238,6 +239,12 @@ const ApiinternalPretestStatusRoute =
     path: '/status',
     getParentRoute: () => ApiinternalPretestRoute,
   } as any)
+const ApiinternalMaterialsBulkGetRoute =
+  ApiinternalMaterialsBulkGetRouteImport.update({
+    id: '/materials/bulk-get',
+    path: '/materials/bulk-get',
+    getParentRoute: () => ApiinternalRouteRoute,
+  } as any)
 const ApiinternalMaterialsIdRoute = ApiinternalMaterialsIdRouteImport.update({
   id: '/materials/$id',
   path: '/materials/$id',
@@ -327,6 +334,7 @@ export interface FileRoutesByFullPath {
   '/api/auth/register': typeof ApiinternalAuthRegisterRoute
   '/api/chapters/$id': typeof ApiinternalChaptersIdRoute
   '/api/materials/$id': typeof ApiinternalMaterialsIdRoute
+  '/api/materials/bulk-get': typeof ApiinternalMaterialsBulkGetRoute
   '/api/pretest/status': typeof ApiinternalPretestStatusRoute
   '/api/quiz/$id': typeof ApiinternalQuizIdRoute
   '/api/quiz/materials': typeof ApiinternalQuizMaterialsRoute
@@ -374,6 +382,7 @@ export interface FileRoutesByTo {
   '/api/auth/register': typeof ApiinternalAuthRegisterRoute
   '/api/chapters/$id': typeof ApiinternalChaptersIdRoute
   '/api/materials/$id': typeof ApiinternalMaterialsIdRoute
+  '/api/materials/bulk-get': typeof ApiinternalMaterialsBulkGetRoute
   '/api/pretest/status': typeof ApiinternalPretestStatusRoute
   '/api/quiz/$id': typeof ApiinternalQuizIdRoute
   '/api/quiz/materials': typeof ApiinternalQuizMaterialsRoute
@@ -423,6 +432,7 @@ export interface FileRoutesById {
   '/api/(internal)/auth/register': typeof ApiinternalAuthRegisterRoute
   '/api/(internal)/chapters/$id': typeof ApiinternalChaptersIdRoute
   '/api/(internal)/materials/$id': typeof ApiinternalMaterialsIdRoute
+  '/api/(internal)/materials/bulk-get': typeof ApiinternalMaterialsBulkGetRoute
   '/api/(internal)/pretest/status': typeof ApiinternalPretestStatusRoute
   '/api/(internal)/quiz/$id': typeof ApiinternalQuizIdRoute
   '/api/(internal)/quiz/materials': typeof ApiinternalQuizMaterialsRoute
@@ -472,6 +482,7 @@ export interface FileRouteTypes {
     | '/api/auth/register'
     | '/api/chapters/$id'
     | '/api/materials/$id'
+    | '/api/materials/bulk-get'
     | '/api/pretest/status'
     | '/api/quiz/$id'
     | '/api/quiz/materials'
@@ -519,6 +530,7 @@ export interface FileRouteTypes {
     | '/api/auth/register'
     | '/api/chapters/$id'
     | '/api/materials/$id'
+    | '/api/materials/bulk-get'
     | '/api/pretest/status'
     | '/api/quiz/$id'
     | '/api/quiz/materials'
@@ -567,6 +579,7 @@ export interface FileRouteTypes {
     | '/api/(internal)/auth/register'
     | '/api/(internal)/chapters/$id'
     | '/api/(internal)/materials/$id'
+    | '/api/(internal)/materials/bulk-get'
     | '/api/(internal)/pretest/status'
     | '/api/(internal)/quiz/$id'
     | '/api/(internal)/quiz/materials'
@@ -841,6 +854,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiinternalPretestStatusRouteImport
       parentRoute: typeof ApiinternalPretestRoute
     }
+    '/api/(internal)/materials/bulk-get': {
+      id: '/api/(internal)/materials/bulk-get'
+      path: '/materials/bulk-get'
+      fullPath: '/api/materials/bulk-get'
+      preLoaderRoute: typeof ApiinternalMaterialsBulkGetRouteImport
+      parentRoute: typeof ApiinternalRouteRoute
+    }
     '/api/(internal)/materials/$id': {
       id: '/api/(internal)/materials/$id'
       path: '/materials/$id'
@@ -990,6 +1010,7 @@ interface ApiinternalRouteRouteChildren {
   ApiinternalAuthRegisterRoute: typeof ApiinternalAuthRegisterRoute
   ApiinternalChaptersIdRoute: typeof ApiinternalChaptersIdRoute
   ApiinternalMaterialsIdRoute: typeof ApiinternalMaterialsIdRoute
+  ApiinternalMaterialsBulkGetRoute: typeof ApiinternalMaterialsBulkGetRoute
   ApiinternalQuizIdRoute: typeof ApiinternalQuizIdRoute
   ApiinternalQuizMaterialsRoute: typeof ApiinternalQuizMaterialsRoute
   ApiinternalQuizVerifyRoute: typeof ApiinternalQuizVerifyRoute
@@ -1010,6 +1031,7 @@ const ApiinternalRouteRouteChildren: ApiinternalRouteRouteChildren = {
   ApiinternalAuthRegisterRoute: ApiinternalAuthRegisterRoute,
   ApiinternalChaptersIdRoute: ApiinternalChaptersIdRoute,
   ApiinternalMaterialsIdRoute: ApiinternalMaterialsIdRoute,
+  ApiinternalMaterialsBulkGetRoute: ApiinternalMaterialsBulkGetRoute,
   ApiinternalQuizIdRoute: ApiinternalQuizIdRoute,
   ApiinternalQuizMaterialsRoute: ApiinternalQuizMaterialsRoute,
   ApiinternalQuizVerifyRoute: ApiinternalQuizVerifyRoute,
