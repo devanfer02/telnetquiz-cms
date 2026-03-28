@@ -274,6 +274,7 @@ const fetchUserStats = (userId: string) =>
 							FROM ${chapters}
 							LEFT JOIN ${quizzes} ON ${quizzes.chapterId} = ${chapters.id}
 							LEFT JOIN ${submissions} ON ${submissions.quizId} = ${quizzes.id} AND ${submissions.userId} = ${userId}
+							WHERE ${chapters.isHidden} = false
 							GROUP BY ${chapters.id}
 							HAVING COUNT(DISTINCT ${quizzes.id}) > 0
 						) cs
