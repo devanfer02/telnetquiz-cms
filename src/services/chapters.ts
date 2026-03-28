@@ -176,7 +176,7 @@ export const fetchChapterById = (id: number, userId?: string) =>
 		const { db } = yield* Db;
 
 		// Run chapter fetch and completed quizzes in parallel when userId is provided
-		const [result, completedQuizIds] = yield* Effect.all([
+		const [result, completedRows] = yield* Effect.all([
 			dbTryPromise({
 				try: () =>
 					db.query.chapters.findFirst({
@@ -203,7 +203,10 @@ export const fetchChapterById = (id: number, userId?: string) =>
 				? dbTryPromise({
 						try: () =>
 							db
-								.select({ quizId: submissions.quizId })
+								.select({
+									quizId: submissions.quizId,
+									score: submissions.score,
+								})
 								.from(submissions)
 								.where(eq(submissions.userId, userId)),
 						catch: (err) =>
@@ -211,15 +214,23 @@ export const fetchChapterById = (id: number, userId?: string) =>
 								cause: err,
 								message: `Failed to fetch completed quizzes for chapter ${id}`,
 							}),
-					}).pipe(Effect.map((rows) => rows.map((s) => s.quizId)))
-				: Effect.succeed([] as number[]),
+					})
+				: Effect.succeed([] as { quizId: number; score: number | null }[]),
 		]);
 
 		if (result === undefined) {
 			return yield* Effect.fail(new NotFoundError({ id, entity: "Chapter" }));
 		}
 
-		return { ...result, completedQuizIds };
+		const completedQuizIds = completedRows.map((s) => s.quizId);
+		const quizScores: Record<number, number> = {};
+		for (const row of completedRows) {
+			if (row.score != null) {
+				quizScores[row.quizId] = row.score;
+			}
+		}
+
+		return { ...result, completedQuizIds, quizScores };
 	});
 
 export const createChapter = (chapter: ChapterFormData) =>
