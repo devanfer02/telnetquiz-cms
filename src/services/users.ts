@@ -268,7 +268,7 @@ const fetchUserStats = (userId: string) =>
 						SELECT ARRAY_AGG(d ORDER BY d DESC) AS dates FROM (
 							SELECT DISTINCT DATE(${submissions.createdAt}) AS d
 							FROM ${submissions}
-							WHERE ${submissions.userId} = ${userId}
+							WHERE ${submissions.userId} = ${userId} AND ${submissions.createdAt} <= NOW()
 						) ds
 					)
 					SELECT us.total_score, us.levels_completed, cs.total_chapters, cs.chapters_completed, sd.dates
@@ -382,7 +382,7 @@ export const updateUserProfile = (
 			return yield* fetchUserProfile(userId);
 		}
 
-		const [updateResult, userResult, stats] = yield* Effect.all([
+		const [updateResult, schoolResult, stats] = yield* Effect.all([
 			dbTryPromise({
 				try: () =>
 					db
@@ -423,7 +423,7 @@ export const updateUserProfile = (
 		}
 
 		const updatedUser = updateResult[0];
-		const schoolData = userResult[0];
+		const schoolData = schoolResult[0];
 
 		return {
 			id: updatedUser.id,

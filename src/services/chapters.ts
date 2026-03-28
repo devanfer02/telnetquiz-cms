@@ -98,10 +98,11 @@ export const fetchChaptersWithUserPerformance = (userId: string) =>
 
 		const hasTakenPretest = parsed.has_taken_pretest ?? false;
 
-		const completedMap = new Map<number, number>();
-		for (const c of parsed.completed_quizzes ?? []) {
-			completedMap.set(c.chapter_id, c.count);
-		}
+		const completedMap = new Map(
+			(parsed.completed_quizzes ?? []).map(
+				(c) => [c.chapter_id, c.count] as const,
+			),
+		);
 
 		const pretestRows = (parsed.pretest_submissions ?? []).map((p) => ({
 			chapterId: p.chapter_id,
