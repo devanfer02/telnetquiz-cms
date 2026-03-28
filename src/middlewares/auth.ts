@@ -46,7 +46,18 @@ export const oauthMiddleware = createMiddleware().server(async ({ next }) => {
 
 export const authMiddleware = createMiddleware().server(async ({ next }) => {
 	const headers = getRequestHeaders();
-	const session = await auth.api.getSession({ headers });
+
+	let session: Awaited<ReturnType<typeof auth.api.getSession>>;
+	try {
+		session = await auth.api.getSession({ headers });
+	} catch {
+		return response(
+			{
+				message: "Unauthorized",
+			},
+			HttpStatus.UNAUTHORIZED,
+		);
+	}
 
 	if (session === null) {
 		return response(
