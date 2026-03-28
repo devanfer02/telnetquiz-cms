@@ -82,27 +82,9 @@ export const fetchChaptersWithUserPerformance = (userId: string) =>
 							WHERE ${pretestSubmissions.userId} = ${userId}
 						)
 						SELECT
-							'meta' AS row_type,
-							(SELECT has_taken_pretest FROM user_pretest)::boolean AS val_bool,
-							NULL::int AS chapter_id,
-							NULL::int AS count,
-							NULL::boolean AS is_correct
-						UNION ALL
-						SELECT
-							'completed' AS row_type,
-							NULL AS val_bool,
-							chapter_id,
-							count,
-							NULL AS is_correct
-						FROM completed
-						UNION ALL
-						SELECT
-							'pretest' AS row_type,
-							NULL AS val_bool,
-							chapter_id,
-							NULL AS count,
-							is_correct
-						FROM pretest_subs
+							(SELECT has_taken_pretest FROM user_pretest) AS has_taken_pretest,
+							(SELECT COALESCE(json_agg(completed), '[]'::json) FROM completed) AS completed_quizzes,
+							(SELECT COALESCE(json_agg(pretest_subs), '[]'::json) FROM pretest_subs) AS pretest_submissions
 					`),
 				catch: (err) =>
 					new DatabaseError({
@@ -112,40 +94,25 @@ export const fetchChaptersWithUserPerformance = (userId: string) =>
 			}),
 		]);
 
-		type UserDataRow = {
-			row_type: string;
-			val_bool: boolean | null;
-			chapter_id: number | null;
-			count: number | null;
-			is_correct: boolean | null;
+		type CompletedRow = { chapter_id: number; count: number };
+		type PretestRow = { chapter_id: number | null; is_correct: boolean };
+		const userData0 = userData.rows[0] as {
+			has_taken_pretest: boolean | null;
+			completed_quizzes: CompletedRow[];
+			pretest_submissions: PretestRow[];
 		};
-		const rows = userData.rows as UserDataRow[];
 
-		let hasTakenPretest = false;
+		const hasTakenPretest = userData0?.has_taken_pretest ?? false;
+
 		const completedMap = new Map<number, number>();
-		const pretestRows: Array<{
-			chapterId: number | null;
-			isCorrect: boolean | null;
-		}> = [];
-
-		for (const row of rows) {
-			switch (row.row_type) {
-				case "meta":
-					hasTakenPretest = row.val_bool ?? false;
-					break;
-				case "completed":
-					if (row.chapter_id != null) {
-						completedMap.set(row.chapter_id, row.count ?? 0);
-					}
-					break;
-				case "pretest":
-					pretestRows.push({
-						chapterId: row.chapter_id,
-						isCorrect: row.is_correct,
-					});
-					break;
-			}
+		for (const c of userData0?.completed_quizzes ?? []) {
+			completedMap.set(c.chapter_id, c.count);
 		}
+
+		const pretestRows = (userData0?.pretest_submissions ?? []).map((p) => ({
+			chapterId: p.chapter_id,
+			isCorrect: p.is_correct,
+		}));
 
 		if (!hasTakenPretest) {
 			return {

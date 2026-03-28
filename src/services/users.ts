@@ -200,24 +200,23 @@ export const fetchLeaderboard = (
 function computeDailyStreak(dateRows: Array<{ d: string }>): number {
 	if (dateRows.length === 0) return 0;
 
-	const today = new Date();
-	today.setHours(0, 0, 0, 0);
-
 	const mostRecentDate = new Date(dateRows[0].d);
-	mostRecentDate.setHours(0, 0, 0, 0);
 
-	if ((today.getTime() - mostRecentDate.getTime()) / 86400000 > 1) {
-		return 0;
-	}
+	const now = new Date();
+	const today = new Date(
+		Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()),
+	);
+
+	const diffDays = (today.getTime() - mostRecentDate.getTime()) / 86400000;
+	if (diffDays > 1) return 0;
 
 	let streak = 0;
 	const referenceDate = new Date(mostRecentDate);
 
 	for (const row of dateRows) {
 		const d = new Date(row.d);
-		d.setHours(0, 0, 0, 0);
 		const expected = new Date(referenceDate);
-		expected.setDate(expected.getDate() - streak);
+		expected.setUTCDate(expected.getUTCDate() - streak);
 		if (d.getTime() === expected.getTime()) {
 			streak++;
 		} else {
