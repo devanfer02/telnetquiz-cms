@@ -162,11 +162,17 @@ export const submissions = pgTable(
 	"submissions",
 	{
 		id: serial().primaryKey(),
-		userId: text().notNull().references(() => users.id, { onDelete: "cascade" }),
-		chapterId: integer().notNull().references(() => chapters.id, {
-			onDelete: "cascade",
-		}),
-		quizId: integer().notNull().references(() => quizzes.id, { onDelete: "cascade" }),
+		userId: text()
+			.notNull()
+			.references(() => users.id, { onDelete: "cascade" }),
+		chapterId: integer()
+			.notNull()
+			.references(() => chapters.id, {
+				onDelete: "cascade",
+			}),
+		quizId: integer()
+			.notNull()
+			.references(() => quizzes.id, { onDelete: "cascade" }),
 		score: integer(),
 		...timestamps,
 	},

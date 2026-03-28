@@ -13,7 +13,8 @@
 			"**/vite.config.js",
 			"!**/src/routeTree.gen.ts",
 			"!**/src/components/ui/**/*",
-			"!**/src/css/styles.css"
+			"!**/src/css/styles.css",
+			"!**/src/database/drizzle"
 		]
 	},
 	"overrides": [
