@@ -94,6 +94,16 @@ describe("generateFilename", () => {
 		expect(result).toMatch(/^\d{4}-\d{2}-\d{2}_[A-Z0-9]+\.$/);
 	});
 
+	it("handles dotfiles", () => {
+		const result = generateFilename(".config");
+		expect(result).toMatch(/^\d{4}-\d{2}-\d{2}_[A-Z0-9]+\.config$/);
+	});
+
+	it("handles filenames with multiple dots", () => {
+		const result = generateFilename("archive.tar.gz");
+		expect(result).toMatch(/^\d{4}-\d{2}-\d{2}_[A-Z0-9]+\.gz$/);
+	});
+
 	it("uses current date", () => {
 		vi.useFakeTimers();
 		vi.setSystemTime(new Date("2025-06-15"));
@@ -110,6 +120,10 @@ describe("getFileExtension", () => {
 
 	it("returns mime type for .png", () => {
 		expect(getFileExtension("image.png")).toBe("image/png");
+	});
+
+	it("returns mime type for .jpeg", () => {
+		expect(getFileExtension("photo.jpeg")).toBe("image/jpeg");
 	});
 
 	it("returns undefined for unknown extension", () => {

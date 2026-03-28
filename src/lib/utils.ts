@@ -8,7 +8,7 @@ import type { z } from "zod";
 const EXTENSION_MAP = {
 	".jpg": "image/jpg",
 	".png": "image/png",
-	jpeg: "image/jpeg",
+	".jpeg": "image/jpeg",
 } as Record<string, string>;
 
 export function cn(...inputs: ClassValue[]) {
