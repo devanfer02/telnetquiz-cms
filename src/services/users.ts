@@ -198,14 +198,25 @@ export const fetchLeaderboard = (
 	});
 
 function computeDailyStreak(dateRows: Array<{ d: string }>): number {
-	let streak = 0;
+	if (dateRows.length === 0) return 0;
+
 	const today = new Date();
 	today.setHours(0, 0, 0, 0);
+
+	const mostRecentDate = new Date(dateRows[0].d);
+	mostRecentDate.setHours(0, 0, 0, 0);
+
+	if ((today.getTime() - mostRecentDate.getTime()) / 86400000 > 1) {
+		return 0;
+	}
+
+	let streak = 0;
+	const referenceDate = new Date(mostRecentDate);
 
 	for (const row of dateRows) {
 		const d = new Date(row.d);
 		d.setHours(0, 0, 0, 0);
-		const expected = new Date(today);
+		const expected = new Date(referenceDate);
 		expected.setDate(expected.getDate() - streak);
 		if (d.getTime() === expected.getTime()) {
 			streak++;

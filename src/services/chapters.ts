@@ -121,9 +121,7 @@ export const fetchChaptersWithUserPerformance = (userId: string) =>
 		};
 		const rows = userData.rows as UserDataRow[];
 
-		const metaRow = rows.find((r) => r.row_type === "meta");
-		const hasTakenPretest = metaRow?.val_bool ?? false;
-
+		let hasTakenPretest = false;
 		const completedMap = new Map<number, number>();
 		const pretestRows: Array<{
 			chapterId: number | null;
@@ -131,13 +129,21 @@ export const fetchChaptersWithUserPerformance = (userId: string) =>
 		}> = [];
 
 		for (const row of rows) {
-			if (row.row_type === "completed" && row.chapter_id != null) {
-				completedMap.set(row.chapter_id, row.count ?? 0);
-			} else if (row.row_type === "pretest") {
-				pretestRows.push({
-					chapterId: row.chapter_id,
-					isCorrect: row.is_correct,
-				});
+			switch (row.row_type) {
+				case "meta":
+					hasTakenPretest = row.val_bool ?? false;
+					break;
+				case "completed":
+					if (row.chapter_id != null) {
+						completedMap.set(row.chapter_id, row.count ?? 0);
+					}
+					break;
+				case "pretest":
+					pretestRows.push({
+						chapterId: row.chapter_id,
+						isCorrect: row.is_correct,
+					});
+					break;
 			}
 		}
 
