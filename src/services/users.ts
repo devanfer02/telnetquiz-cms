@@ -728,6 +728,7 @@ export const fetchUserAchievements = (userId: string) =>
 						SELECT ${pretestSubmissions.createdAt} AS d
 						FROM ${pretestSubmissions}
 						WHERE ${pretestSubmissions.userId} = ${userId}
+						ORDER BY ${pretestSubmissions.createdAt} ASC
 						LIMIT 1
 					),
 					first_quiz AS (
@@ -741,6 +742,7 @@ export const fetchUserAchievements = (userId: string) =>
 						SELECT ${submissions.createdAt} AS d
 						FROM ${submissions}
 						WHERE ${submissions.userId} = ${userId} AND ${submissions.score} = 100
+						ORDER BY ${submissions.createdAt} ASC
 						LIMIT 1
 					),
 					mastery AS (
