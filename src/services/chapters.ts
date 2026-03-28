@@ -1,6 +1,5 @@
 import { desc, eq, sql } from "drizzle-orm";
 import { Effect } from "effect";
-import { z } from "zod";
 import {
 	chapters,
 	pretestSubmissions,
@@ -13,21 +12,6 @@ import { Db } from "@/lib/db";
 import { dbTryPromise } from "@/lib/retry";
 import type { ChapterFormData } from "@/types/zod";
 import { DatabaseError, NotFoundError } from "./errors/errors";
-
-const chapterUserDataSchema = z.object({
-	has_taken_pretest: z.boolean().nullable(),
-	completed_quizzes: z
-		.array(z.object({ chapter_id: z.number(), count: z.number() }))
-		.nullable(),
-	pretest_submissions: z
-		.array(
-			z.object({
-				chapter_id: z.number().nullable(),
-				is_correct: z.boolean(),
-			}),
-		)
-		.nullable(),
-});
 
 export const fetchAllChapters = Effect.gen(function* () {
 	const { db } = yield* Db;

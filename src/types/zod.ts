@@ -115,3 +115,33 @@ export type QuestionFormData = z.infer<typeof questionSchema>;
 export type QuestionsFormData = z.infer<typeof questionsSchema>;
 export type ChapterFormData = z.infer<typeof chapterSchema>;
 export type StudyMaterialFormData = z.infer<typeof studyMaterialSchema>;
+
+export const userStatsRowSchema = z.object({
+	total_score: z.coerce.number(),
+	levels_completed: z.coerce.number(),
+	chapters_completed: z.coerce.number(),
+	total_chapters: z.coerce.number(),
+	dates: z.array(z.string()).nullable(),
+});
+
+export const achievementRowSchema = z.object({
+	pretest_date: z.string().nullable(),
+	first_quiz_date: z.string().nullable(),
+	perfect_score_date: z.string().nullable(),
+	mastery_date: z.string().nullable(),
+});
+
+export const chapterUserDataSchema = z.object({
+	has_taken_pretest: z.boolean().nullable(),
+	completed_quizzes: z
+		.array(z.object({ chapter_id: z.number(), count: z.number() }))
+		.nullable(),
+	pretest_submissions: z
+		.array(
+			z.object({
+				chapter_id: z.number().nullable(),
+				is_correct: z.boolean(),
+			}),
+		)
+		.nullable(),
+});
