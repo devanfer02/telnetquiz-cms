@@ -223,7 +223,8 @@ function computeDailyStreak(dateRows: Array<{ d: string }>): number {
 		Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()),
 	);
 
-	const diffDays = (today.getTime() - mostRecentDate.getTime()) / 86400000;
+	const MS_PER_DAY = 24 * 60 * 60 * 1000;
+	const diffDays = (today.getTime() - mostRecentDate.getTime()) / MS_PER_DAY;
 	if (diffDays > 1) return 0;
 
 	let streak = 0;
