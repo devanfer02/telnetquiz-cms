@@ -30,78 +30,116 @@ export const fetchChaptersWithUserPerformance = (userId: string) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
-		// Run all 4 independent queries in parallel
-		const [userRow, chaptersData, completedQuizzes, userPretestSubmissions] =
-			yield* Effect.all([
-				dbTryPromise({
-					try: () =>
-						db
-							.select({ hasTakenPretest: users.hasTakenPretest })
-							.from(users)
-							.where(eq(users.id, userId))
-							.limit(1),
-					catch: (err) =>
-						new DatabaseError({
-							cause: err,
-							message: "Failed to check pretest status",
-						}),
-				}),
-				dbTryPromise({
-					try: () =>
-						db.query.chapters.findMany({
-							where: eq(chapters.isHidden, false),
-							with: {
-								quizzes: true,
-							},
-						}),
-					catch: (err) =>
-						new DatabaseError({
-							cause: err,
-							message: "Failed to fetch chapters",
-						}),
-				}),
-				dbTryPromise({
-					try: () =>
-						db
-							.select({
-								chapterId: submissions.chapterId,
-								count: sql<number>`count(distinct ${submissions.quizId})`,
-							})
-							.from(submissions)
-							.where(eq(submissions.userId, userId))
-							.groupBy(submissions.chapterId),
-					catch: (err) =>
-						new DatabaseError({
-							cause: err,
-							message: "Failed to fetch completed quizzes",
-						}),
-				}),
-				dbTryPromise({
-					try: () =>
-						db
-							.select({
-								chapterId: questions.chapterId,
-								isCorrect: pretestSubmissions.isCorrect,
-							})
-							.from(pretestSubmissions)
-							.innerJoin(
-								questions,
-								eq(pretestSubmissions.questionId, questions.id),
-							)
-							.where(eq(pretestSubmissions.userId, userId)),
-					catch: (err) =>
-						new DatabaseError({
-							cause: err,
-							message: "Failed to fetch pretest submissions",
-						}),
-				}),
-			]);
+		const [chaptersData, userData] = yield* Effect.all([
+			dbTryPromise({
+				try: () =>
+					db
+						.select({
+							id: chapters.id,
+							title: chapters.title,
+							description: chapters.description,
+							mascotId: chapters.mascotId,
+							quizCount: sql<number>`COUNT(${quizzes.id})::int`.as(
+								"quiz_count",
+							),
+						})
+						.from(chapters)
+						.leftJoin(quizzes, eq(chapters.id, quizzes.chapterId))
+						.where(eq(chapters.isHidden, false))
+						.groupBy(
+							chapters.id,
+							chapters.title,
+							chapters.description,
+							chapters.mascotId,
+						),
+				catch: (err) =>
+					new DatabaseError({
+						cause: err,
+						message: "Failed to fetch chapters",
+					}),
+			}),
+			dbTryPromise({
+				try: () =>
+					db.execute(sql`
+						WITH user_pretest AS (
+							SELECT ${users.hasTakenPretest} AS has_taken_pretest
+							FROM ${users}
+							WHERE ${users.id} = ${userId}
+							LIMIT 1
+						),
+						completed AS (
+							SELECT ${submissions.chapterId} AS chapter_id,
+								COUNT(DISTINCT ${submissions.quizId})::int AS count
+							FROM ${submissions}
+							WHERE ${submissions.userId} = ${userId}
+							GROUP BY ${submissions.chapterId}
+						),
+						pretest_subs AS (
+							SELECT ${questions.chapterId} AS chapter_id,
+								${pretestSubmissions.isCorrect} AS is_correct
+							FROM ${pretestSubmissions}
+							INNER JOIN ${questions} ON ${pretestSubmissions.questionId} = ${questions.id}
+							WHERE ${pretestSubmissions.userId} = ${userId}
+						)
+						SELECT
+							'meta' AS row_type,
+							(SELECT has_taken_pretest FROM user_pretest)::boolean AS val_bool,
+							NULL::int AS chapter_id,
+							NULL::int AS count,
+							NULL::boolean AS is_correct
+						UNION ALL
+						SELECT
+							'completed' AS row_type,
+							NULL AS val_bool,
+							chapter_id,
+							count,
+							NULL AS is_correct
+						FROM completed
+						UNION ALL
+						SELECT
+							'pretest' AS row_type,
+							NULL AS val_bool,
+							chapter_id,
+							NULL AS count,
+							is_correct
+						FROM pretest_subs
+					`),
+				catch: (err) =>
+					new DatabaseError({
+						cause: err,
+						message: "Failed to fetch user chapter data",
+					}),
+			}),
+		]);
 
-		const hasTakenPretest = userRow[0]?.hasTakenPretest ?? false;
+		type UserDataRow = {
+			row_type: string;
+			val_bool: boolean | null;
+			chapter_id: number | null;
+			count: number | null;
+			is_correct: boolean | null;
+		};
+		const rows = userData.rows as UserDataRow[];
 
-		const completedMap = new Map(
-			completedQuizzes.map((c) => [c.chapterId, c.count]),
-		);
+		const metaRow = rows.find((r) => r.row_type === "meta");
+		const hasTakenPretest = metaRow?.val_bool ?? false;
+
+		const completedMap = new Map<number, number>();
+		const pretestRows: Array<{
+			chapterId: number | null;
+			isCorrect: boolean | null;
+		}> = [];
+
+		for (const row of rows) {
+			if (row.row_type === "completed" && row.chapter_id != null) {
+				completedMap.set(row.chapter_id, row.count ?? 0);
+			} else if (row.row_type === "pretest") {
+				pretestRows.push({
+					chapterId: row.chapter_id,
+					isCorrect: row.is_correct,
+				});
+			}
+		}
 
 		if (!hasTakenPretest) {
 			return {
@@ -112,7 +150,7 @@ export const fetchChaptersWithUserPerformance = (userId: string) =>
 					description: ch.description,
 					mascot_id: ch.mascotId,
 					user_performance: null,
-					quiz_count: ch.quizzes.length,
+					quiz_count: Number(ch.quizCount),
 					completed_quizzes: completedMap.get(ch.id) || 0,
 				})),
 			};
@@ -120,7 +158,7 @@ export const fetchChaptersWithUserPerformance = (userId: string) =>
 
 		const performanceMap = new Map<number, { wrong: number; total: number }>();
 
-		userPretestSubmissions.forEach((sub) => {
+		pretestRows.forEach((sub) => {
 			if (sub.chapterId) {
 				const current = performanceMap.get(sub.chapterId) || {
 					wrong: 0,
@@ -151,7 +189,7 @@ export const fetchChaptersWithUserPerformance = (userId: string) =>
 					total_pretest_questions: total,
 					accuracy_percentage: accuracy,
 				},
-				quiz_count: ch.quizzes.length,
+				quiz_count: Number(ch.quizCount),
 				completed_quizzes: completedMap.get(ch.id) || 0,
 			};
 		});

@@ -1,5 +1,5 @@
 import { getRequestHeaders } from "@tanstack/react-start/server";
-import { and, desc, eq, sql } from "drizzle-orm";
+import { desc, eq, sql } from "drizzle-orm";
 import { Effect } from "effect";
 import {
 	chapters,
@@ -197,11 +197,92 @@ export const fetchLeaderboard = (
 		};
 	});
 
+function computeDailyStreak(dateRows: Array<{ d: string }>): number {
+	let streak = 0;
+	const today = new Date();
+	today.setHours(0, 0, 0, 0);
+
+	for (const row of dateRows) {
+		const d = new Date(row.d);
+		d.setHours(0, 0, 0, 0);
+		const expected = new Date(today);
+		expected.setDate(expected.getDate() - streak);
+		if (d.getTime() === expected.getTime()) {
+			streak++;
+		} else {
+			break;
+		}
+	}
+	return streak;
+}
+
+const fetchUserStats = (userId: string) =>
+	Effect.gen(function* () {
+		const { db } = yield* Db;
+
+		const result = yield* dbTryPromise({
+			try: () =>
+				db.execute(sql`
+					WITH user_score AS (
+						SELECT
+							COALESCE(SUM(${submissions.score}), 0)::int AS total_score,
+							COUNT(DISTINCT ${submissions.quizId})::int AS levels_completed
+						FROM ${submissions}
+						WHERE ${submissions.userId} = ${userId}
+					),
+					chapter_stats AS (
+						SELECT
+							COUNT(*)::int AS total_chapters,
+							COUNT(*) FILTER (WHERE completed_count >= quiz_count)::int AS chapters_completed
+						FROM (
+							SELECT
+								${chapters.id},
+								COUNT(DISTINCT ${quizzes.id})::int AS quiz_count,
+								COUNT(DISTINCT ${submissions.quizId})::int AS completed_count
+							FROM ${chapters}
+							LEFT JOIN ${quizzes} ON ${quizzes.chapterId} = ${chapters.id}
+							LEFT JOIN ${submissions} ON ${submissions.quizId} = ${quizzes.id} AND ${submissions.userId} = ${userId}
+							GROUP BY ${chapters.id}
+							HAVING COUNT(DISTINCT ${quizzes.id}) > 0
+						) cs
+					),
+					streak_dates AS (
+						SELECT ARRAY_AGG(d ORDER BY d DESC) AS dates FROM (
+							SELECT DISTINCT DATE(${submissions.createdAt}) AS d
+							FROM ${submissions}
+							WHERE ${submissions.userId} = ${userId}
+						) ds
+					)
+					SELECT us.total_score, us.levels_completed, cs.total_chapters, cs.chapters_completed, sd.dates
+					FROM user_score us, chapter_stats cs, streak_dates sd
+				`),
+			catch: (error) =>
+				new DatabaseError({
+					cause: error,
+					message: "Failed to fetch user stats",
+				}),
+		});
+
+		const row = result.rows[0] as Record<string, unknown> | undefined;
+		const dates = (row?.dates as string[] | null) ?? [];
+		const dailyStreak = computeDailyStreak(
+			dates.map((d) => ({ d: String(d) })),
+		);
+
+		return {
+			total_score: Number(row?.total_score ?? 0),
+			levels_completed: Number(row?.levels_completed ?? 0),
+			chapters_completed: Number(row?.chapters_completed ?? 0),
+			total_chapters: Number(row?.total_chapters ?? 0),
+			daily_streak: dailyStreak,
+		};
+	});
+
 export const fetchUserProfile = (userId: string) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
-		const [userResult, allChaptersData, rawSubmissions] = yield* Effect.all([
+		const [userResult, stats] = yield* Effect.all([
 			dbTryPromise({
 				try: () =>
 					db
@@ -229,39 +310,7 @@ export const fetchUserProfile = (userId: string) =>
 						message: "Failed to fetch user profile",
 					}),
 			}),
-			dbTryPromise({
-				try: () =>
-					db
-						.select({
-							id: chapters.id,
-							quizCount: sql<number>`count(${quizzes.id})`.as("quiz_count"),
-						})
-						.from(chapters)
-						.leftJoin(quizzes, eq(chapters.id, quizzes.chapterId))
-						.groupBy(chapters.id),
-				catch: (error) =>
-					new DatabaseError({
-						cause: error,
-						message: "Failed to fetch chapters for stats",
-					}),
-			}),
-			dbTryPromise({
-				try: () =>
-					db
-						.select({
-							chapterId: submissions.chapterId,
-							quizId: submissions.quizId,
-							score: submissions.score,
-							createdAt: submissions.createdAt,
-						})
-						.from(submissions)
-						.where(eq(submissions.userId, userId)),
-				catch: (error) =>
-					new DatabaseError({
-						cause: error,
-						message: "Failed to fetch user submissions",
-					}),
-			}),
+			fetchUserStats(userId),
 		]);
 
 		if (userResult.length === 0) {
@@ -271,51 +320,6 @@ export const fetchUserProfile = (userId: string) =>
 		}
 
 		const user = userResult[0];
-
-		let totalScore = 0;
-		const uniqueQuizIds = new Set<number>();
-		const completedByChapter = new Map<number, Set<number>>();
-		const uniqueDates = new Set<string>();
-
-		for (const sub of rawSubmissions) {
-			totalScore += sub.score ?? 0;
-			if (sub.quizId != null) uniqueQuizIds.add(sub.quizId);
-			if (sub.chapterId != null && sub.quizId != null) {
-				const set = completedByChapter.get(sub.chapterId) ?? new Set();
-				set.add(sub.quizId);
-				completedByChapter.set(sub.chapterId, set);
-			}
-			if (sub.createdAt) {
-				uniqueDates.add(sub.createdAt.toISOString().split("T")[0]);
-			}
-		}
-
-		let chaptersCompleted = 0;
-		for (const chapter of allChaptersData) {
-			const quizCount = Number(chapter.quizCount);
-			if (quizCount === 0) continue;
-			const completed = completedByChapter.get(chapter.id);
-			if (completed && completed.size >= quizCount) {
-				chaptersCompleted++;
-			}
-		}
-
-		const sortedDates = [...uniqueDates].sort().reverse();
-		let dailyStreak = 0;
-		const today = new Date();
-		today.setHours(0, 0, 0, 0);
-
-		for (const dateStr of sortedDates) {
-			const d = new Date(dateStr);
-			d.setHours(0, 0, 0, 0);
-			const expectedDate = new Date(today);
-			expectedDate.setDate(expectedDate.getDate() - dailyStreak);
-			if (d.getTime() === expectedDate.getTime()) {
-				dailyStreak++;
-			} else {
-				break;
-			}
-		}
 
 		return {
 			id: user.id,
@@ -331,13 +335,7 @@ export const fetchUserProfile = (userId: string) =>
 			has_taken_pretest: user.hasTakenPretest,
 			createdAt: user.createdAt,
 			updatedAt: user.updatedAt,
-			stats: {
-				total_score: totalScore,
-				levels_completed: uniqueQuizIds.size,
-				chapters_completed: chaptersCompleted,
-				total_chapters: allChaptersData.length,
-				daily_streak: dailyStreak,
-			},
+			stats,
 		};
 	});
 
@@ -367,7 +365,7 @@ export const updateUserProfile = (
 			return yield* fetchUserProfile(userId);
 		}
 
-		const [updateResult, allChaptersData, rawSubmissions] = yield* Effect.all([
+		const [updateResult, userResult, stats] = yield* Effect.all([
 			dbTryPromise({
 				try: () =>
 					db
@@ -385,35 +383,20 @@ export const updateUserProfile = (
 				try: () =>
 					db
 						.select({
-							id: chapters.id,
-							quizCount: sql<number>`count(${quizzes.id})`.as("quiz_count"),
+							schoolId: users.schoolId,
+							schoolName: schools.name,
 						})
-						.from(chapters)
-						.leftJoin(quizzes, eq(chapters.id, quizzes.chapterId))
-						.groupBy(chapters.id),
+						.from(users)
+						.leftJoin(schools, eq(users.schoolId, schools.id))
+						.where(eq(users.id, userId))
+						.limit(1),
 				catch: (error) =>
 					new DatabaseError({
 						cause: error,
-						message: "Failed to fetch chapters for stats",
+						message: "Failed to fetch user school",
 					}),
 			}),
-			dbTryPromise({
-				try: () =>
-					db
-						.select({
-							chapterId: submissions.chapterId,
-							quizId: submissions.quizId,
-							score: submissions.score,
-							createdAt: submissions.createdAt,
-						})
-						.from(submissions)
-						.where(eq(submissions.userId, userId)),
-				catch: (error) =>
-					new DatabaseError({
-						cause: error,
-						message: "Failed to fetch user submissions",
-					}),
-			}),
+			fetchUserStats(userId),
 		]);
 
 		if (updateResult.length === 0) {
@@ -423,69 +406,7 @@ export const updateUserProfile = (
 		}
 
 		const updatedUser = updateResult[0];
-
-		// Fetch school name (need join, can't get from returning())
-		const schoolRow = updatedUser.schoolId
-			? yield* dbTryPromise({
-					try: () =>
-						db
-							.select({ name: schools.name })
-							.from(schools)
-							.where(eq(schools.id, updatedUser.schoolId as number))
-							.limit(1),
-					catch: (error) =>
-						new DatabaseError({
-							cause: error,
-							message: "Failed to fetch school",
-						}),
-				})
-			: null;
-
-		// Derive stats from submissions
-		let totalScore = 0;
-		const uniqueQuizIds = new Set<number>();
-		const completedByChapter = new Map<number, Set<number>>();
-		const uniqueDates = new Set<string>();
-
-		for (const sub of rawSubmissions) {
-			totalScore += sub.score ?? 0;
-			if (sub.quizId != null) uniqueQuizIds.add(sub.quizId);
-			if (sub.chapterId != null && sub.quizId != null) {
-				const set = completedByChapter.get(sub.chapterId) ?? new Set();
-				set.add(sub.quizId);
-				completedByChapter.set(sub.chapterId, set);
-			}
-			if (sub.createdAt) {
-				uniqueDates.add(sub.createdAt.toISOString().split("T")[0]);
-			}
-		}
-
-		let chaptersCompleted = 0;
-		for (const chapter of allChaptersData) {
-			const quizCount = Number(chapter.quizCount);
-			if (quizCount === 0) continue;
-			const completed = completedByChapter.get(chapter.id);
-			if (completed && completed.size >= quizCount) {
-				chaptersCompleted++;
-			}
-		}
-
-		const sortedDates = [...uniqueDates].sort().reverse();
-		let dailyStreak = 0;
-		const today = new Date();
-		today.setHours(0, 0, 0, 0);
-
-		for (const dateStr of sortedDates) {
-			const d = new Date(dateStr);
-			d.setHours(0, 0, 0, 0);
-			const expectedDate = new Date(today);
-			expectedDate.setDate(expectedDate.getDate() - dailyStreak);
-			if (d.getTime() === expectedDate.getTime()) {
-				dailyStreak++;
-			} else {
-				break;
-			}
-		}
+		const schoolData = userResult[0];
 
 		return {
 			id: updatedUser.id,
@@ -495,19 +416,13 @@ export const updateUserProfile = (
 			bio: updatedUser.bio,
 			gender: updatedUser.gender,
 			grade: updatedUser.grade,
-			school: schoolRow?.[0]
-				? { id: updatedUser.schoolId ?? 0, name: schoolRow[0].name }
+			school: schoolData?.schoolName
+				? { id: schoolData.schoolId ?? 0, name: schoolData.schoolName }
 				: null,
 			has_taken_pretest: updatedUser.hasTakenPretest,
 			createdAt: updatedUser.createdAt,
 			updatedAt: updatedUser.updatedAt,
-			stats: {
-				total_score: totalScore,
-				levels_completed: uniqueQuizIds.size,
-				chapters_completed: chaptersCompleted,
-				total_chapters: allChaptersData.length,
-				daily_streak: dailyStreak,
-			},
+			stats,
 		};
 	});
 
@@ -780,159 +695,93 @@ export const fetchUserAchievements = (userId: string) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
-		type Achievement = {
-			id: string;
-			title: string;
-			description: string;
-			unlocked: boolean;
-			unlockedAt: string | null;
+		const result = yield* dbTryPromise({
+			try: () =>
+				db.execute(sql`
+					WITH pretest AS (
+						SELECT ${pretestSubmissions.createdAt} AS d
+						FROM ${pretestSubmissions}
+						WHERE ${pretestSubmissions.userId} = ${userId}
+						LIMIT 1
+					),
+					first_quiz AS (
+						SELECT ${submissions.createdAt} AS d
+						FROM ${submissions}
+						WHERE ${submissions.userId} = ${userId}
+						ORDER BY ${submissions.createdAt} ASC
+						LIMIT 1
+					),
+					perfect AS (
+						SELECT ${submissions.createdAt} AS d
+						FROM ${submissions}
+						WHERE ${submissions.userId} = ${userId} AND ${submissions.score} = 100
+						LIMIT 1
+					),
+					mastery AS (
+						SELECT MAX(${submissions.createdAt}) AS d
+						FROM ${chapters}
+						JOIN ${quizzes} ON ${quizzes.chapterId} = ${chapters.id}
+						LEFT JOIN ${submissions} ON ${submissions.quizId} = ${quizzes.id}
+							AND ${submissions.userId} = ${userId}
+						GROUP BY ${chapters.id}
+						HAVING COUNT(DISTINCT ${quizzes.id}) = COUNT(DISTINCT ${submissions.quizId})
+							AND COUNT(DISTINCT ${quizzes.id}) > 0
+						ORDER BY d ASC NULLS LAST
+						LIMIT 1
+					)
+					SELECT
+						(SELECT d FROM pretest) AS pretest_date,
+						(SELECT d FROM first_quiz) AS first_quiz_date,
+						(SELECT d FROM perfect) AS perfect_score_date,
+						(SELECT d FROM mastery) AS mastery_date
+				`),
+			catch: (err) =>
+				new DatabaseError({
+					cause: err,
+					message: "Failed to fetch user achievements",
+				}),
+		});
+
+		const row = (result.rows[0] ?? {}) as Record<string, string | null>;
+
+		return {
+			achievements: [
+				{
+					id: "pretest_complete",
+					title: "Penjelajah Pretest",
+					description: "Menyelesaikan pretest",
+					unlocked: row.pretest_date != null,
+					unlockedAt: row.pretest_date
+						? new Date(row.pretest_date).toISOString()
+						: null,
+				},
+				{
+					id: "first_quiz",
+					title: "Kuis Pertama",
+					description: "Menyelesaikan kuis pertama",
+					unlocked: row.first_quiz_date != null,
+					unlockedAt: row.first_quiz_date
+						? new Date(row.first_quiz_date).toISOString()
+						: null,
+				},
+				{
+					id: "perfect_score",
+					title: "Nilai Sempurna",
+					description: "Mendapatkan nilai 100 pada kuis",
+					unlocked: row.perfect_score_date != null,
+					unlockedAt: row.perfect_score_date
+						? new Date(row.perfect_score_date).toISOString()
+						: null,
+				},
+				{
+					id: "chapter_master",
+					title: "Penguasa Bab",
+					description: "Menyelesaikan semua kuis dalam satu bab",
+					unlocked: row.mastery_date != null,
+					unlockedAt: row.mastery_date
+						? new Date(row.mastery_date).toISOString()
+						: null,
+				},
+			],
 		};
-
-		const achievements: Achievement[] = [];
-
-		const [pretestEntry, firstSubmission, perfectScore] = yield* Effect.all([
-			dbTryPromise({
-				try: () =>
-					db.query.pretestSubmissions.findFirst({
-						where: eq(pretestSubmissions.userId, userId),
-						columns: { createdAt: true },
-					}),
-				catch: (err) =>
-					new DatabaseError({
-						cause: err,
-						message: "Failed to check pretest submissions",
-					}),
-			}),
-			dbTryPromise({
-				try: () =>
-					db.query.submissions.findFirst({
-						where: eq(submissions.userId, userId),
-						orderBy: submissions.createdAt,
-						columns: { createdAt: true },
-					}),
-				catch: (err) =>
-					new DatabaseError({
-						cause: err,
-						message: "Failed to check quiz submissions",
-					}),
-			}),
-			dbTryPromise({
-				try: () =>
-					db.query.submissions.findFirst({
-						where: and(
-							eq(submissions.userId, userId),
-							eq(submissions.score, 100),
-						),
-						columns: { createdAt: true },
-					}),
-				catch: (err) =>
-					new DatabaseError({
-						cause: err,
-						message: "Failed to check perfect scores",
-					}),
-			}),
-		]);
-
-		achievements.push({
-			id: "pretest_complete",
-			title: "Penjelajah Pretest",
-			description: "Menyelesaikan pretest",
-			unlocked: pretestEntry !== undefined,
-			unlockedAt: pretestEntry?.createdAt?.toISOString() ?? null,
-		});
-
-		achievements.push({
-			id: "first_quiz",
-			title: "Kuis Pertama",
-			description: "Menyelesaikan kuis pertama",
-			unlocked: firstSubmission !== undefined,
-			unlockedAt: firstSubmission?.createdAt?.toISOString() ?? null,
-		});
-
-		achievements.push({
-			id: "perfect_score",
-			title: "Nilai Sempurna",
-			description: "Mendapatkan nilai 100 pada kuis",
-			unlocked: perfectScore !== undefined,
-			unlockedAt: perfectScore?.createdAt?.toISOString() ?? null,
-		});
-
-		const [allChapters, userSubmissions] = yield* Effect.all([
-			dbTryPromise({
-				try: () =>
-					db
-						.select({
-							id: chapters.id,
-							quizCount: sql<number>`count(${quizzes.id})`.as("quiz_count"),
-						})
-						.from(chapters)
-						.leftJoin(quizzes, eq(chapters.id, quizzes.chapterId))
-						.groupBy(chapters.id),
-				catch: (err) =>
-					new DatabaseError({
-						cause: err,
-						message: "Failed to fetch chapters with quiz counts",
-					}),
-			}),
-			dbTryPromise({
-				try: () =>
-					db
-						.select({
-							chapterId: submissions.chapterId,
-							quizId: submissions.quizId,
-							createdAt: submissions.createdAt,
-						})
-						.from(submissions)
-						.where(eq(submissions.userId, userId)),
-				catch: (err) =>
-					new DatabaseError({
-						cause: err,
-						message: "Failed to fetch user submissions for chapter mastery",
-					}),
-			}),
-		]);
-
-		const completedQuizzesByChapter = new Map<
-			number,
-			{ quizIds: Set<number>; latestDate: Date }
-		>();
-		for (const sub of userSubmissions) {
-			if (sub.chapterId == null || sub.quizId == null) continue;
-			const entry = completedQuizzesByChapter.get(sub.chapterId);
-			if (entry) {
-				entry.quizIds.add(sub.quizId);
-				if (sub.createdAt && sub.createdAt > entry.latestDate) {
-					entry.latestDate = sub.createdAt;
-				}
-			} else {
-				completedQuizzesByChapter.set(sub.chapterId, {
-					quizIds: new Set([sub.quizId]),
-					latestDate: sub.createdAt ?? new Date(),
-				});
-			}
-		}
-
-		let chapterMasteryUnlocked = false;
-		let chapterMasteryDate: string | null = null;
-
-		for (const chapter of allChapters) {
-			const quizCount = Number(chapter.quizCount);
-			if (quizCount === 0) continue;
-			const completed = completedQuizzesByChapter.get(chapter.id);
-			if (completed && completed.quizIds.size >= quizCount) {
-				chapterMasteryUnlocked = true;
-				chapterMasteryDate = completed.latestDate.toISOString();
-				break;
-			}
-		}
-
-		achievements.push({
-			id: "chapter_master",
-			title: "Penguasa Bab",
-			description: "Menyelesaikan semua kuis dalam satu bab",
-			unlocked: chapterMasteryUnlocked,
-			unlockedAt: chapterMasteryDate,
-		});
-
-		return { achievements };
 	});
