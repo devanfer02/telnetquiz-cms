@@ -1,5 +1,6 @@
 import { desc, eq, sql } from "drizzle-orm";
 import { Effect } from "effect";
+import { z } from "zod";
 import {
 	chapters,
 	pretestSubmissions,
@@ -12,6 +13,21 @@ import { Db } from "@/lib/db";
 import { dbTryPromise } from "@/lib/retry";
 import type { ChapterFormData } from "@/types/zod";
 import { DatabaseError, NotFoundError } from "./errors/errors";
+
+const chapterUserDataSchema = z.object({
+	has_taken_pretest: z.boolean().nullable(),
+	completed_quizzes: z
+		.array(z.object({ chapter_id: z.number(), count: z.number() }))
+		.nullable(),
+	pretest_submissions: z
+		.array(
+			z.object({
+				chapter_id: z.number().nullable(),
+				is_correct: z.boolean(),
+			}),
+		)
+		.nullable(),
+});
 
 export const fetchAllChapters = Effect.gen(function* () {
 	const { db } = yield* Db;
@@ -94,22 +110,16 @@ export const fetchChaptersWithUserPerformance = (userId: string) =>
 			}),
 		]);
 
-		type CompletedRow = { chapter_id: number; count: number };
-		type PretestRow = { chapter_id: number | null; is_correct: boolean };
-		const userData0 = userData.rows[0] as {
-			has_taken_pretest: boolean | null;
-			completed_quizzes: CompletedRow[];
-			pretest_submissions: PretestRow[];
-		};
+		const parsed = chapterUserDataSchema.parse(userData.rows[0]);
 
-		const hasTakenPretest = userData0?.has_taken_pretest ?? false;
+		const hasTakenPretest = parsed.has_taken_pretest ?? false;
 
 		const completedMap = new Map<number, number>();
-		for (const c of userData0?.completed_quizzes ?? []) {
+		for (const c of parsed.completed_quizzes ?? []) {
 			completedMap.set(c.chapter_id, c.count);
 		}
 
-		const pretestRows = (userData0?.pretest_submissions ?? []).map((p) => ({
+		const pretestRows = (parsed.pretest_submissions ?? []).map((p) => ({
 			chapterId: p.chapter_id,
 			isCorrect: p.is_correct,
 		}));

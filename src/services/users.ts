@@ -1,6 +1,7 @@
 import { getRequestHeaders } from "@tanstack/react-start/server";
 import { desc, eq, sql } from "drizzle-orm";
 import { Effect } from "effect";
+import { z } from "zod";
 import {
 	chapters,
 	pretestSubmissions,
@@ -16,6 +17,21 @@ import { dbTryPromise } from "@/lib/retry";
 import type { EditUserFormData } from "@/types/zod";
 import type { UpdateProfileFormData } from "@/types/zod.api";
 import { AuthError, DatabaseError, NotFoundError } from "./errors/errors";
+
+const userStatsRowSchema = z.object({
+	total_score: z.coerce.number(),
+	levels_completed: z.coerce.number(),
+	chapters_completed: z.coerce.number(),
+	total_chapters: z.coerce.number(),
+	dates: z.array(z.string()).nullable(),
+});
+
+const achievementRowSchema = z.object({
+	pretest_date: z.string().nullable(),
+	first_quiz_date: z.string().nullable(),
+	perfect_score_date: z.string().nullable(),
+	mastery_date: z.string().nullable(),
+});
 
 export const patchUser = (id: string, user: EditUserFormData) =>
 	Effect.gen(function* () {
@@ -273,17 +289,16 @@ const fetchUserStats = (userId: string) =>
 				}),
 		});
 
-		const row = result.rows[0] as Record<string, unknown> | undefined;
-		const dates = (row?.dates as string[] | null) ?? [];
+		const row = userStatsRowSchema.parse(result.rows[0]);
 		const dailyStreak = computeDailyStreak(
-			dates.map((d) => ({ d: String(d) })),
+			(row.dates ?? []).map((d) => ({ d })),
 		);
 
 		return {
-			total_score: Number(row?.total_score ?? 0),
-			levels_completed: Number(row?.levels_completed ?? 0),
-			chapters_completed: Number(row?.chapters_completed ?? 0),
-			total_chapters: Number(row?.total_chapters ?? 0),
+			total_score: row.total_score,
+			levels_completed: row.levels_completed,
+			chapters_completed: row.chapters_completed,
+			total_chapters: row.total_chapters,
 			daily_streak: dailyStreak,
 		};
 	});
@@ -752,7 +767,7 @@ export const fetchUserAchievements = (userId: string) =>
 				}),
 		});
 
-		const row = (result.rows[0] ?? {}) as Record<string, string | null>;
+		const row = achievementRowSchema.parse(result.rows[0] ?? {});
 
 		return {
 			achievements: [
