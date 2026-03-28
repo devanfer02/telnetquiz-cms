@@ -216,26 +216,26 @@ export const fetchLeaderboard = (
 function computeDailyStreak(dateRows: Array<{ d: string }>): number {
 	if (dateRows.length === 0) return 0;
 
-	const mostRecentDate = new Date(dateRows[0].d);
+	const MS_PER_DAY = 24 * 60 * 60 * 1000;
+	const mostRecentTs = new Date(dateRows[0].d).getTime();
 
 	const now = new Date();
-	const today = new Date(
-		Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()),
+	const todayTs = Date.UTC(
+		now.getUTCFullYear(),
+		now.getUTCMonth(),
+		now.getUTCDate(),
 	);
 
-	const MS_PER_DAY = 24 * 60 * 60 * 1000;
-	const diffDays = (today.getTime() - mostRecentDate.getTime()) / MS_PER_DAY;
-	if (diffDays > 1) return 0;
+	if ((todayTs - mostRecentTs) / MS_PER_DAY > 1) return 0;
 
-	let streak = 0;
-	const referenceDate = new Date(mostRecentDate);
+	let streak = 1;
+	let lastTs = mostRecentTs;
 
-	for (const row of dateRows) {
-		const d = new Date(row.d);
-		const expected = new Date(referenceDate);
-		expected.setUTCDate(expected.getUTCDate() - streak);
-		if (d.getTime() === expected.getTime()) {
+	for (let i = 1; i < dateRows.length; i++) {
+		const currentTs = new Date(dateRows[i].d).getTime();
+		if (lastTs - currentTs === MS_PER_DAY) {
 			streak++;
+			lastTs = currentTs;
 		} else {
 			break;
 		}
