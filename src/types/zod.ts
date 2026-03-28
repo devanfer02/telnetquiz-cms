@@ -139,7 +139,7 @@ export const chapterUserDataSchema = z.object({
 	pretest_submissions: z
 		.array(
 			z.object({
-				chapter_id: z.number().nullable(),
+				chapter_id: z.number(),
 				is_correct: z.boolean(),
 			}),
 		)
