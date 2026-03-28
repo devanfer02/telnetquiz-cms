@@ -213,11 +213,16 @@ export const fetchLeaderboard = (
 		};
 	});
 
+function parseDateAsUTC(dateString: string): number {
+	const [year, month, day] = dateString.split("-").map(Number);
+	return Date.UTC(year, month - 1, day);
+}
+
 function computeDailyStreak(dateRows: Array<{ d: string }>): number {
 	if (dateRows.length === 0) return 0;
 
 	const MS_PER_DAY = 24 * 60 * 60 * 1000;
-	const mostRecentTs = new Date(dateRows[0].d).getTime();
+	const mostRecentTs = parseDateAsUTC(dateRows[0].d);
 
 	const now = new Date();
 	const todayTs = Date.UTC(
@@ -232,7 +237,7 @@ function computeDailyStreak(dateRows: Array<{ d: string }>): number {
 	let lastTs = mostRecentTs;
 
 	for (let i = 1; i < dateRows.length; i++) {
-		const currentTs = new Date(dateRows[i].d).getTime();
+		const currentTs = parseDateAsUTC(dateRows[i].d);
 		if (lastTs - currentTs === MS_PER_DAY) {
 			streak++;
 			lastTs = currentTs;
@@ -290,7 +295,7 @@ const fetchUserStats = (userId: string) =>
 				}),
 		});
 
-		const row = userStatsRowSchema.parse(result.rows[0]);
+		const row = userStatsRowSchema.parse(result.rows[0] ?? {});
 		const dailyStreak = computeDailyStreak(
 			(row.dates ?? []).map((d) => ({ d })),
 		);

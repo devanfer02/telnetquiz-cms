@@ -110,7 +110,7 @@ export const fetchChaptersWithUserPerformance = (userId: string) =>
 			}),
 		]);
 
-		const parsed = chapterUserDataSchema.parse(userData.rows[0]);
+		const parsed = chapterUserDataSchema.parse(userData.rows[0] ?? {});
 
 		const hasTakenPretest = parsed.has_taken_pretest ?? false;
 
