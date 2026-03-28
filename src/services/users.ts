@@ -244,7 +244,8 @@ const fetchUserStats = (userId: string) =>
 							COALESCE(SUM(${submissions.score}), 0)::int AS total_score,
 							COUNT(DISTINCT ${submissions.quizId})::int AS levels_completed
 						FROM ${submissions}
-						WHERE ${submissions.userId} = ${userId}
+						INNER JOIN ${chapters} ON ${submissions.chapterId} = ${chapters.id}
+						WHERE ${submissions.userId} = ${userId} AND ${chapters.isHidden} = false
 					),
 					chapter_stats AS (
 						SELECT
