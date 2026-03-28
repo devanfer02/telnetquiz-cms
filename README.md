@@ -29,6 +29,11 @@ bun run db:migrate   # Generate + push Drizzle migrations
 bun run db:generate  # Generate migrations only
 bun run db:push      # Push migrations to database
 
+# Seeding
+bun cli/db-init.ts            # Seed essentials (2 chapters, 12 quizzes, ~89 questions)
+bun cli/db-init.ts --scale    # Seed essentials + scale-test data (7 chapters, 112 quizzes, ~1100 questions, 100 users, ~3500 submissions)
+bun cli/db-scale-rollback.ts  # Remove scale-test data, keep essentials
+
 # Utilities
 bun run api:route    # List all API routes with methods
 ```

@@ -1,3 +1,9 @@
+import { faker } from "@faker-js/faker";
+import {
+	hashPassword,
+	generateRandomString,
+} from "better-auth/crypto";
+import { inArray } from "drizzle-orm";
 import { db } from "../src/lib/db";
 import {
 	chapters,
@@ -5,6 +11,11 @@ import {
 	questions,
 	options,
 	studyMaterials,
+	schools,
+	users,
+	accounts,
+	submissions,
+	pretestSubmissions,
 } from "../src/database/schema";
 
 // ============================================================================
@@ -1828,31 +1839,846 @@ const quizzesData = [
 ];
 
 // ============================================================================
+// TELCO CHAPTER DEFINITIONS (5 new chapters)
+// ============================================================================
+
+const telcoChaptersData = [
+	{
+		title: "Media Transmisi",
+		description:
+			"Mempelajari jenis-jenis media transmisi dalam jaringan telekomunikasi, termasuk kabel tembaga, fiber optik, dan media nirkabel.",
+		mascotId: 3,
+	},
+	{
+		title: "Jaringan Nirkabel (Wireless)",
+		description:
+			"Memahami teknologi jaringan nirkabel, standar WiFi, Bluetooth, dan teknologi seluler dari 2G hingga 5G.",
+		mascotId: 4,
+	},
+	{
+		title: "Protokol dan Standar Telekomunikasi",
+		description:
+			"Mempelajari berbagai protokol dan standar yang digunakan dalam telekomunikasi modern, termasuk OSI, VoIP, dan SIP.",
+		mascotId: 5,
+	},
+	{
+		title: "Teknik Modulasi dan Multiplexing",
+		description:
+			"Memahami teknik modulasi sinyal dan multiplexing untuk efisiensi transmisi data dalam jaringan telekomunikasi.",
+		mascotId: 6,
+	},
+	{
+		title: "Keamanan Jaringan Telekomunikasi",
+		description:
+			"Mempelajari aspek keamanan dalam jaringan telekomunikasi, enkripsi, firewall, VPN, dan sistem deteksi intrusi.",
+		mascotId: 7,
+	},
+];
+
+// ============================================================================
+// TELCO STUDY MATERIALS (3 per chapter = 15 total)
+// ============================================================================
+
+const telcoStudyMaterialsData = [
+	// Chapter: Media Transmisi
+	{
+		title: "Pengenalan Media Transmisi",
+		imageLink: null,
+		content: `<h2>Media Transmisi dalam Jaringan</h2>
+<p>Media transmisi adalah jalur fisik atau nirkabel yang digunakan untuk mengirimkan data dari satu perangkat ke perangkat lain dalam jaringan telekomunikasi.</p>
+<h3>Klasifikasi Media Transmisi</h3>
+<ul>
+<li><strong>Guided (Terpandu):</strong> Kabel tembaga (UTP, STP, Coaxial), Fiber Optik</li>
+<li><strong>Unguided (Tidak Terpandu):</strong> Gelombang radio, Microwave, Infrared</li>
+</ul>
+<h3>Faktor Pemilihan Media</h3>
+<ol>
+<li>Bandwidth dan kecepatan transfer</li>
+<li>Jarak transmisi maksimum</li>
+<li>Ketahanan terhadap interferensi</li>
+<li>Biaya instalasi dan pemeliharaan</li>
+</ol>`,
+	},
+	{
+		title: "Kabel Tembaga (UTP, STP, Coaxial)",
+		imageLink: null,
+		content: `<h2>Jenis-Jenis Kabel Tembaga</h2>
+<h3>Kabel UTP (Unshielded Twisted Pair)</h3>
+<ul>
+<li>Terdiri dari pasangan kabel yang dipilin tanpa pelindung</li>
+<li>Kategori: Cat5e (1 Gbps), Cat6 (10 Gbps), Cat6a (10 Gbps 100m)</li>
+<li>Konektor: RJ-45</li>
+<li>Jarak maksimum: 100 meter</li>
+</ul>
+<h3>Kabel STP (Shielded Twisted Pair)</h3>
+<ul>
+<li>Memiliki pelindung logam untuk mengurangi interferensi elektromagnetik</li>
+<li>Lebih mahal dari UTP tetapi lebih tahan terhadap noise</li>
+</ul>
+<h3>Kabel Coaxial</h3>
+<ul>
+<li>Terdiri dari konduktor pusat, isolator, pelindung, dan jaket luar</li>
+<li>Impedansi: 50 ohm (data) atau 75 ohm (video)</li>
+<li>Digunakan pada TV kabel dan jaringan lama</li>
+</ul>`,
+	},
+	{
+		title: "Fiber Optik (Single-mode dan Multi-mode)",
+		imageLink: null,
+		content: `<h2>Teknologi Fiber Optik</h2>
+<p>Fiber optik menggunakan cahaya untuk mentransmisikan data melalui serat kaca atau plastik dengan kecepatan sangat tinggi.</p>
+<h3>Single-mode Fiber (SMF)</h3>
+<ul>
+<li>Diameter inti: 8-10 mikron</li>
+<li>Jarak transmisi: hingga 100 km</li>
+<li>Bandwidth sangat tinggi</li>
+<li>Digunakan untuk jaringan backbone dan WAN</li>
+</ul>
+<h3>Multi-mode Fiber (MMF)</h3>
+<ul>
+<li>Diameter inti: 50-62.5 mikron</li>
+<li>Jarak transmisi: hingga 2 km</li>
+<li>Lebih murah dari single-mode</li>
+<li>Digunakan untuk jaringan LAN dan data center</li>
+</ul>
+<h3>Konektor Fiber Optik</h3>
+<p>Jenis konektor umum: SC, LC, ST, FC, dan MPO/MTP.</p>`,
+	},
+	// Chapter: Jaringan Nirkabel
+	{
+		title: "Teknologi WiFi dan Standar IEEE 802.11",
+		imageLink: null,
+		content: `<h2>Standar WiFi IEEE 802.11</h2>
+<p>WiFi adalah teknologi jaringan nirkabel yang menggunakan gelombang radio untuk menyediakan koneksi internet berkecepatan tinggi.</p>
+<h3>Evolusi Standar WiFi</h3>
+<table>
+<tr><th>Standar</th><th>Nama WiFi</th><th>Frekuensi</th><th>Kecepatan Maks</th></tr>
+<tr><td>802.11b</td><td>WiFi 1</td><td>2.4 GHz</td><td>11 Mbps</td></tr>
+<tr><td>802.11g</td><td>WiFi 3</td><td>2.4 GHz</td><td>54 Mbps</td></tr>
+<tr><td>802.11n</td><td>WiFi 4</td><td>2.4/5 GHz</td><td>600 Mbps</td></tr>
+<tr><td>802.11ac</td><td>WiFi 5</td><td>5 GHz</td><td>6.9 Gbps</td></tr>
+<tr><td>802.11ax</td><td>WiFi 6</td><td>2.4/5/6 GHz</td><td>9.6 Gbps</td></tr>
+</table>
+<h3>Komponen Jaringan WiFi</h3>
+<ul>
+<li><strong>Access Point (AP):</strong> Perangkat yang memancarkan sinyal WiFi</li>
+<li><strong>SSID:</strong> Nama jaringan WiFi</li>
+<li><strong>Channel:</strong> Saluran frekuensi yang digunakan</li>
+</ul>`,
+	},
+	{
+		title: "Bluetooth dan Teknologi NFC",
+		imageLink: null,
+		content: `<h2>Teknologi Bluetooth</h2>
+<p>Bluetooth adalah standar teknologi nirkabel jarak pendek untuk pertukaran data menggunakan gelombang radio UHF pada pita ISM 2.4 GHz.</p>
+<h3>Versi Bluetooth</h3>
+<ul>
+<li><strong>Bluetooth 4.0 (BLE):</strong> Low Energy, cocok untuk IoT</li>
+<li><strong>Bluetooth 5.0:</strong> Jangkauan 4x lebih jauh, kecepatan 2x</li>
+<li><strong>Bluetooth 5.3:</strong> Efisiensi daya lebih baik</li>
+</ul>
+<h3>NFC (Near Field Communication)</h3>
+<ul>
+<li>Jarak operasi: maksimum 10 cm</li>
+<li>Frekuensi: 13.56 MHz</li>
+<li>Digunakan untuk pembayaran digital, akses kontrol, dan transfer data</li>
+<li>Mode operasi: reader/writer, peer-to-peer, card emulation</li>
+</ul>`,
+	},
+	{
+		title: "Jaringan Seluler (2G, 3G, 4G, 5G)",
+		imageLink: null,
+		content: `<h2>Evolusi Jaringan Seluler</h2>
+<h3>Generasi Jaringan Seluler</h3>
+<table>
+<tr><th>Generasi</th><th>Teknologi</th><th>Kecepatan</th><th>Fitur</th></tr>
+<tr><td>2G</td><td>GSM, CDMA</td><td>14.4-384 Kbps</td><td>SMS, MMS</td></tr>
+<tr><td>3G</td><td>UMTS, HSPA</td><td>384 Kbps-42 Mbps</td><td>Internet mobile, video call</td></tr>
+<tr><td>4G</td><td>LTE, LTE-A</td><td>100 Mbps-1 Gbps</td><td>HD streaming, VoLTE</td></tr>
+<tr><td>5G</td><td>NR</td><td>1-20 Gbps</td><td>IoT masif, ultra-low latency</td></tr>
+</table>
+<h3>Arsitektur Jaringan Seluler</h3>
+<ul>
+<li><strong>RAN:</strong> Radio Access Network (base station/tower)</li>
+<li><strong>Core Network:</strong> Mengelola koneksi dan routing</li>
+<li><strong>Backhaul:</strong> Koneksi antara base station dan core network</li>
+</ul>`,
+	},
+	// Chapter: Protokol dan Standar Telekomunikasi
+	{
+		title: "Model OSI dan TCP/IP dalam Telekomunikasi",
+		imageLink: null,
+		content: `<h2>Model OSI dalam Konteks Telekomunikasi</h2>
+<p>Model OSI (Open Systems Interconnection) menyediakan kerangka kerja standar untuk komunikasi jaringan dengan 7 lapisan.</p>
+<h3>7 Lapisan OSI</h3>
+<ol>
+<li><strong>Physical:</strong> Transmisi bit melalui media fisik</li>
+<li><strong>Data Link:</strong> Framing, MAC address, error detection</li>
+<li><strong>Network:</strong> Routing, IP addressing</li>
+<li><strong>Transport:</strong> TCP/UDP, flow control, error recovery</li>
+<li><strong>Session:</strong> Manajemen sesi komunikasi</li>
+<li><strong>Presentation:</strong> Enkripsi, kompresi, format data</li>
+<li><strong>Application:</strong> HTTP, FTP, SMTP, DNS</li>
+</ol>
+<h3>Model TCP/IP</h3>
+<p>Model TCP/IP memiliki 4 lapisan: Network Access, Internet, Transport, dan Application.</p>`,
+	},
+	{
+		title: "Protokol VoIP dan SIP",
+		imageLink: null,
+		content: `<h2>Voice over IP (VoIP)</h2>
+<p>VoIP adalah teknologi yang memungkinkan komunikasi suara melalui jaringan IP, menggantikan jaringan telepon tradisional (PSTN).</p>
+<h3>Protokol VoIP Utama</h3>
+<ul>
+<li><strong>SIP (Session Initiation Protocol):</strong> Protokol signaling untuk memulai, memodifikasi, dan mengakhiri sesi multimedia</li>
+<li><strong>RTP (Real-time Transport Protocol):</strong> Mengangkut data audio/video secara real-time</li>
+<li><strong>H.323:</strong> Standar ITU-T untuk komunikasi multimedia melalui jaringan paket</li>
+</ul>
+<h3>Parameter Kualitas VoIP</h3>
+<ul>
+<li><strong>Latency:</strong> Delay kurang dari 150ms untuk kualitas baik</li>
+<li><strong>Jitter:</strong> Variasi delay, harus minimal</li>
+<li><strong>Packet Loss:</strong> Kehilangan paket kurang dari 1%</li>
+<li><strong>Codec:</strong> G.711, G.729, Opus</li>
+</ul>`,
+	},
+	{
+		title: "Standar ITU-T dan IEEE",
+		imageLink: null,
+		content: `<h2>Organisasi Standar Telekomunikasi</h2>
+<h3>ITU-T (International Telecommunication Union)</h3>
+<ul>
+<li>Mengembangkan standar telekomunikasi internasional</li>
+<li>Standar penting: G.711 (codec audio), G.984 (GPON), H.264 (video coding)</li>
+<li>Seri rekomendasi: G (transmisi), H (multimedia), V (modem), X (data network)</li>
+</ul>
+<h3>IEEE (Institute of Electrical and Electronics Engineers)</h3>
+<ul>
+<li><strong>IEEE 802.3:</strong> Ethernet</li>
+<li><strong>IEEE 802.11:</strong> WiFi</li>
+<li><strong>IEEE 802.15:</strong> Bluetooth, Zigbee</li>
+<li><strong>IEEE 802.16:</strong> WiMAX</li>
+</ul>
+<h3>Standar Lainnya</h3>
+<p>IETF (Internet Engineering Task Force) mengelola standar internet seperti RFC untuk HTTP, DNS, SMTP, dan lainnya.</p>`,
+	},
+	// Chapter: Teknik Modulasi dan Multiplexing
+	{
+		title: "Modulasi Analog (AM, FM, PM)",
+		imageLink: null,
+		content: `<h2>Teknik Modulasi Analog</h2>
+<p>Modulasi adalah proses mengubah karakteristik sinyal pembawa (carrier) sesuai dengan sinyal informasi yang akan dikirim.</p>
+<h3>Amplitude Modulation (AM)</h3>
+<ul>
+<li>Mengubah amplitudo sinyal pembawa</li>
+<li>Rentan terhadap noise</li>
+<li>Digunakan pada radio AM dan komunikasi penerbangan</li>
+</ul>
+<h3>Frequency Modulation (FM)</h3>
+<ul>
+<li>Mengubah frekuensi sinyal pembawa</li>
+<li>Lebih tahan noise dibanding AM</li>
+<li>Digunakan pada radio FM dan komunikasi darurat</li>
+</ul>
+<h3>Phase Modulation (PM)</h3>
+<ul>
+<li>Mengubah fase sinyal pembawa</li>
+<li>Basis untuk modulasi digital modern (PSK)</li>
+<li>Bandwidth lebih efisien</li>
+</ul>`,
+	},
+	{
+		title: "Modulasi Digital (ASK, FSK, PSK, QAM)",
+		imageLink: null,
+		content: `<h2>Teknik Modulasi Digital</h2>
+<h3>ASK (Amplitude Shift Keying)</h3>
+<ul>
+<li>Mengubah amplitudo untuk merepresentasikan bit 0 dan 1</li>
+<li>Sederhana namun rentan noise</li>
+</ul>
+<h3>FSK (Frequency Shift Keying)</h3>
+<ul>
+<li>Menggunakan frekuensi berbeda untuk bit 0 dan 1</li>
+<li>Lebih tahan noise, digunakan pada modem dial-up</li>
+</ul>
+<h3>PSK (Phase Shift Keying)</h3>
+<ul>
+<li>BPSK: 2 fase (1 bit/simbol), QPSK: 4 fase (2 bit/simbol)</li>
+<li>Efisien bandwidth, digunakan pada WiFi dan satelit</li>
+</ul>
+<h3>QAM (Quadrature Amplitude Modulation)</h3>
+<ul>
+<li>Kombinasi AM dan PM</li>
+<li>16-QAM: 4 bit/simbol, 64-QAM: 6 bit/simbol, 256-QAM: 8 bit/simbol</li>
+<li>Digunakan pada WiFi, LTE, dan TV kabel digital</li>
+</ul>`,
+	},
+	{
+		title: "Multiplexing (TDM, FDM, WDM, CDM)",
+		imageLink: null,
+		content: `<h2>Teknik Multiplexing</h2>
+<p>Multiplexing adalah teknik menggabungkan beberapa sinyal untuk ditransmisikan melalui satu media transmisi secara bersamaan.</p>
+<h3>FDM (Frequency Division Multiplexing)</h3>
+<ul>
+<li>Membagi bandwidth menjadi sub-channel dengan frekuensi berbeda</li>
+<li>Digunakan pada radio FM, TV analog, ADSL</li>
+</ul>
+<h3>TDM (Time Division Multiplexing)</h3>
+<ul>
+<li>Membagi waktu transmisi menjadi slot waktu untuk setiap channel</li>
+<li>Digunakan pada ISDN, GSM, telepon digital</li>
+</ul>
+<h3>WDM (Wavelength Division Multiplexing)</h3>
+<ul>
+<li>Menggunakan panjang gelombang berbeda pada fiber optik</li>
+<li>DWDM: Dense WDM, hingga 160 channel per fiber</li>
+</ul>
+<h3>CDM (Code Division Multiplexing)</h3>
+<ul>
+<li>Setiap channel menggunakan kode unik</li>
+<li>Digunakan pada CDMA (jaringan seluler 3G)</li>
+</ul>`,
+	},
+	// Chapter: Keamanan Jaringan Telekomunikasi
+	{
+		title: "Ancaman Keamanan Jaringan",
+		imageLink: null,
+		content: `<h2>Jenis-Jenis Ancaman Keamanan Jaringan</h2>
+<h3>Serangan Pasif</h3>
+<ul>
+<li><strong>Eavesdropping:</strong> Menyadap komunikasi jaringan</li>
+<li><strong>Traffic Analysis:</strong> Menganalisis pola lalu lintas data</li>
+</ul>
+<h3>Serangan Aktif</h3>
+<ul>
+<li><strong>Man-in-the-Middle (MITM):</strong> Menyisipkan diri di antara dua pihak yang berkomunikasi</li>
+<li><strong>DDoS:</strong> Membanjiri server dengan permintaan palsu</li>
+<li><strong>Spoofing:</strong> Memalsukan identitas (IP, MAC, DNS)</li>
+<li><strong>Phishing:</strong> Menipu pengguna untuk memberikan informasi sensitif</li>
+</ul>
+<h3>Malware</h3>
+<ul>
+<li>Virus, Worm, Trojan, Ransomware, Spyware</li>
+<li>Menyebar melalui jaringan dan dapat merusak infrastruktur telekomunikasi</li>
+</ul>`,
+	},
+	{
+		title: "Enkripsi dan Kriptografi",
+		imageLink: null,
+		content: `<h2>Dasar-Dasar Kriptografi</h2>
+<h3>Enkripsi Simetris</h3>
+<ul>
+<li>Menggunakan satu kunci yang sama untuk enkripsi dan dekripsi</li>
+<li>Algoritma: AES (128/192/256 bit), DES, 3DES, Blowfish</li>
+<li>Kelebihan: cepat, cocok untuk data besar</li>
+<li>Kekurangan: masalah distribusi kunci</li>
+</ul>
+<h3>Enkripsi Asimetris</h3>
+<ul>
+<li>Menggunakan pasangan kunci publik dan kunci privat</li>
+<li>Algoritma: RSA, ECC, Diffie-Hellman</li>
+<li>Kelebihan: distribusi kunci aman</li>
+<li>Kekurangan: lebih lambat dari enkripsi simetris</li>
+</ul>
+<h3>Hashing</h3>
+<p>Fungsi hash menghasilkan output tetap dari input apapun. Algoritma: MD5, SHA-1, SHA-256, SHA-3.</p>`,
+	},
+	{
+		title: "Firewall, VPN, dan IDS/IPS",
+		imageLink: null,
+		content: `<h2>Perangkat Keamanan Jaringan</h2>
+<h3>Firewall</h3>
+<ul>
+<li><strong>Packet Filtering:</strong> Menyaring berdasarkan header paket</li>
+<li><strong>Stateful Inspection:</strong> Melacak status koneksi</li>
+<li><strong>Application Gateway:</strong> Proxy pada layer aplikasi</li>
+<li><strong>Next-Gen Firewall:</strong> Deep packet inspection + threat intelligence</li>
+</ul>
+<h3>VPN (Virtual Private Network)</h3>
+<ul>
+<li>Membuat tunnel terenkripsi melalui jaringan publik</li>
+<li>Protokol: IPSec, OpenVPN, WireGuard, L2TP</li>
+<li>Jenis: Site-to-site VPN, Remote access VPN</li>
+</ul>
+<h3>IDS/IPS</h3>
+<ul>
+<li><strong>IDS (Intrusion Detection System):</strong> Mendeteksi dan melaporkan ancaman</li>
+<li><strong>IPS (Intrusion Prevention System):</strong> Mendeteksi dan memblokir ancaman secara otomatis</li>
+<li>Metode: Signature-based, Anomaly-based, Hybrid</li>
+</ul>`,
+	},
+];
+
+// ============================================================================
+// TELCO PRETEST DATA (1 per chapter = 5 total)
+// ============================================================================
+
+const telcoPretestData = [
+	{
+		chapterOffset: 2,
+		materialOffset: 13,
+		imageLink: null,
+		description:
+			"Pertanyaan pretes untuk mengukur pemahaman awal tentang media transmisi.",
+		question:
+			"Media transmisi yang menggunakan cahaya untuk mentransmisikan data dengan kecepatan sangat tinggi disebut...",
+		options: [
+			{ text: "Kabel UTP", isCorrect: false },
+			{ text: "Kabel Coaxial", isCorrect: false },
+			{ text: "Fiber Optik", isCorrect: true },
+			{ text: "Kabel STP", isCorrect: false },
+		],
+	},
+	{
+		chapterOffset: 3,
+		materialOffset: 16,
+		imageLink: null,
+		description:
+			"Pertanyaan pretes untuk mengukur pemahaman awal tentang jaringan nirkabel.",
+		question:
+			"Standar WiFi yang dikenal sebagai WiFi 6 dan mendukung frekuensi 2.4, 5, dan 6 GHz adalah...",
+		options: [
+			{ text: "IEEE 802.11n", isCorrect: false },
+			{ text: "IEEE 802.11ac", isCorrect: false },
+			{ text: "IEEE 802.11ax", isCorrect: true },
+			{ text: "IEEE 802.11g", isCorrect: false },
+		],
+	},
+	{
+		chapterOffset: 4,
+		materialOffset: 19,
+		imageLink: null,
+		description:
+			"Pertanyaan pretes untuk mengukur pemahaman awal tentang protokol telekomunikasi.",
+		question:
+			"Protokol yang digunakan untuk memulai, memodifikasi, dan mengakhiri sesi komunikasi multimedia melalui jaringan IP adalah...",
+		options: [
+			{ text: "HTTP", isCorrect: false },
+			{ text: "SIP (Session Initiation Protocol)", isCorrect: true },
+			{ text: "FTP", isCorrect: false },
+			{ text: "SMTP", isCorrect: false },
+		],
+	},
+	{
+		chapterOffset: 5,
+		materialOffset: 22,
+		imageLink: null,
+		description:
+			"Pertanyaan pretes untuk mengukur pemahaman awal tentang teknik modulasi.",
+		question:
+			"Teknik modulasi yang mengkombinasikan perubahan amplitudo dan fase sehingga dapat mengirim banyak bit per simbol disebut...",
+		options: [
+			{ text: "ASK (Amplitude Shift Keying)", isCorrect: false },
+			{ text: "FSK (Frequency Shift Keying)", isCorrect: false },
+			{ text: "PSK (Phase Shift Keying)", isCorrect: false },
+			{ text: "QAM (Quadrature Amplitude Modulation)", isCorrect: true },
+		],
+	},
+	{
+		chapterOffset: 6,
+		materialOffset: 25,
+		imageLink: null,
+		description:
+			"Pertanyaan pretes untuk mengukur pemahaman awal tentang keamanan jaringan.",
+		question:
+			"Sistem yang berfungsi mendeteksi DAN secara otomatis memblokir ancaman keamanan pada jaringan disebut...",
+		options: [
+			{ text: "Firewall", isCorrect: false },
+			{ text: "IDS (Intrusion Detection System)", isCorrect: false },
+			{ text: "IPS (Intrusion Prevention System)", isCorrect: true },
+			{ text: "VPN (Virtual Private Network)", isCorrect: false },
+		],
+	},
+];
+
+// ============================================================================
+// TELCO QUESTION TEMPLATES (~25 per chapter, reused across levels)
+// ============================================================================
+
+type QuestionTemplate = {
+	description: string;
+	question: string;
+	correct: string;
+	wrong: [string, string, string];
+};
+
+const telcoQuestionTemplates: QuestionTemplate[][] = [
+	// Chapter 0: Media Transmisi
+	[
+		{ description: "Pertanyaan tentang klasifikasi media transmisi.", question: "Media transmisi yang menggunakan jalur fisik seperti kabel disebut media...", correct: "Guided (Terpandu)", wrong: ["Unguided", "Wireless", "Broadcast"] },
+		{ description: "Pertanyaan tentang kabel UTP.", question: "Konektor yang digunakan pada kabel UTP adalah...", correct: "RJ-45", wrong: ["RJ-11", "BNC", "SC"] },
+		{ description: "Pertanyaan tentang kategori kabel.", question: "Kabel UTP Cat6 mendukung kecepatan maksimum...", correct: "10 Gbps", wrong: ["100 Mbps", "1 Gbps", "40 Gbps"] },
+		{ description: "Pertanyaan tentang jarak kabel UTP.", question: "Jarak maksimum kabel UTP untuk jaringan Ethernet adalah...", correct: "100 meter", wrong: ["50 meter", "200 meter", "500 meter"] },
+		{ description: "Pertanyaan tentang kabel STP.", question: "Keunggulan kabel STP dibandingkan UTP adalah...", correct: "Lebih tahan terhadap interferensi elektromagnetik", wrong: ["Lebih murah", "Lebih ringan", "Jarak lebih jauh"] },
+		{ description: "Pertanyaan tentang kabel coaxial.", question: "Impedansi kabel coaxial yang digunakan untuk transmisi data adalah...", correct: "50 ohm", wrong: ["75 ohm", "100 ohm", "25 ohm"] },
+		{ description: "Pertanyaan tentang fiber optik.", question: "Keuntungan utama fiber optik dibandingkan kabel tembaga adalah...", correct: "Bandwidth sangat tinggi dan tahan interferensi elektromagnetik", wrong: ["Harga lebih murah", "Lebih mudah dipasang", "Tidak memerlukan konektor"] },
+		{ description: "Pertanyaan tentang single-mode fiber.", question: "Single-mode fiber optik cocok digunakan untuk...", correct: "Jaringan backbone dan WAN jarak jauh", wrong: ["Jaringan LAN kantor", "Koneksi desktop", "Jaringan rumah"] },
+		{ description: "Pertanyaan tentang multi-mode fiber.", question: "Diameter inti multi-mode fiber optik adalah...", correct: "50-62.5 mikron", wrong: ["8-10 mikron", "100-125 mikron", "1-2 mikron"] },
+		{ description: "Pertanyaan tentang konektor fiber optik.", question: "Konektor fiber optik yang paling umum digunakan di data center modern adalah...", correct: "LC (Lucent Connector)", wrong: ["BNC", "RJ-45", "DB-9"] },
+		{ description: "Pertanyaan tentang media unguided.", question: "Contoh media transmisi unguided adalah...", correct: "Gelombang radio dan microwave", wrong: ["Kabel UTP dan STP", "Fiber optik", "Kabel coaxial"] },
+		{ description: "Pertanyaan tentang atenuasi.", question: "Atenuasi dalam media transmisi adalah...", correct: "Pelemahan sinyal seiring bertambahnya jarak", wrong: ["Penguatan sinyal", "Perubahan frekuensi", "Penambahan noise"] },
+		{ description: "Pertanyaan tentang bandwidth.", question: "Bandwidth pada media transmisi mengacu pada...", correct: "Kapasitas maksimum data yang dapat ditransmisikan per satuan waktu", wrong: ["Panjang kabel", "Jumlah konektor", "Tegangan listrik"] },
+		{ description: "Pertanyaan tentang crosstalk.", question: "Crosstalk pada kabel tembaga terjadi karena...", correct: "Interferensi sinyal antar pasangan kabel yang berdekatan", wrong: ["Kabel terlalu panjang", "Konektor rusak", "Tegangan terlalu tinggi"] },
+		{ description: "Pertanyaan tentang kabel straight-through.", question: "Kabel straight-through digunakan untuk menghubungkan...", correct: "Komputer ke switch", wrong: ["Switch ke switch", "Router ke router", "Komputer ke komputer"] },
+		{ description: "Pertanyaan tentang kabel crossover.", question: "Kabel crossover digunakan untuk menghubungkan...", correct: "Dua perangkat sejenis (switch ke switch)", wrong: ["Komputer ke switch", "Komputer ke router", "Printer ke komputer"] },
+		{ description: "Pertanyaan tentang fiber optik splicing.", question: "Teknik penyambungan fiber optik permanen disebut...", correct: "Fusion splicing", wrong: ["Crimping", "Soldering", "Twisting"] },
+		{ description: "Pertanyaan tentang OTDR.", question: "Alat yang digunakan untuk mengukur karakteristik fiber optik disebut...", correct: "OTDR (Optical Time-Domain Reflectometer)", wrong: ["Multimeter", "Oscilloscope", "Spectrum analyzer"] },
+		{ description: "Pertanyaan tentang throughput.", question: "Perbedaan antara bandwidth dan throughput adalah...", correct: "Bandwidth adalah kapasitas maksimum, throughput adalah kecepatan aktual", wrong: ["Keduanya sama", "Throughput selalu lebih besar", "Bandwidth diukur dalam meter"] },
+		{ description: "Pertanyaan tentang plenum cable.", question: "Kabel plenum digunakan di...", correct: "Ruang sirkulasi udara gedung (plenum space)", wrong: ["Di luar ruangan", "Di bawah air", "Di jalur kereta api"] },
+		{ description: "Pertanyaan tentang PoE.", question: "Power over Ethernet (PoE) memungkinkan...", correct: "Mengirim daya listrik melalui kabel Ethernet bersamaan dengan data", wrong: ["Meningkatkan kecepatan internet", "Menambah jarak kabel", "Mengenkripsi data"] },
+		{ description: "Pertanyaan tentang EMI.", question: "EMI (Electromagnetic Interference) paling mempengaruhi jenis kabel...", correct: "Kabel UTP (tanpa pelindung)", wrong: ["Fiber optik", "Kabel STP", "Kabel coaxial berpelindung"] },
+		{ description: "Pertanyaan tentang Cat5e.", question: "Kabel Cat5e mendukung kecepatan maksimum...", correct: "1 Gbps", wrong: ["100 Mbps", "10 Gbps", "10 Mbps"] },
+		{ description: "Pertanyaan tentang konektor BNC.", question: "Konektor BNC umumnya digunakan pada kabel...", correct: "Coaxial", wrong: ["UTP", "Fiber optik", "STP"] },
+		{ description: "Pertanyaan tentang media transmisi terbaik untuk jarak jauh.", question: "Untuk transmisi data jarak lebih dari 10 km, media yang paling tepat adalah...", correct: "Single-mode fiber optik", wrong: ["Kabel UTP Cat6", "Kabel coaxial", "Kabel STP"] },
+	],
+	// Chapter 1: Jaringan Nirkabel
+	[
+		{ description: "Pertanyaan tentang standar WiFi.", question: "Standar WiFi 5 (802.11ac) beroperasi pada frekuensi...", correct: "5 GHz", wrong: ["2.4 GHz", "6 GHz", "60 GHz"] },
+		{ description: "Pertanyaan tentang WiFi 6.", question: "Kecepatan maksimum teoritis WiFi 6 (802.11ax) adalah...", correct: "9.6 Gbps", wrong: ["1.3 Gbps", "6.9 Gbps", "54 Mbps"] },
+		{ description: "Pertanyaan tentang frekuensi WiFi.", question: "Frekuensi 2.4 GHz memiliki keunggulan dibanding 5 GHz dalam hal...", correct: "Jangkauan lebih jauh dan penetrasi dinding lebih baik", wrong: ["Kecepatan lebih tinggi", "Lebih sedikit interferensi", "Latency lebih rendah"] },
+		{ description: "Pertanyaan tentang SSID.", question: "SSID pada jaringan WiFi adalah...", correct: "Nama identifikasi jaringan nirkabel", wrong: ["Alamat IP router", "Kata sandi jaringan", "Kecepatan koneksi"] },
+		{ description: "Pertanyaan tentang keamanan WiFi.", question: "Protokol keamanan WiFi yang paling aman saat ini adalah...", correct: "WPA3", wrong: ["WEP", "WPA", "WPA2"] },
+		{ description: "Pertanyaan tentang Bluetooth.", question: "Bluetooth beroperasi pada frekuensi...", correct: "2.4 GHz (pita ISM)", wrong: ["5 GHz", "900 MHz", "60 GHz"] },
+		{ description: "Pertanyaan tentang BLE.", question: "BLE (Bluetooth Low Energy) diperkenalkan pada versi...", correct: "Bluetooth 4.0", wrong: ["Bluetooth 2.0", "Bluetooth 3.0", "Bluetooth 5.0"] },
+		{ description: "Pertanyaan tentang NFC.", question: "Jarak operasi maksimum NFC adalah...", correct: "10 cm", wrong: ["1 meter", "10 meter", "100 meter"] },
+		{ description: "Pertanyaan tentang frekuensi NFC.", question: "NFC beroperasi pada frekuensi...", correct: "13.56 MHz", wrong: ["2.4 GHz", "5 GHz", "900 MHz"] },
+		{ description: "Pertanyaan tentang 4G LTE.", question: "Kecepatan download maksimum 4G LTE secara teoritis adalah...", correct: "100 Mbps - 1 Gbps", wrong: ["10 Mbps", "42 Mbps", "20 Gbps"] },
+		{ description: "Pertanyaan tentang 5G.", question: "Salah satu keunggulan utama 5G dibanding 4G adalah...", correct: "Ultra-low latency (di bawah 1 ms)", wrong: ["Jangkauan lebih jauh", "Tidak memerlukan tower", "Harga lebih murah"] },
+		{ description: "Pertanyaan tentang GSM.", question: "GSM (Global System for Mobile Communications) termasuk generasi jaringan seluler...", correct: "2G", wrong: ["1G", "3G", "4G"] },
+		{ description: "Pertanyaan tentang MIMO.", question: "Teknologi MIMO pada WiFi berarti...", correct: "Multiple-Input Multiple-Output, menggunakan beberapa antena", wrong: ["Koneksi satu arah", "Hanya satu antena", "Mode sleep otomatis"] },
+		{ description: "Pertanyaan tentang channel WiFi.", question: "Pada frekuensi 2.4 GHz, jumlah channel WiFi yang tidak saling overlap adalah...", correct: "3 (channel 1, 6, 11)", wrong: ["11", "14", "1"] },
+		{ description: "Pertanyaan tentang Access Point.", question: "Fungsi Access Point dalam jaringan WiFi adalah...", correct: "Memancarkan sinyal WiFi dan menghubungkan perangkat wireless ke jaringan kabel", wrong: ["Menyimpan data", "Mengenkripsi semua trafik", "Menggantikan router"] },
+		{ description: "Pertanyaan tentang roaming WiFi.", question: "WiFi roaming memungkinkan perangkat untuk...", correct: "Berpindah antar Access Point tanpa kehilangan koneksi", wrong: ["Menggunakan data seluler", "Meningkatkan kecepatan", "Mengubah SSID otomatis"] },
+		{ description: "Pertanyaan tentang WiMAX.", question: "WiMAX (IEEE 802.16) dirancang untuk...", correct: "Jaringan nirkabel area luas (metropolitan)", wrong: ["Bluetooth jarak pendek", "NFC", "Jaringan LAN kantor"] },
+		{ description: "Pertanyaan tentang Zigbee.", question: "Zigbee (IEEE 802.15.4) paling cocok digunakan untuk...", correct: "Perangkat IoT dengan konsumsi daya rendah", wrong: ["Streaming video HD", "Transfer file besar", "VoIP"] },
+		{ description: "Pertanyaan tentang jaringan ad-hoc.", question: "Jaringan WiFi ad-hoc adalah...", correct: "Koneksi langsung antar perangkat tanpa Access Point", wrong: ["Jaringan dengan banyak AP", "Koneksi melalui kabel", "Jaringan 5G"] },
+		{ description: "Pertanyaan tentang beamforming.", question: "Beamforming pada WiFi berfungsi untuk...", correct: "Mengarahkan sinyal secara fokus ke perangkat tertentu", wrong: ["Memperluas jangkauan ke segala arah", "Mengenkripsi data", "Mengurangi kecepatan"] },
+		{ description: "Pertanyaan tentang RAN.", question: "RAN (Radio Access Network) pada jaringan seluler terdiri dari...", correct: "Base station dan tower yang menghubungkan perangkat ke core network", wrong: ["Server pusat data", "Kabel bawah laut", "Satellite uplink saja"] },
+		{ description: "Pertanyaan tentang handover.", question: "Handover dalam jaringan seluler adalah proses...", correct: "Perpindahan koneksi dari satu base station ke base station lain", wrong: ["Mematikan ponsel", "Mengubah nomor telepon", "Mengganti SIM card"] },
+		{ description: "Pertanyaan tentang Bluetooth 5.0.", question: "Bluetooth 5.0 memiliki jangkauan hingga...", correct: "240 meter (outdoor)", wrong: ["10 meter", "30 meter", "1 km"] },
+		{ description: "Pertanyaan tentang WiFi Direct.", question: "WiFi Direct memungkinkan...", correct: "Dua perangkat terhubung langsung via WiFi tanpa Access Point", wrong: ["Koneksi melalui kabel", "Akses internet gratis", "Transfer data via NFC"] },
+		{ description: "Pertanyaan tentang interferensi.", question: "Perangkat yang paling sering menyebabkan interferensi pada WiFi 2.4 GHz adalah...", correct: "Microwave oven", wrong: ["Televisi", "Kulkas", "Mesin cuci"] },
+	],
+	// Chapter 2: Protokol dan Standar Telekomunikasi
+	[
+		{ description: "Pertanyaan tentang model OSI.", question: "Model OSI memiliki berapa lapisan?", correct: "7 lapisan", wrong: ["4 lapisan", "5 lapisan", "6 lapisan"] },
+		{ description: "Pertanyaan tentang layer Physical.", question: "Layer 1 (Physical) pada model OSI bertanggung jawab untuk...", correct: "Transmisi bit melalui media fisik", wrong: ["Routing paket", "Enkripsi data", "Manajemen sesi"] },
+		{ description: "Pertanyaan tentang layer Transport.", question: "Protokol TCP bekerja pada layer...", correct: "Layer 4 (Transport)", wrong: ["Layer 3 (Network)", "Layer 2 (Data Link)", "Layer 7 (Application)"] },
+		{ description: "Pertanyaan tentang TCP/IP.", question: "Model TCP/IP memiliki berapa lapisan?", correct: "4 lapisan", wrong: ["7 lapisan", "5 lapisan", "3 lapisan"] },
+		{ description: "Pertanyaan tentang SIP.", question: "SIP (Session Initiation Protocol) digunakan untuk...", correct: "Memulai, memodifikasi, dan mengakhiri sesi multimedia", wrong: ["Transfer file", "Mengirim email", "Browsing web"] },
+		{ description: "Pertanyaan tentang RTP.", question: "RTP (Real-time Transport Protocol) berfungsi untuk...", correct: "Mengangkut data audio dan video secara real-time", wrong: ["Transfer file besar", "Mengirim email", "Resolusi DNS"] },
+		{ description: "Pertanyaan tentang H.323.", question: "H.323 adalah standar yang dikeluarkan oleh...", correct: "ITU-T", wrong: ["IEEE", "IETF", "W3C"] },
+		{ description: "Pertanyaan tentang VoIP.", question: "Kualitas VoIP yang baik memerlukan latency kurang dari...", correct: "150 ms", wrong: ["500 ms", "1 detik", "10 ms"] },
+		{ description: "Pertanyaan tentang codec.", question: "Codec G.711 pada VoIP menghasilkan audio dengan bitrate...", correct: "64 Kbps", wrong: ["8 Kbps", "128 Kbps", "256 Kbps"] },
+		{ description: "Pertanyaan tentang jitter.", question: "Jitter dalam komunikasi jaringan adalah...", correct: "Variasi delay antar paket data", wrong: ["Kecepatan download", "Jumlah paket hilang", "Bandwidth total"] },
+		{ description: "Pertanyaan tentang packet loss.", question: "Untuk kualitas VoIP yang baik, packet loss harus kurang dari...", correct: "1%", wrong: ["5%", "10%", "25%"] },
+		{ description: "Pertanyaan tentang IEEE 802.3.", question: "Standar IEEE 802.3 mendefinisikan...", correct: "Ethernet", wrong: ["WiFi", "Bluetooth", "WiMAX"] },
+		{ description: "Pertanyaan tentang IEEE 802.15.", question: "Standar IEEE 802.15 mencakup teknologi...", correct: "Bluetooth dan Zigbee", wrong: ["Ethernet", "WiFi", "WiMAX"] },
+		{ description: "Pertanyaan tentang IETF.", question: "IETF (Internet Engineering Task Force) bertanggung jawab untuk...", correct: "Mengembangkan standar dan protokol internet (RFC)", wrong: ["Membuat hardware jaringan", "Menjual domain", "Mengatur frekuensi radio"] },
+		{ description: "Pertanyaan tentang QoS.", question: "QoS (Quality of Service) pada jaringan berfungsi untuk...", correct: "Memprioritaskan trafik tertentu untuk menjamin kualitas layanan", wrong: ["Mempercepat semua koneksi", "Memblokir trafik berbahaya", "Mengenkripsi data"] },
+		{ description: "Pertanyaan tentang ISDN.", question: "ISDN (Integrated Services Digital Network) menyediakan...", correct: "Layanan suara dan data digital melalui jaringan telepon", wrong: ["Hanya layanan internet", "Hanya layanan TV", "Hanya layanan radio"] },
+		{ description: "Pertanyaan tentang SS7.", question: "SS7 (Signaling System 7) digunakan pada...", correct: "Jaringan telepon untuk signaling dan kontrol panggilan", wrong: ["Jaringan WiFi", "Internet browsing", "Email server"] },
+		{ description: "Pertanyaan tentang SDP.", question: "SDP (Session Description Protocol) digunakan bersama SIP untuk...", correct: "Mendeskripsikan parameter media dalam sesi multimedia", wrong: ["Mengenkripsi panggilan", "Transfer file", "Routing paket"] },
+		{ description: "Pertanyaan tentang layer Network.", question: "Protokol IP bekerja pada layer OSI...", correct: "Layer 3 (Network)", wrong: ["Layer 1 (Physical)", "Layer 4 (Transport)", "Layer 7 (Application)"] },
+		{ description: "Pertanyaan tentang layer Data Link.", question: "MAC address digunakan pada layer...", correct: "Layer 2 (Data Link)", wrong: ["Layer 1 (Physical)", "Layer 3 (Network)", "Layer 4 (Transport)"] },
+		{ description: "Pertanyaan tentang UDP.", question: "Perbedaan utama UDP dengan TCP adalah...", correct: "UDP tidak menjamin pengiriman data (connectionless)", wrong: ["UDP lebih lambat", "UDP menggunakan 3-way handshake", "UDP hanya untuk email"] },
+		{ description: "Pertanyaan tentang codec G.729.", question: "Codec G.729 menghasilkan audio dengan bitrate...", correct: "8 Kbps", wrong: ["64 Kbps", "128 Kbps", "32 Kbps"] },
+		{ description: "Pertanyaan tentang GPON.", question: "GPON (G.984) adalah standar untuk...", correct: "Jaringan fiber optik pasif (Passive Optical Network)", wrong: ["Jaringan WiFi", "Jaringan seluler 5G", "Bluetooth mesh"] },
+		{ description: "Pertanyaan tentang layer Session.", question: "Layer 5 (Session) pada model OSI bertanggung jawab untuk...", correct: "Manajemen sesi komunikasi antar aplikasi", wrong: ["Routing paket", "Transmisi bit", "Kompresi data"] },
+		{ description: "Pertanyaan tentang encapsulation.", question: "Proses encapsulation pada model OSI adalah...", correct: "Penambahan header pada setiap layer saat data dikirim ke bawah", wrong: ["Penghapusan header", "Enkripsi data", "Kompresi file"] },
+	],
+	// Chapter 3: Teknik Modulasi dan Multiplexing
+	[
+		{ description: "Pertanyaan tentang AM.", question: "Pada modulasi AM, parameter sinyal pembawa yang diubah adalah...", correct: "Amplitudo", wrong: ["Frekuensi", "Fase", "Panjang gelombang"] },
+		{ description: "Pertanyaan tentang FM.", question: "Keunggulan FM dibandingkan AM adalah...", correct: "Lebih tahan terhadap noise", wrong: ["Jangkauan lebih jauh", "Bandwidth lebih kecil", "Implementasi lebih murah"] },
+		{ description: "Pertanyaan tentang PM.", question: "Phase Modulation (PM) mengubah parameter...", correct: "Fase sinyal pembawa", wrong: ["Amplitudo", "Frekuensi", "Panjang gelombang"] },
+		{ description: "Pertanyaan tentang ASK.", question: "ASK (Amplitude Shift Keying) merepresentasikan data digital dengan mengubah...", correct: "Amplitudo sinyal pembawa", wrong: ["Frekuensi sinyal", "Fase sinyal", "Durasi sinyal"] },
+		{ description: "Pertanyaan tentang FSK.", question: "FSK (Frequency Shift Keying) digunakan pada...", correct: "Modem dial-up dan komunikasi data sederhana", wrong: ["WiFi modern", "Satellite TV", "Jaringan 5G"] },
+		{ description: "Pertanyaan tentang BPSK.", question: "BPSK (Binary Phase Shift Keying) mengirimkan berapa bit per simbol?", correct: "1 bit", wrong: ["2 bit", "4 bit", "8 bit"] },
+		{ description: "Pertanyaan tentang QPSK.", question: "QPSK (Quadrature Phase Shift Keying) mengirimkan berapa bit per simbol?", correct: "2 bit", wrong: ["1 bit", "4 bit", "8 bit"] },
+		{ description: "Pertanyaan tentang QAM.", question: "16-QAM mengirimkan berapa bit per simbol?", correct: "4 bit", wrong: ["2 bit", "8 bit", "16 bit"] },
+		{ description: "Pertanyaan tentang 64-QAM.", question: "64-QAM mengirimkan berapa bit per simbol?", correct: "6 bit", wrong: ["4 bit", "8 bit", "64 bit"] },
+		{ description: "Pertanyaan tentang 256-QAM.", question: "256-QAM digunakan pada teknologi...", correct: "WiFi (802.11ac) dan TV kabel digital", wrong: ["Radio AM", "Bluetooth", "NFC"] },
+		{ description: "Pertanyaan tentang FDM.", question: "FDM (Frequency Division Multiplexing) bekerja dengan cara...", correct: "Membagi bandwidth menjadi sub-channel dengan frekuensi berbeda", wrong: ["Membagi waktu transmisi", "Menggunakan kode unik", "Menggunakan panjang gelombang berbeda"] },
+		{ description: "Pertanyaan tentang TDM.", question: "TDM (Time Division Multiplexing) membagi transmisi berdasarkan...", correct: "Slot waktu untuk setiap channel", wrong: ["Frekuensi", "Kode", "Panjang gelombang"] },
+		{ description: "Pertanyaan tentang WDM.", question: "WDM (Wavelength Division Multiplexing) digunakan pada...", correct: "Jaringan fiber optik", wrong: ["Kabel tembaga", "Jaringan WiFi", "Jaringan seluler"] },
+		{ description: "Pertanyaan tentang DWDM.", question: "DWDM (Dense WDM) dapat menampung hingga...", correct: "160 channel per fiber", wrong: ["10 channel", "32 channel", "1000 channel"] },
+		{ description: "Pertanyaan tentang CDM.", question: "CDM (Code Division Multiplexing) menggunakan...", correct: "Kode unik untuk setiap channel", wrong: ["Frekuensi berbeda", "Waktu berbeda", "Panjang gelombang berbeda"] },
+		{ description: "Pertanyaan tentang CDMA.", question: "CDMA banyak digunakan pada jaringan seluler generasi...", correct: "3G", wrong: ["1G", "2G", "5G"] },
+		{ description: "Pertanyaan tentang OFDM.", question: "OFDM (Orthogonal FDM) digunakan pada...", correct: "WiFi, LTE, dan DVB-T", wrong: ["Radio AM", "Telepon analog", "Telegraph"] },
+		{ description: "Pertanyaan tentang baud rate.", question: "Baud rate mengukur...", correct: "Jumlah perubahan sinyal per detik", wrong: ["Jumlah bit per detik", "Jumlah byte per detik", "Jumlah paket per detik"] },
+		{ description: "Pertanyaan tentang bit rate vs baud rate.", question: "Jika menggunakan QPSK, hubungan bit rate dan baud rate adalah...", correct: "Bit rate = 2 × baud rate", wrong: ["Bit rate = baud rate", "Bit rate = 4 × baud rate", "Bit rate = baud rate / 2"] },
+		{ description: "Pertanyaan tentang Nyquist.", question: "Teorema Nyquist menyatakan bahwa sampling rate minimum harus...", correct: "2 kali frekuensi sinyal tertinggi", wrong: ["Sama dengan frekuensi sinyal", "3 kali frekuensi sinyal", "4 kali frekuensi sinyal"] },
+		{ description: "Pertanyaan tentang Shannon.", question: "Rumus kapasitas Shannon menghitung...", correct: "Kapasitas maksimum channel berdasarkan bandwidth dan SNR", wrong: ["Kecepatan cahaya", "Impedansi kabel", "Jarak transmisi"] },
+		{ description: "Pertanyaan tentang SNR.", question: "SNR (Signal-to-Noise Ratio) yang tinggi berarti...", correct: "Kualitas sinyal baik dengan noise rendah", wrong: ["Banyak noise", "Sinyal lemah", "Bandwidth rendah"] },
+		{ description: "Pertanyaan tentang constellation diagram.", question: "Constellation diagram digunakan untuk memvisualisasikan...", correct: "Posisi simbol dalam modulasi digital (seperti QAM dan PSK)", wrong: ["Topologi jaringan", "Routing tabel", "Struktur kabel"] },
+		{ description: "Pertanyaan tentang ADSL.", question: "ADSL menggunakan teknik multiplexing...", correct: "FDM (membagi frekuensi untuk voice dan data)", wrong: ["TDM", "CDM", "WDM"] },
+		{ description: "Pertanyaan tentang penggunaan AM.", question: "Modulasi AM masih digunakan pada...", correct: "Siaran radio AM dan komunikasi penerbangan", wrong: ["WiFi modern", "Jaringan 5G", "Bluetooth"] },
+	],
+	// Chapter 4: Keamanan Jaringan Telekomunikasi
+	[
+		{ description: "Pertanyaan tentang MITM.", question: "Serangan Man-in-the-Middle (MITM) bekerja dengan cara...", correct: "Menyisipkan diri di antara dua pihak yang berkomunikasi", wrong: ["Membanjiri server", "Menebak password", "Menghapus file"] },
+		{ description: "Pertanyaan tentang DDoS.", question: "Serangan DDoS bertujuan untuk...", correct: "Membuat layanan tidak tersedia dengan membanjiri trafik", wrong: ["Mencuri data pengguna", "Mengenkripsi file korban", "Menyadap komunikasi"] },
+		{ description: "Pertanyaan tentang spoofing.", question: "IP Spoofing adalah teknik...", correct: "Memalsukan alamat IP sumber pada paket data", wrong: ["Mengenkripsi alamat IP", "Mempercepat koneksi", "Menambah bandwidth"] },
+		{ description: "Pertanyaan tentang phishing.", question: "Phishing adalah serangan yang...", correct: "Menipu pengguna agar memberikan informasi sensitif melalui situs palsu", wrong: ["Menyerang hardware", "Merusak kabel jaringan", "Memblokir sinyal WiFi"] },
+		{ description: "Pertanyaan tentang enkripsi simetris.", question: "Pada enkripsi simetris, jumlah kunci yang digunakan adalah...", correct: "Satu kunci yang sama untuk enkripsi dan dekripsi", wrong: ["Dua kunci berbeda", "Tiga kunci", "Tidak menggunakan kunci"] },
+		{ description: "Pertanyaan tentang AES.", question: "AES (Advanced Encryption Standard) mendukung ukuran kunci...", correct: "128, 192, dan 256 bit", wrong: ["Hanya 64 bit", "Hanya 128 bit", "512 bit"] },
+		{ description: "Pertanyaan tentang RSA.", question: "RSA termasuk jenis enkripsi...", correct: "Asimetris (menggunakan kunci publik dan privat)", wrong: ["Simetris", "Hashing", "Encoding"] },
+		{ description: "Pertanyaan tentang hashing.", question: "Perbedaan hashing dengan enkripsi adalah...", correct: "Hashing bersifat satu arah (tidak bisa didekripsi)", wrong: ["Hashing bisa didekripsi", "Enkripsi lebih cepat", "Hashing menggunakan kunci"] },
+		{ description: "Pertanyaan tentang SHA-256.", question: "SHA-256 menghasilkan output hash sepanjang...", correct: "256 bit", wrong: ["128 bit", "512 bit", "64 bit"] },
+		{ description: "Pertanyaan tentang firewall.", question: "Stateful inspection firewall bekerja dengan cara...", correct: "Melacak status koneksi dan menyaring berdasarkan konteks sesi", wrong: ["Hanya memeriksa header paket", "Memblokir semua trafik", "Hanya bekerja di layer 7"] },
+		{ description: "Pertanyaan tentang packet filtering.", question: "Packet filtering firewall menyaring trafik berdasarkan...", correct: "Header paket (IP, port, protokol)", wrong: ["Isi konten data", "Identitas pengguna", "Waktu akses saja"] },
+		{ description: "Pertanyaan tentang VPN.", question: "VPN (Virtual Private Network) berfungsi untuk...", correct: "Membuat tunnel terenkripsi melalui jaringan publik", wrong: ["Mempercepat koneksi internet", "Menghapus virus", "Memblokir iklan"] },
+		{ description: "Pertanyaan tentang IPSec.", question: "IPSec beroperasi pada layer...", correct: "Layer 3 (Network)", wrong: ["Layer 2 (Data Link)", "Layer 4 (Transport)", "Layer 7 (Application)"] },
+		{ description: "Pertanyaan tentang IDS vs IPS.", question: "Perbedaan utama IDS dan IPS adalah...", correct: "IDS hanya mendeteksi, IPS mendeteksi dan memblokir", wrong: ["IDS lebih baru", "IPS hanya mendeteksi", "Keduanya sama"] },
+		{ description: "Pertanyaan tentang SSL/TLS.", question: "SSL/TLS digunakan untuk...", correct: "Mengamankan komunikasi web (HTTPS) dengan enkripsi", wrong: ["Transfer file besar", "Routing paket", "Kompresi data"] },
+		{ description: "Pertanyaan tentang PKI.", question: "PKI (Public Key Infrastructure) menyediakan...", correct: "Kerangka kerja untuk manajemen sertifikat digital dan kunci publik", wrong: ["Hardware firewall", "Antivirus", "Jaringan VPN"] },
+		{ description: "Pertanyaan tentang digital certificate.", question: "Sertifikat digital dikeluarkan oleh...", correct: "Certificate Authority (CA)", wrong: ["ISP", "Pengguna sendiri", "Firewall"] },
+		{ description: "Pertanyaan tentang ransomware.", question: "Ransomware adalah malware yang...", correct: "Mengenkripsi file korban dan meminta tebusan", wrong: ["Menghapus semua file", "Memperlambat internet", "Menampilkan iklan"] },
+		{ description: "Pertanyaan tentang social engineering.", question: "Social engineering dalam konteks keamanan adalah...", correct: "Memanipulasi orang untuk memberikan informasi rahasia", wrong: ["Membangun jaringan sosial", "Teknik pemrograman", "Desain antarmuka pengguna"] },
+		{ description: "Pertanyaan tentang WireGuard.", question: "WireGuard adalah...", correct: "Protokol VPN modern yang ringan dan cepat", wrong: ["Firewall hardware", "Antivirus", "Sistem operasi"] },
+		{ description: "Pertanyaan tentang Diffie-Hellman.", question: "Protokol Diffie-Hellman digunakan untuk...", correct: "Pertukaran kunci secara aman melalui channel tidak aman", wrong: ["Enkripsi file", "Hashing password", "Transfer file"] },
+		{ description: "Pertanyaan tentang next-gen firewall.", question: "Next-Generation Firewall (NGFW) memiliki kemampuan tambahan berupa...", correct: "Deep packet inspection dan threat intelligence", wrong: ["Hanya packet filtering", "Hanya NAT", "Hanya logging"] },
+		{ description: "Pertanyaan tentang anomaly-based detection.", question: "Anomaly-based detection pada IDS bekerja dengan...", correct: "Mendeteksi pola trafik yang menyimpang dari baseline normal", wrong: ["Mencocokkan signature malware", "Memblokir semua trafik", "Hanya memeriksa email"] },
+		{ description: "Pertanyaan tentang eavesdropping.", question: "Eavesdropping pada jaringan termasuk jenis serangan...", correct: "Pasif (hanya menyadap tanpa mengubah data)", wrong: ["Aktif", "Fisik", "Internal"] },
+		{ description: "Pertanyaan tentang 3DES.", question: "3DES (Triple DES) melakukan proses enkripsi sebanyak...", correct: "3 kali", wrong: ["1 kali", "2 kali", "6 kali"] },
+	],
+];
+
+// ============================================================================
+// HELPER FUNCTIONS
+// ============================================================================
+
+function getDifficultyForLevel(level: number): "easy" | "medium" | "hard" {
+	if (level <= 7) return "easy";
+	if (level <= 14) return "medium";
+	return "hard";
+}
+
+function generateQuestionsForQuiz(
+	chapterTemplateIndex: number,
+	quizId: number,
+	chapterId: number,
+	materialIds: number[],
+): {
+	chapterId: number;
+	quizId: number;
+	materialId: number;
+	description: string;
+	question: string;
+	options: { text: string; isCorrect: boolean }[];
+}[] {
+	const templates = telcoQuestionTemplates[chapterTemplateIndex];
+	const picked = faker.helpers.arrayElements(templates, 10);
+
+	return picked.map((t) => {
+		const shuffledOptions = faker.helpers.shuffle([
+			{ text: t.correct, isCorrect: true },
+			{ text: t.wrong[0], isCorrect: false },
+			{ text: t.wrong[1], isCorrect: false },
+			{ text: t.wrong[2], isCorrect: false },
+		]);
+
+		return {
+			chapterId,
+			quizId,
+			materialId: faker.helpers.arrayElement(materialIds),
+			description: t.description,
+			question: t.question,
+			options: shuffledOptions,
+		};
+	});
+}
+
+const schoolNames = [
+	"SMKN 1 Jakarta",
+	"SMKN 2 Bandung",
+	"SMKN 3 Surabaya",
+	"SMA Negeri 1 Yogyakarta",
+	"SMK Telkom Purwokerto",
+];
+
+async function generateMockUsers(schoolIds: number[]) {
+	const passwordHash = await hashPassword("password123");
+
+	return Array.from({ length: 100 }, (_, i) => {
+		const id = generateRandomString(32, "a-z", "0-9");
+		const firstName = faker.person.firstName();
+		const lastName = faker.person.lastName();
+
+		return {
+			user: {
+				id,
+				name: `${firstName} ${lastName}`,
+				email: `user${i}@mock.test`,
+				emailVerified: true,
+				image: null,
+				role: "user",
+				schoolId: faker.helpers.arrayElement(schoolIds),
+				gender: faker.datatype.boolean(),
+				grade: faker.helpers.arrayElement(["X", "XI", "XII"]),
+				bio: faker.lorem.sentence(),
+				hasTakenPretest: false,
+				banned: false,
+			},
+			account: {
+				id: generateRandomString(32, "a-z", "0-9"),
+				accountId: id,
+				providerId: "credential",
+				userId: id,
+				password: passwordHash,
+			},
+		};
+	});
+}
+
+function generateQuizSubmissions(
+	userIds: string[],
+	allQuizData: { quizId: number; chapterId: number; level: number }[],
+) {
+	const byChapter = new Map<
+		number,
+		{ quizId: number; chapterId: number; level: number }[]
+	>();
+	for (const q of allQuizData) {
+		const arr = byChapter.get(q.chapterId) ?? [];
+		arr.push(q);
+		byChapter.set(q.chapterId, arr);
+	}
+
+	const subs: {
+		userId: string;
+		chapterId: number;
+		quizId: number;
+		score: number;
+	}[] = [];
+
+	for (const userId of userIds) {
+		const userType = faker.helpers.weightedArrayElement([
+			{ value: "power" as const, weight: 20 },
+			{ value: "regular" as const, weight: 50 },
+			{ value: "casual" as const, weight: 30 },
+		]);
+
+		const maxLevel =
+			userType === "power" ? 20 : userType === "regular" ? 10 : 3;
+		const skipChance =
+			userType === "power" ? 0.1 : userType === "regular" ? 0.4 : 0.6;
+
+		for (const [chapterId, chapterQuizzes] of byChapter) {
+			if (faker.number.float({ max: 1 }) < skipChance) continue;
+
+			const userMaxLevel = faker.number.int({ min: 1, max: maxLevel });
+			const eligible = chapterQuizzes
+				.filter((q) => q.level <= userMaxLevel)
+				.sort((a, b) => a.level - b.level);
+
+			for (const quiz of eligible) {
+				const baseMin =
+					quiz.level <= 7 ? 50 : quiz.level <= 14 ? 30 : 20;
+				const baseMax =
+					quiz.level <= 7 ? 100 : quiz.level <= 14 ? 90 : 80;
+				const score = Math.round(
+					faker.number.int({ min: baseMin, max: baseMax }),
+				);
+
+				subs.push({ userId, chapterId, quizId: quiz.quizId, score });
+			}
+		}
+	}
+
+	return subs;
+}
+
+function generatePretestSubmissions(
+	userIds: string[],
+	pretestQuestionsWithOptions: {
+		questionId: number;
+		correctOptionId: number;
+		wrongOptionIds: number[];
+	}[],
+) {
+	const takenUserIds = faker.helpers.arrayElements(
+		userIds,
+		Math.min(80, userIds.length),
+	);
+	const subs: {
+		userId: string;
+		questionId: number;
+		answeredOptionId: number;
+		isCorrect: boolean;
+	}[] = [];
+
+	for (const userId of takenUserIds) {
+		for (const pq of pretestQuestionsWithOptions) {
+			const answersCorrectly = faker.number.float({ max: 1 }) < 0.7;
+			const answeredOptionId = answersCorrectly
+				? pq.correctOptionId
+				: faker.helpers.arrayElement(pq.wrongOptionIds);
+
+			subs.push({
+				userId,
+				questionId: pq.questionId,
+				answeredOptionId,
+				isCorrect: answersCorrectly,
+			});
+		}
+	}
+
+	return { submissions: subs, userIdsWhoTookPretest: takenUserIds };
+}
+
+// ============================================================================
 // MAIN SEED FUNCTION
 // ============================================================================
 
+const scaleMode = process.argv.includes("--scale");
+
 async function seed() {
-	console.log("🌱 Memulai proses seeding database...\n");
+	faker.seed(42);
+
+	if (scaleMode) {
+		console.log("MODE: --scale (essentials + telco chapters + 100 users + submissions)\n");
+	} else {
+		console.log("MODE: essentials only (2 chapters, 12 quizzes, ~89 questions)\n");
+		console.log("  Tip: run with --scale for full scale-test data\n");
+	}
 
 	try {
-		// Step 1: Insert Study Materials
-		console.log("📚 Memasukkan data materi pembelajaran...");
+		// ================================================================
+		// PHASE 1: CONTENT DATA (essentials)
+		// ================================================================
+
+		// 1. Insert Study Materials
+		console.log("[Phase 1] Memasukkan data materi pembelajaran...");
+		const materialsToInsert = scaleMode
+			? [...studyMaterialsData, ...telcoStudyMaterialsData]
+			: studyMaterialsData;
 		const insertedMaterials = await db
 			.insert(studyMaterials)
-			.values(studyMaterialsData)
+			.values(materialsToInsert)
 			.returning();
-		console.log(`   ✓ ${insertedMaterials.length} materi pembelajaran berhasil dimasukkan\n`);
+		console.log(`  ${insertedMaterials.length} materi pembelajaran berhasil dimasukkan`);
 
-		// Step 2: Insert Chapters
-		console.log("📖 Memasukkan data bab...");
+		// 2. Insert Chapters
+		console.log("[Phase 1] Memasukkan data bab...");
+		const chaptersToInsert = scaleMode
+			? [...chaptersData, ...telcoChaptersData]
+			: chaptersData;
 		const insertedChapters = await db
 			.insert(chapters)
-			.values(chaptersData)
+			.values(chaptersToInsert)
 			.returning();
-		console.log(`   ✓ ${insertedChapters.length} bab berhasil dimasukkan\n`);
+		console.log(`  ${insertedChapters.length} bab berhasil dimasukkan`);
 
-		// Step 3: Insert Pretest Questions
-		console.log("📝 Memasukkan data pertanyaan pretes...");
+		// 3. Insert Pretest Questions (existing 2)
+		console.log("[Phase 1] Memasukkan data pertanyaan pretes...");
+		const pretestQuestionsWithOptions: {
+			questionId: number;
+			correctOptionId: number;
+			wrongOptionIds: number[];
+		}[] = [];
+
 		for (const pretest of pretestData) {
 			const chapter = insertedChapters[pretest.chapterIndex];
 			const material = insertedMaterials[pretest.materialIndex];
@@ -1870,20 +2696,80 @@ async function seed() {
 				})
 				.returning();
 
-			await db.insert(options).values(
-				pretest.options.map((opt) => ({
+			const insertedOpts = await db
+				.insert(options)
+				.values(
+					pretest.options.map((opt) => ({
+						questionId: insertedQuestion.id,
+						text: opt.text,
+						isCorrect: opt.isCorrect,
+					})),
+				)
+				.returning();
+
+			pretestQuestionsWithOptions.push({
+				questionId: insertedQuestion.id,
+				correctOptionId: insertedOpts.find((o) => o.isCorrect)!.id,
+				wrongOptionIds: insertedOpts
+					.filter((o) => !o.isCorrect)
+					.map((o) => o.id),
+			});
+		}
+		console.log(`  ${pretestData.length} pertanyaan pretes berhasil dimasukkan`);
+
+		// 3b. Insert Telco Pretest Questions (scale only)
+		if (scaleMode) {
+			console.log("[Phase 1] Memasukkan data pertanyaan pretes (telco)...");
+			for (const pretest of telcoPretestData) {
+				const chapter = insertedChapters[pretest.chapterOffset];
+				const material = insertedMaterials[pretest.materialOffset];
+
+				const [insertedQuestion] = await db
+					.insert(questions)
+					.values({
+						type: "pretest",
+						chapterId: chapter.id,
+						quizId: null,
+						materialId: material.id,
+						imageLink: pretest.imageLink,
+						description: pretest.description,
+						question: pretest.question,
+					})
+					.returning();
+
+				const insertedOpts = await db
+					.insert(options)
+					.values(
+						pretest.options.map((opt) => ({
+							questionId: insertedQuestion.id,
+							text: opt.text,
+							isCorrect: opt.isCorrect,
+						})),
+					)
+					.returning();
+
+				pretestQuestionsWithOptions.push({
 					questionId: insertedQuestion.id,
-					text: opt.text,
-					isCorrect: opt.isCorrect,
-				}))
+					correctOptionId: insertedOpts.find((o) => o.isCorrect)!.id,
+					wrongOptionIds: insertedOpts
+						.filter((o) => !o.isCorrect)
+						.map((o) => o.id),
+				});
+			}
+			console.log(
+				`  ${telcoPretestData.length} pertanyaan pretes (telco) berhasil dimasukkan`,
 			);
 		}
-		console.log(`   ✓ ${pretestData.length} pertanyaan pretes berhasil dimasukkan\n`);
 
-		// Step 4: Insert Quizzes and Questions
-		console.log("🎯 Memasukkan data kuis dan pertanyaan...");
+		// 4. Insert Existing Quizzes and Questions (12 quizzes, ~89 questions)
+		console.log("[Phase 1] Memasukkan data kuis existing...");
 		let totalQuizzes = 0;
 		let totalQuestions = 0;
+		const allQuizData: {
+			quizId: number;
+			chapterId: number;
+			level: number;
+		}[] = [];
 
 		for (const quizData of quizzesData) {
 			const chapter = insertedChapters[quizData.chapterIndex];
@@ -1898,6 +2784,11 @@ async function seed() {
 				})
 				.returning();
 
+			allQuizData.push({
+				quizId: insertedQuiz.id,
+				chapterId: chapter.id,
+				level: quizData.level,
+			});
 			totalQuizzes++;
 
 			for (const questionData of quizData.questions) {
@@ -1921,29 +2812,196 @@ async function seed() {
 						questionId: insertedQuestion.id,
 						text: opt.text,
 						isCorrect: opt.isCorrect,
-					}))
+					})),
 				);
 
 				totalQuestions++;
 			}
 		}
-		console.log(`   ✓ ${totalQuizzes} kuis berhasil dimasukkan`);
-		console.log(`   ✓ ${totalQuestions} pertanyaan kuis berhasil dimasukkan\n`);
+		console.log(`  ${totalQuizzes} kuis existing berhasil dimasukkan`);
+		console.log(`  ${totalQuestions} pertanyaan existing berhasil dimasukkan`);
+
+		// 5. Insert Telco Quizzes (scale only)
+		if (scaleMode) {
+			console.log(
+				"[Phase 1] Memasukkan data kuis telco (5 bab x 20 level x 10 soal)...",
+			);
+			let telcoQuizCount = 0;
+			let telcoQuestionCount = 0;
+
+			for (let ci = 0; ci < telcoChaptersData.length; ci++) {
+				const chapter = insertedChapters[ci + 2];
+				const chapterMaterialIds = [
+					insertedMaterials[13 + ci * 3].id,
+					insertedMaterials[13 + ci * 3 + 1].id,
+					insertedMaterials[13 + ci * 3 + 2].id,
+				];
+
+				const quizInsertData = Array.from({ length: 20 }, (_, li) => ({
+					chapterId: chapter.id,
+					title: `${telcoChaptersData[ci].title} - Level ${li + 1}`,
+					level: li + 1,
+					difficulty: getDifficultyForLevel(li + 1),
+				}));
+				const insertedQuizzes = await db
+					.insert(quizzes)
+					.values(quizInsertData)
+					.returning();
+
+				for (const quiz of insertedQuizzes) {
+					allQuizData.push({
+						quizId: quiz.id,
+						chapterId: chapter.id,
+						level: quiz.level,
+					});
+				}
+				telcoQuizCount += insertedQuizzes.length;
+
+				const allQuestionsData = insertedQuizzes.flatMap((quiz) =>
+					generateQuestionsForQuiz(
+						ci,
+						quiz.id,
+						chapter.id,
+						chapterMaterialIds,
+					),
+				);
+
+				const insertedQs = await db
+					.insert(questions)
+					.values(
+						allQuestionsData.map((q) => ({
+							type: "quiz" as const,
+							chapterId: q.chapterId,
+							quizId: q.quizId,
+							materialId: q.materialId,
+							imageLink: null,
+							description: q.description,
+							question: q.question,
+						})),
+					)
+					.returning();
+
+				const allOptionsData = insertedQs.flatMap((iq, idx) =>
+					allQuestionsData[idx].options.map((opt) => ({
+						questionId: iq.id,
+						text: opt.text,
+						isCorrect: opt.isCorrect,
+					})),
+				);
+				await db.insert(options).values(allOptionsData);
+
+				telcoQuestionCount += insertedQs.length;
+				console.log(
+					`  Bab "${telcoChaptersData[ci].title}": ${insertedQuizzes.length} kuis, ${insertedQs.length} soal`,
+				);
+			}
+
+			totalQuizzes += telcoQuizCount;
+			totalQuestions += telcoQuestionCount;
+		}
+
+		// ================================================================
+		// PHASE 2 & 3: USERS + SUBMISSIONS (scale only)
+		// ================================================================
+
+		let schoolCount = 0;
+		let userCount = 0;
+		let quizSubCount = 0;
+		let pretestSubCount = 0;
+
+		if (scaleMode) {
+			// 6. Insert Schools
+			console.log("\n[Phase 2] Memasukkan data sekolah...");
+			const insertedSchools = await db
+				.insert(schools)
+				.values(schoolNames.map((name) => ({ name })))
+				.returning();
+			schoolCount = insertedSchools.length;
+			console.log(`  ${schoolCount} sekolah berhasil dimasukkan`);
+
+			// 7. Insert Users + Accounts
+			console.log("[Phase 2] Generating 100 mock users...");
+			const schoolIds = insertedSchools.map((s) => s.id);
+			const mockUsers = await generateMockUsers(schoolIds);
+
+			const insertedUsers = await db
+				.insert(users)
+				.values(mockUsers.map((m) => m.user))
+				.returning();
+			userCount = insertedUsers.length;
+			console.log(`  ${userCount} pengguna berhasil dimasukkan`);
+
+			await db.insert(accounts).values(mockUsers.map((m) => m.account));
+			console.log(`  ${mockUsers.length} akun berhasil dimasukkan`);
+
+			// 9. Quiz Submissions
+			const userIds = insertedUsers.map((u) => u.id);
+
+			console.log("\n[Phase 3] Generating quiz submissions...");
+			const quizSubs = generateQuizSubmissions(userIds, allQuizData);
+			for (let i = 0; i < quizSubs.length; i += 500) {
+				await db
+					.insert(submissions)
+					.values(quizSubs.slice(i, i + 500));
+			}
+			quizSubCount = quizSubs.length;
+			console.log(`  ${quizSubCount} quiz submissions berhasil dimasukkan`);
+
+			// 10. Pretest Submissions
+			console.log("[Phase 3] Generating pretest submissions...");
+			const { submissions: pretestSubs, userIdsWhoTookPretest } =
+				generatePretestSubmissions(
+					userIds,
+					pretestQuestionsWithOptions,
+				);
+			for (let i = 0; i < pretestSubs.length; i += 500) {
+				await db
+					.insert(pretestSubmissions)
+					.values(pretestSubs.slice(i, i + 500));
+			}
+			pretestSubCount = pretestSubs.length;
+			console.log(
+				`  ${pretestSubCount} pretest submissions berhasil dimasukkan`,
+			);
+
+			// 11. Update hasTakenPretest
+			if (userIdsWhoTookPretest.length > 0) {
+				await db
+					.update(users)
+					.set({ hasTakenPretest: true })
+					.where(inArray(users.id, userIdsWhoTookPretest));
+				console.log(
+					`  ${userIdsWhoTookPretest.length} pengguna ditandai sudah pretest`,
+				);
+			}
+		}
 
 		// Summary
-		console.log("═══════════════════════════════════════════════════════════");
-		console.log("                    RINGKASAN SEEDING                       ");
-		console.log("═══════════════════════════════════════════════════════════");
-		console.log(`   📚 Materi Pembelajaran : ${insertedMaterials.length}`);
-		console.log(`   📖 Bab                 : ${insertedChapters.length}`);
-		console.log(`   📝 Pertanyaan Pretes   : ${pretestData.length}`);
-		console.log(`   🎯 Kuis                : ${totalQuizzes}`);
-		console.log(`   ❓ Pertanyaan Kuis     : ${totalQuestions}`);
-		console.log(`   🔘 Opsi Jawaban        : ${(pretestData.length + totalQuestions) * 4}`);
-		console.log("═══════════════════════════════════════════════════════════");
-		console.log("\n✅ Seeding database berhasil diselesaikan!");
+		const totalPretests =
+			pretestData.length + (scaleMode ? telcoPretestData.length : 0);
+		console.log("\n===================================================");
+		console.log(
+			`     RINGKASAN SEEDING ${scaleMode ? "(SCALE)" : "(ESSENTIALS)"}`,
+		);
+		console.log("===================================================");
+		console.log(`  Materi Pembelajaran : ${insertedMaterials.length}`);
+		console.log(`  Bab                 : ${insertedChapters.length}`);
+		console.log(`  Pertanyaan Pretes   : ${totalPretests}`);
+		console.log(`  Kuis                : ${totalQuizzes}`);
+		console.log(`  Pertanyaan Kuis     : ${totalQuestions}`);
+		console.log(
+			`  Opsi Jawaban        : ~${(totalPretests + totalQuestions) * 4}`,
+		);
+		if (scaleMode) {
+			console.log(`  Sekolah             : ${schoolCount}`);
+			console.log(`  Pengguna            : ${userCount}`);
+			console.log(`  Quiz Submissions    : ${quizSubCount}`);
+			console.log(`  Pretest Submissions : ${pretestSubCount}`);
+		}
+		console.log("===================================================");
+		console.log("\nSeeding database berhasil diselesaikan!");
 	} catch (error) {
-		console.error("\n❌ Terjadi kesalahan saat seeding:");
+		console.error("\nTerjadi kesalahan saat seeding:");
 		console.error(error);
 		process.exit(1);
 	}
