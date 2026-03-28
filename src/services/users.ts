@@ -101,13 +101,14 @@ export const fetchLeaderboard = (
 				userId: users.id,
 				fullname: users.name,
 				image: users.image,
+				gender: users.gender,
 				totalScore: sql<number>`COALESCE(SUM(${submissions.score}), 0)`.as(
 					"total_score",
 				),
 			})
 			.from(users)
 			.leftJoin(submissions, eq(users.id, submissions.userId))
-			.groupBy(users.id, users.name, users.image)
+			.groupBy(users.id, users.name, users.image, users.gender)
 			.orderBy(desc(sql`total_score`), users.id)
 			.limit(limit + 1);
 
@@ -150,6 +151,7 @@ export const fetchLeaderboard = (
 						.select({
 							fullname: users.name,
 							image: users.image,
+							gender: users.gender,
 							totalScore:
 								sql<number>`COALESCE(SUM(${submissions.score}), 0)`.as(
 									"total_score",
@@ -158,7 +160,7 @@ export const fetchLeaderboard = (
 						.from(users)
 						.leftJoin(submissions, eq(users.id, submissions.userId))
 						.where(eq(users.id, userId))
-						.groupBy(users.id, users.name, users.image),
+						.groupBy(users.id, users.name, users.image, users.gender),
 				catch: (error) =>
 					new DatabaseError({
 						cause: error,
@@ -176,6 +178,7 @@ export const fetchLeaderboard = (
 				userId: item.userId,
 				fullname: item.fullname,
 				image: item.image,
+				gender: item.gender,
 				totalScore: Number(item.totalScore),
 			})),
 			currentUser: currentUser
@@ -183,6 +186,7 @@ export const fetchLeaderboard = (
 						rank: Number(userRank),
 						fullname: currentUser.fullname,
 						image: currentUser.image,
+						gender: currentUser.gender,
 						totalScore: Number(currentUser.totalScore),
 					}
 				: null,
