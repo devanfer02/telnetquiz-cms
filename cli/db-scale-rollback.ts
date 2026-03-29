@@ -1,4 +1,4 @@
-import { like, inArray } from "drizzle-orm";
+import { eq, like, inArray } from "drizzle-orm";
 import { db } from "../src/lib/db";
 import {
 	chapters,
@@ -45,32 +45,40 @@ async function rollback() {
 	console.log("Rolling back scale-test data...\n");
 
 	try {
-		// 1. Delete mock users (cascades → accounts, sessions, submissions, pretestSubmissions)
-		console.log("[1/4] Deleting mock users (user*@mock.test)...");
+		// 1a. Delete mock users (cascades → accounts, sessions, submissions, pretestSubmissions)
+		console.log("[1/5] Deleting mock users (user*@mock.test)...");
 		const deletedUsers = await db
 			.delete(users)
 			.where(like(users.email, "user%@mock.test"))
 			.returning({ id: users.id });
 		console.log(`  ${deletedUsers.length} users deleted (+ cascaded accounts, submissions, pretest submissions)`);
 
-		// 2. Delete telco chapters (cascades → quizzes → questions → options, submissions)
-		console.log("[2/4] Deleting telco chapters...");
+		// 1b. Delete devan@gmail.com activity user
+		console.log("[2/5] Deleting devan@gmail.com...");
+		const deletedDevan = await db
+			.delete(users)
+			.where(eq(users.email, "devan@gmail.com"))
+			.returning({ id: users.id });
+		console.log(`  ${deletedDevan.length} user deleted (+ cascaded data)`);
+
+		// 3. Delete telco chapters (cascades → quizzes → questions → options, submissions)
+		console.log("[3/5] Deleting telco chapters...");
 		const deletedChapters = await db
 			.delete(chapters)
 			.where(inArray(chapters.title, telcoChapterTitles))
 			.returning({ id: chapters.id });
 		console.log(`  ${deletedChapters.length} chapters deleted (+ cascaded quizzes, questions, options)`);
 
-		// 3. Delete telco study materials
-		console.log("[3/4] Deleting telco study materials...");
+		// 4. Delete telco study materials
+		console.log("[4/5] Deleting telco study materials...");
 		const deletedMaterials = await db
 			.delete(studyMaterials)
 			.where(inArray(studyMaterials.title, telcoMaterialTitles))
 			.returning({ id: studyMaterials.id });
 		console.log(`  ${deletedMaterials.length} study materials deleted`);
 
-		// 4. Delete scale schools
-		console.log("[4/4] Deleting scale-test schools...");
+		// 5. Delete scale schools
+		console.log("[5/5] Deleting scale-test schools...");
 		const deletedSchools = await db
 			.delete(schools)
 			.where(inArray(schools.name, scaleSchoolNames))

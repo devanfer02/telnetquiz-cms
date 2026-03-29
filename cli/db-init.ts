@@ -3,7 +3,7 @@ import {
 	hashPassword,
 	generateRandomString,
 } from "better-auth/crypto";
-import { inArray } from "drizzle-orm";
+import { asc, eq, inArray, like } from "drizzle-orm";
 import { db } from "../src/lib/db";
 import {
 	chapters,
@@ -2649,80 +2649,116 @@ async function seed() {
 		// PHASE 1: CONTENT DATA (essentials)
 		// ================================================================
 
-		// 1. Insert Study Materials
-		console.log("[Phase 1] Memasukkan data materi pembelajaran...");
-		const materialsToInsert = scaleMode
-			? [...studyMaterialsData, ...telcoStudyMaterialsData]
-			: studyMaterialsData;
-		const insertedMaterials = await db
-			.insert(studyMaterials)
-			.values(materialsToInsert)
-			.returning();
-		console.log(`  ${insertedMaterials.length} materi pembelajaran berhasil dimasukkan`);
+		const allChapterTitles = scaleMode
+			? [...chaptersData, ...telcoChaptersData].map((c) => c.title)
+			: chaptersData.map((c) => c.title);
 
-		// 2. Insert Chapters
-		console.log("[Phase 1] Memasukkan data bab...");
-		const chaptersToInsert = scaleMode
-			? [...chaptersData, ...telcoChaptersData]
-			: chaptersData;
-		const insertedChapters = await db
-			.insert(chapters)
-			.values(chaptersToInsert)
-			.returning();
-		console.log(`  ${insertedChapters.length} bab berhasil dimasukkan`);
+		const existingChapters = await db
+			.select()
+			.from(chapters)
+			.where(inArray(chapters.title, allChapterTitles))
+			.orderBy(asc(chapters.id));
 
-		// 3. Insert Pretest Questions (existing 2)
-		console.log("[Phase 1] Memasukkan data pertanyaan pretes...");
+		const contentAlreadySeeded = existingChapters.length === allChapterTitles.length;
+
+		// 1. Study Materials
+		let insertedMaterials: (typeof studyMaterials.$inferSelect)[];
+		if (contentAlreadySeeded) {
+			console.log("[Phase 1] Materi pembelajaran sudah ada, skip insert...");
+			insertedMaterials = await db
+				.select()
+				.from(studyMaterials)
+				.orderBy(asc(studyMaterials.id));
+		} else {
+			console.log("[Phase 1] Memasukkan data materi pembelajaran...");
+			const materialsToInsert = scaleMode
+				? [...studyMaterialsData, ...telcoStudyMaterialsData]
+				: studyMaterialsData;
+			insertedMaterials = await db
+				.insert(studyMaterials)
+				.values(materialsToInsert)
+				.returning();
+			console.log(`  ${insertedMaterials.length} materi pembelajaran berhasil dimasukkan`);
+		}
+
+		// 2. Chapters
+		let insertedChapters: (typeof chapters.$inferSelect)[];
+		if (contentAlreadySeeded) {
+			console.log("[Phase 1] Bab sudah ada, skip insert...");
+			insertedChapters = existingChapters;
+		} else {
+			console.log("[Phase 1] Memasukkan data bab...");
+			const chaptersToInsert = scaleMode
+				? [...chaptersData, ...telcoChaptersData]
+				: chaptersData;
+			insertedChapters = await db
+				.insert(chapters)
+				.values(chaptersToInsert)
+				.returning();
+			console.log(`  ${insertedChapters.length} bab berhasil dimasukkan`);
+		}
+
+		// 3–5. Pretest questions, quizzes, and quiz questions
 		const pretestQuestionsWithOptions: {
 			questionId: number;
 			correctOptionId: number;
 			wrongOptionIds: number[];
 		}[] = [];
+		let totalQuizzes = 0;
+		let totalQuestions = 0;
+		const allQuizData: {
+			quizId: number;
+			chapterId: number;
+			level: number;
+		}[] = [];
 
-		for (const pretest of pretestData) {
-			const chapter = insertedChapters[pretest.chapterIndex];
-			const material = insertedMaterials[pretest.materialIndex];
+		if (contentAlreadySeeded) {
+			console.log("[Phase 1] Pertanyaan & kuis sudah ada, skip insert...");
 
-			const [insertedQuestion] = await db
-				.insert(questions)
-				.values({
-					type: "pretest",
-					chapterId: chapter.id,
-					quizId: null,
-					materialId: material.id,
-					imageLink: pretest.imageLink,
-					description: pretest.description,
-					question: pretest.question,
-				})
-				.returning();
+			const chapterIds = insertedChapters.map((c) => c.id);
+			const existingPretestQs = await db
+				.select({ id: questions.id, chapterId: questions.chapterId })
+				.from(questions)
+				.where(
+					eq(questions.type, "pretest"),
+				);
+			for (const pq of existingPretestQs) {
+				const opts = await db
+					.select()
+					.from(options)
+					.where(eq(options.questionId, pq.id));
+				const correct = opts.find((o) => o.isCorrect);
+				if (correct) {
+					pretestQuestionsWithOptions.push({
+						questionId: pq.id,
+						correctOptionId: correct.id,
+						wrongOptionIds: opts.filter((o) => !o.isCorrect).map((o) => o.id),
+					});
+				}
+			}
 
-			const insertedOpts = await db
-				.insert(options)
-				.values(
-					pretest.options.map((opt) => ({
-						questionId: insertedQuestion.id,
-						text: opt.text,
-						isCorrect: opt.isCorrect,
-					})),
-				)
-				.returning();
+			const existingQuizzes = await db
+				.select()
+				.from(quizzes)
+				.where(inArray(quizzes.chapterId, chapterIds))
+				.orderBy(asc(quizzes.id));
+			for (const q of existingQuizzes) {
+				allQuizData.push({
+					quizId: q.id,
+					chapterId: q.chapterId!,
+					level: q.level,
+				});
+			}
+			totalQuizzes = existingQuizzes.length;
 
-			pretestQuestionsWithOptions.push({
-				questionId: insertedQuestion.id,
-				correctOptionId: insertedOpts.find((o) => o.isCorrect)!.id,
-				wrongOptionIds: insertedOpts
-					.filter((o) => !o.isCorrect)
-					.map((o) => o.id),
-			});
-		}
-		console.log(`  ${pretestData.length} pertanyaan pretes berhasil dimasukkan`);
-
-		// 3b. Insert Telco Pretest Questions (scale only)
-		if (scaleMode) {
-			console.log("[Phase 1] Memasukkan data pertanyaan pretes (telco)...");
-			for (const pretest of telcoPretestData) {
-				const chapter = insertedChapters[pretest.chapterOffset];
-				const material = insertedMaterials[pretest.materialOffset];
+			console.log(`  ${pretestQuestionsWithOptions.length} pertanyaan pretes ditemukan`);
+			console.log(`  ${totalQuizzes} kuis ditemukan`);
+		} else {
+			// 3. Insert Pretest Questions (existing 2)
+			console.log("[Phase 1] Memasukkan data pertanyaan pretes...");
+			for (const pretest of pretestData) {
+				const chapter = insertedChapters[pretest.chapterIndex];
+				const material = insertedMaterials[pretest.materialIndex];
 
 				const [insertedQuestion] = await db
 					.insert(questions)
@@ -2756,148 +2792,183 @@ async function seed() {
 						.map((o) => o.id),
 				});
 			}
-			console.log(
-				`  ${telcoPretestData.length} pertanyaan pretes (telco) berhasil dimasukkan`,
-			);
-		}
+			console.log(`  ${pretestData.length} pertanyaan pretes berhasil dimasukkan`);
 
-		// 4. Insert Existing Quizzes and Questions (12 quizzes, ~89 questions)
-		console.log("[Phase 1] Memasukkan data kuis existing...");
-		let totalQuizzes = 0;
-		let totalQuestions = 0;
-		const allQuizData: {
-			quizId: number;
-			chapterId: number;
-			level: number;
-		}[] = [];
+			// 3b. Insert Telco Pretest Questions (scale only)
+			if (scaleMode) {
+				console.log("[Phase 1] Memasukkan data pertanyaan pretes (telco)...");
+				for (const pretest of telcoPretestData) {
+					const chapter = insertedChapters[pretest.chapterOffset];
+					const material = insertedMaterials[pretest.materialOffset];
 
-		for (const quizData of quizzesData) {
-			const chapter = insertedChapters[quizData.chapterIndex];
+					const [insertedQuestion] = await db
+						.insert(questions)
+						.values({
+							type: "pretest",
+							chapterId: chapter.id,
+							quizId: null,
+							materialId: material.id,
+							imageLink: pretest.imageLink,
+							description: pretest.description,
+							question: pretest.question,
+						})
+						.returning();
 
-			const [insertedQuiz] = await db
-				.insert(quizzes)
-				.values({
-					chapterId: chapter.id,
-					title: quizData.title,
-					level: quizData.level,
-					difficulty: quizData.difficulty,
-				})
-				.returning();
+					const insertedOpts = await db
+						.insert(options)
+						.values(
+							pretest.options.map((opt) => ({
+								questionId: insertedQuestion.id,
+								text: opt.text,
+								isCorrect: opt.isCorrect,
+							})),
+						)
+						.returning();
 
-			allQuizData.push({
-				quizId: insertedQuiz.id,
-				chapterId: chapter.id,
-				level: quizData.level,
-			});
-			totalQuizzes++;
+					pretestQuestionsWithOptions.push({
+						questionId: insertedQuestion.id,
+						correctOptionId: insertedOpts.find((o) => o.isCorrect)!.id,
+						wrongOptionIds: insertedOpts
+							.filter((o) => !o.isCorrect)
+							.map((o) => o.id),
+					});
+				}
+				console.log(
+					`  ${telcoPretestData.length} pertanyaan pretes (telco) berhasil dimasukkan`,
+				);
+			}
 
-			for (const questionData of quizData.questions) {
-				const material = insertedMaterials[questionData.materialIndex];
+			// 4. Insert Existing Quizzes and Questions (12 quizzes, ~89 questions)
+			console.log("[Phase 1] Memasukkan data kuis existing...");
 
-				const [insertedQuestion] = await db
-					.insert(questions)
+			for (const quizData of quizzesData) {
+				const chapter = insertedChapters[quizData.chapterIndex];
+
+				const [insertedQuiz] = await db
+					.insert(quizzes)
 					.values({
-						type: "quiz",
 						chapterId: chapter.id,
-						quizId: insertedQuiz.id,
-						materialId: material.id,
-						imageLink: questionData.imageLink,
-						description: questionData.description,
-						question: questionData.question,
+						title: quizData.title,
+						level: quizData.level,
+						difficulty: quizData.difficulty,
 					})
 					.returning();
 
-				await db.insert(options).values(
-					questionData.options.map((opt) => ({
-						questionId: insertedQuestion.id,
-						text: opt.text,
-						isCorrect: opt.isCorrect,
-					})),
-				);
-
-				totalQuestions++;
-			}
-		}
-		console.log(`  ${totalQuizzes} kuis existing berhasil dimasukkan`);
-		console.log(`  ${totalQuestions} pertanyaan existing berhasil dimasukkan`);
-
-		// 5. Insert Telco Quizzes (scale only)
-		if (scaleMode) {
-			console.log(
-				"[Phase 1] Memasukkan data kuis telco (5 bab x 20 level x 10 soal)...",
-			);
-			let telcoQuizCount = 0;
-			let telcoQuestionCount = 0;
-
-			for (let ci = 0; ci < telcoChaptersData.length; ci++) {
-				const chapter = insertedChapters[ci + 2];
-				const chapterMaterialIds = [
-					insertedMaterials[13 + ci * 3].id,
-					insertedMaterials[13 + ci * 3 + 1].id,
-					insertedMaterials[13 + ci * 3 + 2].id,
-				];
-
-				const quizInsertData = Array.from({ length: 20 }, (_, li) => ({
+				allQuizData.push({
+					quizId: insertedQuiz.id,
 					chapterId: chapter.id,
-					title: `${telcoChaptersData[ci].title} - Level ${li + 1}`,
-					level: li + 1,
-					difficulty: getDifficultyForLevel(li + 1),
-				}));
-				const insertedQuizzes = await db
-					.insert(quizzes)
-					.values(quizInsertData)
-					.returning();
+					level: quizData.level,
+				});
+				totalQuizzes++;
 
-				for (const quiz of insertedQuizzes) {
-					allQuizData.push({
-						quizId: quiz.id,
-						chapterId: chapter.id,
-						level: quiz.level,
-					});
-				}
-				telcoQuizCount += insertedQuizzes.length;
+				for (const questionData of quizData.questions) {
+					const material = insertedMaterials[questionData.materialIndex];
 
-				const allQuestionsData = insertedQuizzes.flatMap((quiz) =>
-					generateQuestionsForQuiz(
-						ci,
-						quiz.id,
-						chapter.id,
-						chapterMaterialIds,
-					),
-				);
+					const [insertedQuestion] = await db
+						.insert(questions)
+						.values({
+							type: "quiz",
+							chapterId: chapter.id,
+							quizId: insertedQuiz.id,
+							materialId: material.id,
+							imageLink: questionData.imageLink,
+							description: questionData.description,
+							question: questionData.question,
+						})
+						.returning();
 
-				const insertedQs = await db
-					.insert(questions)
-					.values(
-						allQuestionsData.map((q) => ({
-							type: "quiz" as const,
-							chapterId: q.chapterId,
-							quizId: q.quizId,
-							materialId: q.materialId,
-							imageLink: null,
-							description: q.description,
-							question: q.question,
+					await db.insert(options).values(
+						questionData.options.map((opt) => ({
+							questionId: insertedQuestion.id,
+							text: opt.text,
+							isCorrect: opt.isCorrect,
 						})),
-					)
-					.returning();
+					);
 
-				const allOptionsData = insertedQs.flatMap((iq, idx) =>
-					allQuestionsData[idx].options.map((opt) => ({
-						questionId: iq.id,
-						text: opt.text,
-						isCorrect: opt.isCorrect,
-					})),
-				);
-				await db.insert(options).values(allOptionsData);
-
-				telcoQuestionCount += insertedQs.length;
-				console.log(
-					`  Bab "${telcoChaptersData[ci].title}": ${insertedQuizzes.length} kuis, ${insertedQs.length} soal`,
-				);
+					totalQuestions++;
+				}
 			}
+			console.log(`  ${totalQuizzes} kuis existing berhasil dimasukkan`);
+			console.log(`  ${totalQuestions} pertanyaan existing berhasil dimasukkan`);
 
-			totalQuizzes += telcoQuizCount;
-			totalQuestions += telcoQuestionCount;
+			// 5. Insert Telco Quizzes (scale only)
+			if (scaleMode) {
+				console.log(
+					"[Phase 1] Memasukkan data kuis telco (5 bab x 20 level x 10 soal)...",
+				);
+				let telcoQuizCount = 0;
+				let telcoQuestionCount = 0;
+
+				for (let ci = 0; ci < telcoChaptersData.length; ci++) {
+					const chapter = insertedChapters[ci + 2];
+					const chapterMaterialIds = [
+						insertedMaterials[13 + ci * 3].id,
+						insertedMaterials[13 + ci * 3 + 1].id,
+						insertedMaterials[13 + ci * 3 + 2].id,
+					];
+
+					const quizInsertData = Array.from({ length: 20 }, (_, li) => ({
+						chapterId: chapter.id,
+						title: `${telcoChaptersData[ci].title} - Level ${li + 1}`,
+						level: li + 1,
+						difficulty: getDifficultyForLevel(li + 1),
+					}));
+					const insertedQuizzes = await db
+						.insert(quizzes)
+						.values(quizInsertData)
+						.returning();
+
+					for (const quiz of insertedQuizzes) {
+						allQuizData.push({
+							quizId: quiz.id,
+							chapterId: chapter.id,
+							level: quiz.level,
+						});
+					}
+					telcoQuizCount += insertedQuizzes.length;
+
+					const allQuestionsData = insertedQuizzes.flatMap((quiz) =>
+						generateQuestionsForQuiz(
+							ci,
+							quiz.id,
+							chapter.id,
+							chapterMaterialIds,
+						),
+					);
+
+					const insertedQs = await db
+						.insert(questions)
+						.values(
+							allQuestionsData.map((q) => ({
+								type: "quiz" as const,
+								chapterId: q.chapterId,
+								quizId: q.quizId,
+								materialId: q.materialId,
+								imageLink: null,
+								description: q.description,
+								question: q.question,
+							})),
+						)
+						.returning();
+
+					const allOptionsData = insertedQs.flatMap((iq, idx) =>
+						allQuestionsData[idx].options.map((opt) => ({
+							questionId: iq.id,
+							text: opt.text,
+							isCorrect: opt.isCorrect,
+						})),
+					);
+					await db.insert(options).values(allOptionsData);
+
+					telcoQuestionCount += insertedQs.length;
+					console.log(
+						`  Bab "${telcoChaptersData[ci].title}": ${insertedQuizzes.length} kuis, ${insertedQs.length} soal`,
+					);
+				}
+
+				totalQuizzes += telcoQuizCount;
+				totalQuestions += telcoQuestionCount;
+			}
 		}
 
 		// ================================================================
@@ -2912,32 +2983,62 @@ async function seed() {
 		if (scaleMode) {
 			// 6. Insert Schools
 			console.log("\n[Phase 2] Memasukkan data sekolah...");
-			const insertedSchools = await db
-				.insert(schools)
-				.values(schoolNames.map((name) => ({ name })))
-				.returning();
+			const existingSchools = await db
+				.select()
+				.from(schools)
+				.where(inArray(schools.name, schoolNames));
+
+			let insertedSchools: (typeof schools.$inferSelect)[];
+			if (existingSchools.length === schoolNames.length) {
+				console.log("  Sekolah sudah ada, skip insert...");
+				insertedSchools = existingSchools;
+			} else {
+				const existingNames = new Set(existingSchools.map((s) => s.name));
+				const newSchools = schoolNames
+					.filter((name) => !existingNames.has(name))
+					.map((name) => ({ name }));
+				const freshSchools = newSchools.length > 0
+					? await db.insert(schools).values(newSchools).returning()
+					: [];
+				insertedSchools = [...existingSchools, ...freshSchools];
+				console.log(`  ${freshSchools.length} sekolah baru dimasukkan, ${existingSchools.length} sudah ada`);
+			}
 			schoolCount = insertedSchools.length;
-			console.log(`  ${schoolCount} sekolah berhasil dimasukkan`);
 
 			// 7. Insert Users + Accounts
-			console.log("[Phase 2] Generating 100 mock users...");
-			const schoolIds = insertedSchools.map((s) => s.id);
-			const mockUsers = await generateMockUsers(schoolIds);
+			const existingMockUsers = await db
+				.select({ id: users.id })
+				.from(users)
+				.where(like(users.email, "user%@mock.test"));
 
-			const insertedUsers = await db
-				.insert(users)
-				.values(mockUsers.map((m) => m.user))
-				.returning();
-			userCount = insertedUsers.length;
-			console.log(`  ${userCount} pengguna berhasil dimasukkan`);
+			let userIds: string[];
+			if (existingMockUsers.length > 0) {
+				console.log(`[Phase 2] ${existingMockUsers.length} mock users sudah ada, skip insert...`);
+				userIds = existingMockUsers.map((u) => u.id);
+				userCount = existingMockUsers.length;
+			} else {
+				console.log("[Phase 2] Generating 100 mock users...");
+				const schoolIds = insertedSchools.map((s) => s.id);
+				const mockUsers = await generateMockUsers(schoolIds);
 
-			await db.insert(accounts).values(mockUsers.map((m) => m.account));
-			console.log(`  ${mockUsers.length} akun berhasil dimasukkan`);
+				const insertedUsers = await db
+					.insert(users)
+					.values(mockUsers.map((m) => m.user))
+					.returning();
+				userCount = insertedUsers.length;
+				console.log(`  ${userCount} pengguna berhasil dimasukkan`);
+
+				await db.insert(accounts).values(mockUsers.map((m) => m.account));
+				console.log(`  ${mockUsers.length} akun berhasil dimasukkan`);
+				userIds = insertedUsers.map((u) => u.id);
+			}
 
 			// 9. Quiz Submissions
-			const userIds = insertedUsers.map((u) => u.id);
+			console.log("\n[Phase 3] Clearing existing mock user submissions...");
+			await db.delete(submissions).where(inArray(submissions.userId, userIds));
+			await db.delete(pretestSubmissions).where(inArray(pretestSubmissions.userId, userIds));
 
-			console.log("\n[Phase 3] Generating quiz submissions...");
+			console.log("[Phase 3] Generating quiz submissions...");
 			const quizSubs = generateQuizSubmissions(userIds, allQuizData);
 			for (let i = 0; i < quizSubs.length; i += 500) {
 				await db
@@ -2974,6 +3075,96 @@ async function seed() {
 					`  ${userIdsWhoTookPretest.length} pengguna ditandai sudah pretest`,
 				);
 			}
+
+			// 12. Activity logs for devan@gmail.com
+			console.log("\n[Phase 4] Generating activity logs for devan@gmail.com...");
+
+			const existingDevan = await db
+				.select({ id: users.id })
+				.from(users)
+				.where(eq(users.email, "devan@gmail.com"))
+				.limit(1);
+
+			let devanId: string;
+
+			if (existingDevan.length > 0) {
+				devanId = existingDevan[0].id;
+				console.log(`  User devan@gmail.com already exists (id: ${devanId}), skipping creation`);
+				await db
+					.delete(submissions)
+					.where(eq(submissions.userId, devanId));
+				console.log("  Cleared existing submissions for devan@gmail.com");
+			} else {
+				devanId = generateRandomString(32, "a-z", "0-9");
+				const devanPasswordHash = await hashPassword("password123");
+
+				await db.insert(users).values({
+					id: devanId,
+					name: "Devan",
+					email: "devan@gmail.com",
+					emailVerified: true,
+					image: null,
+					role: "user",
+					schoolId: insertedSchools[0].id,
+					gender: true,
+					grade: "XI",
+					bio: "Test user for activity logs",
+					hasTakenPretest: false,
+					banned: false,
+				});
+				await db.insert(accounts).values({
+					id: generateRandomString(32, "a-z", "0-9"),
+					accountId: devanId,
+					providerId: "credential",
+					userId: devanId,
+					password: devanPasswordHash,
+				});
+				console.log("  User devan@gmail.com created");
+			}
+
+			const now = new Date();
+			const activitySubs: {
+				userId: string;
+				chapterId: number;
+				quizId: number;
+				score: number;
+				createdAt: Date;
+			}[] = [];
+
+			for (let dayOffset = 0; dayOffset < 7; dayOffset++) {
+				const date = new Date(
+					Date.UTC(
+						now.getUTCFullYear(),
+						now.getUTCMonth(),
+						now.getUTCDate() - dayOffset,
+						faker.number.int({ min: 8, max: 20 }),
+						faker.number.int({ min: 0, max: 59 }),
+					),
+				);
+
+				const quizzesForDay = faker.helpers.arrayElements(
+					allQuizData,
+					faker.number.int({ min: 1, max: Math.min(4, allQuizData.length) }),
+				);
+
+				for (const quiz of quizzesForDay) {
+					const retries = faker.number.int({ min: 1, max: 3 });
+					for (let r = 0; r < retries; r++) {
+						activitySubs.push({
+							userId: devanId,
+							chapterId: quiz.chapterId,
+							quizId: quiz.quizId,
+							score: faker.number.int({ min: 40, max: 100 }),
+							createdAt: new Date(date.getTime() + r * 60_000),
+						});
+					}
+				}
+			}
+
+			await db.insert(submissions).values(activitySubs);
+			console.log(
+				`  ${activitySubs.length} activity submissions for devan@gmail.com berhasil dimasukkan`,
+			);
 		}
 
 		// Summary
