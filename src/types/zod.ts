@@ -107,6 +107,22 @@ export const schoolSchema = z.object({
 	name: z.string().min(2, "Nama sekolah minimal 2 karakter"),
 });
 
+export const achievementSchema = z.object({
+	slug: z
+		.string()
+		.min(2, "Slug minimal 2 karakter")
+		.regex(
+			/^[a-z0-9_]+$/,
+			"Slug hanya boleh huruf kecil, angka, dan underscore",
+		),
+	title: z.string().min(3, "Judul minimal 3 karakter"),
+	description: z.string().min(3, "Deskripsi minimal 3 karakter"),
+	icon: z.string().optional().or(z.literal("")),
+	rule: z.string().min(2, "Rule JSON Logic wajib diisi"),
+	isActive: z.boolean().default(true),
+});
+
+export type AchievementFormData = z.infer<typeof achievementSchema>;
 export type SchoolFormData = z.infer<typeof schoolSchema>;
 export type EditUserFormData = z.infer<typeof editUserSchema>;
 export type QuizFormData = z.infer<typeof quizSchema>;

@@ -4,7 +4,7 @@ import { DbLayer } from "@/lib/db";
 import { HttpStatus, response } from "@/lib/http";
 import { withApiErrorHandling } from "@/lib/sentry/effect";
 import { authMiddleware } from "@/middlewares/auth";
-import { fetchUserAchievements } from "@/services/users";
+import { evaluateUserAchievements } from "@/services/achievements";
 
 export const Route = createFileRoute("/api/(internal)/achievements")({
 	server: {
@@ -14,7 +14,7 @@ export const Route = createFileRoute("/api/(internal)/achievements")({
 				Effect.runPromise(
 					withApiErrorHandling(
 						Effect.gen(function* () {
-							const result = yield* fetchUserAchievements(context.user.id);
+							const result = yield* evaluateUserAchievements(context.user.id);
 
 							return response(
 								{

@@ -90,6 +90,18 @@ type School = {
 	updatedAt: Date;
 };
 
+type Achievement = {
+	id: number;
+	slug: string;
+	title: string;
+	description: string;
+	icon: string | null;
+	rule: unknown;
+	isActive: boolean;
+	createdAt: Date;
+	updatedAt: Date;
+};
+
 type Session = {
 	id: string;
 	userId: string;
@@ -99,4 +111,17 @@ type Session = {
 	userAgent: string | null;
 	createdAt: Date;
 	updatedAt: Date;
+};
+
+type AchievementContext = {
+	pretest_taken: boolean;
+	pretest_total: number;
+	pretest_correct: number;
+	pretest_score: number;
+	total_submissions: number;
+	best_score: number;
+	levels_completed: number;
+	chapters_completed: number;
+	total_score: number;
+	has_perfect_score: boolean;
 };

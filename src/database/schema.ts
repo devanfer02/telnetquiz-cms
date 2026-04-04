@@ -3,6 +3,7 @@ import {
 	boolean,
 	index,
 	integer,
+	jsonb,
 	pgTable,
 	serial,
 	text,
@@ -162,11 +163,17 @@ export const submissions = pgTable(
 	"submissions",
 	{
 		id: serial().primaryKey(),
-		userId: text().notNull().references(() => users.id, { onDelete: "cascade" }),
-		chapterId: integer().notNull().references(() => chapters.id, {
-			onDelete: "cascade",
-		}),
-		quizId: integer().notNull().references(() => quizzes.id, { onDelete: "cascade" }),
+		userId: text()
+			.notNull()
+			.references(() => users.id, { onDelete: "cascade" }),
+		chapterId: integer()
+			.notNull()
+			.references(() => chapters.id, {
+				onDelete: "cascade",
+			}),
+		quizId: integer()
+			.notNull()
+			.references(() => quizzes.id, { onDelete: "cascade" }),
 		score: integer(),
 		...timestamps,
 	},
@@ -206,6 +213,53 @@ export const studyMaterials = pgTable("study_materials", {
 	content: text().notNull(),
 	...timestamps,
 });
+
+export const achievements = pgTable("achievements", {
+	id: serial().primaryKey(),
+	slug: varchar().notNull().unique(),
+	title: varchar().notNull(),
+	description: text().notNull(),
+	icon: varchar(),
+	rule: jsonb().notNull(),
+	isActive: boolean("is_active").default(true).notNull(),
+	...timestamps,
+});
+
+export const userAchievements = pgTable(
+	"user_achievements",
+	{
+		id: serial().primaryKey(),
+		userId: text("user_id")
+			.notNull()
+			.references(() => users.id, { onDelete: "cascade" }),
+		achievementId: integer("achievement_id")
+			.notNull()
+			.references(() => achievements.id, { onDelete: "cascade" }),
+		unlockedAt: timestamp("unlocked_at").notNull().defaultNow(),
+	},
+	(t) => [
+		unique("user_achievement_unique").on(t.userId, t.achievementId),
+		index("user_achievements_userId_idx").on(t.userId),
+	],
+);
+
+export const achievementsRelations = relations(achievements, ({ many }) => ({
+	userAchievements: many(userAchievements),
+}));
+
+export const userAchievementsRelations = relations(
+	userAchievements,
+	({ one }) => ({
+		user: one(users, {
+			fields: [userAchievements.userId],
+			references: [users.id],
+		}),
+		achievement: one(achievements, {
+			fields: [userAchievements.achievementId],
+			references: [achievements.id],
+		}),
+	}),
+);
 
 export const schoolsRelations = relations(schools, ({ many }) => ({
 	users: many(users),
