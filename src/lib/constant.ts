@@ -1,4 +1,5 @@
 import {
+	Award,
 	BookMarked,
 	BookOpen,
 	Brain,
@@ -46,6 +47,11 @@ export const sidebarItems = [
 		icon: Users,
 	},
 	{
+		title: "Achievements",
+		url: "/achievements",
+		icon: Award,
+	},
+	{
 		title: "Schools",
 		url: "/schools",
 		icon: School,
@@ -72,4 +78,5 @@ export const QUERY_KEYS = {
 	LEADERBOARD: "leaderboard",
 	DASHBOARD_STATS: "dashboard-stats",
 	SCHOOLS: "school-list",
+	ACHIEVEMENTS: "achievement-list",
 };

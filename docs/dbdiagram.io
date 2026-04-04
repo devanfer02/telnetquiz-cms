@@ -65,19 +65,6 @@ Table accounts {
   }
 }
 
-Table verifications {
-  id text [pk]
-  identifier text [not null]
-  value text [not null]
-  expires_at timestamp [not null]
-  created_at timestamp [not null, default: `now()`]
-  updated_at timestamp [not null]
-
-  indexes {
-    identifier [name: 'verifications_identifier_idx']
-  }
-}
-
 Table chapters {
   id serial [pk]
   title varchar [not null]
@@ -171,5 +158,29 @@ Table pretest_submissions {
   indexes {
     user_id [name: 'pretest_submissions_userId_idx']
     question_id [name: 'pretest_submissions_questionId_idx']
+  }
+}
+
+Table achievements {
+  id serial [pk]
+  slug varchar [not null, unique]
+  title varchar [not null]
+  description text [not null]
+  icon varchar
+  rule jsonb [not null, note: 'JSON Logic rule evaluated against user context']
+  is_active boolean [not null, default: true]
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+}
+
+Table user_achievements {
+  id serial [pk]
+  user_id text [not null, ref: > users.id, note: 'on delete cascade']
+  achievement_id integer [not null, ref: > achievements.id, note: 'on delete cascade']
+  unlocked_at timestamp [not null, default: `now()`]
+
+  indexes {
+    user_id [name: 'user_achievements_userId_idx']
+    (user_id, achievement_id) [unique, name: 'user_achievement_unique']
   }
 }
