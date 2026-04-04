@@ -14,6 +14,7 @@ type User = {
 type Chapter = {
 	id: number;
 	title: string;
+	minimumScore: number;
 	description: string;
 	mascotId: number;
 	isHidden: boolean;

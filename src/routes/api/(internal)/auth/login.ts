@@ -38,7 +38,7 @@ export const Route = createFileRoute("/api/(internal)/auth/login")({
 								Effect.succeed(
 									response(
 										{
-											message: "Failed to register user",
+											message: "Failed to login user",
 											errors: err.message,
 										},
 										HttpStatus.BAD_REQUEST,

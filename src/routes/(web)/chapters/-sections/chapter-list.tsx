@@ -61,6 +61,10 @@ export default function ChapterList({ chapters }: ChapterListProps) {
 			),
 		},
 		{
+			accessorKey: "minimumScore",
+			header: ({ column }) => <SortableHeader column={column} title="KKM" />,
+		},
+		{
 			accessorKey: "description",
 			header: "Description",
 			size: 200,
