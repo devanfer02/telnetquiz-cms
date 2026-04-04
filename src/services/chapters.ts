@@ -205,10 +205,13 @@ export const fetchChapterById = (id: number, userId?: string) =>
 							db
 								.select({
 									quizId: submissions.quizId,
-									score: submissions.score,
+									score: sql<number>`MAX(${submissions.score})`.as(
+										"best_score",
+									),
 								})
 								.from(submissions)
-								.where(eq(submissions.userId, userId)),
+								.where(eq(submissions.userId, userId))
+								.groupBy(submissions.quizId),
 						catch: (err) =>
 							new DatabaseError({
 								cause: err,

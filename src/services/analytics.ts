@@ -113,18 +113,28 @@ export const fetchAverageScores = Effect.gen(function* () {
 export const fetchLeaderboard = Effect.gen(function* () {
 	const { db } = yield* Db;
 
+	const bestPerQuiz = db
+		.select({
+			userId: submissions.userId,
+			bestScore: sql<number>`MAX(${submissions.score})`.as("best_score"),
+			latestAt: sql<string>`MAX(${submissions.createdAt})`.as("latest_at"),
+		})
+		.from(submissions)
+		.groupBy(submissions.userId, submissions.quizId)
+		.as("best_per_quiz");
+
 	const results = yield* dbTryPromise({
 		try: () =>
 			db
 				.select({
 					userName: users.name,
-					score: sql<number>`SUM(${submissions.score})`,
-					latestSubmitAt: sql<string>`MAX(${submissions.createdAt})`,
+					score: sql<number>`SUM(${bestPerQuiz.bestScore})`,
+					latestSubmitAt: sql<string>`MAX(${bestPerQuiz.latestAt})`,
 				})
-				.from(submissions)
-				.leftJoin(users, eq(submissions.userId, users.id))
+				.from(bestPerQuiz)
+				.leftJoin(users, eq(bestPerQuiz.userId, users.id))
 				.groupBy(users.name)
-				.orderBy(desc(sql`SUM(${submissions.score})`))
+				.orderBy(desc(sql`SUM(${bestPerQuiz.bestScore})`))
 				.limit(10),
 		catch: (err) =>
 			new DatabaseError({
