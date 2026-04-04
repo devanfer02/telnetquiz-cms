@@ -134,6 +134,13 @@
 			"when": 1775279412461,
 			"tag": "0018_lucky_wiccan",
 			"breakpoints": true
+		},
+		{
+			"idx": 19,
+			"version": "7",
+			"when": 1775304850908,
+			"tag": "0019_breezy_pet_avengers",
+			"breakpoints": true
 		}
 	]
 }

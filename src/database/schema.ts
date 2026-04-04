@@ -110,6 +110,7 @@ export const chapters = pgTable("chapters", {
 	title: varchar().notNull(),
 	description: text().notNull(),
 	mascotId: integer().notNull(),
+	minimumScore: integer("minimum_score").default(100).notNull(),
 	isHidden: boolean("is_hidden").default(false).notNull(),
 	...timestamps,
 });

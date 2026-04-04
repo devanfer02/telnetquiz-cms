@@ -70,6 +70,7 @@ Table chapters {
   title varchar [not null]
   description text [not null]
   mascot_id integer [not null]
+  minimum_score integer [not null, default: 100, note: 'KKM per chapter (1-100)']
   is_hidden boolean [not null, default: false]
   created_at timestamp [not null, default: `now()`]
   updated_at timestamp [not null, default: `now()`]

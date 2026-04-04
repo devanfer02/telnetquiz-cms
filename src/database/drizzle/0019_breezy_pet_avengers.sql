@@ -1,0 +1,1 @@
+ALTER TABLE "chapters" ADD COLUMN "minimum_score" integer DEFAULT 100 NOT NULL;
