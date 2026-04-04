@@ -14,15 +14,29 @@ import TanstackTable from "@/components/global/ts-table";
 import { Input } from "@/components/ui/input";
 import UserActions from "./user-actions";
 
+function formatDate(value: unknown): string {
+	const date = value instanceof Date ? value : new Date(String(value));
+	if (Number.isNaN(date.getTime())) return "-";
+	return date.toLocaleDateString("id-ID", {
+		day: "2-digit",
+		month: "short",
+		year: "numeric",
+		hour: "2-digit",
+		minute: "2-digit",
+	});
+}
+
 export const columns: ColumnDef<User>[] = [
 	{
 		accessorKey: "id",
 		header: ({ column }) => <SortableHeader column={column} title="ID" />,
-		size: 10,
 		cell: ({ row }) => {
 			const id = row.original.id.toString();
-
-			return <p>{id}</p>;
+			return (
+				<p className="max-w-[6rem] truncate" title={id}>
+					{id}
+				</p>
+			);
 		},
 	},
 	{
@@ -55,6 +69,7 @@ export const columns: ColumnDef<User>[] = [
 	{
 		accessorKey: "createdAt",
 		header: "Registered At",
+		cell: ({ row }) => formatDate(row.original.createdAt),
 	},
 	{
 		id: "actions",
