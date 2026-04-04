@@ -7,6 +7,7 @@ import type {
 	DatabaseError,
 	InternalServerError,
 	NotFoundError,
+	TtsServiceError,
 	ValidationError,
 } from "@/services/errors/errors";
 
@@ -16,7 +17,8 @@ type AppError =
 	| AuthError
 	| DatabaseError
 	| CloudflareR2Error
-	| InternalServerError;
+	| InternalServerError
+	| TtsServiceError;
 
 export const withApiErrorHandling = <A>(
 	effect: Effect.Effect<A, AppError, never>,
@@ -84,6 +86,18 @@ export const withApiErrorHandling = <A>(
 							error: err.message,
 						},
 						HttpStatus.INTERNAL_SERVER_ERROR,
+					),
+				);
+			},
+			TtsServiceError: (err: TtsServiceError) => {
+				Sentry.captureException(err.cause);
+				return Effect.succeed(
+					response(
+						{
+							message: "TTS service error",
+							error: err.message,
+						},
+						HttpStatus.BAD_GATEWAY,
 					),
 				);
 			},

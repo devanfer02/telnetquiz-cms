@@ -12,6 +12,7 @@ export const HttpStatus = {
 	NOT_FOUND: 404,
 	CONFLICT: 409,
 	INTERNAL_SERVER_ERROR: 500,
+	BAD_GATEWAY: 502,
 } as const;
 
 export const parseBody = <T>(schema: z.ZodSchema<T>, body: unknown) =>

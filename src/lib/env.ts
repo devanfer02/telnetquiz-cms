@@ -23,6 +23,8 @@ export const env = createEnv({
 		),
 		SENTRY_DSN: z.string().url().optional(),
 		SENTRY_ENABLED: z.string().optional(),
+		TTS_SERVICE_URL: z.url(),
+		TTS_SERVICE_API_KEY: z.string(),
 	},
 
 	/**

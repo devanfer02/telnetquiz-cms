@@ -6,6 +6,7 @@ import { dbTryPromise } from "@/lib/retry";
 import type { QuestionFormData, QuestionsFormData } from "@/types/zod";
 import { DatabaseError, NotFoundError } from "./errors/errors";
 import { deleteFile, uploadFile } from "./image";
+import { invalidateTtsCache } from "./tts";
 
 export const fetchAllQuestions = Effect.gen(function* () {
 	const { db } = yield* Db;
@@ -225,6 +226,11 @@ export const patchQuestion = (id: number, data: QuestionFormData) =>
 					message: `Failed to update question with id ${id}`,
 				}),
 		});
+
+		// Fire-and-forget TTS cache invalidation
+		yield* invalidateTtsCache(data.type, id).pipe(
+			Effect.catchAll(() => Effect.void),
+		);
 
 		return yield* fetchQuestionById(id);
 	});

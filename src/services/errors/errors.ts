@@ -29,3 +29,8 @@ export class InternalServerError extends Data.TaggedError(
 	cause: unknown;
 	message: string;
 }> {}
+
+export class TtsServiceError extends Data.TaggedError("TtsServiceError")<{
+	cause: unknown;
+	message: string;
+}> {}

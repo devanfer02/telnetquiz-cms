@@ -59,6 +59,7 @@ import { Route as webQuizEditIdRouteImport } from './routes/(web)/quiz/edit.$id'
 import { Route as webQuestionsEditIdRouteImport } from './routes/(web)/questions/edit.$id'
 import { Route as webChaptersEditIdRouteImport } from './routes/(web)/chapters/edit.$id'
 import { Route as webAchievementsEditIdRouteImport } from './routes/(web)/achievements/edit.$id'
+import { Route as ApiinternalTtsTypeIdRouteImport } from './routes/api/(internal)/tts/$type/$id'
 
 const webRouteRoute = webRouteRouteImport.update({
   id: '/(web)',
@@ -314,6 +315,11 @@ const webAchievementsEditIdRoute = webAchievementsEditIdRouteImport.update({
   path: '/achievements/edit/$id',
   getParentRoute: () => webRouteRoute,
 } as any)
+const ApiinternalTtsTypeIdRoute = ApiinternalTtsTypeIdRouteImport.update({
+  id: '/tts/$type/$id',
+  path: '/tts/$type/$id',
+  getParentRoute: () => ApiinternalRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -365,6 +371,7 @@ export interface FileRoutesByFullPath {
   '/api/auth/$': typeof ApipublicAuthSplatRoute
   '/api/chapters': typeof ApiinternalChaptersIndexRoute
   '/api/schools': typeof ApiinternalSchoolsIndexRoute
+  '/api/tts/$type/$id': typeof ApiinternalTtsTypeIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -416,6 +423,7 @@ export interface FileRoutesByTo {
   '/api/auth/$': typeof ApipublicAuthSplatRoute
   '/api/chapters': typeof ApiinternalChaptersIndexRoute
   '/api/schools': typeof ApiinternalSchoolsIndexRoute
+  '/api/tts/$type/$id': typeof ApiinternalTtsTypeIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -469,6 +477,7 @@ export interface FileRoutesById {
   '/api/(public)/auth/$': typeof ApipublicAuthSplatRoute
   '/api/(internal)/chapters/': typeof ApiinternalChaptersIndexRoute
   '/api/(internal)/schools/': typeof ApiinternalSchoolsIndexRoute
+  '/api/(internal)/tts/$type/$id': typeof ApiinternalTtsTypeIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -522,6 +531,7 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/api/chapters'
     | '/api/schools'
+    | '/api/tts/$type/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -573,6 +583,7 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/api/chapters'
     | '/api/schools'
+    | '/api/tts/$type/$id'
   id:
     | '__root__'
     | '/'
@@ -625,6 +636,7 @@ export interface FileRouteTypes {
     | '/api/(public)/auth/$'
     | '/api/(internal)/chapters/'
     | '/api/(internal)/schools/'
+    | '/api/(internal)/tts/$type/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -988,6 +1000,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof webAchievementsEditIdRouteImport
       parentRoute: typeof webRouteRoute
     }
+    '/api/(internal)/tts/$type/$id': {
+      id: '/api/(internal)/tts/$type/$id'
+      path: '/tts/$type/$id'
+      fullPath: '/api/tts/$type/$id'
+      preLoaderRoute: typeof ApiinternalTtsTypeIdRouteImport
+      parentRoute: typeof ApiinternalRouteRoute
+    }
   }
 }
 
@@ -1081,6 +1100,7 @@ interface ApiinternalRouteRouteChildren {
   ApiinternalUsersProfileRoute: typeof ApiinternalUsersProfileRoute
   ApiinternalChaptersIndexRoute: typeof ApiinternalChaptersIndexRoute
   ApiinternalSchoolsIndexRoute: typeof ApiinternalSchoolsIndexRoute
+  ApiinternalTtsTypeIdRoute: typeof ApiinternalTtsTypeIdRoute
 }
 
 const ApiinternalRouteRouteChildren: ApiinternalRouteRouteChildren = {
@@ -1102,6 +1122,7 @@ const ApiinternalRouteRouteChildren: ApiinternalRouteRouteChildren = {
   ApiinternalUsersProfileRoute: ApiinternalUsersProfileRoute,
   ApiinternalChaptersIndexRoute: ApiinternalChaptersIndexRoute,
   ApiinternalSchoolsIndexRoute: ApiinternalSchoolsIndexRoute,
+  ApiinternalTtsTypeIdRoute: ApiinternalTtsTypeIdRoute,
 }
 
 const ApiinternalRouteRouteWithChildren =

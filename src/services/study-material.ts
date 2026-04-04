@@ -6,6 +6,7 @@ import { dbTryPromise } from "@/lib/retry";
 import type { StudyMaterialFormData } from "@/types/zod";
 import { DatabaseError, NotFoundError } from "./errors/errors";
 import { deleteFile, uploadFile } from "./image";
+import { invalidateTtsCache } from "./tts";
 
 export const fetchAllStudyMaterials = Effect.gen(function* () {
 	const { db } = yield* Db;
@@ -137,6 +138,11 @@ export const patchStudyMaterial = (
 				new NotFoundError({ id, entity: "StudyMaterial" }),
 			);
 		}
+
+		// Fire-and-forget TTS cache invalidation
+		yield* invalidateTtsCache("material", id).pipe(
+			Effect.catchAll(() => Effect.void),
+		);
 
 		return result[0];
 	});
