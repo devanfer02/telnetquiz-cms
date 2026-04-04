@@ -78,6 +78,39 @@ export default function ChapterForm({ form, buttonText }: ChapterFormProps) {
 						)}
 					</form.Field>
 					<form.Field
+						name="minimumScore"
+						validators={{
+							onChange: (value) =>
+								validateField(chapterSchema, "minimumScore", value.value),
+						}}
+					>
+						{(field) => (
+							<div className="space-y-2">
+								<Label htmlFor={field.name}>
+									KKM (Kriteria Ketuntasan Minimal)
+								</Label>
+								<Input
+									id={field.name}
+									type="number"
+									min={1}
+									max={100}
+									value={field.state.value}
+									onBlur={field.handleBlur}
+									onChange={(e) => field.handleChange(Number(e.target.value))}
+								/>
+								<p className="text-muted-foreground text-xs">
+									Skor minimum (1-100) yang harus dicapai siswa untuk lulus quiz
+									di chapter ini.
+								</p>
+								{field.state.meta.errors && (
+									<p className="text-destructive text-sm">
+										{field.state.meta.errors}
+									</p>
+								)}
+							</div>
+						)}
+					</form.Field>
+					<form.Field
 						name="mascotId"
 						validators={{
 							onChange: (value) =>

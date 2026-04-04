@@ -111,6 +111,7 @@ export const fetchChaptersWithUserPerformance = (userId: string) =>
 					title: ch.title,
 					description: ch.description,
 					mascot_id: ch.mascotId,
+					minimum_score: ch.minimumScore,
 					user_performance: null,
 					quiz_count: ch.quizzes.length,
 					completed_quizzes: completedMap.get(ch.id) || 0,
@@ -146,6 +147,7 @@ export const fetchChaptersWithUserPerformance = (userId: string) =>
 				title: ch.title,
 				description: ch.description,
 				mascot_id: ch.mascotId,
+				minimum_score: ch.minimumScore,
 				user_performance: {
 					wrong_answers: wrong,
 					total_pretest_questions: total,

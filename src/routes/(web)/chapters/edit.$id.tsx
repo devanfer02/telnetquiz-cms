@@ -43,6 +43,7 @@ export default function RouteComponent() {
 			title: chapter?.title,
 			description: chapter?.description,
 			mascotId: chapter?.mascotId,
+			minimumScore: chapter?.minimumScore ?? 100,
 		} as ChapterFormData,
 		onSubmit: async ({ value }) => {
 			const result = await updateChapter({

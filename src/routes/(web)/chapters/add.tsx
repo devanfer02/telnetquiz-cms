@@ -23,6 +23,7 @@ export default function RouteComponent() {
 			title: "",
 			description: "",
 			mascotId: 1,
+			minimumScore: 100,
 		} as ChapterFormData,
 		onSubmit: async ({ value }) => {
 			const result = await addChapter({ data: value });
