@@ -166,6 +166,7 @@ export const submitQuizAnswers = (
 				db.query.quizzes.findFirst({
 					where: eq(quizzes.id, quizId),
 					with: {
+						chapter: true,
 						questions: {
 							with: {
 								options: true,
@@ -217,6 +218,8 @@ export const submitQuizAnswers = (
 		const totalQuestions = answers.length;
 		const score =
 			totalQuestions > 0 ? (correctCount / totalQuestions) * 100 : 0;
+		const minimumScore = quiz.chapter?.minimumScore ?? 100;
+		const passed = score >= minimumScore;
 
 		yield* dbTryPromise({
 			try: () =>
@@ -233,18 +236,9 @@ export const submitQuizAnswers = (
 				}),
 		});
 
-		if (wrongAnswers.length > 0) {
-			return {
-				passed: false,
-				wrong_question_ids: wrongAnswers,
-				correct_answers: correctCount,
-				total_questions: totalQuestions,
-				score_percentage: score,
-			};
-		}
-
 		return {
-			passed: true,
+			passed,
+			wrong_question_ids: passed ? undefined : wrongAnswers,
 			correct_answers: correctCount,
 			total_questions: totalQuestions,
 			score_percentage: score,
