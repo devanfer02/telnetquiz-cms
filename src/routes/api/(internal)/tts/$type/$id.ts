@@ -6,7 +6,6 @@ import { withApiErrorHandling } from "@/lib/sentry/effect";
 import {
 	buildCacheKey,
 	constructTtsText,
-	genderToVoice,
 	requestTtsAudio,
 } from "@/services/tts";
 
@@ -16,7 +15,7 @@ export const Route = createFileRoute("/api/(internal)/tts/$type/$id")({
 	server: {
 		handlers: ({ createHandlers }) =>
 			createHandlers({
-				GET: async ({ params, request }) =>
+				GET: async ({ params }) =>
 					Effect.runPromise(
 						withApiErrorHandling(
 							Effect.gen(function* () {
@@ -41,23 +40,9 @@ export const Route = createFileRoute("/api/(internal)/tts/$type/$id")({
 									);
 								}
 
-								const url = new URL(request.url);
-								const gender = url.searchParams.get("gender") ?? "female";
-
-								if (gender !== "male" && gender !== "female") {
-									return response(
-										{
-											message: "Invalid gender. Must be 'male' or 'female'",
-										},
-										HttpStatus.BAD_REQUEST,
-									);
-								}
-
-								const voice = genderToVoice(gender);
-								const cacheKey = buildCacheKey(gender, type, id);
-
+								const cacheKey = buildCacheKey(type, id);
 								const text = yield* constructTtsText(type, id);
-								const result = yield* requestTtsAudio(text, voice, cacheKey);
+								const result = yield* requestTtsAudio(text, cacheKey);
 
 								return response(
 									{

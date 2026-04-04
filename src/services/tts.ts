@@ -5,24 +5,13 @@ import { TtsServiceError } from "./errors/errors";
 import { fetchQuestionById } from "./questions";
 import { fetchStudyMaterialById } from "./study-material";
 
-const VOICE_MAP: Record<string, string> = {
-	male: "id-ID-ArdiNeural",
-	female: "id-ID-GadisNeural",
-};
-
 const LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H"];
 
 export const hashId = (id: number): string =>
 	createHash("sha256").update(String(id)).digest("hex").slice(0, 12);
 
-export const buildCacheKey = (
-	gender: string,
-	type: string,
-	id: number,
-): string => `${gender}/${type}-${hashId(id)}-audio`;
-
-export const genderToVoice = (gender: string): string =>
-	VOICE_MAP[gender] ?? VOICE_MAP.female;
+export const buildCacheKey = (type: string, id: number): string =>
+	`${type}-${hashId(id)}-audio`;
 
 export const constructTtsText = (type: string, id: number) =>
 	Effect.gen(function* () {
@@ -50,11 +39,7 @@ export const constructTtsText = (type: string, id: number) =>
 		);
 	});
 
-export const requestTtsAudio = (
-	text: string,
-	voice: string,
-	cacheKey: string,
-) =>
+export const requestTtsAudio = (text: string, cacheKey: string) =>
 	Effect.gen(function* () {
 		const result = yield* Effect.tryPromise({
 			try: async () => {
@@ -66,7 +51,6 @@ export const requestTtsAudio = (
 					},
 					body: JSON.stringify({
 						text,
-						voice,
 						cache_key: cacheKey,
 					}),
 				});
@@ -94,18 +78,14 @@ export const requestTtsAudio = (
 
 export const invalidateTtsCache = (type: string, id: number) =>
 	Effect.gen(function* () {
-		const genders = ["male", "female"];
+		const cacheKey = buildCacheKey(type, id);
 
-		for (const gender of genders) {
-			const cacheKey = buildCacheKey(gender, type, id);
-
-			yield* Effect.tryPromise({
-				try: () =>
-					fetch(`${env.TTS_SERVICE_URL}/cache/${cacheKey}`, {
-						method: "DELETE",
-						headers: { "x-api-key": env.TTS_SERVICE_API_KEY },
-					}),
-				catch: () => null,
-			}).pipe(Effect.catchAll(() => Effect.void));
-		}
+		yield* Effect.tryPromise({
+			try: () =>
+				fetch(`${env.TTS_SERVICE_URL}/cache/${cacheKey}`, {
+					method: "DELETE",
+					headers: { "x-api-key": env.TTS_SERVICE_API_KEY },
+				}),
+			catch: () => null,
+		}).pipe(Effect.catchAll(() => Effect.void));
 	});
