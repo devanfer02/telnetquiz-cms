@@ -2,8 +2,11 @@ from io import BytesIO
 
 import edge_tts
 
+from src.pronunciation import preprocess_for_tts
+
 
 async def synthesize(text: str, voice: str) -> bytes:
+    text = preprocess_for_tts(text)
     communicate = edge_tts.Communicate(text, voice)
     buffer = BytesIO()
 
