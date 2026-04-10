@@ -1,10 +1,11 @@
 import { createHash } from "node:crypto";
+import { resolve } from "node:path";
 import { db } from "../src/lib/db";
-import { env } from "../src/lib/env";
 import { questions, options, studyMaterials } from "../src/database/schema";
 import { asc } from "drizzle-orm";
 
 const LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H"];
+const TTS_PROJECT_DIR = resolve(import.meta.dir, "../../telnetquiz-tts");
 
 function hashId(id: number): string {
 	return createHash("sha256").update(String(id)).digest("hex").slice(0, 12);
@@ -14,33 +15,46 @@ function buildCacheKey(type: string, id: number): string {
 	return `${type}-${hashId(id)}-audio`;
 }
 
-async function synthesize(text: string, cacheKey: string) {
-	const res = await fetch(`${env.TTS_SERVICE_URL}/synthesize`, {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-			"x-api-key": env.TTS_SERVICE_API_KEY,
-		},
-		body: JSON.stringify({ text, cache_key: cacheKey }),
+interface TtsItem {
+	text: string;
+	cache_key: string;
+}
+
+interface TtsResult {
+	cache_key: string;
+	status: "generated" | "cached" | "failed";
+	audio_url?: string;
+	error?: string;
+}
+
+async function runPythonBatch(items: TtsItem[]): Promise<TtsResult[]> {
+	const input = JSON.stringify(items);
+
+	const proc = Bun.spawn(["make", "batch:convert"], {
+		cwd: TTS_PROJECT_DIR,
+		stdin: new Blob([input]),
+		stdout: "pipe",
+		stderr: "inherit",
 	});
 
-	if (!res.ok) {
-		const body = await res.text();
-		throw new Error(`TTS service returned ${res.status}: ${body}`);
+	const stdout = await new Response(proc.stdout).text();
+	const exitCode = await proc.exited;
+
+	if (exitCode !== 0) {
+		throw new Error(`Python batch script exited with code ${exitCode}`);
 	}
 
-	return (await res.json()) as { audio_url: string; cached: boolean };
+	return JSON.parse(stdout) as TtsResult[];
 }
 
 async function batchGenerate() {
 	const args = process.argv.slice(2);
 	const types = args.length > 0 ? args : ["question", "pretest", "material"];
 
-	console.log(`Batch TTS generation for: ${types.join(", ")}\n`);
+	console.log(`Batch TTS generation for: ${types.join(", ")}`);
+	console.log(`Using Python TTS at: ${TTS_PROJECT_DIR}\n`);
 
-	let generated = 0;
-	let cached = 0;
-	let failed = 0;
+	const items: TtsItem[] = [];
 
 	if (types.includes("question") || types.includes("pretest")) {
 		const allQuestions = await db
@@ -80,26 +94,12 @@ async function batchGenerate() {
 				.join(". ");
 			const ttsText = `${q.description}. ${q.question}. Pilihan jawaban: ${optionsText}`;
 			const type = q.type ?? "question";
-			const cacheKey = buildCacheKey(type, q.id);
 
-			try {
-				const result = await synthesize(ttsText, cacheKey);
-				if (result.cached) {
-					cached++;
-					process.stdout.write(".");
-				} else {
-					generated++;
-					process.stdout.write("✓");
-				}
-			} catch (err) {
-				failed++;
-				process.stdout.write("✗");
-				console.error(
-					`\n  Failed ${type} #${q.id}: ${err instanceof Error ? err.message : err}`,
-				);
-			}
+			items.push({
+				text: ttsText,
+				cache_key: buildCacheKey(type, q.id),
+			});
 		}
-		console.log();
 	}
 
 	if (types.includes("material")) {
@@ -115,27 +115,31 @@ async function batchGenerate() {
 
 		for (const m of allMaterials) {
 			const plainContent = m.content.replace(/<[^>]*>/g, "");
-			const ttsText = `${m.title}. ${plainContent}`;
-			const cacheKey = buildCacheKey("material", m.id);
-
-			try {
-				const result = await synthesize(ttsText, cacheKey);
-				if (result.cached) {
-					cached++;
-					process.stdout.write(".");
-				} else {
-					generated++;
-					process.stdout.write("✓");
-				}
-			} catch (err) {
-				failed++;
-				process.stdout.write("✗");
-				console.error(
-					`\n  Failed material #${m.id}: ${err instanceof Error ? err.message : err}`,
-				);
-			}
+			items.push({
+				text: `${m.title}. ${plainContent}`,
+				cache_key: buildCacheKey("material", m.id),
+			});
 		}
-		console.log();
+	}
+
+	if (items.length === 0) {
+		console.log("No items to process.");
+		process.exit(0);
+	}
+
+	console.log(`\nSending ${items.length} items to Python TTS batch...\n`);
+
+	const results = await runPythonBatch(items);
+
+	const generated = results.filter((r) => r.status === "generated").length;
+	const cached = results.filter((r) => r.status === "cached").length;
+	const failed = results.filter((r) => r.status === "failed").length;
+
+	if (failed > 0) {
+		console.log("\nFailed items:");
+		for (const r of results.filter((r) => r.status === "failed")) {
+			console.log(`  ${r.cache_key}: ${r.error}`);
+		}
 	}
 
 	console.log(

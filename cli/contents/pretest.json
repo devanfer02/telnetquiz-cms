@@ -1,0 +1,52 @@
+{
+  "questions": [
+    {
+      "chapterRef": "Prinsip TCP/IP",
+      "description": "Pertanyaan umum mengenai pengertian dan fungsi protokol TCP/IP dalam jaringan komputer.",
+      "question": "Apa fungsi utama dari protokol TCP/IP dalam jaringan komputer?",
+      "imageLink": null,
+      "options": [
+        { "text": "Mengatur komunikasi dan pengiriman data antar perangkat dalam jaringan", "isCorrect": true },
+        { "text": "Mengenkripsi seluruh data yang tersimpan di hard disk komputer", "isCorrect": false },
+        { "text": "Mengelola tampilan antarmuka pengguna pada sistem operasi", "isCorrect": false },
+        { "text": "Mengatur kecepatan prosesor agar sesuai dengan beban jaringan", "isCorrect": false }
+      ]
+    },
+    {
+      "chapterRef": "Prinsip TCP/IP",
+      "description": "Pertanyaan tentang struktur dasar alamat IPv4 dan pembagian kelasnya.",
+      "question": "Alamat IPv4 terdiri dari berapa bit?",
+      "imageLink": null,
+      "options": [
+        { "text": "32 bit", "isCorrect": true },
+        { "text": "64 bit", "isCorrect": false },
+        { "text": "128 bit", "isCorrect": false },
+        { "text": "16 bit", "isCorrect": false }
+      ]
+    },
+    {
+      "chapterRef": "Prinsip Sistem WLAN",
+      "description": "Pertanyaan umum mengenai pengertian dan cara kerja WLAN.",
+      "question": "Apa yang dimaksud dengan WLAN (Wireless Local Area Network)?",
+      "imageLink": null,
+      "options": [
+        { "text": "Jaringan area lokal yang menghubungkan perangkat menggunakan gelombang radio tanpa kabel", "isCorrect": true },
+        { "text": "Jaringan luas yang menghubungkan komputer antar kota menggunakan kabel fiber optik", "isCorrect": false },
+        { "text": "Perangkat lunak yang digunakan untuk memantau lalu lintas internet", "isCorrect": false },
+        { "text": "Protokol keamanan yang melindungi data pada jaringan berkabel", "isCorrect": false }
+      ]
+    },
+    {
+      "chapterRef": "Prinsip Sistem WLAN",
+      "description": "Pertanyaan tentang komponen dasar yang digunakan dalam jaringan WLAN.",
+      "question": "Perangkat apa yang berfungsi sebagai penghubung utama antara perangkat nirkabel dan jaringan kabel pada WLAN?",
+      "imageLink": null,
+      "options": [
+        { "text": "Access Point (AP)", "isCorrect": true },
+        { "text": "Repeater", "isCorrect": false },
+        { "text": "Modem DSL", "isCorrect": false },
+        { "text": "Network Interface Card (NIC) kabel", "isCorrect": false }
+      ]
+    }
+  ]
+}
