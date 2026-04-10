@@ -1,9 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { ArrowLeft } from "lucide-react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { addQuestions } from "@/actions/questions";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+import FormPageLayout from "@/components/global/form-page-layout";
 import { useCustomForm } from "@/hooks/use-custom-form";
 import { QUERY_KEYS } from "@/lib/constant";
 import QuestionForm from "@/routes/(web)/questions/-sections/question-form";
@@ -53,7 +51,6 @@ export default function RouteComponent() {
 					type: "error",
 					message: "Failed to create questions. See logs.",
 				});
-
 				navigate({ to: "/questions" });
 				return;
 			}
@@ -72,25 +69,12 @@ export default function RouteComponent() {
 	});
 
 	return (
-		<div className="max-w-4xl mx-auto space-y-6 pb-10">
-			<div className="flex items-center gap-4">
-				<Button variant="outline" size="icon" asChild>
-					<Link to="/questions">
-						<ArrowLeft className="h-4 w-4" />
-					</Link>
-				</Button>
-				<div>
-					<h1 className="text-2xl font-bold tracking-tight">
-						Add New Questions
-					</h1>
-					<p className="text-muted-foreground">
-						Fill out the form below to add new questions. You can add multiple
-						questions at once.
-					</p>
-				</div>
-			</div>
-			<Separator />
+		<FormPageLayout
+			backTo="/questions"
+			title="Add New Questions"
+			description="Fill out the form below to add new questions. You can add multiple questions at once."
+		>
 			<QuestionForm form={form} buttonText="Tambah Pertanyaan" />
-		</div>
+		</FormPageLayout>
 	);
 }

@@ -1,9 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { ArrowLeft } from "lucide-react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { addSchool } from "@/actions/schools";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+import FormPageLayout from "@/components/global/form-page-layout";
 import { useCustomForm } from "@/hooks/use-custom-form";
 import { QUERY_KEYS } from "@/lib/constant";
 import { setFlashState } from "@/store/use-flash";
@@ -48,24 +46,12 @@ export default function RouteComponent() {
 	});
 
 	return (
-		<div className="max-w-4xl mx-auto space-y-6 pb-10">
-			<div className="flex items-center gap-4">
-				<Button variant="outline" size="icon" asChild>
-					<Link to="/schools">
-						<ArrowLeft className="h-4 w-4" />
-					</Link>
-				</Button>
-				<div>
-					<h1 className="text-2xl font-bold tracking-tight">
-						Tambah Sekolah Baru
-					</h1>
-					<p className="text-muted-foreground">
-						Isi form di bawah untuk menambahkan sekolah baru.
-					</p>
-				</div>
-			</div>
-			<Separator />
+		<FormPageLayout
+			backTo="/schools"
+			title="Tambah Sekolah Baru"
+			description="Isi form di bawah untuk menambahkan sekolah baru."
+		>
 			<SchoolForm form={form} buttonText="Tambah" />
-		</div>
+		</FormPageLayout>
 	);
 }

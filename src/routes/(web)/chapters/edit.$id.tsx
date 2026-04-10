@@ -1,14 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
-import {
-	createFileRoute,
-	Link,
-	redirect,
-	useNavigate,
-} from "@tanstack/react-router";
-import { ArrowLeft } from "lucide-react";
+import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { getChapterById, updateChapter } from "@/actions/chapters";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+import FormPageLayout from "@/components/global/form-page-layout";
 import { useCustomForm } from "@/hooks/use-custom-form";
 import { QUERY_KEYS } from "@/lib/constant";
 import { setFlashState } from "@/store/use-flash";
@@ -58,7 +51,6 @@ export default function RouteComponent() {
 					type: "error",
 					message: "Failed to update chapter. See logs.",
 				});
-
 				navigate({ to: "/chapters" });
 				return;
 			}
@@ -78,24 +70,13 @@ export default function RouteComponent() {
 	});
 
 	return (
-		<div className="max-w-4xl mx-auto space-y-6 pb-10">
-			<div className="flex items-center gap-4">
-				<Button variant="outline" size="icon" asChild>
-					<Link to="/chapters/$id" params={{ id: chapter.id.toString() }}>
-						<ArrowLeft className="h-4 w-4" />
-					</Link>
-				</Button>
-				<div>
-					<h1 className="text-2xl font-bold tracking-tight">
-						Edit Chapter {chapter?.title}
-					</h1>
-					<p className="text-muted-foreground">
-						Isi form di bawah untuk memperbarui chapter.
-					</p>
-				</div>
-			</div>
-			<Separator />
+		<FormPageLayout
+			backTo="/chapters/$id"
+			backParams={{ id: chapter.id.toString() }}
+			title={`Edit Chapter ${chapter?.title}`}
+			description="Isi form di bawah untuk memperbarui chapter."
+		>
 			<ChapterForm form={form} buttonText="Perbarui" />
-		</div>
+		</FormPageLayout>
 	);
 }
