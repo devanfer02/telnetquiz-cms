@@ -3,6 +3,17 @@ import { Effect } from "effect";
 import z from "zod";
 import { ValidationError } from "@/services/errors/errors";
 
+export const parseNumericId = (raw: string, label = "id") =>
+	Effect.gen(function* () {
+		const id = Number(raw);
+		if (Number.isNaN(id)) {
+			return yield* Effect.fail(
+				new ValidationError({ errors: { [label]: `Invalid ${label}` } }),
+			);
+		}
+		return id;
+	});
+
 export const HttpStatus = {
 	OK: 200,
 	CREATED: 201,
