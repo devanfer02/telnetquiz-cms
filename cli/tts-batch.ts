@@ -5,7 +5,7 @@ import { questions, options, studyMaterials } from "../src/database/schema";
 import { asc } from "drizzle-orm";
 
 const LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H"];
-const TTS_PROJECT_DIR = resolve(import.meta.dir, "../../telnetquiz-tts");
+const TTS_PROJECT_DIR = resolve(import.meta.dir, "../tts-api");
 
 function hashId(id: number): string {
 	return createHash("sha256").update(String(id)).digest("hex").slice(0, 12);
