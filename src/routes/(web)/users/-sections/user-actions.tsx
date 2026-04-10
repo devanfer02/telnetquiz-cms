@@ -1,6 +1,7 @@
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Edit, RotateCcw, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { getAllSchools } from "@/actions/schools";
 import {
 	removeUser,
 	resetUserProgressAction,
@@ -41,11 +42,17 @@ export default function UserActions({ user }: UserActionsProps) {
 	const [open, setOpen] = useState(false);
 	const queryClient = useQueryClient();
 
+	const { data: schools = [] } = useQuery({
+		queryKey: [QUERY_KEYS.SCHOOLS],
+		queryFn: () => getAllSchools(),
+	});
+
 	const form = useCustomForm({
 		defaultValues: {
 			fullname: user.name,
 			email: user.email,
 			password: "",
+			schoolId: user.schoolId ?? undefined,
 			gender: user.gender ?? undefined,
 			grade: user.grade ?? "",
 		} as EditUserFormData,
@@ -124,7 +131,11 @@ export default function UserActions({ user }: UserActionsProps) {
 						<SheetDescription>Update user details.</SheetDescription>
 					</SheetHeader>
 					<div className="">
-						<UserForm form={form} buttonText="Perbaharui User" />
+						<UserForm
+							form={form}
+							buttonText="Perbaharui User"
+							schools={schools}
+						/>
 					</div>
 				</SheetContent>
 			</Sheet>
