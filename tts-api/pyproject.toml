@@ -1,0 +1,17 @@
+[project]
+name = "telnetquiz-tts"
+version = "0.1.0"
+description = "Edge TTS microservice for TelNetQuiz - generates Indonesian speech audio via Microsoft Edge neural voices"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.34.0",
+    "edge-tts>=7.0.0",
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+    "boto3>=1.35.0",
+]
+
+[project.scripts]
+dev = "uvicorn src.main:app --reload --host 0.0.0.0 --port 8000"
