@@ -1,4 +1,4 @@
-.PHONY: dev dev\:cms dev\:tts tts\:batch tts\:purge seed\:content seed\:mock
+.PHONY: dev dev\:cms dev\:tts tts\:batch tts\:purge seed\:content seed\:mock docker\:up docker\:down docker\:build docker\:logs
 
 # Start both CMS and TTS API concurrently
 dev:
@@ -24,3 +24,16 @@ seed\:content:
 
 seed\:mock:
 	bun run db:seed-mock
+
+# Docker
+docker\:up:
+	docker compose up -d
+
+docker\:down:
+	docker compose down
+
+docker\:build:
+	docker compose build
+
+docker\:logs:
+	docker compose logs -f
