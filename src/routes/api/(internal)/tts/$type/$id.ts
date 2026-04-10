@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Effect } from "effect";
 import { DbLayer } from "@/lib/db";
-import { HttpStatus, response } from "@/lib/http";
+import { HttpStatus, parseNumericId, response } from "@/lib/http";
 import { withApiErrorHandling } from "@/lib/sentry/effect";
+import { ValidationError } from "@/services/errors/errors";
 import {
 	buildCacheKey,
 	constructTtsText,
@@ -20,26 +21,20 @@ export const Route = createFileRoute("/api/(internal)/tts/$type/$id")({
 						withApiErrorHandling(
 							Effect.gen(function* () {
 								const { type } = params;
-								const id = Number(params.id);
 
 								if (
 									!VALID_TYPES.includes(type as (typeof VALID_TYPES)[number])
 								) {
-									return response(
-										{
-											message: `Invalid type: ${type}. Must be one of: ${VALID_TYPES.join(", ")}`,
-										},
-										HttpStatus.BAD_REQUEST,
+									return yield* Effect.fail(
+										new ValidationError({
+											errors: {
+												type: `Invalid type: ${type}. Must be one of: ${VALID_TYPES.join(", ")}`,
+											},
+										}),
 									);
 								}
 
-								if (Number.isNaN(id)) {
-									return response(
-										{ message: "Invalid id" },
-										HttpStatus.BAD_REQUEST,
-									);
-								}
-
+								const id = yield* parseNumericId(params.id);
 								const cacheKey = buildCacheKey(type, id);
 								const text = yield* constructTtsText(type, id);
 								const result = yield* requestTtsAudio(text, cacheKey);

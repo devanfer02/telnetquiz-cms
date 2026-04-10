@@ -5,7 +5,10 @@ import { HttpStatus, parseBody, response } from "@/lib/http";
 import { withApiErrorHandling } from "@/lib/sentry/effect";
 import { authMiddleware } from "@/middlewares/auth";
 import { submitPretest } from "@/services/pretest";
-import { fetchQuestionsByType } from "@/services/questions";
+import {
+	fetchQuestionsByType,
+	formatQuestionsForApi,
+} from "@/services/questions";
 import { pretestSubmissionSchema } from "@/types/zod.api";
 
 export const Route = createFileRoute("/api/(internal)/pretest")({
@@ -18,24 +21,11 @@ export const Route = createFileRoute("/api/(internal)/pretest")({
 							Effect.gen(function* () {
 								const questions = yield* fetchQuestionsByType("pretest");
 
-								const formattedQuestions = questions.map((q) => ({
-									id: q.id,
-									type: q.type,
-									chapter_id: q.chapterId,
-									image_link: q.imageLink,
-									description: q.description,
-									question: q.question,
-									options: q.options.map((o) => ({
-										id: o.id,
-										text: o.text,
-									})),
-								}));
-
 								return response(
 									{
 										message: "Successfully fetch pretest questions",
 										data: {
-											questions: formattedQuestions,
+											questions: formatQuestionsForApi(questions),
 										},
 									},
 									HttpStatus.OK,

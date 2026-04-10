@@ -123,6 +123,20 @@ export const deleteQuiz = (id: number) =>
 		return { success: true, id };
 	});
 
+export const sanitizeQuizForClient = <
+	T extends {
+		questions: { options: { isCorrect: boolean; [k: string]: unknown }[] }[];
+	},
+>(
+	quiz: T,
+) => ({
+	...quiz,
+	questions: quiz.questions.map((q) => ({
+		...q,
+		options: q.options.map(({ isCorrect: _, ...opt }) => opt),
+	})),
+});
+
 export const fetchQuizByIdWithQuestionsAndOptions = (id: number) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;

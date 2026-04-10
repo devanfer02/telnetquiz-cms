@@ -3,11 +3,12 @@ import { Effect } from "effect";
 import { DbLayer } from "@/lib/db";
 import { HttpStatus, response } from "@/lib/http";
 import { S3Layer } from "@/lib/s3";
+import { withApiErrorHandling } from "@/lib/sentry/effect";
 import { authMiddleware } from "@/middlewares/auth";
 import { uploadAvatar } from "@/services/avatar";
-import type { DatabaseError } from "@/services/errors/errors";
+import { ValidationError } from "@/services/errors/errors";
 
-const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
+const MAX_FILE_SIZE = 2 * 1024 * 1024;
 const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "image/png"];
 
 export const Route = createFileRoute("/api/(internal)/users/avatar")({
@@ -16,73 +17,54 @@ export const Route = createFileRoute("/api/(internal)/users/avatar")({
 		handlers: {
 			POST: async ({ request }) =>
 				Effect.runPromise(
-					Effect.gen(function* () {
-						const formData = yield* Effect.tryPromise({
-							try: () => request.formData(),
-							catch: () => ({
-								_tag: "ValidationError" as const,
-								message: "Invalid form data",
-							}),
-						});
+					withApiErrorHandling(
+						Effect.gen(function* () {
+							const formData = yield* Effect.tryPromise({
+								try: () => request.formData(),
+								catch: () =>
+									new ValidationError({
+										errors: { form: "Invalid form data" },
+									}),
+							});
 
-						const file = formData.get("image");
-						if (!file || !(file instanceof File)) {
-							return response(
-								{ message: "No image file provided" },
-								HttpStatus.BAD_REQUEST,
-							);
-						}
+							const file = formData.get("image");
+							if (!file || !(file instanceof File)) {
+								return yield* Effect.fail(
+									new ValidationError({
+										errors: { image: "No image file provided" },
+									}),
+								);
+							}
 
-						if (file.size > MAX_FILE_SIZE) {
-							return response(
-								{ message: "File size exceeds 2MB limit" },
-								HttpStatus.BAD_REQUEST,
-							);
-						}
+							if (file.size > MAX_FILE_SIZE) {
+								return yield* Effect.fail(
+									new ValidationError({
+										errors: { image: "File size exceeds 2MB limit" },
+									}),
+								);
+							}
 
-						if (!ALLOWED_TYPES.includes(file.type)) {
+							if (!ALLOWED_TYPES.includes(file.type)) {
+								return yield* Effect.fail(
+									new ValidationError({
+										errors: {
+											image:
+												"Invalid file type. Only JPG, JPEG, and PNG are allowed",
+										},
+									}),
+								);
+							}
+
+							const imageUrl = yield* uploadAvatar(file);
+
 							return response(
 								{
-									message:
-										"Invalid file type. Only JPG, JPEG, and PNG are allowed",
+									message: "Successfully uploaded avatar",
+									data: { image_url: imageUrl },
 								},
-								HttpStatus.BAD_REQUEST,
+								HttpStatus.OK,
 							);
-						}
-
-						const imageUrl = yield* uploadAvatar(file);
-
-						return response(
-							{
-								message: "Successfully uploaded avatar",
-								data: { image_url: imageUrl },
-							},
-							HttpStatus.OK,
-						);
-					}).pipe(
-						Effect.provide(S3Layer),
-						Effect.provide(DbLayer),
-						Effect.catchTags({
-							DatabaseError: (err: DatabaseError) =>
-								Effect.succeed(
-									response(
-										{
-											message: "Failed to upload avatar",
-											error: err.message,
-										},
-										HttpStatus.INTERNAL_SERVER_ERROR,
-									),
-								),
-						}),
-						Effect.catchAll((err) => {
-							console.error("ERR: ", err);
-							return Effect.succeed(
-								response(
-									{ message: "Internal server error" },
-									HttpStatus.INTERNAL_SERVER_ERROR,
-								),
-							);
-						}),
+						}).pipe(Effect.provide(S3Layer), Effect.provide(DbLayer)),
 					),
 				),
 		},

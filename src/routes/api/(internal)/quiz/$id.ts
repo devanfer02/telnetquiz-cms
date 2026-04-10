@@ -1,11 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Effect } from "effect";
 import { DbLayer } from "@/lib/db";
-import { HttpStatus, parseBody, response } from "@/lib/http";
+import { HttpStatus, parseBody, parseNumericId, response } from "@/lib/http";
 import { withApiErrorHandling } from "@/lib/sentry/effect";
 import { authMiddleware } from "@/middlewares/auth";
 import {
 	fetchQuizByIdWithQuestionsAndOptions,
+	sanitizeQuizForClient,
 	submitQuizAnswers,
 } from "@/services/quizzes";
 import { quizSubmissionSchema } from "@/types/zod.api";
@@ -18,31 +19,13 @@ export const Route = createFileRoute("/api/(internal)/quiz/$id")({
 					Effect.runPromise(
 						withApiErrorHandling(
 							Effect.gen(function* () {
-								const id = Number(params.id);
-
-								if (Number.isNaN(id)) {
-									return response(
-										{
-											message: "Invalid quiz id",
-										},
-										HttpStatus.BAD_REQUEST,
-									);
-								}
-
+								const id = yield* parseNumericId(params.id, "quiz id");
 								const result = yield* fetchQuizByIdWithQuestionsAndOptions(id);
-
-								const sanitizedResult = {
-									...result,
-									questions: result.questions.map((q) => ({
-										...q,
-										options: q.options.map(({ isCorrect, ...opt }) => opt),
-									})),
-								};
 
 								return response(
 									{
 										message: "Successfully fetch quiz by id",
-										data: sanitizedResult,
+										data: sanitizeQuizForClient(result),
 									},
 									HttpStatus.OK,
 								);
@@ -55,17 +38,7 @@ export const Route = createFileRoute("/api/(internal)/quiz/$id")({
 						Effect.runPromise(
 							withApiErrorHandling(
 								Effect.gen(function* () {
-									const id = Number(params.id);
-
-									if (Number.isNaN(id)) {
-										return response(
-											{
-												message: "Invalid quiz id",
-											},
-											HttpStatus.BAD_REQUEST,
-										);
-									}
-
+									const id = yield* parseNumericId(params.id, "quiz id");
 									const body = yield* Effect.tryPromise(() => request.json());
 									const data = yield* parseBody(quizSubmissionSchema, body);
 

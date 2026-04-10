@@ -27,6 +27,30 @@ export const fetchAllQuestions = Effect.gen(function* () {
 	});
 });
 
+export const formatQuestionsForApi = (
+	items: {
+		id: number;
+		type: string | null;
+		chapterId: number | null;
+		imageLink: string | null;
+		description: string;
+		question: string;
+		options: { id: number; text: string }[];
+	}[],
+) =>
+	items.map((q) => ({
+		id: q.id,
+		type: q.type,
+		chapter_id: q.chapterId,
+		image_link: q.imageLink,
+		description: q.description,
+		question: q.question,
+		options: q.options.map((o) => ({
+			id: o.id,
+			text: o.text,
+		})),
+	}));
+
 export const fetchQuestionsByType = (type: "pretest" | "quiz") =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
