@@ -64,7 +64,6 @@ export default function RouteComponent() {
 
 	return (
 		<FormPageLayout
-			backTo="/schools"
 			title={`Edit Sekolah ${school?.name}`}
 			description="Isi form di bawah untuk memperbarui sekolah."
 		>

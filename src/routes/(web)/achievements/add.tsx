@@ -52,7 +52,6 @@ export default function RouteComponent() {
 
 	return (
 		<FormPageLayout
-			backTo="/achievements"
 			title="Tambah Achievement Baru"
 			description="Isi form di bawah untuk menambahkan achievement baru."
 		>

@@ -70,7 +70,6 @@ export default function RouteComponent() {
 
 	return (
 		<FormPageLayout
-			backTo="/questions"
 			title="Add New Questions"
 			description="Fill out the form below to add new questions. You can add multiple questions at once."
 		>

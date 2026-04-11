@@ -47,7 +47,6 @@ export default function RouteComponent() {
 
 	return (
 		<FormPageLayout
-			backTo="/schools"
 			title="Tambah Sekolah Baru"
 			description="Isi form di bawah untuk menambahkan sekolah baru."
 		>

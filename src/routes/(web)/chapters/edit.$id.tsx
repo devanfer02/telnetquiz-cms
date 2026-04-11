@@ -71,8 +71,6 @@ export default function RouteComponent() {
 
 	return (
 		<FormPageLayout
-			backTo="/chapters/$id"
-			backParams={{ id: chapter.id.toString() }}
 			title={`Edit Chapter ${chapter?.title}`}
 			description="Isi form di bawah untuk memperbarui chapter."
 		>

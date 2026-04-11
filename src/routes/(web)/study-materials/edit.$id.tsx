@@ -81,8 +81,6 @@ export default function RouteComponent() {
 
 	return (
 		<FormPageLayout
-			backTo="/study-materials/$id"
-			backParams={{ id: studyMaterial.id.toString() }}
 			title={`Edit Materi ${studyMaterial?.title}`}
 			description="Isi form di bawah untuk memperbarui materi."
 		>

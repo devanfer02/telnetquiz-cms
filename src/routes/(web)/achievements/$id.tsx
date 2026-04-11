@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import { getAchievementDetail } from "@/actions/achievements";
 import { Button } from "@/components/ui/button";
@@ -19,6 +19,7 @@ export const Route = createFileRoute("/(web)/achievements/$id")({
 });
 
 function AchievementDetailPage() {
+	const router = useRouter();
 	const { id } = Route.useParams();
 
 	const { data } = useSuspenseQuery({
@@ -31,12 +32,10 @@ function AchievementDetailPage() {
 		return (
 			<div className="flex flex-col items-center justify-center py-20 gap-4">
 				<p className="text-muted-foreground text-lg">Achievement not found</p>
-				<Link to="/achievements">
-					<Button variant="outline">
-						<ArrowLeft className="mr-2 h-4 w-4" />
-						Kembali ke Achievements
-					</Button>
-				</Link>
+				<Button variant="outline" onClick={() => router.history.back()}>
+					<ArrowLeft className="mr-2 h-4 w-4" />
+					Kembali ke Achievements
+				</Button>
 			</div>
 		);
 	}
@@ -46,11 +45,13 @@ function AchievementDetailPage() {
 	return (
 		<div className="space-y-6 mb-10">
 			<div className="flex items-center gap-4">
-				<Link to="/achievements">
-					<Button variant="outline" size="icon">
-						<ArrowLeft className="h-4 w-4" />
-					</Button>
-				</Link>
+				<Button
+					variant="outline"
+					size="icon"
+					onClick={() => router.history.back()}
+				>
+					<ArrowLeft className="h-4 w-4" />
+				</Button>
 				<div>
 					<h1 className="text-2xl font-bold tracking-tight">
 						Detail Achievement

@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import { getUserDetail } from "@/actions/users";
 import { Button } from "@/components/ui/button";
@@ -27,6 +27,7 @@ export const Route = createFileRoute("/(web)/users/$id")({
 });
 
 function UserDetailPage() {
+	const router = useRouter();
 	const { id } = Route.useParams();
 
 	const { data } = useSuspenseQuery({
@@ -39,12 +40,10 @@ function UserDetailPage() {
 		return (
 			<div className="flex flex-col items-center justify-center py-20 gap-4">
 				<p className="text-muted-foreground text-lg">User not found</p>
-				<Link to="/users">
-					<Button variant="outline">
-						<ArrowLeft className="mr-2 h-4 w-4" />
-						Back to Users
-					</Button>
-				</Link>
+				<Button variant="outline" onClick={() => router.history.back()}>
+					<ArrowLeft className="mr-2 h-4 w-4" />
+					Back to Users
+				</Button>
 			</div>
 		);
 	}
@@ -54,11 +53,13 @@ function UserDetailPage() {
 	return (
 		<div className="space-y-6 mb-10">
 			<div className="flex items-center gap-4">
-				<Link to="/users">
-					<Button variant="outline" size="icon">
-						<ArrowLeft className="h-4 w-4" />
-					</Button>
-				</Link>
+				<Button
+					variant="outline"
+					size="icon"
+					onClick={() => router.history.back()}
+				>
+					<ArrowLeft className="h-4 w-4" />
+				</Button>
 				<div>
 					<h1 className="text-2xl font-bold tracking-tight">User Detail</h1>
 					<p className="text-muted-foreground">

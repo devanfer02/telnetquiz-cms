@@ -86,7 +86,6 @@ export default function RouteComponent() {
 
 	return (
 		<FormPageLayout
-			backTo="/questions"
 			title="Edit Question"
 			description="Edit the form below to update the question."
 		>

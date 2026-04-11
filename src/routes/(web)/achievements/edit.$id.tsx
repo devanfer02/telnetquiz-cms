@@ -69,7 +69,6 @@ export default function RouteComponent() {
 
 	return (
 		<FormPageLayout
-			backTo="/achievements"
 			title={`Edit Achievement: ${achievement.title}`}
 			description="Perbarui detail achievement di bawah."
 		>

@@ -51,7 +51,6 @@ export default function RouteComponent() {
 
 	return (
 		<FormPageLayout
-			backTo="/quiz"
 			title="Tambah Kuis Baru"
 			description="Isi form di bawah untuk menambahkan kuis baru."
 		>

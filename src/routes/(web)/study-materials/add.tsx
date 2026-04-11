@@ -60,7 +60,6 @@ export default function RouteComponent() {
 
 	return (
 		<FormPageLayout
-			backTo="/study-materials"
 			title="Tambah Materi Baru"
 			description="Isi form di bawah untuk menambahkan materi baru."
 		>

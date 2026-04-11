@@ -71,8 +71,6 @@ export default function RouteComponent() {
 
 	return (
 		<FormPageLayout
-			backTo="/quiz/$id"
-			backParams={{ id: quiz.id.toString() }}
 			title={`Edit Kuis ${quiz?.title}`}
 			description="Isi form di bawah untuk memperbarui kuis."
 		>

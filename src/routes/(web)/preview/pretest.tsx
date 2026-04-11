@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { getAllQuestions } from "@/actions/questions";
@@ -17,6 +17,7 @@ export const Route = createFileRoute("/(web)/preview/pretest")({
 });
 
 function RouteComponent() {
+	const router = useRouter();
 	const [showCorrect, setShowCorrect] = useState(false);
 	const [previewKey, setPreviewKey] = useState(0);
 
@@ -44,12 +45,13 @@ function RouteComponent() {
 	return (
 		<div>
 			<div className="flex items-center gap-3 mb-6">
-				<Link
-					to="/preview"
+				<button
+					type="button"
+					onClick={() => router.history.back()}
 					className="p-2 rounded-lg hover:bg-muted transition-colors"
 				>
 					<ArrowLeft className="w-5 h-5" />
-				</Link>
+				</button>
 				<div>
 					<h1 className="text-2xl font-bold">Preview Pretest</h1>
 					<p className="text-sm text-muted-foreground">
