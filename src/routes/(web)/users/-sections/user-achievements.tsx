@@ -52,8 +52,8 @@ export default function UserAchievements({ userId }: UserAchievementsProps) {
 			<CardContent>
 				{isLoading ? (
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-						{Array.from({ length: 4 }).map((_, i) => (
-							<Skeleton key={`skeleton-${i}`} className="h-20 rounded-lg" />
+						{["a", "b", "c", "d"].map((id) => (
+							<Skeleton key={id} className="h-20 rounded-lg" />
 						))}
 					</div>
 				) : !achievements || achievements.length === 0 ? (

@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { BookOpen, Pencil } from "lucide-react";
+import { BookOpen, Eye, Pencil } from "lucide-react";
 import { MetadataTable } from "@/components/global/date-metadata";
 import { Button } from "@/components/ui/button";
 
@@ -38,20 +38,35 @@ export default function MaterialHeader({ studyMaterial }: MaterialHeaderProps) {
 						</div>
 					</div>
 
-					{/* Right side - Action button */}
-					<Button
-						className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm shrink-0"
-						asChild
-					>
-						<Link
-							to="/study-materials/edit/$id"
-							params={{ id: studyMaterial.id.toString() }}
-							className="flex items-center gap-2"
+					{/* Right side - Action buttons */}
+					<div className="flex items-center gap-2 shrink-0">
+						<Button
+							className="bg-amber-600 hover:bg-amber-700 text-white shadow-sm"
+							asChild
 						>
-							<Pencil className="w-4 h-4" />
-							Edit Material
-						</Link>
-					</Button>
+							<Link
+								to="/preview/study-material/$id"
+								params={{ id: studyMaterial.id.toString() }}
+								className="flex items-center gap-2"
+							>
+								<Eye className="w-4 h-4" />
+								Preview
+							</Link>
+						</Button>
+						<Button
+							className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm"
+							asChild
+						>
+							<Link
+								to="/study-materials/edit/$id"
+								params={{ id: studyMaterial.id.toString() }}
+								className="flex items-center gap-2"
+							>
+								<Pencil className="w-4 h-4" />
+								Edit Material
+							</Link>
+						</Button>
+					</div>
 				</div>
 
 				{/* Content section */}

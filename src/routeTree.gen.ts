@@ -60,6 +60,7 @@ import { Route as webStudyMaterialsEditIdRouteImport } from './routes/(web)/stud
 import { Route as webSchoolsEditIdRouteImport } from './routes/(web)/schools/edit.$id'
 import { Route as webQuizEditIdRouteImport } from './routes/(web)/quiz/edit.$id'
 import { Route as webQuestionsEditIdRouteImport } from './routes/(web)/questions/edit.$id'
+import { Route as webPreviewStudyMaterialIdRouteImport } from './routes/(web)/preview/study-material.$id'
 import { Route as webPreviewQuizQuizIdRouteImport } from './routes/(web)/preview/quiz.$quizId'
 import { Route as webChaptersEditIdRouteImport } from './routes/(web)/chapters/edit.$id'
 import { Route as webAchievementsEditIdRouteImport } from './routes/(web)/achievements/edit.$id'
@@ -324,6 +325,12 @@ const webQuestionsEditIdRoute = webQuestionsEditIdRouteImport.update({
   path: '/questions/edit/$id',
   getParentRoute: () => webRouteRoute,
 } as any)
+const webPreviewStudyMaterialIdRoute =
+  webPreviewStudyMaterialIdRouteImport.update({
+    id: '/preview/study-material/$id',
+    path: '/preview/study-material/$id',
+    getParentRoute: () => webRouteRoute,
+  } as any)
 const webPreviewQuizQuizIdRoute = webPreviewQuizQuizIdRouteImport.update({
   id: '/preview/quiz/$quizId',
   path: '/preview/quiz/$quizId',
@@ -380,6 +387,7 @@ export interface FileRoutesByFullPath {
   '/achievements/edit/$id': typeof webAchievementsEditIdRoute
   '/chapters/edit/$id': typeof webChaptersEditIdRoute
   '/preview/quiz/$quizId': typeof webPreviewQuizQuizIdRoute
+  '/preview/study-material/$id': typeof webPreviewStudyMaterialIdRoute
   '/questions/edit/$id': typeof webQuestionsEditIdRoute
   '/quiz/edit/$id': typeof webQuizEditIdRoute
   '/schools/edit/$id': typeof webSchoolsEditIdRoute
@@ -436,6 +444,7 @@ export interface FileRoutesByTo {
   '/achievements/edit/$id': typeof webAchievementsEditIdRoute
   '/chapters/edit/$id': typeof webChaptersEditIdRoute
   '/preview/quiz/$quizId': typeof webPreviewQuizQuizIdRoute
+  '/preview/study-material/$id': typeof webPreviewStudyMaterialIdRoute
   '/questions/edit/$id': typeof webQuestionsEditIdRoute
   '/quiz/edit/$id': typeof webQuizEditIdRoute
   '/schools/edit/$id': typeof webSchoolsEditIdRoute
@@ -494,6 +503,7 @@ export interface FileRoutesById {
   '/(web)/achievements/edit/$id': typeof webAchievementsEditIdRoute
   '/(web)/chapters/edit/$id': typeof webChaptersEditIdRoute
   '/(web)/preview/quiz/$quizId': typeof webPreviewQuizQuizIdRoute
+  '/(web)/preview/study-material/$id': typeof webPreviewStudyMaterialIdRoute
   '/(web)/questions/edit/$id': typeof webQuestionsEditIdRoute
   '/(web)/quiz/edit/$id': typeof webQuizEditIdRoute
   '/(web)/schools/edit/$id': typeof webSchoolsEditIdRoute
@@ -552,6 +562,7 @@ export interface FileRouteTypes {
     | '/achievements/edit/$id'
     | '/chapters/edit/$id'
     | '/preview/quiz/$quizId'
+    | '/preview/study-material/$id'
     | '/questions/edit/$id'
     | '/quiz/edit/$id'
     | '/schools/edit/$id'
@@ -608,6 +619,7 @@ export interface FileRouteTypes {
     | '/achievements/edit/$id'
     | '/chapters/edit/$id'
     | '/preview/quiz/$quizId'
+    | '/preview/study-material/$id'
     | '/questions/edit/$id'
     | '/quiz/edit/$id'
     | '/schools/edit/$id'
@@ -665,6 +677,7 @@ export interface FileRouteTypes {
     | '/(web)/achievements/edit/$id'
     | '/(web)/chapters/edit/$id'
     | '/(web)/preview/quiz/$quizId'
+    | '/(web)/preview/study-material/$id'
     | '/(web)/questions/edit/$id'
     | '/(web)/quiz/edit/$id'
     | '/(web)/schools/edit/$id'
@@ -1055,6 +1068,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof webQuestionsEditIdRouteImport
       parentRoute: typeof webRouteRoute
     }
+    '/(web)/preview/study-material/$id': {
+      id: '/(web)/preview/study-material/$id'
+      path: '/preview/study-material/$id'
+      fullPath: '/preview/study-material/$id'
+      preLoaderRoute: typeof webPreviewStudyMaterialIdRouteImport
+      parentRoute: typeof webRouteRoute
+    }
     '/(web)/preview/quiz/$quizId': {
       id: '/(web)/preview/quiz/$quizId'
       path: '/preview/quiz/$quizId'
@@ -1112,6 +1132,7 @@ interface webRouteRouteChildren {
   webAchievementsEditIdRoute: typeof webAchievementsEditIdRoute
   webChaptersEditIdRoute: typeof webChaptersEditIdRoute
   webPreviewQuizQuizIdRoute: typeof webPreviewQuizQuizIdRoute
+  webPreviewStudyMaterialIdRoute: typeof webPreviewStudyMaterialIdRoute
   webQuestionsEditIdRoute: typeof webQuestionsEditIdRoute
   webQuizEditIdRoute: typeof webQuizEditIdRoute
   webSchoolsEditIdRoute: typeof webSchoolsEditIdRoute
@@ -1144,6 +1165,7 @@ const webRouteRouteChildren: webRouteRouteChildren = {
   webAchievementsEditIdRoute: webAchievementsEditIdRoute,
   webChaptersEditIdRoute: webChaptersEditIdRoute,
   webPreviewQuizQuizIdRoute: webPreviewQuizQuizIdRoute,
+  webPreviewStudyMaterialIdRoute: webPreviewStudyMaterialIdRoute,
   webQuestionsEditIdRoute: webQuestionsEditIdRoute,
   webQuizEditIdRoute: webQuizEditIdRoute,
   webSchoolsEditIdRoute: webSchoolsEditIdRoute,
