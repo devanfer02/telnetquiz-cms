@@ -18,7 +18,6 @@ WORKDIR /app
 
 COPY --from=build /app/.output .output
 
-# Install only the native dependencies needed at runtime
 COPY --from=build /app/.output/server/package.json ./package.json
 RUN bun install --production
 
