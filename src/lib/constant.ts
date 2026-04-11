@@ -6,6 +6,7 @@ import {
 	FileQuestionIcon,
 	LayoutDashboard,
 	School,
+	Smartphone,
 	Upload,
 	Users,
 } from "lucide-react";
@@ -55,6 +56,11 @@ export const sidebarItems = [
 		title: "Schools",
 		url: "/schools",
 		icon: School,
+	},
+	{
+		title: "Preview",
+		url: "/preview",
+		icon: Smartphone,
 	},
 ];
 

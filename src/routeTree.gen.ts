@@ -20,6 +20,7 @@ import { Route as webStudyMaterialsIndexRouteImport } from './routes/(web)/study
 import { Route as webSchoolsIndexRouteImport } from './routes/(web)/schools/index'
 import { Route as webQuizIndexRouteImport } from './routes/(web)/quiz/index'
 import { Route as webQuestionsIndexRouteImport } from './routes/(web)/questions/index'
+import { Route as webPreviewIndexRouteImport } from './routes/(web)/preview/index'
 import { Route as webChaptersIndexRouteImport } from './routes/(web)/chapters/index'
 import { Route as webAchievementsIndexRouteImport } from './routes/(web)/achievements/index'
 import { Route as ApipublicHealthRouteImport } from './routes/api/(public)/health'
@@ -35,6 +36,7 @@ import { Route as webSchoolsAddRouteImport } from './routes/(web)/schools/add'
 import { Route as webQuizAddRouteImport } from './routes/(web)/quiz/add'
 import { Route as webQuizIdRouteImport } from './routes/(web)/quiz/$id'
 import { Route as webQuestionsAddRouteImport } from './routes/(web)/questions/add'
+import { Route as webPreviewPretestRouteImport } from './routes/(web)/preview/pretest'
 import { Route as webChaptersAddRouteImport } from './routes/(web)/chapters/add'
 import { Route as webChaptersIdRouteImport } from './routes/(web)/chapters/$id'
 import { Route as webAchievementsAddRouteImport } from './routes/(web)/achievements/add'
@@ -57,6 +59,7 @@ import { Route as webStudyMaterialsEditIdRouteImport } from './routes/(web)/stud
 import { Route as webSchoolsEditIdRouteImport } from './routes/(web)/schools/edit.$id'
 import { Route as webQuizEditIdRouteImport } from './routes/(web)/quiz/edit.$id'
 import { Route as webQuestionsEditIdRouteImport } from './routes/(web)/questions/edit.$id'
+import { Route as webPreviewQuizQuizIdRouteImport } from './routes/(web)/preview/quiz.$quizId'
 import { Route as webChaptersEditIdRouteImport } from './routes/(web)/chapters/edit.$id'
 import { Route as webAchievementsEditIdRouteImport } from './routes/(web)/achievements/edit.$id'
 import { Route as ApiinternalTtsTypeIdRouteImport } from './routes/api/(internal)/tts/$type/$id'
@@ -113,6 +116,11 @@ const webQuizIndexRoute = webQuizIndexRouteImport.update({
 const webQuestionsIndexRoute = webQuestionsIndexRouteImport.update({
   id: '/questions/',
   path: '/questions/',
+  getParentRoute: () => webRouteRoute,
+} as any)
+const webPreviewIndexRoute = webPreviewIndexRouteImport.update({
+  id: '/preview/',
+  path: '/preview/',
   getParentRoute: () => webRouteRoute,
 } as any)
 const webChaptersIndexRoute = webChaptersIndexRouteImport.update({
@@ -188,6 +196,11 @@ const webQuizIdRoute = webQuizIdRouteImport.update({
 const webQuestionsAddRoute = webQuestionsAddRouteImport.update({
   id: '/questions/add',
   path: '/questions/add',
+  getParentRoute: () => webRouteRoute,
+} as any)
+const webPreviewPretestRoute = webPreviewPretestRouteImport.update({
+  id: '/preview/pretest',
+  path: '/preview/pretest',
   getParentRoute: () => webRouteRoute,
 } as any)
 const webChaptersAddRoute = webChaptersAddRouteImport.update({
@@ -305,6 +318,11 @@ const webQuestionsEditIdRoute = webQuestionsEditIdRouteImport.update({
   path: '/questions/edit/$id',
   getParentRoute: () => webRouteRoute,
 } as any)
+const webPreviewQuizQuizIdRoute = webPreviewQuizQuizIdRouteImport.update({
+  id: '/preview/quiz/$quizId',
+  path: '/preview/quiz/$quizId',
+  getParentRoute: () => webRouteRoute,
+} as any)
 const webChaptersEditIdRoute = webChaptersEditIdRouteImport.update({
   id: '/chapters/edit/$id',
   path: '/chapters/edit/$id',
@@ -329,6 +347,7 @@ export interface FileRoutesByFullPath {
   '/achievements/add': typeof webAchievementsAddRoute
   '/chapters/$id': typeof webChaptersIdRoute
   '/chapters/add': typeof webChaptersAddRoute
+  '/preview/pretest': typeof webPreviewPretestRoute
   '/questions/add': typeof webQuestionsAddRoute
   '/quiz/$id': typeof webQuizIdRoute
   '/quiz/add': typeof webQuizAddRoute
@@ -344,6 +363,7 @@ export interface FileRoutesByFullPath {
   '/api/health': typeof ApipublicHealthRoute
   '/achievements': typeof webAchievementsIndexRoute
   '/chapters': typeof webChaptersIndexRoute
+  '/preview': typeof webPreviewIndexRoute
   '/questions': typeof webQuestionsIndexRoute
   '/quiz': typeof webQuizIndexRoute
   '/schools': typeof webSchoolsIndexRoute
@@ -352,6 +372,7 @@ export interface FileRoutesByFullPath {
   '/users': typeof webUsersIndexRoute
   '/achievements/edit/$id': typeof webAchievementsEditIdRoute
   '/chapters/edit/$id': typeof webChaptersEditIdRoute
+  '/preview/quiz/$quizId': typeof webPreviewQuizQuizIdRoute
   '/questions/edit/$id': typeof webQuestionsEditIdRoute
   '/quiz/edit/$id': typeof webQuizEditIdRoute
   '/schools/edit/$id': typeof webSchoolsEditIdRoute
@@ -381,6 +402,7 @@ export interface FileRoutesByTo {
   '/achievements/add': typeof webAchievementsAddRoute
   '/chapters/$id': typeof webChaptersIdRoute
   '/chapters/add': typeof webChaptersAddRoute
+  '/preview/pretest': typeof webPreviewPretestRoute
   '/questions/add': typeof webQuestionsAddRoute
   '/quiz/$id': typeof webQuizIdRoute
   '/quiz/add': typeof webQuizAddRoute
@@ -396,6 +418,7 @@ export interface FileRoutesByTo {
   '/api/health': typeof ApipublicHealthRoute
   '/achievements': typeof webAchievementsIndexRoute
   '/chapters': typeof webChaptersIndexRoute
+  '/preview': typeof webPreviewIndexRoute
   '/questions': typeof webQuestionsIndexRoute
   '/quiz': typeof webQuizIndexRoute
   '/schools': typeof webSchoolsIndexRoute
@@ -404,6 +427,7 @@ export interface FileRoutesByTo {
   '/users': typeof webUsersIndexRoute
   '/achievements/edit/$id': typeof webAchievementsEditIdRoute
   '/chapters/edit/$id': typeof webChaptersEditIdRoute
+  '/preview/quiz/$quizId': typeof webPreviewQuizQuizIdRoute
   '/questions/edit/$id': typeof webQuestionsEditIdRoute
   '/quiz/edit/$id': typeof webQuizEditIdRoute
   '/schools/edit/$id': typeof webSchoolsEditIdRoute
@@ -435,6 +459,7 @@ export interface FileRoutesById {
   '/(web)/achievements/add': typeof webAchievementsAddRoute
   '/(web)/chapters/$id': typeof webChaptersIdRoute
   '/(web)/chapters/add': typeof webChaptersAddRoute
+  '/(web)/preview/pretest': typeof webPreviewPretestRoute
   '/(web)/questions/add': typeof webQuestionsAddRoute
   '/(web)/quiz/$id': typeof webQuizIdRoute
   '/(web)/quiz/add': typeof webQuizAddRoute
@@ -450,6 +475,7 @@ export interface FileRoutesById {
   '/api/(public)/health': typeof ApipublicHealthRoute
   '/(web)/achievements/': typeof webAchievementsIndexRoute
   '/(web)/chapters/': typeof webChaptersIndexRoute
+  '/(web)/preview/': typeof webPreviewIndexRoute
   '/(web)/questions/': typeof webQuestionsIndexRoute
   '/(web)/quiz/': typeof webQuizIndexRoute
   '/(web)/schools/': typeof webSchoolsIndexRoute
@@ -458,6 +484,7 @@ export interface FileRoutesById {
   '/(web)/users/': typeof webUsersIndexRoute
   '/(web)/achievements/edit/$id': typeof webAchievementsEditIdRoute
   '/(web)/chapters/edit/$id': typeof webChaptersEditIdRoute
+  '/(web)/preview/quiz/$quizId': typeof webPreviewQuizQuizIdRoute
   '/(web)/questions/edit/$id': typeof webQuestionsEditIdRoute
   '/(web)/quiz/edit/$id': typeof webQuizEditIdRoute
   '/(web)/schools/edit/$id': typeof webSchoolsEditIdRoute
@@ -489,6 +516,7 @@ export interface FileRouteTypes {
     | '/achievements/add'
     | '/chapters/$id'
     | '/chapters/add'
+    | '/preview/pretest'
     | '/questions/add'
     | '/quiz/$id'
     | '/quiz/add'
@@ -504,6 +532,7 @@ export interface FileRouteTypes {
     | '/api/health'
     | '/achievements'
     | '/chapters'
+    | '/preview'
     | '/questions'
     | '/quiz'
     | '/schools'
@@ -512,6 +541,7 @@ export interface FileRouteTypes {
     | '/users'
     | '/achievements/edit/$id'
     | '/chapters/edit/$id'
+    | '/preview/quiz/$quizId'
     | '/questions/edit/$id'
     | '/quiz/edit/$id'
     | '/schools/edit/$id'
@@ -541,6 +571,7 @@ export interface FileRouteTypes {
     | '/achievements/add'
     | '/chapters/$id'
     | '/chapters/add'
+    | '/preview/pretest'
     | '/questions/add'
     | '/quiz/$id'
     | '/quiz/add'
@@ -556,6 +587,7 @@ export interface FileRouteTypes {
     | '/api/health'
     | '/achievements'
     | '/chapters'
+    | '/preview'
     | '/questions'
     | '/quiz'
     | '/schools'
@@ -564,6 +596,7 @@ export interface FileRouteTypes {
     | '/users'
     | '/achievements/edit/$id'
     | '/chapters/edit/$id'
+    | '/preview/quiz/$quizId'
     | '/questions/edit/$id'
     | '/quiz/edit/$id'
     | '/schools/edit/$id'
@@ -594,6 +627,7 @@ export interface FileRouteTypes {
     | '/(web)/achievements/add'
     | '/(web)/chapters/$id'
     | '/(web)/chapters/add'
+    | '/(web)/preview/pretest'
     | '/(web)/questions/add'
     | '/(web)/quiz/$id'
     | '/(web)/quiz/add'
@@ -609,6 +643,7 @@ export interface FileRouteTypes {
     | '/api/(public)/health'
     | '/(web)/achievements/'
     | '/(web)/chapters/'
+    | '/(web)/preview/'
     | '/(web)/questions/'
     | '/(web)/quiz/'
     | '/(web)/schools/'
@@ -617,6 +652,7 @@ export interface FileRouteTypes {
     | '/(web)/users/'
     | '/(web)/achievements/edit/$id'
     | '/(web)/chapters/edit/$id'
+    | '/(web)/preview/quiz/$quizId'
     | '/(web)/questions/edit/$id'
     | '/(web)/quiz/edit/$id'
     | '/(web)/schools/edit/$id'
@@ -727,6 +763,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof webQuestionsIndexRouteImport
       parentRoute: typeof webRouteRoute
     }
+    '/(web)/preview/': {
+      id: '/(web)/preview/'
+      path: '/preview'
+      fullPath: '/preview'
+      preLoaderRoute: typeof webPreviewIndexRouteImport
+      parentRoute: typeof webRouteRoute
+    }
     '/(web)/chapters/': {
       id: '/(web)/chapters/'
       path: '/chapters'
@@ -830,6 +873,13 @@ declare module '@tanstack/react-router' {
       path: '/questions/add'
       fullPath: '/questions/add'
       preLoaderRoute: typeof webQuestionsAddRouteImport
+      parentRoute: typeof webRouteRoute
+    }
+    '/(web)/preview/pretest': {
+      id: '/(web)/preview/pretest'
+      path: '/preview/pretest'
+      fullPath: '/preview/pretest'
+      preLoaderRoute: typeof webPreviewPretestRouteImport
       parentRoute: typeof webRouteRoute
     }
     '/(web)/chapters/add': {
@@ -986,6 +1036,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof webQuestionsEditIdRouteImport
       parentRoute: typeof webRouteRoute
     }
+    '/(web)/preview/quiz/$quizId': {
+      id: '/(web)/preview/quiz/$quizId'
+      path: '/preview/quiz/$quizId'
+      fullPath: '/preview/quiz/$quizId'
+      preLoaderRoute: typeof webPreviewQuizQuizIdRouteImport
+      parentRoute: typeof webRouteRoute
+    }
     '/(web)/chapters/edit/$id': {
       id: '/(web)/chapters/edit/$id'
       path: '/chapters/edit/$id'
@@ -1015,6 +1072,7 @@ interface webRouteRouteChildren {
   webAchievementsAddRoute: typeof webAchievementsAddRoute
   webChaptersIdRoute: typeof webChaptersIdRoute
   webChaptersAddRoute: typeof webChaptersAddRoute
+  webPreviewPretestRoute: typeof webPreviewPretestRoute
   webQuestionsAddRoute: typeof webQuestionsAddRoute
   webQuizIdRoute: typeof webQuizIdRoute
   webQuizAddRoute: typeof webQuizAddRoute
@@ -1024,6 +1082,7 @@ interface webRouteRouteChildren {
   webUsersIdRoute: typeof webUsersIdRoute
   webAchievementsIndexRoute: typeof webAchievementsIndexRoute
   webChaptersIndexRoute: typeof webChaptersIndexRoute
+  webPreviewIndexRoute: typeof webPreviewIndexRoute
   webQuestionsIndexRoute: typeof webQuestionsIndexRoute
   webQuizIndexRoute: typeof webQuizIndexRoute
   webSchoolsIndexRoute: typeof webSchoolsIndexRoute
@@ -1032,6 +1091,7 @@ interface webRouteRouteChildren {
   webUsersIndexRoute: typeof webUsersIndexRoute
   webAchievementsEditIdRoute: typeof webAchievementsEditIdRoute
   webChaptersEditIdRoute: typeof webChaptersEditIdRoute
+  webPreviewQuizQuizIdRoute: typeof webPreviewQuizQuizIdRoute
   webQuestionsEditIdRoute: typeof webQuestionsEditIdRoute
   webQuizEditIdRoute: typeof webQuizEditIdRoute
   webSchoolsEditIdRoute: typeof webSchoolsEditIdRoute
@@ -1043,6 +1103,7 @@ const webRouteRouteChildren: webRouteRouteChildren = {
   webAchievementsAddRoute: webAchievementsAddRoute,
   webChaptersIdRoute: webChaptersIdRoute,
   webChaptersAddRoute: webChaptersAddRoute,
+  webPreviewPretestRoute: webPreviewPretestRoute,
   webQuestionsAddRoute: webQuestionsAddRoute,
   webQuizIdRoute: webQuizIdRoute,
   webQuizAddRoute: webQuizAddRoute,
@@ -1052,6 +1113,7 @@ const webRouteRouteChildren: webRouteRouteChildren = {
   webUsersIdRoute: webUsersIdRoute,
   webAchievementsIndexRoute: webAchievementsIndexRoute,
   webChaptersIndexRoute: webChaptersIndexRoute,
+  webPreviewIndexRoute: webPreviewIndexRoute,
   webQuestionsIndexRoute: webQuestionsIndexRoute,
   webQuizIndexRoute: webQuizIndexRoute,
   webSchoolsIndexRoute: webSchoolsIndexRoute,
@@ -1060,6 +1122,7 @@ const webRouteRouteChildren: webRouteRouteChildren = {
   webUsersIndexRoute: webUsersIndexRoute,
   webAchievementsEditIdRoute: webAchievementsEditIdRoute,
   webChaptersEditIdRoute: webChaptersEditIdRoute,
+  webPreviewQuizQuizIdRoute: webPreviewQuizQuizIdRoute,
   webQuestionsEditIdRoute: webQuestionsEditIdRoute,
   webQuizEditIdRoute: webQuizEditIdRoute,
   webSchoolsEditIdRoute: webSchoolsEditIdRoute,

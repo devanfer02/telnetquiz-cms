@@ -17,6 +17,7 @@ export const fetchAllQuestions = Effect.gen(function* () {
 				orderBy: desc(questions.createdAt),
 				with: {
 					options: true,
+					chapter: true,
 				},
 			}),
 		catch: (err) =>

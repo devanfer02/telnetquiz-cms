@@ -1,5 +1,6 @@
 import { Eye } from "lucide-react";
 import { useRef, useState } from "react";
+import ChapterAccordionView from "@/components/preview/chapter-accordion-view";
 import ContentPreviewer from "@/components/preview/content-previewer";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,6 +11,7 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from "@/components/ui/sheet";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface QuizPreviewSheetProps {
 	quiz: Quiz & { questions?: Question[] };
@@ -31,6 +33,19 @@ export default function QuizPreviewSheet({ quiz }: QuizPreviewSheetProps) {
 		imageLink: q.imageLink,
 		options: (q.options ?? []).map((o, oi) => ({
 			id: q.id * 1000 + oi,
+			text: o.text,
+			isCorrect: o.isCorrect,
+		})),
+	}));
+
+	const accordionQuestions = questions.map((q) => ({
+		id: q.id,
+		description: q.description,
+		question: q.question,
+		imageLink: q.imageLink,
+		chapterId: quiz.chapterId ?? null,
+		chapterTitle: quiz.chapter?.title ?? null,
+		options: (q.options ?? []).map((o) => ({
 			text: o.text,
 			isCorrect: o.isCorrect,
 		})),
@@ -63,7 +78,6 @@ export default function QuizPreviewSheet({ quiz }: QuizPreviewSheetProps) {
 						Tampilan soal seperti di aplikasi mobile
 					</SheetDescription>
 
-					{/* Admin controls */}
 					<div className="flex items-center justify-between mt-2 pt-2 border-t">
 						<label className="flex items-center gap-2 text-sm cursor-pointer">
 							<input
@@ -77,20 +91,38 @@ export default function QuizPreviewSheet({ quiz }: QuizPreviewSheetProps) {
 							</span>
 						</label>
 
-						<div className="flex items-center gap-1 text-sm text-muted-foreground">
-							<span>{questions.length} soal</span>
-						</div>
+						<span className="text-sm text-muted-foreground">
+							{questions.length} soal
+						</span>
 					</div>
 				</SheetHeader>
 
-				<div className="flex justify-center px-4 pb-6 pt-2">
-					<ContentPreviewer
-						key={keyRef.current}
-						title={quiz.title}
-						mascotSrc={mascotSrc}
-						questions={previewQuestions}
-						showCorrect={showCorrect}
-					/>
+				<div className="px-4 pb-6 pt-2">
+					<Tabs defaultValue="overview">
+						<TabsList className="mb-4 w-full">
+							<TabsTrigger value="overview" className="flex-1">
+								Per Bab
+							</TabsTrigger>
+							<TabsTrigger value="preview" className="flex-1">
+								Simulasi
+							</TabsTrigger>
+						</TabsList>
+						<TabsContent value="overview">
+							<ChapterAccordionView
+								questions={accordionQuestions}
+								showCorrect={showCorrect}
+							/>
+						</TabsContent>
+						<TabsContent value="preview" className="flex justify-center">
+							<ContentPreviewer
+								key={keyRef.current}
+								title={quiz.title}
+								mascotSrc={mascotSrc}
+								questions={previewQuestions}
+								showCorrect={showCorrect}
+							/>
+						</TabsContent>
+					</Tabs>
 				</div>
 			</SheetContent>
 		</Sheet>

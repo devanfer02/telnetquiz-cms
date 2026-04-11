@@ -1,5 +1,6 @@
 import { Eye } from "lucide-react";
 import { useRef, useState } from "react";
+import ChapterAccordionView from "@/components/preview/chapter-accordion-view";
 import ContentPreviewer from "@/components/preview/content-previewer";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,9 +11,14 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from "@/components/ui/sheet";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+interface PretestQuestion extends Question {
+	chapter?: { id: number; title: string } | null;
+}
 
 interface PretestPreviewSheetProps {
-	questions: Question[];
+	questions: PretestQuestion[];
 }
 
 export default function PretestPreviewSheet({
@@ -28,6 +34,19 @@ export default function PretestPreviewSheet({
 		imageLink: q.imageLink,
 		options: (q.options ?? []).map((o, oi) => ({
 			id: q.id * 1000 + oi,
+			text: o.text,
+			isCorrect: o.isCorrect,
+		})),
+	}));
+
+	const accordionQuestions = questions.map((q) => ({
+		id: q.id,
+		description: q.description,
+		question: q.question,
+		imageLink: q.imageLink,
+		chapterId: q.chapterId,
+		chapterTitle: q.chapter?.title ?? null,
+		options: (q.options ?? []).map((o) => ({
 			text: o.text,
 			isCorrect: o.isCorrect,
 		})),
@@ -79,14 +98,32 @@ export default function PretestPreviewSheet({
 					</div>
 				</SheetHeader>
 
-				<div className="flex justify-center px-4 pb-6 pt-2">
-					<ContentPreviewer
-						key={keyRef.current}
-						title="Pretest"
-						mascotSrc="/assets/mascot/chap1.png"
-						questions={previewQuestions}
-						showCorrect={showCorrect}
-					/>
+				<div className="px-4 pb-6 pt-2">
+					<Tabs defaultValue="overview">
+						<TabsList className="mb-4 w-full">
+							<TabsTrigger value="overview" className="flex-1">
+								Per Bab
+							</TabsTrigger>
+							<TabsTrigger value="preview" className="flex-1">
+								Simulasi
+							</TabsTrigger>
+						</TabsList>
+						<TabsContent value="overview">
+							<ChapterAccordionView
+								questions={accordionQuestions}
+								showCorrect={showCorrect}
+							/>
+						</TabsContent>
+						<TabsContent value="preview" className="flex justify-center">
+							<ContentPreviewer
+								key={keyRef.current}
+								title="Pretest"
+								mascotSrc="/assets/mascot/chap1.png"
+								questions={previewQuestions}
+								showCorrect={showCorrect}
+							/>
+						</TabsContent>
+					</Tabs>
 				</div>
 			</SheetContent>
 		</Sheet>
