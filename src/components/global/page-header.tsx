@@ -1,5 +1,5 @@
 import { Separator } from "@/components/ui/separator";
-import { sidebarItems } from "@/lib/constant";
+import { flatSidebarItems } from "@/lib/constant";
 import { cn } from "@/lib/utils";
 
 interface PageHeaderProps {
@@ -15,7 +15,7 @@ export default function PageHeader({
 }: PageHeaderProps) {
 	// Find the icon based on the title (fuzzy match or direct match)
 	// Sidebar items: Dashboard, Chapters, Quiz, Study Materials, Questions, Submissions, Users
-	const item = sidebarItems.find(
+	const item = flatSidebarItems.find(
 		(item) =>
 			item.title.toLowerCase() === title.toLowerCase() ||
 			(title === "Quizzes" && item.title === "Quiz"),

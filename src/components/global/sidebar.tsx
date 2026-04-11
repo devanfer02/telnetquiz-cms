@@ -1,25 +1,151 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { LogOut } from "lucide-react";
+import { ChevronRight, LogOut } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { authClient } from "@/lib/auth/client";
-import { sidebarItems } from "@/lib/constant";
+import {
+	type SidebarEntry,
+	type SidebarGroup,
+	type SidebarLink,
+	sidebarEntries,
+} from "@/lib/constant";
 import { useAuth } from "@/providers/auth";
+import {
+	Collapsible,
+	CollapsibleContent,
+	CollapsibleTrigger,
+} from "../ui/collapsible";
 import {
 	Sidebar,
 	SidebarContent,
 	SidebarFooter,
-	SidebarGroup,
 	SidebarGroupContent,
 	SidebarGroupLabel,
+	SidebarGroup as SidebarGroupUI,
 	SidebarHeader,
 	SidebarMenu,
 	SidebarMenuButton,
 	SidebarMenuItem,
+	SidebarMenuSub,
+	SidebarMenuSubButton,
+	SidebarMenuSubItem,
 } from "../ui/sidebar";
 
 const isActive = (currentPath: string, itemUrl: string) => {
 	return currentPath === itemUrl || currentPath.startsWith(`${itemUrl}/`);
 };
+
+const isGroupActive = (currentPath: string, group: SidebarGroup) => {
+	return group.items.some((item) => isActive(currentPath, item.url));
+};
+
+function SidebarLinkItem({
+	item,
+	currentPath,
+}: {
+	item: SidebarLink;
+	currentPath: string;
+}) {
+	const active = isActive(currentPath, item.url);
+	return (
+		<SidebarMenuItem>
+			<SidebarMenuButton
+				asChild
+				isActive={active}
+				className={`
+					h-12 w-full transition-all duration-200 ease-in-out rounded-xl px-4
+					${
+						active
+							? "bg-white text-telnet-primary shadow-md font-bold translate-x-1"
+							: "text-white/90 hover:bg-white/10 hover:text-white hover:translate-x-1"
+					}
+				`}
+			>
+				<Link to={item.url} className="flex items-center gap-3">
+					<item.icon
+						className={`transition-all duration-200 ${active ? "size-5" : "size-5 opacity-80 group-hover:opacity-100"}`}
+					/>
+					<span className="text-base font-medium">{item.title}</span>
+				</Link>
+			</SidebarMenuButton>
+		</SidebarMenuItem>
+	);
+}
+
+function SidebarGroupItem({
+	group,
+	currentPath,
+}: {
+	group: SidebarGroup;
+	currentPath: string;
+}) {
+	const groupActive = isGroupActive(currentPath, group);
+
+	return (
+		<Collapsible defaultOpen={groupActive} className="group/collapsible">
+			<SidebarMenuItem>
+				<CollapsibleTrigger asChild>
+					<SidebarMenuButton
+						className={`
+							h-12 w-full transition-all duration-200 ease-in-out rounded-xl px-4
+							${
+								groupActive
+									? "bg-white/15 text-white font-bold"
+									: "text-white/90 hover:bg-white/10 hover:text-white hover:translate-x-1"
+							}
+						`}
+					>
+						<group.icon className="size-5 opacity-80 group-hover:opacity-100" />
+						<span className="text-base font-medium">{group.title}</span>
+						<ChevronRight className="ml-auto size-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+					</SidebarMenuButton>
+				</CollapsibleTrigger>
+				<CollapsibleContent>
+					<SidebarMenuSub className="border-white/20 ml-4 mr-0 px-2 py-1">
+						{group.items.map((item) => {
+							const active = isActive(currentPath, item.url);
+							return (
+								<SidebarMenuSubItem key={item.title}>
+									<SidebarMenuSubButton
+										asChild
+										isActive={active}
+										className={`
+											h-10 rounded-lg px-3 transition-all duration-200
+											${
+												active
+													? "bg-white text-telnet-primary shadow-md font-bold translate-x-1"
+													: "text-white/80 hover:bg-white/10 hover:text-white hover:translate-x-1"
+											}
+										`}
+									>
+										<Link to={item.url} className="flex items-center gap-3">
+											<item.icon
+												className={`transition-all duration-200 ${active ? "size-4" : "size-4 opacity-70"}`}
+											/>
+											<span className="text-sm font-medium">{item.title}</span>
+										</Link>
+									</SidebarMenuSubButton>
+								</SidebarMenuSubItem>
+							);
+						})}
+					</SidebarMenuSub>
+				</CollapsibleContent>
+			</SidebarMenuItem>
+		</Collapsible>
+	);
+}
+
+function SidebarEntryRenderer({
+	entry,
+	currentPath,
+}: {
+	entry: SidebarEntry;
+	currentPath: string;
+}) {
+	if (entry.type === "group") {
+		return <SidebarGroupItem group={entry} currentPath={currentPath} />;
+	}
+	return <SidebarLinkItem item={entry} currentPath={currentPath} />;
+}
 
 export default function AppSidebar() {
 	const { session, isPending } = useAuth();
@@ -43,40 +169,19 @@ export default function AppSidebar() {
 				</SidebarGroupLabel>
 			</SidebarHeader>
 			<SidebarContent className="bg-telnet-primary text-white font-bold">
-				<SidebarGroup>
+				<SidebarGroupUI>
 					<SidebarGroupContent>
 						<SidebarMenu className="gap-2">
-							{sidebarItems.map((item) => {
-								const active = isActive(currentPath, item.url);
-								return (
-									<SidebarMenuItem key={item.title}>
-										<SidebarMenuButton
-											asChild
-											isActive={active}
-											className={`
-                        h-12 w-full transition-all duration-200 ease-in-out rounded-xl px-4
-                        ${
-													active
-														? "bg-white text-telnet-primary shadow-md font-bold translate-x-1"
-														: "text-white/90 hover:bg-white/10 hover:text-white hover:translate-x-1"
-												}
-                      `}
-										>
-											<Link to={item.url} className="flex items-center gap-3">
-												<item.icon
-													className={`transition-all duration-200 ${active ? "size-5" : "size-5 opacity-80 group-hover:opacity-100"}`}
-												/>
-												<span className="text-base font-medium">
-													{item.title}
-												</span>
-											</Link>
-										</SidebarMenuButton>
-									</SidebarMenuItem>
-								);
-							})}
+							{sidebarEntries.map((entry) => (
+								<SidebarEntryRenderer
+									key={entry.title}
+									entry={entry}
+									currentPath={currentPath}
+								/>
+							))}
 						</SidebarMenu>
 					</SidebarGroupContent>
-				</SidebarGroup>
+				</SidebarGroupUI>
 			</SidebarContent>
 			<SidebarFooter className="bg-telnet-primary pb-6 px-4">
 				<SidebarMenu>

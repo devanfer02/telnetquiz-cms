@@ -1,6 +1,6 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { getDashboardStats } from "@/actions/analytics";
-import { QUERY_KEYS, sidebarItems } from "@/lib/constant";
+import { flatSidebarItems, QUERY_KEYS } from "@/lib/constant";
 import CardStat from "../../../../components/global/card-stat";
 import { Card } from "../../../../components/ui/card";
 
@@ -11,7 +11,7 @@ export default function DashboardStats() {
 		staleTime: 60 * 1000,
 	});
 
-	const dashboardItems = sidebarItems
+	const dashboardItems = flatSidebarItems
 		.filter((item) => item.title !== "Dashboard")
 		.map((item) => {
 			let count = 0;

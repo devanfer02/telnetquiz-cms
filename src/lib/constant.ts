@@ -1,75 +1,115 @@
+import type { LucideIcon } from "lucide-react";
 import {
 	Award,
 	BookMarked,
 	BookOpen,
 	Brain,
 	FileQuestionIcon,
+	FolderOpen,
 	LayoutDashboard,
 	School,
 	Smartphone,
 	Upload,
+	UserCog,
 	Users,
 } from "lucide-react";
 
-export const sidebarItems = [
+export type SidebarLink = {
+	type: "link";
+	title: string;
+	url: string;
+	icon: LucideIcon;
+};
+
+export type SidebarGroup = {
+	type: "group";
+	title: string;
+	icon: LucideIcon;
+	items: SidebarLink[];
+};
+
+export type SidebarEntry = SidebarLink | SidebarGroup;
+
+export const sidebarEntries: SidebarEntry[] = [
 	{
+		type: "link",
 		title: "Dashboard",
 		url: "/dashboard",
 		icon: LayoutDashboard,
 	},
 	{
-		title: "Chapters",
-		url: "/chapters",
-		icon: BookMarked,
+		type: "group",
+		title: "Content",
+		icon: FolderOpen,
+		items: [
+			{
+				type: "link",
+				title: "Chapters",
+				url: "/chapters",
+				icon: BookMarked,
+			},
+			{
+				type: "link",
+				title: "Quiz",
+				url: "/quiz",
+				icon: Brain,
+			},
+			{
+				type: "link",
+				title: "Questions",
+				url: "/questions",
+				icon: FileQuestionIcon,
+			},
+			{
+				type: "link",
+				title: "Study Materials",
+				url: "/study-materials",
+				icon: BookOpen,
+			},
+		],
 	},
 	{
-		title: "Quiz",
-		url: "/quiz",
-		icon: Brain,
+		type: "group",
+		title: "Management",
+		icon: UserCog,
+		items: [
+			{
+				type: "link",
+				title: "Users",
+				url: "/users",
+				icon: Users,
+			},
+			{
+				type: "link",
+				title: "Submissions",
+				url: "/submissions",
+				icon: Upload,
+			},
+			{
+				type: "link",
+				title: "Schools",
+				url: "/schools",
+				icon: School,
+			},
+		],
 	},
 	{
-		title: "Study Materials",
-		url: "/study-materials",
-		icon: BookOpen,
-	},
-	{
-		title: "Questions",
-		url: "/questions",
-		icon: FileQuestionIcon,
-	},
-	{
-		title: "Submissions",
-		url: "/submissions",
-		icon: Upload,
-	},
-	{
-		title: "Users",
-		url: "/users",
-		icon: Users,
-	},
-	{
+		type: "link",
 		title: "Achievements",
 		url: "/achievements",
 		icon: Award,
 	},
 	{
-		title: "Schools",
-		url: "/schools",
-		icon: School,
-	},
-	{
+		type: "link",
 		title: "Preview",
 		url: "/preview",
 		icon: Smartphone,
 	},
 ];
 
-export const dashboardItems = sidebarItems
-	.filter((item) => item.title !== "Dashboard")
-	.map((item) => ({
-		...item,
-		counter: 20,
-	}));
+export const flatSidebarItems: SidebarLink[] = sidebarEntries.flatMap(
+	(entry) => (entry.type === "group" ? entry.items : [entry]),
+);
 
 export const QUERY_KEYS = {
 	CHAPTERS: "chapter-list",
