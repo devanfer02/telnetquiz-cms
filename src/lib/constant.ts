@@ -125,4 +125,6 @@ export const QUERY_KEYS = {
 	DASHBOARD_STATS: "dashboard-stats",
 	SCHOOLS: "school-list",
 	ACHIEVEMENTS: "achievement-list",
+	ACHIEVEMENT_DETAIL: "achievement-detail",
+	USER_ACHIEVEMENTS: "user-achievements",
 };

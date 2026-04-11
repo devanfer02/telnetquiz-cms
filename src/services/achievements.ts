@@ -6,8 +6,10 @@ import {
 	chapters,
 	pretestSubmissions,
 	quizzes,
+	schools,
 	submissions,
 	userAchievements,
+	users,
 } from "@/database/schema";
 import { Db } from "@/lib/db";
 import { dbTryPromise } from "@/lib/retry";
@@ -357,4 +359,105 @@ export const deleteAchievement = (id: number) =>
 		}
 
 		return result[0];
+	});
+
+export const fetchAchievementDetail = (id: number) =>
+	Effect.gen(function* () {
+		const { db } = yield* Db;
+
+		const [achievementRows, unlockedUsers] = yield* Effect.all([
+			dbTryPromise({
+				try: () =>
+					db
+						.select()
+						.from(achievements)
+						.where(eq(achievements.id, id))
+						.limit(1),
+				catch: (err) =>
+					new DatabaseError({
+						cause: err,
+						message: `Failed to fetch achievement with id ${id}`,
+					}),
+			}),
+			dbTryPromise({
+				try: () =>
+					db
+						.select({
+							userId: users.id,
+							userName: users.name,
+							userEmail: users.email,
+							userImage: users.image,
+							schoolName: schools.name,
+							grade: users.grade,
+							unlockedAt: userAchievements.unlockedAt,
+						})
+						.from(userAchievements)
+						.innerJoin(users, eq(userAchievements.userId, users.id))
+						.leftJoin(schools, eq(users.schoolId, schools.id))
+						.where(eq(userAchievements.achievementId, id))
+						.orderBy(desc(userAchievements.unlockedAt)),
+				catch: (err) =>
+					new DatabaseError({
+						cause: err,
+						message: `Failed to fetch users for achievement ${id}`,
+					}),
+			}),
+		]);
+
+		if (achievementRows.length === 0) {
+			return yield* Effect.fail(
+				new NotFoundError({ id, entity: "Achievement" }),
+			);
+		}
+
+		return {
+			achievement: achievementRows[0],
+			unlockedUsers,
+		};
+	});
+
+export const fetchUserAchievements = (userId: string) =>
+	Effect.gen(function* () {
+		const { db } = yield* Db;
+
+		const [allAchievements, unlocked] = yield* Effect.all([
+			dbTryPromise({
+				try: () =>
+					db
+						.select()
+						.from(achievements)
+						.where(eq(achievements.isActive, true))
+						.orderBy(achievements.id),
+				catch: (err) =>
+					new DatabaseError({
+						cause: err,
+						message: "Failed to fetch achievements for user",
+					}),
+			}),
+			dbTryPromise({
+				try: () =>
+					db
+						.select({
+							achievementId: userAchievements.achievementId,
+							unlockedAt: userAchievements.unlockedAt,
+						})
+						.from(userAchievements)
+						.where(eq(userAchievements.userId, userId)),
+				catch: (err) =>
+					new DatabaseError({
+						cause: err,
+						message: `Failed to fetch user achievements for user ${userId}`,
+					}),
+			}),
+		]);
+
+		const unlockedMap = new Map(
+			unlocked.map((u) => [u.achievementId, u.unlockedAt]),
+		);
+
+		return allAchievements.map((a) => ({
+			...a,
+			unlocked: unlockedMap.has(a.id),
+			unlockedAt: unlockedMap.get(a.id) ?? null,
+		}));
 	});

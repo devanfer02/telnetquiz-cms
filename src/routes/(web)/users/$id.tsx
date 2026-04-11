@@ -5,6 +5,7 @@ import { getUserDetail } from "@/actions/users";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { QUERY_KEYS } from "@/lib/constant";
+import UserAchievements from "./-sections/user-achievements";
 import UserActivityHeatmap from "./-sections/user-activity-heatmap";
 import UserChapterMasteryRadar from "./-sections/user-chapter-mastery-radar";
 import UserDailyProgressChart from "./-sections/user-daily-progress-chart";
@@ -85,6 +86,8 @@ function UserDetailPage() {
 					pretestSubmissions={pretestSubmissions}
 				/>
 			</div>
+
+			<UserAchievements userId={id} />
 
 			<UserSubmissionsTable
 				submissions={submissions}

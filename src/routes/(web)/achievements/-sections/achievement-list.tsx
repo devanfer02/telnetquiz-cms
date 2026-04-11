@@ -45,6 +45,15 @@ export default function AchievementList({
 			accessorKey: "title",
 			header: ({ column }) => <SortableHeader column={column} title="Judul" />,
 			size: 40,
+			cell: ({ row }) => (
+				<Link
+					to="/achievements/$id"
+					params={{ id: String(row.original.id) }}
+					className="hover:underline text-primary font-medium"
+				>
+					{row.original.title}
+				</Link>
+			),
 		},
 		{
 			accessorKey: "description",

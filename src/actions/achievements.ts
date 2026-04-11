@@ -6,10 +6,12 @@ import {
 	createAchievement,
 	deleteAchievement,
 	fetchAchievementById,
+	fetchAchievementDetail,
 	fetchAllAchievements,
+	fetchUserAchievements,
 	patchAchievement,
 } from "@/services/achievements";
-import { achievementSchema, idNumberSchema } from "@/types/zod";
+import { achievementSchema, idNumberSchema, idStringSchema } from "@/types/zod";
 
 export const getAllAchievements = createServerFn({
 	method: "GET",
@@ -106,6 +108,40 @@ export const removeAchievement = createServerFn({
 				Effect.catchAll((err) => {
 					console.error("Failed to delete achievement. ERR:", err);
 					return Effect.succeed(null);
+				}),
+			),
+		);
+	});
+
+export const getAchievementDetail = createServerFn({
+	method: "GET",
+})
+	.inputValidator(z.number())
+	.handler(async ({ data: id }) => {
+		return Effect.runPromise(
+			fetchAchievementDetail(id).pipe(
+				Effect.provide(DbLayer),
+				Effect.catchAll((err) => {
+					console.error("Failed to get achievement detail. ERR:", err);
+					return Effect.succeed(null);
+				}),
+			),
+		);
+	});
+
+export const getUserAchievements = createServerFn({
+	method: "GET",
+})
+	.inputValidator(idStringSchema)
+	.handler(async ({ data }) => {
+		const { id } = data;
+
+		return Effect.runPromise(
+			fetchUserAchievements(id).pipe(
+				Effect.provide(DbLayer),
+				Effect.catchAll((err) => {
+					console.error("Failed to get user achievements. ERR:", err);
+					return Effect.succeed([]);
 				}),
 			),
 		);

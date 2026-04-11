@@ -40,6 +40,7 @@ import { Route as webPreviewPretestRouteImport } from './routes/(web)/preview/pr
 import { Route as webChaptersAddRouteImport } from './routes/(web)/chapters/add'
 import { Route as webChaptersIdRouteImport } from './routes/(web)/chapters/$id'
 import { Route as webAchievementsAddRouteImport } from './routes/(web)/achievements/add'
+import { Route as webAchievementsIdRouteImport } from './routes/(web)/achievements/$id'
 import { Route as ApiinternalSchoolsIndexRouteImport } from './routes/api/(internal)/schools/index'
 import { Route as ApiinternalChaptersIndexRouteImport } from './routes/api/(internal)/chapters/index'
 import { Route as ApipublicAuthSplatRouteImport } from './routes/api/(public)/auth/$'
@@ -218,6 +219,11 @@ const webAchievementsAddRoute = webAchievementsAddRouteImport.update({
   path: '/achievements/add',
   getParentRoute: () => webRouteRoute,
 } as any)
+const webAchievementsIdRoute = webAchievementsIdRouteImport.update({
+  id: '/achievements/$id',
+  path: '/achievements/$id',
+  getParentRoute: () => webRouteRoute,
+} as any)
 const ApiinternalSchoolsIndexRoute = ApiinternalSchoolsIndexRouteImport.update({
   id: '/schools/',
   path: '/schools/',
@@ -344,6 +350,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof webDashboardRouteRoute
   '/api': typeof ApiinternalRouteRouteWithChildren
   '/auth/sign-in': typeof AuthSignInRoute
+  '/achievements/$id': typeof webAchievementsIdRoute
   '/achievements/add': typeof webAchievementsAddRoute
   '/chapters/$id': typeof webChaptersIdRoute
   '/chapters/add': typeof webChaptersAddRoute
@@ -399,6 +406,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof webDashboardRouteRoute
   '/api': typeof ApiinternalRouteRouteWithChildren
   '/auth/sign-in': typeof AuthSignInRoute
+  '/achievements/$id': typeof webAchievementsIdRoute
   '/achievements/add': typeof webAchievementsAddRoute
   '/chapters/$id': typeof webChaptersIdRoute
   '/chapters/add': typeof webChaptersAddRoute
@@ -456,6 +464,7 @@ export interface FileRoutesById {
   '/(web)/dashboard': typeof webDashboardRouteRoute
   '/api/(internal)': typeof ApiinternalRouteRouteWithChildren
   '/auth/sign-in': typeof AuthSignInRoute
+  '/(web)/achievements/$id': typeof webAchievementsIdRoute
   '/(web)/achievements/add': typeof webAchievementsAddRoute
   '/(web)/chapters/$id': typeof webChaptersIdRoute
   '/(web)/chapters/add': typeof webChaptersAddRoute
@@ -513,6 +522,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/api'
     | '/auth/sign-in'
+    | '/achievements/$id'
     | '/achievements/add'
     | '/chapters/$id'
     | '/chapters/add'
@@ -568,6 +578,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/api'
     | '/auth/sign-in'
+    | '/achievements/$id'
     | '/achievements/add'
     | '/chapters/$id'
     | '/chapters/add'
@@ -624,6 +635,7 @@ export interface FileRouteTypes {
     | '/(web)/dashboard'
     | '/api/(internal)'
     | '/auth/sign-in'
+    | '/(web)/achievements/$id'
     | '/(web)/achievements/add'
     | '/(web)/chapters/$id'
     | '/(web)/chapters/add'
@@ -903,6 +915,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof webAchievementsAddRouteImport
       parentRoute: typeof webRouteRoute
     }
+    '/(web)/achievements/$id': {
+      id: '/(web)/achievements/$id'
+      path: '/achievements/$id'
+      fullPath: '/achievements/$id'
+      preLoaderRoute: typeof webAchievementsIdRouteImport
+      parentRoute: typeof webRouteRoute
+    }
     '/api/(internal)/schools/': {
       id: '/api/(internal)/schools/'
       path: '/schools'
@@ -1069,6 +1088,7 @@ declare module '@tanstack/react-router' {
 
 interface webRouteRouteChildren {
   webDashboardRouteRoute: typeof webDashboardRouteRoute
+  webAchievementsIdRoute: typeof webAchievementsIdRoute
   webAchievementsAddRoute: typeof webAchievementsAddRoute
   webChaptersIdRoute: typeof webChaptersIdRoute
   webChaptersAddRoute: typeof webChaptersAddRoute
@@ -1100,6 +1120,7 @@ interface webRouteRouteChildren {
 
 const webRouteRouteChildren: webRouteRouteChildren = {
   webDashboardRouteRoute: webDashboardRouteRoute,
+  webAchievementsIdRoute: webAchievementsIdRoute,
   webAchievementsAddRoute: webAchievementsAddRoute,
   webChaptersIdRoute: webChaptersIdRoute,
   webChaptersAddRoute: webChaptersAddRoute,
