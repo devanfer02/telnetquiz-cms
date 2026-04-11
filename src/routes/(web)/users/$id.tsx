@@ -5,8 +5,13 @@ import { getUserDetail } from "@/actions/users";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { QUERY_KEYS } from "@/lib/constant";
+import UserActivityHeatmap from "./-sections/user-activity-heatmap";
+import UserChapterMasteryRadar from "./-sections/user-chapter-mastery-radar";
+import UserDailyProgressChart from "./-sections/user-daily-progress-chart";
 import UserInfoCard from "./-sections/user-info-card";
 import UserPretestResults from "./-sections/user-pretest-results";
+import UserPretestVsQuizChart from "./-sections/user-pretest-vs-quiz-chart";
+import UserScoreDistributionChart from "./-sections/user-score-distribution-chart";
 import UserStatsGrid from "./-sections/user-stats-grid";
 import UserSubmissionsTable from "./-sections/user-submissions-table";
 
@@ -46,7 +51,7 @@ function UserDetailPage() {
 	const { user, stats, submissions, pretestSubmissions } = data;
 
 	return (
-		<div className="space-y-6">
+		<div className="space-y-6 mb-10">
 			<div className="flex items-center gap-4">
 				<Link to="/users">
 					<Button variant="outline" size="icon">
@@ -65,6 +70,22 @@ function UserDetailPage() {
 
 			<UserInfoCard user={user} />
 			<UserStatsGrid stats={stats} />
+
+			<UserDailyProgressChart submissions={submissions} />
+
+			<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+				<UserActivityHeatmap submissions={submissions} />
+				<UserChapterMasteryRadar submissions={submissions} />
+			</div>
+
+			<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+				<UserScoreDistributionChart submissions={submissions} />
+				<UserPretestVsQuizChart
+					submissions={submissions}
+					pretestSubmissions={pretestSubmissions}
+				/>
+			</div>
+
 			<UserSubmissionsTable
 				submissions={submissions}
 				totalSubmissions={stats.totalSubmissions}

@@ -51,7 +51,7 @@ export default function UserPretestResults({
 							variant="outline"
 						>
 							{stats.pretestCorrect}/{stats.pretestTotal} benar (
-							{stats.pretestScore}%)b
+							{stats.pretestScore}%)
 						</Badge>
 					)}
 				</CardTitle>

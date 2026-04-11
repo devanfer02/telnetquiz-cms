@@ -633,7 +633,11 @@ export const fetchUserDetail = (userId: string) =>
 				db.query.pretestSubmissions.findMany({
 					where: eq(pretestSubmissions.userId, userId),
 					with: {
-						question: true,
+						question: {
+							with: {
+								chapter: true,
+							},
+						},
 						answeredOption: true,
 					},
 				}),
@@ -655,11 +659,13 @@ export const fetchUserDetail = (userId: string) =>
 				db
 					.select({
 						id: chapters.id,
+						title: chapters.title,
+						minimumScore: chapters.minimumScore,
 						quizCount: sql<number>`count(${quizzes.id})`.as("quiz_count"),
 					})
 					.from(chapters)
 					.leftJoin(quizzes, eq(chapters.id, quizzes.chapterId))
-					.groupBy(chapters.id),
+					.groupBy(chapters.id, chapters.title, chapters.minimumScore),
 			catch: (error) =>
 				new DatabaseError({
 					cause: error,
@@ -720,6 +726,7 @@ export const fetchUserDetail = (userId: string) =>
 			},
 			submissions: userSubmissions.map((s) => ({
 				id: s.id,
+				chapterId: s.chapterId,
 				chapterTitle: s.chapter?.title ?? "-",
 				quizLevel: s.quiz?.level ?? 0,
 				score: s.score ?? 0,
@@ -727,10 +734,18 @@ export const fetchUserDetail = (userId: string) =>
 			})),
 			pretestSubmissions: userPretestSubmissions.map((p) => ({
 				id: p.id,
+				chapterId: p.question?.chapterId ?? null,
+				chapterTitle: p.question?.chapter?.title ?? null,
 				question: p.question?.question ?? "-",
 				description: p.question?.description ?? "",
 				answeredOption: p.answeredOption?.text ?? "-",
 				isCorrect: p.isCorrect,
+			})),
+			chapters: allChaptersData.map((c) => ({
+				id: c.id,
+				title: c.title,
+				minimumScore: c.minimumScore,
+				quizCount: Number(c.quizCount),
 			})),
 		};
 	});
