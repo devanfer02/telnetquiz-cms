@@ -54,6 +54,7 @@ function RouteComponent() {
 				<StudyMaterialPreviewer
 					title={studyMaterial.title}
 					content={studyMaterial.content}
+					imageLink={studyMaterial.imageLink}
 				/>
 			</div>
 		</div>
