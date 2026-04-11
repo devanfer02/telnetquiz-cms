@@ -4,12 +4,14 @@ interface TableLinkProps<K extends string = string> {
 	to: string;
 	paramKey: K;
 	paramValue: string | number;
+	children?: React.ReactNode;
 }
 
 export default function TableLink<K extends string>({
 	to,
 	paramKey,
 	paramValue,
+	children,
 }: TableLinkProps<K>) {
 	return (
 		<Link
@@ -17,7 +19,7 @@ export default function TableLink<K extends string>({
 			params={{ [paramKey]: paramValue } as Record<K, string | number>}
 			className="hover:bg-white duration-200 py-1 px-2 rounded-md text-telnet-primary hover:text-telnet-dark-brown font-semibold"
 		>
-			{paramValue}
+			{children ?? paramValue}
 		</Link>
 	);
 }

@@ -44,21 +44,18 @@ export default function StudyMaterialList({
 
 	const columns: ColumnDef<StudyMaterial>[] = [
 		{
-			accessorKey: "id",
-			header: ({ column }) => <SortableHeader column={column} title="ID" />,
-			size: 10,
-			cell: ({ row }) => {
-				const id = row.original.id.toString();
-
-				return (
-					<TableLink to="/study-materials/$id" paramKey="id" paramValue={id} />
-				);
-			},
-		},
-		{
 			accessorKey: "title",
 			header: ({ column }) => <SortableHeader column={column} title="Title" />,
 			size: 50,
+			cell: ({ row }) => (
+				<TableLink
+					to="/study-materials/$id"
+					paramKey="id"
+					paramValue={row.original.id.toString()}
+				>
+					{row.original.title}
+				</TableLink>
+			),
 		},
 		{
 			accessorKey: "content",

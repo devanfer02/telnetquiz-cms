@@ -41,38 +41,33 @@ export default function QuizList({ quizzes, disableKey }: QuizListProps) {
 
 	const columns: ColumnDef<Quiz>[] = [
 		{
-			accessorKey: "id",
-			header: ({ column }) => <SortableHeader column={column} title="ID" />,
-			size: 10,
-			cell: ({ row }) => {
-				const id = row.original.id.toString();
-
-				return <TableLink to="/quiz/$id" paramKey="id" paramValue={id} />;
-			},
-		},
-		{
-			accessorKey: "chapterId",
-			header: ({ column }) => (
-				<SortableHeader column={column} title="Chapter ID" />
-			),
+			accessorKey: "chapterTitle",
+			accessorFn: (row) => row.chapter?.title ?? "",
+			header: "Chapter Name",
 			size: 10,
 			cell: ({ row }) => {
 				const chapterId = row.original.chapter?.id?.toString() ?? "";
 
 				return (
-					<TableLink to="/chapters/$id" paramKey="id" paramValue={chapterId} />
+					<TableLink to="/chapters/$id" paramKey="id" paramValue={chapterId}>
+						{row.original.chapter?.title ?? ""}
+					</TableLink>
 				);
 			},
-		},
-		{
-			accessorKey: "chapterTitle",
-			header: "Chapter Name",
-			size: 10,
 		},
 		{
 			accessorKey: "title",
 			header: ({ column }) => <SortableHeader column={column} title="Title" />,
 			size: 50,
+			cell: ({ row }) => (
+				<TableLink
+					to="/quiz/$id"
+					paramKey="id"
+					paramValue={row.original.id.toString()}
+				>
+					{row.original.title}
+				</TableLink>
+			),
 		},
 		{
 			accessorKey: "difficulty",

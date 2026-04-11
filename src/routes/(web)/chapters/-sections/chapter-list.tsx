@@ -33,31 +33,27 @@ export default function ChapterList({ chapters }: ChapterListProps) {
 
 	const columns: ColumnDef<Chapter>[] = [
 		{
-			accessorKey: "id",
-			header: ({ column }) => <SortableHeader column={column} title="ID" />,
-			size: 10,
-			cell: ({ row }) => {
-				const id = row.original.id.toString();
-
-				return <TableLink to="/chapters/$id" paramKey="id" paramValue={id} />;
-			},
-		},
-		{
 			accessorKey: "title",
 			header: ({ column }) => <SortableHeader column={column} title="Title" />,
 			size: 50,
 			cell: ({ row }) => (
-				<div className="flex items-center gap-2">
-					<span>{row.original.title}</span>
-					{row.original.isHidden && (
-						<Badge
-							variant="outline"
-							className="text-xs bg-yellow-50 text-yellow-700 border-yellow-200"
-						>
-							Hidden
-						</Badge>
-					)}
-				</div>
+				<TableLink
+					to="/chapters/$id"
+					paramKey="id"
+					paramValue={row.original.id}
+				>
+					<div className="flex items-center gap-2">
+						<span>{row.original.title}</span>
+						{row.original.isHidden && (
+							<Badge
+								variant="outline"
+								className="text-xs bg-yellow-50 text-yellow-700 border-yellow-200"
+							>
+								Hidden
+							</Badge>
+						)}
+					</div>
+				</TableLink>
 			),
 		},
 		{

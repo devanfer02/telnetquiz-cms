@@ -46,7 +46,11 @@ export const fetchQuizById = (id: number) =>
 				db.query.quizzes.findFirst({
 					where: eq(quizzes.id, id),
 					with: {
-						questions: true,
+						questions: {
+							with: {
+								options: true,
+							},
+						},
 					},
 					extras: {
 						numberOfQuestions: sql<number>`(
@@ -66,7 +70,6 @@ export const fetchQuizById = (id: number) =>
 		if (result === undefined) {
 			return yield* Effect.fail(new NotFoundError({ id, entity: "Quiz" }));
 		}
-
 		return result;
 	});
 
