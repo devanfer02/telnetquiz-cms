@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Brain, Pencil, Trophy } from "lucide-react";
 import { MetadataTable } from "@/components/global/date-metadata";
 import { Button } from "@/components/ui/button";
+import QuizPreviewSheet from "./quiz-preview-sheet";
 
 const difficultyStyles = {
 	easy: "bg-green-100 text-green-700 border-green-200",
@@ -10,7 +11,7 @@ const difficultyStyles = {
 };
 
 interface QuizHeaderProps {
-	quiz: Quiz;
+	quiz: Quiz & { questions?: Question[] };
 }
 
 export default function QuizHeader({ quiz }: QuizHeaderProps) {
@@ -60,20 +61,23 @@ export default function QuizHeader({ quiz }: QuizHeaderProps) {
 						</div>
 					</div>
 
-					{/* Right side - Action button */}
-					<Button
-						className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm shrink-0"
-						asChild
-					>
-						<Link
-							to="/quiz/edit/$id"
-							params={{ id }}
-							className="flex items-center gap-2"
+					{/* Right side - Action buttons */}
+					<div className="flex items-center gap-2 shrink-0">
+						<QuizPreviewSheet quiz={quiz} />
+						<Button
+							className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm"
+							asChild
 						>
-							<Pencil className="w-4 h-4" />
-							Edit Quiz
-						</Link>
-					</Button>
+							<Link
+								to="/quiz/edit/$id"
+								params={{ id }}
+								className="flex items-center gap-2"
+							>
+								<Pencil className="w-4 h-4" />
+								Edit Quiz
+							</Link>
+						</Button>
+					</div>
 				</div>
 
 				<div className="mt-6 border-t border-gray-200">

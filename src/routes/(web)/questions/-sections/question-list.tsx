@@ -28,6 +28,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { QUERY_KEYS } from "@/lib/constant";
 import { filterColumns } from "@/lib/utils";
 import { setFlashState } from "@/store/use-flash";
+import PretestPreviewSheet from "./pretest-preview-sheet";
 
 interface QuestionListProps {
 	questions: Question[];
@@ -259,9 +260,14 @@ export default function QuestionList({
 					onChange={(e) => setKeyword(e.target.value)}
 					className="w-full"
 				/>
-				<Button className="px-4 py-2 rounded-md bg-primary border border-telnet-primary bg-telnet-primary text-white hover:bg-white hover:text-telnet-primary duration-200 cursor-pointer">
-					<Link to="/questions/add">Tambah Pertanyaan</Link>
-				</Button>
+				<div className="flex items-center gap-2 shrink-0">
+					{activeTab === "pretest" && (
+						<PretestPreviewSheet questions={filteredData} />
+					)}
+					<Button className="px-4 py-2 rounded-md bg-primary border border-telnet-primary bg-telnet-primary text-white hover:bg-white hover:text-telnet-primary duration-200 cursor-pointer">
+						<Link to="/questions/add">Tambah Pertanyaan</Link>
+					</Button>
+				</div>
 			</div>
 			<Tabs
 				value={activeTab}
