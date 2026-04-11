@@ -6,7 +6,7 @@ import { dbTryPromise } from "@/lib/retry";
 import type { StudyMaterialFormData } from "@/types/zod";
 import { DatabaseError, NotFoundError } from "./errors/errors";
 import { deleteFile, uploadFile } from "./image";
-import { invalidateTtsCache } from "./tts";
+import { invalidateTtsCache } from "./tts-cache";
 
 export const fetchAllStudyMaterials = Effect.gen(function* () {
 	const { db } = yield* Db;
