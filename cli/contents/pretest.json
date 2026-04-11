@@ -2,50 +2,98 @@
   "questions": [
     {
       "chapterRef": "Prinsip TCP/IP",
-      "description": "Pertanyaan umum mengenai pengertian dan fungsi protokol TCP/IP dalam jaringan komputer.",
+      "description": "Setiap kali kamu buka Instagram atau kirim chat ke teman, ada protokol yang diam-diam bekerja di balik layar supaya datamu sampai dengan selamat. Kira-kira, kamu sudah tahu belum apa protokol itu dan fungsi utamanya?",
       "question": "Apa fungsi utama dari protokol TCP/IP dalam jaringan komputer?",
       "imageLink": null,
       "options": [
-        { "text": "Mengatur komunikasi dan pengiriman data antar perangkat dalam jaringan", "isCorrect": true },
-        { "text": "Mengenkripsi seluruh data yang tersimpan di hard disk komputer", "isCorrect": false },
-        { "text": "Mengelola tampilan antarmuka pengguna pada sistem operasi", "isCorrect": false },
-        { "text": "Mengatur kecepatan prosesor agar sesuai dengan beban jaringan", "isCorrect": false }
+        {
+          "text": "Mengatur komunikasi dan pengiriman data antar perangkat dalam jaringan",
+          "isCorrect": true
+        },
+        {
+          "text": "Mengenkripsi seluruh data yang tersimpan di hard disk komputer",
+          "isCorrect": false
+        },
+        {
+          "text": "Mengelola tampilan antarmuka pengguna pada sistem operasi",
+          "isCorrect": false
+        },
+        {
+          "text": "Mengatur kecepatan prosesor agar sesuai dengan beban jaringan",
+          "isCorrect": false
+        }
       ]
     },
     {
       "chapterRef": "Prinsip TCP/IP",
-      "description": "Pertanyaan tentang struktur dasar alamat IPv4 dan pembagian kelasnya.",
+      "description": "Setiap perangkat yang terhubung ke jaringan punya alamat unik yang disebut IP address. Kamu mungkin pernah lihat deretan angka seperti 192.168.1.1 di pengaturan Wi-Fi. Nah, alamat seperti itu tersusun dari sejumlah bit tertentu — kamu sudah tahu berapa?",
       "question": "Alamat IPv4 terdiri dari berapa bit?",
       "imageLink": null,
       "options": [
-        { "text": "32 bit", "isCorrect": true },
-        { "text": "64 bit", "isCorrect": false },
-        { "text": "128 bit", "isCorrect": false },
-        { "text": "16 bit", "isCorrect": false }
+        {
+          "text": "32 bit",
+          "isCorrect": true
+        },
+        {
+          "text": "64 bit",
+          "isCorrect": false
+        },
+        {
+          "text": "128 bit",
+          "isCorrect": false
+        },
+        {
+          "text": "16 bit",
+          "isCorrect": false
+        }
       ]
     },
     {
       "chapterRef": "Prinsip Sistem WLAN",
-      "description": "Pertanyaan umum mengenai pengertian dan cara kerja WLAN.",
+      "description": "Kamu pasti sering konek ke Wi-Fi, entah di sekolah, rumah, atau tempat nongkrong. Tapi kamu sudah tahu belum istilah resmi untuk teknologi jaringan nirkabel yang kamu pakai setiap hari itu?",
       "question": "Apa yang dimaksud dengan WLAN (Wireless Local Area Network)?",
       "imageLink": null,
       "options": [
-        { "text": "Jaringan area lokal yang menghubungkan perangkat menggunakan gelombang radio tanpa kabel", "isCorrect": true },
-        { "text": "Jaringan luas yang menghubungkan komputer antar kota menggunakan kabel fiber optik", "isCorrect": false },
-        { "text": "Perangkat lunak yang digunakan untuk memantau lalu lintas internet", "isCorrect": false },
-        { "text": "Protokol keamanan yang melindungi data pada jaringan berkabel", "isCorrect": false }
+        {
+          "text": "Jaringan area lokal yang menghubungkan perangkat menggunakan gelombang radio tanpa kabel",
+          "isCorrect": true
+        },
+        {
+          "text": "Jaringan luas yang menghubungkan komputer antar kota menggunakan kabel fiber optik",
+          "isCorrect": false
+        },
+        {
+          "text": "Perangkat lunak yang digunakan untuk memantau lalu lintas internet",
+          "isCorrect": false
+        },
+        {
+          "text": "Protokol keamanan yang melindungi data pada jaringan berkabel",
+          "isCorrect": false
+        }
       ]
     },
     {
       "chapterRef": "Prinsip Sistem WLAN",
-      "description": "Pertanyaan tentang komponen dasar yang digunakan dalam jaringan WLAN.",
+      "description": "Pernah perhatikan kotak kecil yang biasanya dipasang di langit-langit atau dinding sekolah? Perangkat itu yang bikin HP-mu bisa konek ke Wi-Fi. Coba tebak, apa nama dan fungsi utamanya?",
       "question": "Perangkat apa yang berfungsi sebagai penghubung utama antara perangkat nirkabel dan jaringan kabel pada WLAN?",
       "imageLink": null,
       "options": [
-        { "text": "Access Point (AP)", "isCorrect": true },
-        { "text": "Repeater", "isCorrect": false },
-        { "text": "Modem DSL", "isCorrect": false },
-        { "text": "Network Interface Card (NIC) kabel", "isCorrect": false }
+        {
+          "text": "Access Point (AP)",
+          "isCorrect": true
+        },
+        {
+          "text": "Repeater",
+          "isCorrect": false
+        },
+        {
+          "text": "Modem DSL",
+          "isCorrect": false
+        },
+        {
+          "text": "Network Interface Card (NIC) kabel",
+          "isCorrect": false
+        }
       ]
     }
   ]
