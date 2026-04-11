@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Effect } from "effect";
 import { HttpStatus, parseBody, response } from "@/lib/http";
-import { loginUser } from "@/services/auth";
 import type { AuthError, ValidationError } from "@/services/errors/errors";
+import { loginUser } from "@/services/users/auth";
 import { loginUserSchema } from "@/types/zod.api";
 
 export const Route = createFileRoute("/api/(internal)/auth/login")({

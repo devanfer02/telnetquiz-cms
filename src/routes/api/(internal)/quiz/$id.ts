@@ -8,7 +8,7 @@ import {
 	fetchQuizByIdWithQuestionsAndOptions,
 	sanitizeQuizForClient,
 	submitQuizAnswers,
-} from "@/services/quizzes";
+} from "@/services/content/quizzes";
 import { quizSubmissionSchema } from "@/types/zod.api";
 
 export const Route = createFileRoute("/api/(internal)/quiz/$id")({

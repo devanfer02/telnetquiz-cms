@@ -11,7 +11,7 @@ import {
 	resetUserProgress,
 	revokeAllUserSessions,
 	revokeSession,
-} from "@/services/users";
+} from "@/services/users/users";
 import { editUserSchema, idStringSchema } from "@/types/zod";
 
 export const getUserDetail = createServerFn({

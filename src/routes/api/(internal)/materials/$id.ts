@@ -3,7 +3,7 @@ import { Effect } from "effect";
 import { DbLayer } from "@/lib/db";
 import { HttpStatus, parseNumericId, response } from "@/lib/http";
 import { withApiErrorHandling } from "@/lib/sentry/effect";
-import { fetchStudyMaterialById } from "@/services/study-material";
+import { fetchStudyMaterialById } from "@/services/content/study-material";
 
 export const Route = createFileRoute("/api/(internal)/materials/$id")({
 	server: {

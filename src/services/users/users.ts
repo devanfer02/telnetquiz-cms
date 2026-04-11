@@ -15,7 +15,7 @@ import { Db } from "@/lib/db";
 import { dbTryPromise } from "@/lib/retry";
 import type { EditUserFormData } from "@/types/zod";
 import type { UpdateProfileFormData } from "@/types/zod.api";
-import { AuthError, DatabaseError, NotFoundError } from "./errors/errors";
+import { AuthError, DatabaseError, NotFoundError } from "../errors/errors";
 
 export const patchUser = (id: string, user: EditUserFormData) =>
 	Effect.gen(function* () {

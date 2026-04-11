@@ -8,7 +8,7 @@ import {
 	buildCacheKey,
 	constructTtsText,
 	requestTtsAudio,
-} from "@/services/tts";
+} from "@/services/tts/tts";
 
 const VALID_TYPES = ["question", "pretest", "material"] as const;
 

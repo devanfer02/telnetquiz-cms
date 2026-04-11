@@ -12,7 +12,7 @@ import {
 } from "@/database/schema";
 import { Db } from "@/lib/db";
 import { dbTryPromise } from "@/lib/retry";
-import { DatabaseError } from "./errors/errors";
+import { DatabaseError } from "../errors/errors";
 
 export const fetchAllUsers = Effect.gen(function* () {
 	const { db } = yield* Db;

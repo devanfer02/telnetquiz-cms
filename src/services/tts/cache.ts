@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import { Effect } from "effect";
 import { env } from "@/lib/env";
-import { TtsServiceError } from "./errors/errors";
+import { TtsServiceError } from "../errors/errors";
 
 export const hashId = (id: number): string =>
 	createHash("sha256").update(String(id)).digest("hex").slice(0, 12);

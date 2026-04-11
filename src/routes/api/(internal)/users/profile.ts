@@ -4,7 +4,7 @@ import { DbLayer } from "@/lib/db";
 import { HttpStatus, parseBody, response } from "@/lib/http";
 import { withApiErrorHandling } from "@/lib/sentry/effect";
 import { authMiddleware } from "@/middlewares/auth";
-import { fetchUserProfile, updateUserProfile } from "@/services/users";
+import { fetchUserProfile, updateUserProfile } from "@/services/users/users";
 import { updateProfileSchema } from "@/types/zod.api";
 
 export const Route = createFileRoute("/api/(internal)/users/profile")({

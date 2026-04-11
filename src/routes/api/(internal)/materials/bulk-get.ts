@@ -3,7 +3,7 @@ import { Effect } from "effect";
 import { DbLayer } from "@/lib/db";
 import { HttpStatus, parseBody, response } from "@/lib/http";
 import { withApiErrorHandling } from "@/lib/sentry/effect";
-import { fetchStudyMaterialsByIds } from "@/services/study-material";
+import { fetchStudyMaterialsByIds } from "@/services/content/study-material";
 import { bulkMaterialsSchema } from "@/types/zod.api";
 
 export const Route = createFileRoute("/api/(internal)/materials/bulk-get")({

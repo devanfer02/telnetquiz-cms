@@ -4,7 +4,7 @@ import { DbLayer } from "@/lib/db";
 import { HttpStatus, response } from "@/lib/http";
 import { withApiErrorHandling } from "@/lib/sentry/effect";
 import { authMiddleware } from "@/middlewares/auth";
-import { evaluateUserAchievements } from "@/services/achievements";
+import { evaluateUserAchievements } from "@/services/users/achievements";
 
 export const Route = createFileRoute("/api/(internal)/achievements")({
 	server: {

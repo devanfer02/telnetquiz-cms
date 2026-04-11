@@ -11,7 +11,7 @@ import {
 import { Db } from "@/lib/db";
 import { dbTryPromise } from "@/lib/retry";
 import type { ChapterFormData } from "@/types/zod";
-import { DatabaseError, NotFoundError } from "./errors/errors";
+import { DatabaseError, NotFoundError } from "../errors/errors";
 
 export const fetchAllChapters = Effect.gen(function* () {
 	const { db } = yield* Db;

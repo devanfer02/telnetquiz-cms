@@ -4,7 +4,7 @@ import { schools } from "@/database/schema";
 import { Db } from "@/lib/db";
 import { dbTryPromise } from "@/lib/retry";
 import type { SchoolFormData } from "@/types/zod";
-import { DatabaseError, NotFoundError } from "./errors/errors";
+import { DatabaseError, NotFoundError } from "../errors/errors";
 
 export const fetchAllSchools = Effect.gen(function* () {
 	const { db } = yield* Db;

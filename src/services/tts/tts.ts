@@ -1,9 +1,9 @@
 import { Effect } from "effect";
-import { TtsServiceError } from "./errors/errors";
-import { fetchQuestionById } from "./questions";
-import { fetchStudyMaterialById } from "./study-material";
+import { fetchQuestionById } from "../content/questions";
+import { fetchStudyMaterialById } from "../content/study-material";
+import { TtsServiceError } from "../errors/errors";
 
-export { buildCacheKey, requestTtsAudio } from "./tts-cache";
+export { buildCacheKey, requestTtsAudio } from "./cache";
 
 const LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H"];
 

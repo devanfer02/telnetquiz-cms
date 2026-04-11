@@ -9,7 +9,7 @@ import {
 	hideSchool,
 	patchSchool,
 	unhideSchool,
-} from "@/services/schools";
+} from "@/services/users/schools";
 import { idNumberSchema, schoolSchema } from "@/types/zod";
 
 export const getAllSchools = createServerFn({

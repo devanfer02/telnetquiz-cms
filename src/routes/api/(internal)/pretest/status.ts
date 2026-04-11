@@ -4,7 +4,7 @@ import { DbLayer } from "@/lib/db";
 import { HttpStatus, response } from "@/lib/http";
 import { withApiErrorHandling } from "@/lib/sentry/effect";
 import { authMiddleware } from "@/middlewares/auth";
-import { checkPretestStatus } from "@/services/pretest";
+import { checkPretestStatus } from "@/services/content/pretest";
 
 export const Route = createFileRoute("/api/(internal)/pretest/status")({
 	server: {

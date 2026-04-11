@@ -8,7 +8,7 @@ import {
 	fetchAllQuizzes,
 	fetchQuizById,
 	patchQuiz,
-} from "@/services/quizzes";
+} from "@/services/content/quizzes";
 import { idNumberSchema, quizSchema } from "@/types/zod";
 
 export const getAllQuizzes = createServerFn({

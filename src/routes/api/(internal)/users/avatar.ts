@@ -5,8 +5,8 @@ import { HttpStatus, response } from "@/lib/http";
 import { S3Layer } from "@/lib/s3";
 import { withApiErrorHandling } from "@/lib/sentry/effect";
 import { authMiddleware } from "@/middlewares/auth";
-import { uploadAvatar } from "@/services/avatar";
 import { ValidationError } from "@/services/errors/errors";
+import { uploadAvatar } from "@/services/users/avatar";
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024;
 const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "image/png"];

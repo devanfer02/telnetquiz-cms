@@ -3,7 +3,10 @@ import { Effect } from "effect";
 import { DbLayer } from "@/lib/db";
 import { HttpStatus, response } from "@/lib/http";
 import { withApiErrorHandling } from "@/lib/sentry/effect";
-import { fetchSchoolsPaginated, fetchVisibleSchools } from "@/services/schools";
+import {
+	fetchSchoolsPaginated,
+	fetchVisibleSchools,
+} from "@/services/users/schools";
 
 export const Route = createFileRoute("/api/(internal)/schools/")({
 	server: {

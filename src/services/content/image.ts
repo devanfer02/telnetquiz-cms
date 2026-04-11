@@ -3,7 +3,7 @@ import { Effect } from "effect";
 import { env } from "@/lib/env";
 import { S3 } from "@/lib/s3";
 import { generateFilename, getFileExtension } from "@/lib/utils";
-import { CloudflareR2Error, InternalServerError } from "./errors/errors";
+import { CloudflareR2Error, InternalServerError } from "../errors/errors";
 
 export const uploadFile = (file: File) =>
 	Effect.gen(function* () {

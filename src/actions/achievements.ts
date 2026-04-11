@@ -10,7 +10,7 @@ import {
 	fetchAllAchievements,
 	fetchUserAchievements,
 	patchAchievement,
-} from "@/services/achievements";
+} from "@/services/users/achievements";
 import { achievementSchema, idNumberSchema, idStringSchema } from "@/types/zod";
 
 export const getAllAchievements = createServerFn({

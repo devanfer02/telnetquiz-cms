@@ -9,7 +9,7 @@ import {
 	hideChapter,
 	patchChapter,
 	unhideChapter,
-} from "@/services/chapters";
+} from "@/services/content/chapters";
 import { chapterSchema, idNumberSchema } from "@/types/zod";
 
 export const getAllChapters = createServerFn({

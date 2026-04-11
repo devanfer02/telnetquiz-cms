@@ -9,7 +9,11 @@ import {
 import { Db } from "@/lib/db";
 import { dbTryPromise } from "@/lib/retry";
 import type { QuizFormData } from "@/types/zod";
-import { DatabaseError, NotFoundError, ValidationError } from "./errors/errors";
+import {
+	DatabaseError,
+	NotFoundError,
+	ValidationError,
+} from "../errors/errors";
 
 export const fetchAllQuizzes = Effect.gen(function* () {
 	const { db } = yield* Db;

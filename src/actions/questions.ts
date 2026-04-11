@@ -9,7 +9,7 @@ import {
 	fetchAllQuestions,
 	fetchQuestionById,
 	patchQuestion,
-} from "@/services/questions";
+} from "@/services/content/questions";
 
 export const getAllQuestions = createServerFn({
 	method: "GET",

@@ -4,11 +4,11 @@ import { DbLayer } from "@/lib/db";
 import { HttpStatus, parseBody, response } from "@/lib/http";
 import { withApiErrorHandling } from "@/lib/sentry/effect";
 import { authMiddleware } from "@/middlewares/auth";
-import { submitPretest } from "@/services/pretest";
+import { submitPretest } from "@/services/content/pretest";
 import {
 	fetchQuestionsByType,
 	formatQuestionsForApi,
-} from "@/services/questions";
+} from "@/services/content/questions";
 import { pretestSubmissionSchema } from "@/types/zod.api";
 
 export const Route = createFileRoute("/api/(internal)/pretest")({

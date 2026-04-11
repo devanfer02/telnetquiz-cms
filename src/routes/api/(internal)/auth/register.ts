@@ -2,12 +2,12 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Effect } from "effect";
 import { DbLayer } from "@/lib/db";
 import { HttpStatus, parseBody, response } from "@/lib/http";
-import { registerUser } from "@/services/auth";
 import type {
 	AuthError,
 	DatabaseError,
 	ValidationError,
 } from "@/services/errors/errors";
+import { registerUser } from "@/services/users/auth";
 import { registerUserSchema } from "@/types/zod.api";
 
 export const Route = createFileRoute("/api/(internal)/auth/register")({

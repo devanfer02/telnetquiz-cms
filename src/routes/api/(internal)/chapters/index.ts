@@ -4,7 +4,7 @@ import { DbLayer } from "@/lib/db";
 import { HttpStatus, response } from "@/lib/http";
 import { withApiErrorHandling } from "@/lib/sentry/effect";
 import { authMiddleware } from "@/middlewares/auth";
-import { fetchChaptersWithUserPerformance } from "@/services/chapters";
+import { fetchChaptersWithUserPerformance } from "@/services/content/chapters";
 
 export const Route = createFileRoute("/api/(internal)/chapters/")({
 	server: {

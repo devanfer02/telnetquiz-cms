@@ -7,7 +7,7 @@ import {
 	fetchAverageScores,
 	fetchDashboardStats,
 	fetchLeaderboard,
-} from "@/services/analytics";
+} from "@/services/users/analytics";
 
 export const getAllUsers = createServerFn({
 	method: "GET",

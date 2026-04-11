@@ -4,9 +4,9 @@ import { options, questions } from "@/database/schema";
 import { Db } from "@/lib/db";
 import { dbTryPromise } from "@/lib/retry";
 import type { QuestionFormData, QuestionsFormData } from "@/types/zod";
-import { DatabaseError, NotFoundError } from "./errors/errors";
+import { DatabaseError, NotFoundError } from "../errors/errors";
+import { invalidateTtsCache } from "../tts/cache";
 import { deleteFile, uploadFile } from "./image";
-import { invalidateTtsCache } from "./tts-cache";
 
 export const fetchAllQuestions = Effect.gen(function* () {
 	const { db } = yield* Db;

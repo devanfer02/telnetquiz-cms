@@ -8,7 +8,7 @@ import {
 } from "@/database/schema";
 import { Db } from "@/lib/db";
 import { dbTryPromise } from "@/lib/retry";
-import { DatabaseError, ValidationError } from "./errors/errors";
+import { DatabaseError, ValidationError } from "../errors/errors";
 
 export const checkPretestStatus = (userId: string) =>
 	Effect.gen(function* () {

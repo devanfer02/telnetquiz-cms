@@ -9,7 +9,7 @@ import {
 	fetchAllStudyMaterials,
 	fetchStudyMaterialById,
 	patchStudyMaterial,
-} from "@/services/study-material";
+} from "@/services/content/study-material";
 
 export const getAllStudyMaterials = createServerFn({
 	method: "GET",

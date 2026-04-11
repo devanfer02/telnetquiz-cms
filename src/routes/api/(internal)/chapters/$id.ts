@@ -4,7 +4,7 @@ import { DbLayer } from "@/lib/db";
 import { HttpStatus, parseNumericId, response } from "@/lib/http";
 import { withApiErrorHandling } from "@/lib/sentry/effect";
 import { authMiddleware } from "@/middlewares/auth";
-import { fetchChapterById } from "@/services/chapters";
+import { fetchChapterById } from "@/services/content/chapters";
 
 export const Route = createFileRoute("/api/(internal)/chapters/$id")({
 	server: {

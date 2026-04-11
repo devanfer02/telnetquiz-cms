@@ -3,7 +3,7 @@ import { Effect } from "effect";
 import { chapters, quizzes, submissions } from "@/database/schema";
 import { Db } from "@/lib/db";
 import { dbTryPromise } from "@/lib/retry";
-import { DatabaseError } from "./errors/errors";
+import { DatabaseError } from "../errors/errors";
 
 export const fetchRecentActivity = (userId: string) =>
 	Effect.gen(function* () {

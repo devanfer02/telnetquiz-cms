@@ -4,7 +4,7 @@ import { DbLayer } from "@/lib/db";
 import { HttpStatus, response } from "@/lib/http";
 import { withApiErrorHandling } from "@/lib/sentry/effect";
 import { authMiddleware } from "@/middlewares/auth";
-import { revokeSession } from "@/services/users";
+import { revokeSession } from "@/services/users/users";
 
 export const Route = createFileRoute("/api/(internal)/sessions")({
 	server: {

@@ -6,7 +6,7 @@ import { withApiErrorHandling } from "@/lib/sentry/effect";
 import {
 	fetchQuestionsByType,
 	formatQuestionsForApi,
-} from "@/services/questions";
+} from "@/services/content/questions";
 
 export const Route = createFileRoute("/api/(internal)/questions")({
 	server: {

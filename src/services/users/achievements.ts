@@ -13,7 +13,7 @@ import {
 } from "@/database/schema";
 import { Db } from "@/lib/db";
 import { dbTryPromise } from "@/lib/retry";
-import { DatabaseError, NotFoundError } from "./errors/errors";
+import { DatabaseError, NotFoundError } from "../errors/errors";
 
 const buildContext = (userId: string) =>
 	Effect.gen(function* () {

@@ -4,7 +4,7 @@ import { DbLayer } from "@/lib/db";
 import { HttpStatus, response } from "@/lib/http";
 import { withApiErrorHandling } from "@/lib/sentry/effect";
 import { authMiddleware } from "@/middlewares/auth";
-import { fetchRecentActivity } from "@/services/activity";
+import { fetchRecentActivity } from "@/services/users/activity";
 
 export const Route = createFileRoute("/api/(internal)/activity/recent")({
 	server: {

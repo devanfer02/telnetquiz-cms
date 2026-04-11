@@ -5,7 +5,7 @@ import { auth } from "@/lib/auth/server";
 import { Db } from "@/lib/db";
 import { dbTryPromise } from "@/lib/retry";
 import type { LoginUserFormData, RegisterUserFormData } from "@/types/zod.api";
-import { AuthError, DatabaseError } from "./errors/errors";
+import { AuthError, DatabaseError } from "../errors/errors";
 
 export const registerUser = (userForm: RegisterUserFormData) =>
 	Effect.gen(function* () {

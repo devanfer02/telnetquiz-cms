@@ -4,7 +4,7 @@ import { DbLayer } from "@/lib/db";
 import { HttpStatus, parseBody, response } from "@/lib/http";
 import { withApiErrorHandling } from "@/lib/sentry/effect";
 import { authMiddleware } from "@/middlewares/auth";
-import { verifyQuizAnswer } from "@/services/quizzes";
+import { verifyQuizAnswer } from "@/services/content/quizzes";
 import { verifyAnswerSchema } from "@/types/zod.api";
 
 export const Route = createFileRoute("/api/(internal)/quiz/verify")({
