@@ -1,11 +1,11 @@
 import { createHash } from "node:crypto";
 import { resolve } from "node:path";
-import { db } from "../src/lib/db";
-import { questions, options, studyMaterials } from "../src/database/schema";
+import { db } from "../../src/lib/db";
+import { questions, options, studyMaterials } from "../../src/database/schema";
 import { asc } from "drizzle-orm";
 
 const LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H"];
-const TTS_PROJECT_DIR = resolve(import.meta.dir, "../tts-api");
+const TTS_PROJECT_DIR = resolve(import.meta.dir, "../../tts-api");
 
 function hashId(id: number): string {
 	return createHash("sha256").update(String(id)).digest("hex").slice(0, 12);

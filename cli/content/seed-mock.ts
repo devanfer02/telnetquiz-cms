@@ -6,7 +6,7 @@ import {
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { asc, eq, inArray, like } from "drizzle-orm";
-import { db } from "../src/lib/db";
+import { db } from "../../src/lib/db";
 import {
 	chapters,
 	quizzes,
@@ -18,13 +18,13 @@ import {
 	accounts,
 	submissions,
 	pretestSubmissions,
-} from "../src/database/schema";
+} from "../../src/database/schema";
 
 // ============================================================================
 // LOAD MOCK DATA FROM JSON
 // ============================================================================
 
-const MOCK_DIR = join(import.meta.dir, "contents", "mock");
+const MOCK_DIR = join(import.meta.dir, "data", "mock");
 
 function loadJson<T>(filename: string): T {
 	return JSON.parse(readFileSync(join(MOCK_DIR, filename), "utf-8")) as T;

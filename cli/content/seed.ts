@@ -1,7 +1,7 @@
 import { createInterface } from "node:readline";
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { db } from "../src/lib/db";
+import { db } from "../../src/lib/db";
 import {
 	chapters,
 	quizzes,
@@ -10,7 +10,7 @@ import {
 	studyMaterials,
 	submissions,
 	pretestSubmissions,
-} from "../src/database/schema";
+} from "../../src/database/schema";
 import { sql } from "drizzle-orm";
 
 // ============================================================================
@@ -40,6 +40,7 @@ interface QuestionJson {
 	studyMaterial: {
 		title: string;
 		content: string;
+		imageLink: string | null;
 	};
 	options: OptionJson[];
 }
@@ -65,7 +66,7 @@ interface PretestQuestionJson {
 // CLI HELPERS
 // ============================================================================
 
-const CONTENTS_DIR = join(import.meta.dir, "contents", "prod");
+const CONTENTS_DIR = join(import.meta.dir, "data", "prod");
 
 const flags = {
 	force: process.argv.includes("--force"),
@@ -379,6 +380,7 @@ async function main() {
 				const materialsToInsert = level.questions.map((q) => ({
 					title: q.studyMaterial.title,
 					content: q.studyMaterial.content,
+					imageLink: q.studyMaterial.imageLink ?? null,
 				}));
 
 				const insertedMaterials = await tx

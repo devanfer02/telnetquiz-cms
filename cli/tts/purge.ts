@@ -2,8 +2,8 @@ import {
 	DeleteObjectCommand,
 	ListObjectsV2Command,
 } from "@aws-sdk/client-s3";
-import { s3 } from "../src/lib/s3";
-import { env } from "../src/lib/env";
+import { s3 } from "../../src/lib/s3";
+import { env } from "../../src/lib/env";
 
 async function listTtsFiles(): Promise<string[]> {
 	const keys: string[] = [];

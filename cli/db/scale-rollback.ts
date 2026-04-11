@@ -1,11 +1,11 @@
 import { eq, like, inArray } from "drizzle-orm";
-import { db } from "../src/lib/db";
+import { db } from "../../src/lib/db";
 import {
 	chapters,
 	studyMaterials,
 	schools,
 	users,
-} from "../src/database/schema";
+} from "../../src/database/schema";
 
 const telcoChapterTitles = [
 	"Media Transmisi",

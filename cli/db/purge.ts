@@ -1,5 +1,5 @@
 import { createInterface } from "node:readline";
-import { db } from "../src/lib/db";
+import { db } from "../../src/lib/db";
 import {
 	schools,
 	users,
@@ -15,7 +15,7 @@ import {
 	studyMaterials,
 	achievements,
 	userAchievements,
-} from "../src/database/schema";
+} from "../../src/database/schema";
 import { sql, count, eq, inArray, ne } from "drizzle-orm";
 
 // ============================================================================

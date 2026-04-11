@@ -1,9 +1,9 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { sql } from "drizzle-orm";
-import { db } from "../src/lib/db";
+import { db } from "../../src/lib/db";
 
-const SCHEMA_PATH = join(import.meta.dir, "../src/database/schema.ts");
+const SCHEMA_PATH = join(import.meta.dir, "../../src/database/schema.ts");
 
 function parseTableNames(): string[] {
 	const content = readFileSync(SCHEMA_PATH, "utf-8");
