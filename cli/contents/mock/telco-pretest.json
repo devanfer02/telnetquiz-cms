@@ -1,0 +1,127 @@
+[
+  {
+    "chapterOffset": 2,
+    "materialOffset": 13,
+    "imageLink": null,
+    "description": "Pertanyaan pretes untuk mengukur pemahaman awal tentang media transmisi.",
+    "question": "Media transmisi yang menggunakan cahaya untuk mentransmisikan data dengan kecepatan sangat tinggi disebut...",
+    "options": [
+      {
+        "text": "Kabel UTP",
+        "isCorrect": false
+      },
+      {
+        "text": "Kabel Coaxial",
+        "isCorrect": false
+      },
+      {
+        "text": "Fiber Optik",
+        "isCorrect": true
+      },
+      {
+        "text": "Kabel STP",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "chapterOffset": 3,
+    "materialOffset": 16,
+    "imageLink": null,
+    "description": "Pertanyaan pretes untuk mengukur pemahaman awal tentang jaringan nirkabel.",
+    "question": "Standar WiFi yang dikenal sebagai WiFi 6 dan mendukung frekuensi 2.4, 5, dan 6 GHz adalah...",
+    "options": [
+      {
+        "text": "IEEE 802.11n",
+        "isCorrect": false
+      },
+      {
+        "text": "IEEE 802.11ac",
+        "isCorrect": false
+      },
+      {
+        "text": "IEEE 802.11ax",
+        "isCorrect": true
+      },
+      {
+        "text": "IEEE 802.11g",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "chapterOffset": 4,
+    "materialOffset": 19,
+    "imageLink": null,
+    "description": "Pertanyaan pretes untuk mengukur pemahaman awal tentang protokol telekomunikasi.",
+    "question": "Protokol yang digunakan untuk memulai, memodifikasi, dan mengakhiri sesi komunikasi multimedia melalui jaringan IP adalah...",
+    "options": [
+      {
+        "text": "HTTP",
+        "isCorrect": false
+      },
+      {
+        "text": "SIP (Session Initiation Protocol)",
+        "isCorrect": true
+      },
+      {
+        "text": "FTP",
+        "isCorrect": false
+      },
+      {
+        "text": "SMTP",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "chapterOffset": 5,
+    "materialOffset": 22,
+    "imageLink": null,
+    "description": "Pertanyaan pretes untuk mengukur pemahaman awal tentang teknik modulasi.",
+    "question": "Teknik modulasi yang mengkombinasikan perubahan amplitudo dan fase sehingga dapat mengirim banyak bit per simbol disebut...",
+    "options": [
+      {
+        "text": "ASK (Amplitude Shift Keying)",
+        "isCorrect": false
+      },
+      {
+        "text": "FSK (Frequency Shift Keying)",
+        "isCorrect": false
+      },
+      {
+        "text": "PSK (Phase Shift Keying)",
+        "isCorrect": false
+      },
+      {
+        "text": "QAM (Quadrature Amplitude Modulation)",
+        "isCorrect": true
+      }
+    ]
+  },
+  {
+    "chapterOffset": 6,
+    "materialOffset": 25,
+    "imageLink": null,
+    "description": "Pertanyaan pretes untuk mengukur pemahaman awal tentang keamanan jaringan.",
+    "question": "Sistem yang berfungsi mendeteksi DAN secara otomatis memblokir ancaman keamanan pada jaringan disebut...",
+    "options": [
+      {
+        "text": "Firewall",
+        "isCorrect": false
+      },
+      {
+        "text": "IDS (Intrusion Detection System)",
+        "isCorrect": false
+      },
+      {
+        "text": "IPS (Intrusion Prevention System)",
+        "isCorrect": true
+      },
+      {
+        "text": "VPN (Virtual Private Network)",
+        "isCorrect": false
+      }
+    ]
+  }
+]

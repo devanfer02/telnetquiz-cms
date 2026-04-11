@@ -65,7 +65,7 @@ interface PretestQuestionJson {
 // CLI HELPERS
 // ============================================================================
 
-const CONTENTS_DIR = join(import.meta.dir, "contents");
+const CONTENTS_DIR = join(import.meta.dir, "contents", "prod");
 
 const flags = {
 	force: process.argv.includes("--force"),

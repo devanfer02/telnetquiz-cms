@@ -1,0 +1,27 @@
+[
+  {
+    "title": "Media Transmisi",
+    "description": "Mempelajari jenis-jenis media transmisi dalam jaringan telekomunikasi, termasuk kabel tembaga, fiber optik, dan media nirkabel.",
+    "mascotId": 3
+  },
+  {
+    "title": "Jaringan Nirkabel (Wireless)",
+    "description": "Memahami teknologi jaringan nirkabel, standar WiFi, Bluetooth, dan teknologi seluler dari 2G hingga 5G.",
+    "mascotId": 4
+  },
+  {
+    "title": "Protokol dan Standar Telekomunikasi",
+    "description": "Mempelajari berbagai protokol dan standar yang digunakan dalam telekomunikasi modern, termasuk OSI, VoIP, dan SIP.",
+    "mascotId": 5
+  },
+  {
+    "title": "Teknik Modulasi dan Multiplexing",
+    "description": "Memahami teknik modulasi sinyal dan multiplexing untuk efisiensi transmisi data dalam jaringan telekomunikasi.",
+    "mascotId": 6
+  },
+  {
+    "title": "Keamanan Jaringan Telekomunikasi",
+    "description": "Mempelajari aspek keamanan dalam jaringan telekomunikasi, enkripsi, firewall, VPN, dan sistem deteksi intrusi.",
+    "mascotId": 7
+  }
+]

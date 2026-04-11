@@ -1,0 +1,52 @@
+[
+  {
+    "chapterIndex": 0,
+    "materialIndex": 0,
+    "imageLink": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Ipv4_address.svg/800px-Ipv4_address.svg.png",
+    "description": "Pertanyaan pretes untuk mengukur pemahaman awal tentang alamat IP.",
+    "question": "Alamat IP berfungsi sebagai identitas unik perangkat dalam jaringan. Manakah pernyataan berikut yang BENAR mengenai alamat IP?",
+    "options": [
+      {
+        "text": "IPv4 menggunakan 128 bit sedangkan IPv6 menggunakan 32 bit",
+        "isCorrect": false
+      },
+      {
+        "text": "IPv4 menggunakan 32 bit sedangkan IPv6 menggunakan 128 bit",
+        "isCorrect": true
+      },
+      {
+        "text": "IPv4 dan IPv6 sama-sama menggunakan 64 bit",
+        "isCorrect": false
+      },
+      {
+        "text": "IPv4 menggunakan notasi heksadesimal sedangkan IPv6 menggunakan desimal",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "chapterIndex": 1,
+    "materialIndex": 6,
+    "imageLink": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/NetworkTopologies.svg/800px-NetworkTopologies.svg.png",
+    "description": "Pertanyaan pretes untuk mengukur pemahaman awal tentang topologi jaringan.",
+    "question": "Topologi jaringan menentukan bagaimana perangkat terhubung satu sama lain. Topologi manakah yang menggunakan satu perangkat pusat (seperti switch atau hub) sebagai titik koneksi semua perangkat?",
+    "options": [
+      {
+        "text": "Topologi Bus",
+        "isCorrect": false
+      },
+      {
+        "text": "Topologi Ring",
+        "isCorrect": false
+      },
+      {
+        "text": "Topologi Star",
+        "isCorrect": true
+      },
+      {
+        "text": "Topologi Mesh",
+        "isCorrect": false
+      }
+    ]
+  }
+]

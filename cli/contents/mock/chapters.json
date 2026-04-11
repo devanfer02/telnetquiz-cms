@@ -1,0 +1,12 @@
+[
+  {
+    "title": "Protokol Internet (IP)",
+    "description": "Mempelajari konsep dasar pengalamatan IP, termasuk IPv4, IPv6, subnetting, dan teknik pembagian jaringan.",
+    "mascotId": 1
+  },
+  {
+    "title": "Topologi Jaringan",
+    "description": "Memahami berbagai jenis topologi jaringan komputer, karakteristik, kelebihan, dan kekurangan masing-masing topologi.",
+    "mascotId": 2
+  }
+]

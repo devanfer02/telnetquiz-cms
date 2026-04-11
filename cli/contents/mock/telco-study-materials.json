@@ -1,0 +1,77 @@
+[
+  {
+    "title": "Pengenalan Media Transmisi",
+    "imageLink": null,
+    "content": "<h2>Media Transmisi dalam Jaringan</h2>\n<p>Media transmisi adalah jalur fisik atau nirkabel yang digunakan untuk mengirimkan data dari satu perangkat ke perangkat lain dalam jaringan telekomunikasi.</p>\n<h3>Klasifikasi Media Transmisi</h3>\n<ul>\n<li><strong>Guided (Terpandu):</strong> Kabel tembaga (UTP, STP, Coaxial), Fiber Optik</li>\n<li><strong>Unguided (Tidak Terpandu):</strong> Gelombang radio, Microwave, Infrared</li>\n</ul>\n<h3>Faktor Pemilihan Media</h3>\n<ol>\n<li>Bandwidth dan kecepatan transfer</li>\n<li>Jarak transmisi maksimum</li>\n<li>Ketahanan terhadap interferensi</li>\n<li>Biaya instalasi dan pemeliharaan</li>\n</ol>"
+  },
+  {
+    "title": "Kabel Tembaga (UTP, STP, Coaxial)",
+    "imageLink": null,
+    "content": "<h2>Jenis-Jenis Kabel Tembaga</h2>\n<h3>Kabel UTP (Unshielded Twisted Pair)</h3>\n<ul>\n<li>Terdiri dari pasangan kabel yang dipilin tanpa pelindung</li>\n<li>Kategori: Cat5e (1 Gbps), Cat6 (10 Gbps), Cat6a (10 Gbps 100m)</li>\n<li>Konektor: RJ-45</li>\n<li>Jarak maksimum: 100 meter</li>\n</ul>\n<h3>Kabel STP (Shielded Twisted Pair)</h3>\n<ul>\n<li>Memiliki pelindung logam untuk mengurangi interferensi elektromagnetik</li>\n<li>Lebih mahal dari UTP tetapi lebih tahan terhadap noise</li>\n</ul>\n<h3>Kabel Coaxial</h3>\n<ul>\n<li>Terdiri dari konduktor pusat, isolator, pelindung, dan jaket luar</li>\n<li>Impedansi: 50 ohm (data) atau 75 ohm (video)</li>\n<li>Digunakan pada TV kabel dan jaringan lama</li>\n</ul>"
+  },
+  {
+    "title": "Fiber Optik (Single-mode dan Multi-mode)",
+    "imageLink": null,
+    "content": "<h2>Teknologi Fiber Optik</h2>\n<p>Fiber optik menggunakan cahaya untuk mentransmisikan data melalui serat kaca atau plastik dengan kecepatan sangat tinggi.</p>\n<h3>Single-mode Fiber (SMF)</h3>\n<ul>\n<li>Diameter inti: 8-10 mikron</li>\n<li>Jarak transmisi: hingga 100 km</li>\n<li>Bandwidth sangat tinggi</li>\n<li>Digunakan untuk jaringan backbone dan WAN</li>\n</ul>\n<h3>Multi-mode Fiber (MMF)</h3>\n<ul>\n<li>Diameter inti: 50-62.5 mikron</li>\n<li>Jarak transmisi: hingga 2 km</li>\n<li>Lebih murah dari single-mode</li>\n<li>Digunakan untuk jaringan LAN dan data center</li>\n</ul>\n<h3>Konektor Fiber Optik</h3>\n<p>Jenis konektor umum: SC, LC, ST, FC, dan MPO/MTP.</p>"
+  },
+  {
+    "title": "Teknologi WiFi dan Standar IEEE 802.11",
+    "imageLink": null,
+    "content": "<h2>Standar WiFi IEEE 802.11</h2>\n<p>WiFi adalah teknologi jaringan nirkabel yang menggunakan gelombang radio untuk menyediakan koneksi internet berkecepatan tinggi.</p>\n<h3>Evolusi Standar WiFi</h3>\n<table>\n<tr><th>Standar</th><th>Nama WiFi</th><th>Frekuensi</th><th>Kecepatan Maks</th></tr>\n<tr><td>802.11b</td><td>WiFi 1</td><td>2.4 GHz</td><td>11 Mbps</td></tr>\n<tr><td>802.11g</td><td>WiFi 3</td><td>2.4 GHz</td><td>54 Mbps</td></tr>\n<tr><td>802.11n</td><td>WiFi 4</td><td>2.4/5 GHz</td><td>600 Mbps</td></tr>\n<tr><td>802.11ac</td><td>WiFi 5</td><td>5 GHz</td><td>6.9 Gbps</td></tr>\n<tr><td>802.11ax</td><td>WiFi 6</td><td>2.4/5/6 GHz</td><td>9.6 Gbps</td></tr>\n</table>\n<h3>Komponen Jaringan WiFi</h3>\n<ul>\n<li><strong>Access Point (AP):</strong> Perangkat yang memancarkan sinyal WiFi</li>\n<li><strong>SSID:</strong> Nama jaringan WiFi</li>\n<li><strong>Channel:</strong> Saluran frekuensi yang digunakan</li>\n</ul>"
+  },
+  {
+    "title": "Bluetooth dan Teknologi NFC",
+    "imageLink": null,
+    "content": "<h2>Teknologi Bluetooth</h2>\n<p>Bluetooth adalah standar teknologi nirkabel jarak pendek untuk pertukaran data menggunakan gelombang radio UHF pada pita ISM 2.4 GHz.</p>\n<h3>Versi Bluetooth</h3>\n<ul>\n<li><strong>Bluetooth 4.0 (BLE):</strong> Low Energy, cocok untuk IoT</li>\n<li><strong>Bluetooth 5.0:</strong> Jangkauan 4x lebih jauh, kecepatan 2x</li>\n<li><strong>Bluetooth 5.3:</strong> Efisiensi daya lebih baik</li>\n</ul>\n<h3>NFC (Near Field Communication)</h3>\n<ul>\n<li>Jarak operasi: maksimum 10 cm</li>\n<li>Frekuensi: 13.56 MHz</li>\n<li>Digunakan untuk pembayaran digital, akses kontrol, dan transfer data</li>\n<li>Mode operasi: reader/writer, peer-to-peer, card emulation</li>\n</ul>"
+  },
+  {
+    "title": "Jaringan Seluler (2G, 3G, 4G, 5G)",
+    "imageLink": null,
+    "content": "<h2>Evolusi Jaringan Seluler</h2>\n<h3>Generasi Jaringan Seluler</h3>\n<table>\n<tr><th>Generasi</th><th>Teknologi</th><th>Kecepatan</th><th>Fitur</th></tr>\n<tr><td>2G</td><td>GSM, CDMA</td><td>14.4-384 Kbps</td><td>SMS, MMS</td></tr>\n<tr><td>3G</td><td>UMTS, HSPA</td><td>384 Kbps-42 Mbps</td><td>Internet mobile, video call</td></tr>\n<tr><td>4G</td><td>LTE, LTE-A</td><td>100 Mbps-1 Gbps</td><td>HD streaming, VoLTE</td></tr>\n<tr><td>5G</td><td>NR</td><td>1-20 Gbps</td><td>IoT masif, ultra-low latency</td></tr>\n</table>\n<h3>Arsitektur Jaringan Seluler</h3>\n<ul>\n<li><strong>RAN:</strong> Radio Access Network (base station/tower)</li>\n<li><strong>Core Network:</strong> Mengelola koneksi dan routing</li>\n<li><strong>Backhaul:</strong> Koneksi antara base station dan core network</li>\n</ul>"
+  },
+  {
+    "title": "Model OSI dan TCP/IP dalam Telekomunikasi",
+    "imageLink": null,
+    "content": "<h2>Model OSI dalam Konteks Telekomunikasi</h2>\n<p>Model OSI (Open Systems Interconnection) menyediakan kerangka kerja standar untuk komunikasi jaringan dengan 7 lapisan.</p>\n<h3>7 Lapisan OSI</h3>\n<ol>\n<li><strong>Physical:</strong> Transmisi bit melalui media fisik</li>\n<li><strong>Data Link:</strong> Framing, MAC address, error detection</li>\n<li><strong>Network:</strong> Routing, IP addressing</li>\n<li><strong>Transport:</strong> TCP/UDP, flow control, error recovery</li>\n<li><strong>Session:</strong> Manajemen sesi komunikasi</li>\n<li><strong>Presentation:</strong> Enkripsi, kompresi, format data</li>\n<li><strong>Application:</strong> HTTP, FTP, SMTP, DNS</li>\n</ol>\n<h3>Model TCP/IP</h3>\n<p>Model TCP/IP memiliki 4 lapisan: Network Access, Internet, Transport, dan Application.</p>"
+  },
+  {
+    "title": "Protokol VoIP dan SIP",
+    "imageLink": null,
+    "content": "<h2>Voice over IP (VoIP)</h2>\n<p>VoIP adalah teknologi yang memungkinkan komunikasi suara melalui jaringan IP, menggantikan jaringan telepon tradisional (PSTN).</p>\n<h3>Protokol VoIP Utama</h3>\n<ul>\n<li><strong>SIP (Session Initiation Protocol):</strong> Protokol signaling untuk memulai, memodifikasi, dan mengakhiri sesi multimedia</li>\n<li><strong>RTP (Real-time Transport Protocol):</strong> Mengangkut data audio/video secara real-time</li>\n<li><strong>H.323:</strong> Standar ITU-T untuk komunikasi multimedia melalui jaringan paket</li>\n</ul>\n<h3>Parameter Kualitas VoIP</h3>\n<ul>\n<li><strong>Latency:</strong> Delay kurang dari 150ms untuk kualitas baik</li>\n<li><strong>Jitter:</strong> Variasi delay, harus minimal</li>\n<li><strong>Packet Loss:</strong> Kehilangan paket kurang dari 1%</li>\n<li><strong>Codec:</strong> G.711, G.729, Opus</li>\n</ul>"
+  },
+  {
+    "title": "Standar ITU-T dan IEEE",
+    "imageLink": null,
+    "content": "<h2>Organisasi Standar Telekomunikasi</h2>\n<h3>ITU-T (International Telecommunication Union)</h3>\n<ul>\n<li>Mengembangkan standar telekomunikasi internasional</li>\n<li>Standar penting: G.711 (codec audio), G.984 (GPON), H.264 (video coding)</li>\n<li>Seri rekomendasi: G (transmisi), H (multimedia), V (modem), X (data network)</li>\n</ul>\n<h3>IEEE (Institute of Electrical and Electronics Engineers)</h3>\n<ul>\n<li><strong>IEEE 802.3:</strong> Ethernet</li>\n<li><strong>IEEE 802.11:</strong> WiFi</li>\n<li><strong>IEEE 802.15:</strong> Bluetooth, Zigbee</li>\n<li><strong>IEEE 802.16:</strong> WiMAX</li>\n</ul>\n<h3>Standar Lainnya</h3>\n<p>IETF (Internet Engineering Task Force) mengelola standar internet seperti RFC untuk HTTP, DNS, SMTP, dan lainnya.</p>"
+  },
+  {
+    "title": "Modulasi Analog (AM, FM, PM)",
+    "imageLink": null,
+    "content": "<h2>Teknik Modulasi Analog</h2>\n<p>Modulasi adalah proses mengubah karakteristik sinyal pembawa (carrier) sesuai dengan sinyal informasi yang akan dikirim.</p>\n<h3>Amplitude Modulation (AM)</h3>\n<ul>\n<li>Mengubah amplitudo sinyal pembawa</li>\n<li>Rentan terhadap noise</li>\n<li>Digunakan pada radio AM dan komunikasi penerbangan</li>\n</ul>\n<h3>Frequency Modulation (FM)</h3>\n<ul>\n<li>Mengubah frekuensi sinyal pembawa</li>\n<li>Lebih tahan noise dibanding AM</li>\n<li>Digunakan pada radio FM dan komunikasi darurat</li>\n</ul>\n<h3>Phase Modulation (PM)</h3>\n<ul>\n<li>Mengubah fase sinyal pembawa</li>\n<li>Basis untuk modulasi digital modern (PSK)</li>\n<li>Bandwidth lebih efisien</li>\n</ul>"
+  },
+  {
+    "title": "Modulasi Digital (ASK, FSK, PSK, QAM)",
+    "imageLink": null,
+    "content": "<h2>Teknik Modulasi Digital</h2>\n<h3>ASK (Amplitude Shift Keying)</h3>\n<ul>\n<li>Mengubah amplitudo untuk merepresentasikan bit 0 dan 1</li>\n<li>Sederhana namun rentan noise</li>\n</ul>\n<h3>FSK (Frequency Shift Keying)</h3>\n<ul>\n<li>Menggunakan frekuensi berbeda untuk bit 0 dan 1</li>\n<li>Lebih tahan noise, digunakan pada modem dial-up</li>\n</ul>\n<h3>PSK (Phase Shift Keying)</h3>\n<ul>\n<li>BPSK: 2 fase (1 bit/simbol), QPSK: 4 fase (2 bit/simbol)</li>\n<li>Efisien bandwidth, digunakan pada WiFi dan satelit</li>\n</ul>\n<h3>QAM (Quadrature Amplitude Modulation)</h3>\n<ul>\n<li>Kombinasi AM dan PM</li>\n<li>16-QAM: 4 bit/simbol, 64-QAM: 6 bit/simbol, 256-QAM: 8 bit/simbol</li>\n<li>Digunakan pada WiFi, LTE, dan TV kabel digital</li>\n</ul>"
+  },
+  {
+    "title": "Multiplexing (TDM, FDM, WDM, CDM)",
+    "imageLink": null,
+    "content": "<h2>Teknik Multiplexing</h2>\n<p>Multiplexing adalah teknik menggabungkan beberapa sinyal untuk ditransmisikan melalui satu media transmisi secara bersamaan.</p>\n<h3>FDM (Frequency Division Multiplexing)</h3>\n<ul>\n<li>Membagi bandwidth menjadi sub-channel dengan frekuensi berbeda</li>\n<li>Digunakan pada radio FM, TV analog, ADSL</li>\n</ul>\n<h3>TDM (Time Division Multiplexing)</h3>\n<ul>\n<li>Membagi waktu transmisi menjadi slot waktu untuk setiap channel</li>\n<li>Digunakan pada ISDN, GSM, telepon digital</li>\n</ul>\n<h3>WDM (Wavelength Division Multiplexing)</h3>\n<ul>\n<li>Menggunakan panjang gelombang berbeda pada fiber optik</li>\n<li>DWDM: Dense WDM, hingga 160 channel per fiber</li>\n</ul>\n<h3>CDM (Code Division Multiplexing)</h3>\n<ul>\n<li>Setiap channel menggunakan kode unik</li>\n<li>Digunakan pada CDMA (jaringan seluler 3G)</li>\n</ul>"
+  },
+  {
+    "title": "Ancaman Keamanan Jaringan",
+    "imageLink": null,
+    "content": "<h2>Jenis-Jenis Ancaman Keamanan Jaringan</h2>\n<h3>Serangan Pasif</h3>\n<ul>\n<li><strong>Eavesdropping:</strong> Menyadap komunikasi jaringan</li>\n<li><strong>Traffic Analysis:</strong> Menganalisis pola lalu lintas data</li>\n</ul>\n<h3>Serangan Aktif</h3>\n<ul>\n<li><strong>Man-in-the-Middle (MITM):</strong> Menyisipkan diri di antara dua pihak yang berkomunikasi</li>\n<li><strong>DDoS:</strong> Membanjiri server dengan permintaan palsu</li>\n<li><strong>Spoofing:</strong> Memalsukan identitas (IP, MAC, DNS)</li>\n<li><strong>Phishing:</strong> Menipu pengguna untuk memberikan informasi sensitif</li>\n</ul>\n<h3>Malware</h3>\n<ul>\n<li>Virus, Worm, Trojan, Ransomware, Spyware</li>\n<li>Menyebar melalui jaringan dan dapat merusak infrastruktur telekomunikasi</li>\n</ul>"
+  },
+  {
+    "title": "Enkripsi dan Kriptografi",
+    "imageLink": null,
+    "content": "<h2>Dasar-Dasar Kriptografi</h2>\n<h3>Enkripsi Simetris</h3>\n<ul>\n<li>Menggunakan satu kunci yang sama untuk enkripsi dan dekripsi</li>\n<li>Algoritma: AES (128/192/256 bit), DES, 3DES, Blowfish</li>\n<li>Kelebihan: cepat, cocok untuk data besar</li>\n<li>Kekurangan: masalah distribusi kunci</li>\n</ul>\n<h3>Enkripsi Asimetris</h3>\n<ul>\n<li>Menggunakan pasangan kunci publik dan kunci privat</li>\n<li>Algoritma: RSA, ECC, Diffie-Hellman</li>\n<li>Kelebihan: distribusi kunci aman</li>\n<li>Kekurangan: lebih lambat dari enkripsi simetris</li>\n</ul>\n<h3>Hashing</h3>\n<p>Fungsi hash menghasilkan output tetap dari input apapun. Algoritma: MD5, SHA-1, SHA-256, SHA-3.</p>"
+  },
+  {
+    "title": "Firewall, VPN, dan IDS/IPS",
+    "imageLink": null,
+    "content": "<h2>Perangkat Keamanan Jaringan</h2>\n<h3>Firewall</h3>\n<ul>\n<li><strong>Packet Filtering:</strong> Menyaring berdasarkan header paket</li>\n<li><strong>Stateful Inspection:</strong> Melacak status koneksi</li>\n<li><strong>Application Gateway:</strong> Proxy pada layer aplikasi</li>\n<li><strong>Next-Gen Firewall:</strong> Deep packet inspection + threat intelligence</li>\n</ul>\n<h3>VPN (Virtual Private Network)</h3>\n<ul>\n<li>Membuat tunnel terenkripsi melalui jaringan publik</li>\n<li>Protokol: IPSec, OpenVPN, WireGuard, L2TP</li>\n<li>Jenis: Site-to-site VPN, Remote access VPN</li>\n</ul>\n<h3>IDS/IPS</h3>\n<ul>\n<li><strong>IDS (Intrusion Detection System):</strong> Mendeteksi dan melaporkan ancaman</li>\n<li><strong>IPS (Intrusion Prevention System):</strong> Mendeteksi dan memblokir ancaman secara otomatis</li>\n<li>Metode: Signature-based, Anomaly-based, Hybrid</li>\n</ul>"
+  }
+]

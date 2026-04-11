@@ -1,0 +1,1262 @@
+[
+  [
+    {
+      "description": "Pertanyaan tentang klasifikasi media transmisi.",
+      "question": "Media transmisi yang menggunakan jalur fisik seperti kabel disebut media...",
+      "correct": "Guided (Terpandu)",
+      "wrong": [
+        "Unguided",
+        "Wireless",
+        "Broadcast"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang kabel UTP.",
+      "question": "Konektor yang digunakan pada kabel UTP adalah...",
+      "correct": "RJ-45",
+      "wrong": [
+        "RJ-11",
+        "BNC",
+        "SC"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang kategori kabel.",
+      "question": "Kabel UTP Cat6 mendukung kecepatan maksimum...",
+      "correct": "10 Gbps",
+      "wrong": [
+        "100 Mbps",
+        "1 Gbps",
+        "40 Gbps"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang jarak kabel UTP.",
+      "question": "Jarak maksimum kabel UTP untuk jaringan Ethernet adalah...",
+      "correct": "100 meter",
+      "wrong": [
+        "50 meter",
+        "200 meter",
+        "500 meter"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang kabel STP.",
+      "question": "Keunggulan kabel STP dibandingkan UTP adalah...",
+      "correct": "Lebih tahan terhadap interferensi elektromagnetik",
+      "wrong": [
+        "Lebih murah",
+        "Lebih ringan",
+        "Jarak lebih jauh"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang kabel coaxial.",
+      "question": "Impedansi kabel coaxial yang digunakan untuk transmisi data adalah...",
+      "correct": "50 ohm",
+      "wrong": [
+        "75 ohm",
+        "100 ohm",
+        "25 ohm"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang fiber optik.",
+      "question": "Keuntungan utama fiber optik dibandingkan kabel tembaga adalah...",
+      "correct": "Bandwidth sangat tinggi dan tahan interferensi elektromagnetik",
+      "wrong": [
+        "Harga lebih murah",
+        "Lebih mudah dipasang",
+        "Tidak memerlukan konektor"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang single-mode fiber.",
+      "question": "Single-mode fiber optik cocok digunakan untuk...",
+      "correct": "Jaringan backbone dan WAN jarak jauh",
+      "wrong": [
+        "Jaringan LAN kantor",
+        "Koneksi desktop",
+        "Jaringan rumah"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang multi-mode fiber.",
+      "question": "Diameter inti multi-mode fiber optik adalah...",
+      "correct": "50-62.5 mikron",
+      "wrong": [
+        "8-10 mikron",
+        "100-125 mikron",
+        "1-2 mikron"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang konektor fiber optik.",
+      "question": "Konektor fiber optik yang paling umum digunakan di data center modern adalah...",
+      "correct": "LC (Lucent Connector)",
+      "wrong": [
+        "BNC",
+        "RJ-45",
+        "DB-9"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang media unguided.",
+      "question": "Contoh media transmisi unguided adalah...",
+      "correct": "Gelombang radio dan microwave",
+      "wrong": [
+        "Kabel UTP dan STP",
+        "Fiber optik",
+        "Kabel coaxial"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang atenuasi.",
+      "question": "Atenuasi dalam media transmisi adalah...",
+      "correct": "Pelemahan sinyal seiring bertambahnya jarak",
+      "wrong": [
+        "Penguatan sinyal",
+        "Perubahan frekuensi",
+        "Penambahan noise"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang bandwidth.",
+      "question": "Bandwidth pada media transmisi mengacu pada...",
+      "correct": "Kapasitas maksimum data yang dapat ditransmisikan per satuan waktu",
+      "wrong": [
+        "Panjang kabel",
+        "Jumlah konektor",
+        "Tegangan listrik"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang crosstalk.",
+      "question": "Crosstalk pada kabel tembaga terjadi karena...",
+      "correct": "Interferensi sinyal antar pasangan kabel yang berdekatan",
+      "wrong": [
+        "Kabel terlalu panjang",
+        "Konektor rusak",
+        "Tegangan terlalu tinggi"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang kabel straight-through.",
+      "question": "Kabel straight-through digunakan untuk menghubungkan...",
+      "correct": "Komputer ke switch",
+      "wrong": [
+        "Switch ke switch",
+        "Router ke router",
+        "Komputer ke komputer"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang kabel crossover.",
+      "question": "Kabel crossover digunakan untuk menghubungkan...",
+      "correct": "Dua perangkat sejenis (switch ke switch)",
+      "wrong": [
+        "Komputer ke switch",
+        "Komputer ke router",
+        "Printer ke komputer"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang fiber optik splicing.",
+      "question": "Teknik penyambungan fiber optik permanen disebut...",
+      "correct": "Fusion splicing",
+      "wrong": [
+        "Crimping",
+        "Soldering",
+        "Twisting"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang OTDR.",
+      "question": "Alat yang digunakan untuk mengukur karakteristik fiber optik disebut...",
+      "correct": "OTDR (Optical Time-Domain Reflectometer)",
+      "wrong": [
+        "Multimeter",
+        "Oscilloscope",
+        "Spectrum analyzer"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang throughput.",
+      "question": "Perbedaan antara bandwidth dan throughput adalah...",
+      "correct": "Bandwidth adalah kapasitas maksimum, throughput adalah kecepatan aktual",
+      "wrong": [
+        "Keduanya sama",
+        "Throughput selalu lebih besar",
+        "Bandwidth diukur dalam meter"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang plenum cable.",
+      "question": "Kabel plenum digunakan di...",
+      "correct": "Ruang sirkulasi udara gedung (plenum space)",
+      "wrong": [
+        "Di luar ruangan",
+        "Di bawah air",
+        "Di jalur kereta api"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang PoE.",
+      "question": "Power over Ethernet (PoE) memungkinkan...",
+      "correct": "Mengirim daya listrik melalui kabel Ethernet bersamaan dengan data",
+      "wrong": [
+        "Meningkatkan kecepatan internet",
+        "Menambah jarak kabel",
+        "Mengenkripsi data"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang EMI.",
+      "question": "EMI (Electromagnetic Interference) paling mempengaruhi jenis kabel...",
+      "correct": "Kabel UTP (tanpa pelindung)",
+      "wrong": [
+        "Fiber optik",
+        "Kabel STP",
+        "Kabel coaxial berpelindung"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang Cat5e.",
+      "question": "Kabel Cat5e mendukung kecepatan maksimum...",
+      "correct": "1 Gbps",
+      "wrong": [
+        "100 Mbps",
+        "10 Gbps",
+        "10 Mbps"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang konektor BNC.",
+      "question": "Konektor BNC umumnya digunakan pada kabel...",
+      "correct": "Coaxial",
+      "wrong": [
+        "UTP",
+        "Fiber optik",
+        "STP"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang media transmisi terbaik untuk jarak jauh.",
+      "question": "Untuk transmisi data jarak lebih dari 10 km, media yang paling tepat adalah...",
+      "correct": "Single-mode fiber optik",
+      "wrong": [
+        "Kabel UTP Cat6",
+        "Kabel coaxial",
+        "Kabel STP"
+      ]
+    }
+  ],
+  [
+    {
+      "description": "Pertanyaan tentang standar WiFi.",
+      "question": "Standar WiFi 5 (802.11ac) beroperasi pada frekuensi...",
+      "correct": "5 GHz",
+      "wrong": [
+        "2.4 GHz",
+        "6 GHz",
+        "60 GHz"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang WiFi 6.",
+      "question": "Kecepatan maksimum teoritis WiFi 6 (802.11ax) adalah...",
+      "correct": "9.6 Gbps",
+      "wrong": [
+        "1.3 Gbps",
+        "6.9 Gbps",
+        "54 Mbps"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang frekuensi WiFi.",
+      "question": "Frekuensi 2.4 GHz memiliki keunggulan dibanding 5 GHz dalam hal...",
+      "correct": "Jangkauan lebih jauh dan penetrasi dinding lebih baik",
+      "wrong": [
+        "Kecepatan lebih tinggi",
+        "Lebih sedikit interferensi",
+        "Latency lebih rendah"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang SSID.",
+      "question": "SSID pada jaringan WiFi adalah...",
+      "correct": "Nama identifikasi jaringan nirkabel",
+      "wrong": [
+        "Alamat IP router",
+        "Kata sandi jaringan",
+        "Kecepatan koneksi"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang keamanan WiFi.",
+      "question": "Protokol keamanan WiFi yang paling aman saat ini adalah...",
+      "correct": "WPA3",
+      "wrong": [
+        "WEP",
+        "WPA",
+        "WPA2"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang Bluetooth.",
+      "question": "Bluetooth beroperasi pada frekuensi...",
+      "correct": "2.4 GHz (pita ISM)",
+      "wrong": [
+        "5 GHz",
+        "900 MHz",
+        "60 GHz"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang BLE.",
+      "question": "BLE (Bluetooth Low Energy) diperkenalkan pada versi...",
+      "correct": "Bluetooth 4.0",
+      "wrong": [
+        "Bluetooth 2.0",
+        "Bluetooth 3.0",
+        "Bluetooth 5.0"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang NFC.",
+      "question": "Jarak operasi maksimum NFC adalah...",
+      "correct": "10 cm",
+      "wrong": [
+        "1 meter",
+        "10 meter",
+        "100 meter"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang frekuensi NFC.",
+      "question": "NFC beroperasi pada frekuensi...",
+      "correct": "13.56 MHz",
+      "wrong": [
+        "2.4 GHz",
+        "5 GHz",
+        "900 MHz"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang 4G LTE.",
+      "question": "Kecepatan download maksimum 4G LTE secara teoritis adalah...",
+      "correct": "100 Mbps - 1 Gbps",
+      "wrong": [
+        "10 Mbps",
+        "42 Mbps",
+        "20 Gbps"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang 5G.",
+      "question": "Salah satu keunggulan utama 5G dibanding 4G adalah...",
+      "correct": "Ultra-low latency (di bawah 1 ms)",
+      "wrong": [
+        "Jangkauan lebih jauh",
+        "Tidak memerlukan tower",
+        "Harga lebih murah"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang GSM.",
+      "question": "GSM (Global System for Mobile Communications) termasuk generasi jaringan seluler...",
+      "correct": "2G",
+      "wrong": [
+        "1G",
+        "3G",
+        "4G"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang MIMO.",
+      "question": "Teknologi MIMO pada WiFi berarti...",
+      "correct": "Multiple-Input Multiple-Output, menggunakan beberapa antena",
+      "wrong": [
+        "Koneksi satu arah",
+        "Hanya satu antena",
+        "Mode sleep otomatis"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang channel WiFi.",
+      "question": "Pada frekuensi 2.4 GHz, jumlah channel WiFi yang tidak saling overlap adalah...",
+      "correct": "3 (channel 1, 6, 11)",
+      "wrong": [
+        "11",
+        "14",
+        "1"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang Access Point.",
+      "question": "Fungsi Access Point dalam jaringan WiFi adalah...",
+      "correct": "Memancarkan sinyal WiFi dan menghubungkan perangkat wireless ke jaringan kabel",
+      "wrong": [
+        "Menyimpan data",
+        "Mengenkripsi semua trafik",
+        "Menggantikan router"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang roaming WiFi.",
+      "question": "WiFi roaming memungkinkan perangkat untuk...",
+      "correct": "Berpindah antar Access Point tanpa kehilangan koneksi",
+      "wrong": [
+        "Menggunakan data seluler",
+        "Meningkatkan kecepatan",
+        "Mengubah SSID otomatis"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang WiMAX.",
+      "question": "WiMAX (IEEE 802.16) dirancang untuk...",
+      "correct": "Jaringan nirkabel area luas (metropolitan)",
+      "wrong": [
+        "Bluetooth jarak pendek",
+        "NFC",
+        "Jaringan LAN kantor"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang Zigbee.",
+      "question": "Zigbee (IEEE 802.15.4) paling cocok digunakan untuk...",
+      "correct": "Perangkat IoT dengan konsumsi daya rendah",
+      "wrong": [
+        "Streaming video HD",
+        "Transfer file besar",
+        "VoIP"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang jaringan ad-hoc.",
+      "question": "Jaringan WiFi ad-hoc adalah...",
+      "correct": "Koneksi langsung antar perangkat tanpa Access Point",
+      "wrong": [
+        "Jaringan dengan banyak AP",
+        "Koneksi melalui kabel",
+        "Jaringan 5G"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang beamforming.",
+      "question": "Beamforming pada WiFi berfungsi untuk...",
+      "correct": "Mengarahkan sinyal secara fokus ke perangkat tertentu",
+      "wrong": [
+        "Memperluas jangkauan ke segala arah",
+        "Mengenkripsi data",
+        "Mengurangi kecepatan"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang RAN.",
+      "question": "RAN (Radio Access Network) pada jaringan seluler terdiri dari...",
+      "correct": "Base station dan tower yang menghubungkan perangkat ke core network",
+      "wrong": [
+        "Server pusat data",
+        "Kabel bawah laut",
+        "Satellite uplink saja"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang handover.",
+      "question": "Handover dalam jaringan seluler adalah proses...",
+      "correct": "Perpindahan koneksi dari satu base station ke base station lain",
+      "wrong": [
+        "Mematikan ponsel",
+        "Mengubah nomor telepon",
+        "Mengganti SIM card"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang Bluetooth 5.0.",
+      "question": "Bluetooth 5.0 memiliki jangkauan hingga...",
+      "correct": "240 meter (outdoor)",
+      "wrong": [
+        "10 meter",
+        "30 meter",
+        "1 km"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang WiFi Direct.",
+      "question": "WiFi Direct memungkinkan...",
+      "correct": "Dua perangkat terhubung langsung via WiFi tanpa Access Point",
+      "wrong": [
+        "Koneksi melalui kabel",
+        "Akses internet gratis",
+        "Transfer data via NFC"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang interferensi.",
+      "question": "Perangkat yang paling sering menyebabkan interferensi pada WiFi 2.4 GHz adalah...",
+      "correct": "Microwave oven",
+      "wrong": [
+        "Televisi",
+        "Kulkas",
+        "Mesin cuci"
+      ]
+    }
+  ],
+  [
+    {
+      "description": "Pertanyaan tentang model OSI.",
+      "question": "Model OSI memiliki berapa lapisan?",
+      "correct": "7 lapisan",
+      "wrong": [
+        "4 lapisan",
+        "5 lapisan",
+        "6 lapisan"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang layer Physical.",
+      "question": "Layer 1 (Physical) pada model OSI bertanggung jawab untuk...",
+      "correct": "Transmisi bit melalui media fisik",
+      "wrong": [
+        "Routing paket",
+        "Enkripsi data",
+        "Manajemen sesi"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang layer Transport.",
+      "question": "Protokol TCP bekerja pada layer...",
+      "correct": "Layer 4 (Transport)",
+      "wrong": [
+        "Layer 3 (Network)",
+        "Layer 2 (Data Link)",
+        "Layer 7 (Application)"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang TCP/IP.",
+      "question": "Model TCP/IP memiliki berapa lapisan?",
+      "correct": "4 lapisan",
+      "wrong": [
+        "7 lapisan",
+        "5 lapisan",
+        "3 lapisan"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang SIP.",
+      "question": "SIP (Session Initiation Protocol) digunakan untuk...",
+      "correct": "Memulai, memodifikasi, dan mengakhiri sesi multimedia",
+      "wrong": [
+        "Transfer file",
+        "Mengirim email",
+        "Browsing web"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang RTP.",
+      "question": "RTP (Real-time Transport Protocol) berfungsi untuk...",
+      "correct": "Mengangkut data audio dan video secara real-time",
+      "wrong": [
+        "Transfer file besar",
+        "Mengirim email",
+        "Resolusi DNS"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang H.323.",
+      "question": "H.323 adalah standar yang dikeluarkan oleh...",
+      "correct": "ITU-T",
+      "wrong": [
+        "IEEE",
+        "IETF",
+        "W3C"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang VoIP.",
+      "question": "Kualitas VoIP yang baik memerlukan latency kurang dari...",
+      "correct": "150 ms",
+      "wrong": [
+        "500 ms",
+        "1 detik",
+        "10 ms"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang codec.",
+      "question": "Codec G.711 pada VoIP menghasilkan audio dengan bitrate...",
+      "correct": "64 Kbps",
+      "wrong": [
+        "8 Kbps",
+        "128 Kbps",
+        "256 Kbps"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang jitter.",
+      "question": "Jitter dalam komunikasi jaringan adalah...",
+      "correct": "Variasi delay antar paket data",
+      "wrong": [
+        "Kecepatan download",
+        "Jumlah paket hilang",
+        "Bandwidth total"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang packet loss.",
+      "question": "Untuk kualitas VoIP yang baik, packet loss harus kurang dari...",
+      "correct": "1%",
+      "wrong": [
+        "5%",
+        "10%",
+        "25%"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang IEEE 802.3.",
+      "question": "Standar IEEE 802.3 mendefinisikan...",
+      "correct": "Ethernet",
+      "wrong": [
+        "WiFi",
+        "Bluetooth",
+        "WiMAX"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang IEEE 802.15.",
+      "question": "Standar IEEE 802.15 mencakup teknologi...",
+      "correct": "Bluetooth dan Zigbee",
+      "wrong": [
+        "Ethernet",
+        "WiFi",
+        "WiMAX"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang IETF.",
+      "question": "IETF (Internet Engineering Task Force) bertanggung jawab untuk...",
+      "correct": "Mengembangkan standar dan protokol internet (RFC)",
+      "wrong": [
+        "Membuat hardware jaringan",
+        "Menjual domain",
+        "Mengatur frekuensi radio"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang QoS.",
+      "question": "QoS (Quality of Service) pada jaringan berfungsi untuk...",
+      "correct": "Memprioritaskan trafik tertentu untuk menjamin kualitas layanan",
+      "wrong": [
+        "Mempercepat semua koneksi",
+        "Memblokir trafik berbahaya",
+        "Mengenkripsi data"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang ISDN.",
+      "question": "ISDN (Integrated Services Digital Network) menyediakan...",
+      "correct": "Layanan suara dan data digital melalui jaringan telepon",
+      "wrong": [
+        "Hanya layanan internet",
+        "Hanya layanan TV",
+        "Hanya layanan radio"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang SS7.",
+      "question": "SS7 (Signaling System 7) digunakan pada...",
+      "correct": "Jaringan telepon untuk signaling dan kontrol panggilan",
+      "wrong": [
+        "Jaringan WiFi",
+        "Internet browsing",
+        "Email server"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang SDP.",
+      "question": "SDP (Session Description Protocol) digunakan bersama SIP untuk...",
+      "correct": "Mendeskripsikan parameter media dalam sesi multimedia",
+      "wrong": [
+        "Mengenkripsi panggilan",
+        "Transfer file",
+        "Routing paket"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang layer Network.",
+      "question": "Protokol IP bekerja pada layer OSI...",
+      "correct": "Layer 3 (Network)",
+      "wrong": [
+        "Layer 1 (Physical)",
+        "Layer 4 (Transport)",
+        "Layer 7 (Application)"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang layer Data Link.",
+      "question": "MAC address digunakan pada layer...",
+      "correct": "Layer 2 (Data Link)",
+      "wrong": [
+        "Layer 1 (Physical)",
+        "Layer 3 (Network)",
+        "Layer 4 (Transport)"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang UDP.",
+      "question": "Perbedaan utama UDP dengan TCP adalah...",
+      "correct": "UDP tidak menjamin pengiriman data (connectionless)",
+      "wrong": [
+        "UDP lebih lambat",
+        "UDP menggunakan 3-way handshake",
+        "UDP hanya untuk email"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang codec G.729.",
+      "question": "Codec G.729 menghasilkan audio dengan bitrate...",
+      "correct": "8 Kbps",
+      "wrong": [
+        "64 Kbps",
+        "128 Kbps",
+        "32 Kbps"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang GPON.",
+      "question": "GPON (G.984) adalah standar untuk...",
+      "correct": "Jaringan fiber optik pasif (Passive Optical Network)",
+      "wrong": [
+        "Jaringan WiFi",
+        "Jaringan seluler 5G",
+        "Bluetooth mesh"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang layer Session.",
+      "question": "Layer 5 (Session) pada model OSI bertanggung jawab untuk...",
+      "correct": "Manajemen sesi komunikasi antar aplikasi",
+      "wrong": [
+        "Routing paket",
+        "Transmisi bit",
+        "Kompresi data"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang encapsulation.",
+      "question": "Proses encapsulation pada model OSI adalah...",
+      "correct": "Penambahan header pada setiap layer saat data dikirim ke bawah",
+      "wrong": [
+        "Penghapusan header",
+        "Enkripsi data",
+        "Kompresi file"
+      ]
+    }
+  ],
+  [
+    {
+      "description": "Pertanyaan tentang AM.",
+      "question": "Pada modulasi AM, parameter sinyal pembawa yang diubah adalah...",
+      "correct": "Amplitudo",
+      "wrong": [
+        "Frekuensi",
+        "Fase",
+        "Panjang gelombang"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang FM.",
+      "question": "Keunggulan FM dibandingkan AM adalah...",
+      "correct": "Lebih tahan terhadap noise",
+      "wrong": [
+        "Jangkauan lebih jauh",
+        "Bandwidth lebih kecil",
+        "Implementasi lebih murah"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang PM.",
+      "question": "Phase Modulation (PM) mengubah parameter...",
+      "correct": "Fase sinyal pembawa",
+      "wrong": [
+        "Amplitudo",
+        "Frekuensi",
+        "Panjang gelombang"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang ASK.",
+      "question": "ASK (Amplitude Shift Keying) merepresentasikan data digital dengan mengubah...",
+      "correct": "Amplitudo sinyal pembawa",
+      "wrong": [
+        "Frekuensi sinyal",
+        "Fase sinyal",
+        "Durasi sinyal"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang FSK.",
+      "question": "FSK (Frequency Shift Keying) digunakan pada...",
+      "correct": "Modem dial-up dan komunikasi data sederhana",
+      "wrong": [
+        "WiFi modern",
+        "Satellite TV",
+        "Jaringan 5G"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang BPSK.",
+      "question": "BPSK (Binary Phase Shift Keying) mengirimkan berapa bit per simbol?",
+      "correct": "1 bit",
+      "wrong": [
+        "2 bit",
+        "4 bit",
+        "8 bit"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang QPSK.",
+      "question": "QPSK (Quadrature Phase Shift Keying) mengirimkan berapa bit per simbol?",
+      "correct": "2 bit",
+      "wrong": [
+        "1 bit",
+        "4 bit",
+        "8 bit"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang QAM.",
+      "question": "16-QAM mengirimkan berapa bit per simbol?",
+      "correct": "4 bit",
+      "wrong": [
+        "2 bit",
+        "8 bit",
+        "16 bit"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang 64-QAM.",
+      "question": "64-QAM mengirimkan berapa bit per simbol?",
+      "correct": "6 bit",
+      "wrong": [
+        "4 bit",
+        "8 bit",
+        "64 bit"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang 256-QAM.",
+      "question": "256-QAM digunakan pada teknologi...",
+      "correct": "WiFi (802.11ac) dan TV kabel digital",
+      "wrong": [
+        "Radio AM",
+        "Bluetooth",
+        "NFC"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang FDM.",
+      "question": "FDM (Frequency Division Multiplexing) bekerja dengan cara...",
+      "correct": "Membagi bandwidth menjadi sub-channel dengan frekuensi berbeda",
+      "wrong": [
+        "Membagi waktu transmisi",
+        "Menggunakan kode unik",
+        "Menggunakan panjang gelombang berbeda"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang TDM.",
+      "question": "TDM (Time Division Multiplexing) membagi transmisi berdasarkan...",
+      "correct": "Slot waktu untuk setiap channel",
+      "wrong": [
+        "Frekuensi",
+        "Kode",
+        "Panjang gelombang"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang WDM.",
+      "question": "WDM (Wavelength Division Multiplexing) digunakan pada...",
+      "correct": "Jaringan fiber optik",
+      "wrong": [
+        "Kabel tembaga",
+        "Jaringan WiFi",
+        "Jaringan seluler"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang DWDM.",
+      "question": "DWDM (Dense WDM) dapat menampung hingga...",
+      "correct": "160 channel per fiber",
+      "wrong": [
+        "10 channel",
+        "32 channel",
+        "1000 channel"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang CDM.",
+      "question": "CDM (Code Division Multiplexing) menggunakan...",
+      "correct": "Kode unik untuk setiap channel",
+      "wrong": [
+        "Frekuensi berbeda",
+        "Waktu berbeda",
+        "Panjang gelombang berbeda"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang CDMA.",
+      "question": "CDMA banyak digunakan pada jaringan seluler generasi...",
+      "correct": "3G",
+      "wrong": [
+        "1G",
+        "2G",
+        "5G"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang OFDM.",
+      "question": "OFDM (Orthogonal FDM) digunakan pada...",
+      "correct": "WiFi, LTE, dan DVB-T",
+      "wrong": [
+        "Radio AM",
+        "Telepon analog",
+        "Telegraph"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang baud rate.",
+      "question": "Baud rate mengukur...",
+      "correct": "Jumlah perubahan sinyal per detik",
+      "wrong": [
+        "Jumlah bit per detik",
+        "Jumlah byte per detik",
+        "Jumlah paket per detik"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang bit rate vs baud rate.",
+      "question": "Jika menggunakan QPSK, hubungan bit rate dan baud rate adalah...",
+      "correct": "Bit rate = 2 × baud rate",
+      "wrong": [
+        "Bit rate = baud rate",
+        "Bit rate = 4 × baud rate",
+        "Bit rate = baud rate / 2"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang Nyquist.",
+      "question": "Teorema Nyquist menyatakan bahwa sampling rate minimum harus...",
+      "correct": "2 kali frekuensi sinyal tertinggi",
+      "wrong": [
+        "Sama dengan frekuensi sinyal",
+        "3 kali frekuensi sinyal",
+        "4 kali frekuensi sinyal"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang Shannon.",
+      "question": "Rumus kapasitas Shannon menghitung...",
+      "correct": "Kapasitas maksimum channel berdasarkan bandwidth dan SNR",
+      "wrong": [
+        "Kecepatan cahaya",
+        "Impedansi kabel",
+        "Jarak transmisi"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang SNR.",
+      "question": "SNR (Signal-to-Noise Ratio) yang tinggi berarti...",
+      "correct": "Kualitas sinyal baik dengan noise rendah",
+      "wrong": [
+        "Banyak noise",
+        "Sinyal lemah",
+        "Bandwidth rendah"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang constellation diagram.",
+      "question": "Constellation diagram digunakan untuk memvisualisasikan...",
+      "correct": "Posisi simbol dalam modulasi digital (seperti QAM dan PSK)",
+      "wrong": [
+        "Topologi jaringan",
+        "Routing tabel",
+        "Struktur kabel"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang ADSL.",
+      "question": "ADSL menggunakan teknik multiplexing...",
+      "correct": "FDM (membagi frekuensi untuk voice dan data)",
+      "wrong": [
+        "TDM",
+        "CDM",
+        "WDM"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang penggunaan AM.",
+      "question": "Modulasi AM masih digunakan pada...",
+      "correct": "Siaran radio AM dan komunikasi penerbangan",
+      "wrong": [
+        "WiFi modern",
+        "Jaringan 5G",
+        "Bluetooth"
+      ]
+    }
+  ],
+  [
+    {
+      "description": "Pertanyaan tentang MITM.",
+      "question": "Serangan Man-in-the-Middle (MITM) bekerja dengan cara...",
+      "correct": "Menyisipkan diri di antara dua pihak yang berkomunikasi",
+      "wrong": [
+        "Membanjiri server",
+        "Menebak password",
+        "Menghapus file"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang DDoS.",
+      "question": "Serangan DDoS bertujuan untuk...",
+      "correct": "Membuat layanan tidak tersedia dengan membanjiri trafik",
+      "wrong": [
+        "Mencuri data pengguna",
+        "Mengenkripsi file korban",
+        "Menyadap komunikasi"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang spoofing.",
+      "question": "IP Spoofing adalah teknik...",
+      "correct": "Memalsukan alamat IP sumber pada paket data",
+      "wrong": [
+        "Mengenkripsi alamat IP",
+        "Mempercepat koneksi",
+        "Menambah bandwidth"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang phishing.",
+      "question": "Phishing adalah serangan yang...",
+      "correct": "Menipu pengguna agar memberikan informasi sensitif melalui situs palsu",
+      "wrong": [
+        "Menyerang hardware",
+        "Merusak kabel jaringan",
+        "Memblokir sinyal WiFi"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang enkripsi simetris.",
+      "question": "Pada enkripsi simetris, jumlah kunci yang digunakan adalah...",
+      "correct": "Satu kunci yang sama untuk enkripsi dan dekripsi",
+      "wrong": [
+        "Dua kunci berbeda",
+        "Tiga kunci",
+        "Tidak menggunakan kunci"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang AES.",
+      "question": "AES (Advanced Encryption Standard) mendukung ukuran kunci...",
+      "correct": "128, 192, dan 256 bit",
+      "wrong": [
+        "Hanya 64 bit",
+        "Hanya 128 bit",
+        "512 bit"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang RSA.",
+      "question": "RSA termasuk jenis enkripsi...",
+      "correct": "Asimetris (menggunakan kunci publik dan privat)",
+      "wrong": [
+        "Simetris",
+        "Hashing",
+        "Encoding"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang hashing.",
+      "question": "Perbedaan hashing dengan enkripsi adalah...",
+      "correct": "Hashing bersifat satu arah (tidak bisa didekripsi)",
+      "wrong": [
+        "Hashing bisa didekripsi",
+        "Enkripsi lebih cepat",
+        "Hashing menggunakan kunci"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang SHA-256.",
+      "question": "SHA-256 menghasilkan output hash sepanjang...",
+      "correct": "256 bit",
+      "wrong": [
+        "128 bit",
+        "512 bit",
+        "64 bit"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang firewall.",
+      "question": "Stateful inspection firewall bekerja dengan cara...",
+      "correct": "Melacak status koneksi dan menyaring berdasarkan konteks sesi",
+      "wrong": [
+        "Hanya memeriksa header paket",
+        "Memblokir semua trafik",
+        "Hanya bekerja di layer 7"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang packet filtering.",
+      "question": "Packet filtering firewall menyaring trafik berdasarkan...",
+      "correct": "Header paket (IP, port, protokol)",
+      "wrong": [
+        "Isi konten data",
+        "Identitas pengguna",
+        "Waktu akses saja"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang VPN.",
+      "question": "VPN (Virtual Private Network) berfungsi untuk...",
+      "correct": "Membuat tunnel terenkripsi melalui jaringan publik",
+      "wrong": [
+        "Mempercepat koneksi internet",
+        "Menghapus virus",
+        "Memblokir iklan"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang IPSec.",
+      "question": "IPSec beroperasi pada layer...",
+      "correct": "Layer 3 (Network)",
+      "wrong": [
+        "Layer 2 (Data Link)",
+        "Layer 4 (Transport)",
+        "Layer 7 (Application)"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang IDS vs IPS.",
+      "question": "Perbedaan utama IDS dan IPS adalah...",
+      "correct": "IDS hanya mendeteksi, IPS mendeteksi dan memblokir",
+      "wrong": [
+        "IDS lebih baru",
+        "IPS hanya mendeteksi",
+        "Keduanya sama"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang SSL/TLS.",
+      "question": "SSL/TLS digunakan untuk...",
+      "correct": "Mengamankan komunikasi web (HTTPS) dengan enkripsi",
+      "wrong": [
+        "Transfer file besar",
+        "Routing paket",
+        "Kompresi data"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang PKI.",
+      "question": "PKI (Public Key Infrastructure) menyediakan...",
+      "correct": "Kerangka kerja untuk manajemen sertifikat digital dan kunci publik",
+      "wrong": [
+        "Hardware firewall",
+        "Antivirus",
+        "Jaringan VPN"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang digital certificate.",
+      "question": "Sertifikat digital dikeluarkan oleh...",
+      "correct": "Certificate Authority (CA)",
+      "wrong": [
+        "ISP",
+        "Pengguna sendiri",
+        "Firewall"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang ransomware.",
+      "question": "Ransomware adalah malware yang...",
+      "correct": "Mengenkripsi file korban dan meminta tebusan",
+      "wrong": [
+        "Menghapus semua file",
+        "Memperlambat internet",
+        "Menampilkan iklan"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang social engineering.",
+      "question": "Social engineering dalam konteks keamanan adalah...",
+      "correct": "Memanipulasi orang untuk memberikan informasi rahasia",
+      "wrong": [
+        "Membangun jaringan sosial",
+        "Teknik pemrograman",
+        "Desain antarmuka pengguna"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang WireGuard.",
+      "question": "WireGuard adalah...",
+      "correct": "Protokol VPN modern yang ringan dan cepat",
+      "wrong": [
+        "Firewall hardware",
+        "Antivirus",
+        "Sistem operasi"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang Diffie-Hellman.",
+      "question": "Protokol Diffie-Hellman digunakan untuk...",
+      "correct": "Pertukaran kunci secara aman melalui channel tidak aman",
+      "wrong": [
+        "Enkripsi file",
+        "Hashing password",
+        "Transfer file"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang next-gen firewall.",
+      "question": "Next-Generation Firewall (NGFW) memiliki kemampuan tambahan berupa...",
+      "correct": "Deep packet inspection dan threat intelligence",
+      "wrong": [
+        "Hanya packet filtering",
+        "Hanya NAT",
+        "Hanya logging"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang anomaly-based detection.",
+      "question": "Anomaly-based detection pada IDS bekerja dengan...",
+      "correct": "Mendeteksi pola trafik yang menyimpang dari baseline normal",
+      "wrong": [
+        "Mencocokkan signature malware",
+        "Memblokir semua trafik",
+        "Hanya memeriksa email"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang eavesdropping.",
+      "question": "Eavesdropping pada jaringan termasuk jenis serangan...",
+      "correct": "Pasif (hanya menyadap tanpa mengubah data)",
+      "wrong": [
+        "Aktif",
+        "Fisik",
+        "Internal"
+      ]
+    },
+    {
+      "description": "Pertanyaan tentang 3DES.",
+      "question": "3DES (Triple DES) melakukan proses enkripsi sebanyak...",
+      "correct": "3 kali",
+      "wrong": [
+        "1 kali",
+        "2 kali",
+        "6 kali"
+      ]
+    }
+  ]
+]
