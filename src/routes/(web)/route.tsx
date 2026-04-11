@@ -1,15 +1,42 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import { createServerFn } from "@tanstack/react-start";
+import { getRequestHeaders } from "@tanstack/react-start/server";
+import { eq } from "drizzle-orm";
 import { Cat, SpeechBubble } from "react-kawaii";
 import FlashContainer from "@/components/global/flash-banner";
 import GlobalLoader from "@/components/global/global-loading";
 import AppSidebar from "@/components/global/sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { oauthMiddleware } from "@/middlewares/auth";
+import { accounts } from "@/database/schema";
+import { auth } from "@/lib/auth/server";
+import { db } from "@/lib/db";
 import { AuthProvider } from "@/providers/auth";
 
+const checkAuth = createServerFn({ method: "GET" }).handler(async () => {
+	const headers = getRequestHeaders();
+	const session = await auth.api.getSession({ headers });
+
+	if (!session) return { authenticated: false } as const;
+
+	const [account] = await db
+		.select({ providerId: accounts.providerId })
+		.from(accounts)
+		.where(eq(accounts.userId, session.user.id))
+		.limit(1);
+
+	if (!account || account.providerId !== "google") {
+		return { authenticated: false } as const;
+	}
+
+	return { authenticated: true } as const;
+});
+
 export const Route = createFileRoute("/(web)")({
-	server: {
-		middleware: [oauthMiddleware],
+	beforeLoad: async () => {
+		const result = await checkAuth();
+		if (!result.authenticated) {
+			throw redirect({ to: "/auth/sign-in" });
+		}
 	},
 	component: RouteComponent,
 	errorComponent: ErrorComponent,

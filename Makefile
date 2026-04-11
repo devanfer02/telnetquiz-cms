@@ -40,19 +40,6 @@ populate-content:
 	$(MAKE) img\:upload
 	$(MAKE) seed\:content
 
-# Docker
-docker\:up:
-	docker compose up -d
-
-docker\:down:
-	docker compose down
-
-docker\:build:
-	docker compose build
-
-docker\:logs:
-	docker compose logs -f
-
 # GHCR
 ghcr\:login:
 ifdef GHCR_TOKEN
