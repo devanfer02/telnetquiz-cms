@@ -9,7 +9,7 @@ import {
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import TanStackQueryDevtools from "@/lib/devtools";
 import { env } from "@/lib/env";
-// @ts-expect-error
+// @ts-expect-error-error
 import appCss from "../css/styles.css?url";
 
 interface MyRouterContext {
@@ -26,27 +26,38 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 			},
 			{
 				name: "description",
-				content: "TelNetQuiz content managament system platform.",
+				content:
+					"Media pembelajaran interaktif berbasis kuis untuk mata pelajaran Media dan Jaringan Telekomunikasi bagi siswa SMK jurusan Teknik Komputer dan Jaringan.",
 			},
-			{ property: "og:title", content: "TelNetQuiz" },
+			{ property: "og:type", content: "website" },
+			{
+				property: "og:title",
+				content: "TelNetQuiz — Media Pembelajaran Interaktif",
+			},
 			{
 				property: "og:description",
-				content: "TelNetQuiz mobile app content management system",
+				content:
+					"Aplikasi kuis interaktif untuk mata pelajaran Media dan Jaringan Telekomunikasi bagi siswa SMK jurusan Teknik Komputer dan Jaringan.",
 			},
 			{ property: "og:image", content: `${env.VITE_APP_URL}/telnetquiz.webp` },
 			{ property: "og:url", content: `${env.VITE_APP_URL}` },
-			{ property: "twitter:title", content: "TelNetQuiz" },
+			{ property: "og:site_name", content: "TelNetQuiz" },
+			{ name: "twitter:card", content: "summary" },
 			{
-				property: "twitter:description",
-				content: "TelNetQuiz mobile app content management system",
+				name: "twitter:title",
+				content: "TelNetQuiz — Media Pembelajaran Interaktif",
 			},
 			{
-				property: "twitter:image",
+				name: "twitter:description",
+				content:
+					"Aplikasi kuis interaktif untuk mata pelajaran Media dan Jaringan Telekomunikasi bagi siswa SMK jurusan Teknik Komputer dan Jaringan.",
+			},
+			{
+				name: "twitter:image",
 				content: `${env.VITE_APP_URL}/telnetquiz.webp`,
 			},
-			{ property: "twitter:url", content: `${env.VITE_APP_URL}` },
 			{
-				title: "TelNetQuiz Panel",
+				title: "TelNetQuiz",
 			},
 		],
 		links: [

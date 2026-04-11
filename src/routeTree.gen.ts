@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as webRouteRouteImport } from './routes/(web)/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
@@ -66,6 +67,11 @@ import { Route as webChaptersEditIdRouteImport } from './routes/(web)/chapters/e
 import { Route as webAchievementsEditIdRouteImport } from './routes/(web)/achievements/edit.$id'
 import { Route as ApiinternalTtsTypeIdRouteImport } from './routes/api/(internal)/tts/$type/$id'
 
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const webRouteRoute = webRouteRouteImport.update({
   id: '/(web)',
   getParentRoute: () => rootRouteImport,
@@ -354,6 +360,7 @@ const ApiinternalTtsTypeIdRoute = ApiinternalTtsTypeIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/privacy': typeof PrivacyRoute
   '/dashboard': typeof webDashboardRouteRoute
   '/api': typeof ApiinternalRouteRouteWithChildren
   '/auth/sign-in': typeof AuthSignInRoute
@@ -411,6 +418,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/privacy': typeof PrivacyRoute
   '/dashboard': typeof webDashboardRouteRoute
   '/api': typeof ApiinternalRouteRouteWithChildren
   '/auth/sign-in': typeof AuthSignInRoute
@@ -470,6 +478,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/(web)': typeof webRouteRouteWithChildren
+  '/privacy': typeof PrivacyRoute
   '/(web)/dashboard': typeof webDashboardRouteRoute
   '/api/(internal)': typeof ApiinternalRouteRouteWithChildren
   '/auth/sign-in': typeof AuthSignInRoute
@@ -529,6 +538,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/privacy'
     | '/dashboard'
     | '/api'
     | '/auth/sign-in'
@@ -586,6 +596,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/privacy'
     | '/dashboard'
     | '/api'
     | '/auth/sign-in'
@@ -644,6 +655,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/(web)'
+    | '/privacy'
     | '/(web)/dashboard'
     | '/api/(internal)'
     | '/auth/sign-in'
@@ -703,6 +715,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   webRouteRoute: typeof webRouteRouteWithChildren
+  PrivacyRoute: typeof PrivacyRoute
   ApiinternalRouteRoute: typeof ApiinternalRouteRouteWithChildren
   AuthSignInRoute: typeof AuthSignInRoute
   ApipublicHealthRoute: typeof ApipublicHealthRoute
@@ -711,6 +724,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/(web)': {
       id: '/(web)'
       path: ''
@@ -1237,6 +1257,7 @@ const ApiinternalRouteRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   webRouteRoute: webRouteRouteWithChildren,
+  PrivacyRoute: PrivacyRoute,
   ApiinternalRouteRoute: ApiinternalRouteRouteWithChildren,
   AuthSignInRoute: AuthSignInRoute,
   ApipublicHealthRoute: ApipublicHealthRoute,

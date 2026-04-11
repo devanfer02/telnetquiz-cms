@@ -32,6 +32,17 @@ const checkAuth = createServerFn({ method: "GET" }).handler(async () => {
 });
 
 export const Route = createFileRoute("/(web)")({
+	head: () => ({
+		meta: [
+			{ title: "TelNetQuiz CMS" },
+			{
+				name: "description",
+				content:
+					"TelNetQuiz admin panel — manage quizzes, study materials, users, and analytics.",
+			},
+			{ name: "robots", content: "noindex, nofollow" },
+		],
+	}),
 	beforeLoad: async () => {
 		const result = await checkAuth();
 		if (!result.authenticated) {
