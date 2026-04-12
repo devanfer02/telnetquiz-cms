@@ -1,6 +1,6 @@
 import { asc, desc, eq } from "drizzle-orm";
 import { Effect } from "effect";
-import { chapters, options, questions } from "@/database/schema";
+import { options, questions } from "@/database/schema";
 import { Db } from "@/lib/db";
 import { dbTryPromise } from "@/lib/retry";
 import type { QuestionFormData, QuestionsFormData } from "@/types/zod";
@@ -58,15 +58,20 @@ export const fetchQuestionsByType = (type: "pretest" | "quiz") =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
-		const [joinedRows, optionRows] = yield* Effect.all([
+		const [questionRows, optionRows] = yield* Effect.all([
 			dbTryPromise({
 				try: () =>
-					db
-						.select()
-						.from(questions)
-						.leftJoin(chapters, eq(questions.chapterId, chapters.id))
-						.where(eq(questions.type, type))
-						.orderBy(asc(questions.chapterId), asc(questions.id)),
+					db.query.questions.findMany({
+						where: eq(questions.type, type),
+						orderBy: [asc(questions.chapterId), asc(questions.id)],
+						with: {
+							quiz: {
+								with: {
+									chapter: true,
+								},
+							},
+						},
+					}),
 				catch: (err) =>
 					new DatabaseError({
 						cause: err,
@@ -103,10 +108,11 @@ export const fetchQuestionsByType = (type: "pretest" | "quiz") =>
 			optionsByQuestionId.set(row.questionId, list);
 		}
 
-		return joinedRows.map((r) => ({
-			...r.questions,
-			chapterTitle: r.chapters?.title ?? null,
-			options: optionsByQuestionId.get(r.questions.id) ?? [],
+		return questionRows.map((q) => ({
+			...q,
+			chapterId: q.quiz?.chapterId ?? q.chapterId,
+			chapterTitle: q.quiz?.chapter?.title ?? null,
+			options: optionsByQuestionId.get(q.id) ?? [],
 		}));
 	});
 
