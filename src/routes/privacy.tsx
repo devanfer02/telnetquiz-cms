@@ -10,31 +10,35 @@ function PrivacyPolicyPage() {
 		<div className="min-h-screen bg-white">
 			{/* Nav */}
 			<nav className="border-b border-gray-100">
-				<div className="max-w-4xl mx-auto px-6 py-4 flex items-center gap-3">
+				<div className="max-w-4xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center gap-2 sm:gap-3">
 					<Link
 						to="/"
-						className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+						className="p-1.5 sm:p-2 rounded-lg hover:bg-gray-100 transition-colors"
 					>
-						<ArrowLeft className="w-5 h-5 text-gray-600" />
+						<ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
 					</Link>
-					<div className="flex items-center gap-3">
+					<div className="flex items-center gap-2 sm:gap-3">
 						<img
 							src="/telnetquiz.webp"
 							alt="TelNetQuiz"
-							className="w-8 h-8 rounded-xl"
+							className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl"
 						/>
-						<span className="font-bold text-lg text-[#F37704]">TelNetQuiz</span>
+						<span className="font-bold text-base sm:text-lg text-[#F37704]">
+							TelNetQuiz
+						</span>
 					</div>
 				</div>
 			</nav>
 
 			{/* Content */}
-			<div className="max-w-4xl mx-auto px-6 py-12">
-				<div className="flex items-center gap-3 mb-8">
-					<div className="p-2.5 bg-orange-50 rounded-xl">
-						<Shield className="w-6 h-6 text-[#F37704]" />
+			<div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+				<div className="flex items-center gap-2.5 sm:gap-3 mb-6 sm:mb-8">
+					<div className="p-2 sm:p-2.5 bg-orange-50 rounded-xl">
+						<Shield className="w-5 h-5 sm:w-6 sm:h-6 text-[#F37704]" />
 					</div>
-					<h1 className="text-3xl font-bold text-gray-900">Privacy Policy</h1>
+					<h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+						Privacy Policy
+					</h1>
 				</div>
 
 				<div className="prose prose-gray max-w-none">
@@ -171,8 +175,8 @@ function PrivacyPolicyPage() {
 			</div>
 
 			{/* Footer */}
-			<footer className="border-t border-gray-100 py-6">
-				<div className="max-w-4xl mx-auto px-6 text-center text-sm text-gray-500">
+			<footer className="border-t border-gray-100 py-5 sm:py-6">
+				<div className="max-w-4xl mx-auto px-4 sm:px-6 text-center text-xs sm:text-sm text-gray-500">
 					<Link to="/" className="hover:text-gray-700">
 						&larr; Back to Home
 					</Link>
