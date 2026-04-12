@@ -66,8 +66,6 @@ export const Route = createFileRoute("/api/(internal)/auth/register")({
 									),
 							}),
 							Effect.catchAll((err) => {
-								console.error("ERR: ", err);
-
 								return Effect.succeed(
 									response(
 										{

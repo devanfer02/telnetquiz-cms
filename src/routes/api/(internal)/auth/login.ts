@@ -49,8 +49,6 @@ export const Route = createFileRoute("/api/(internal)/auth/login")({
 									),
 							}),
 							Effect.catchAll((err) => {
-								console.error("ERR: ", err);
-
 								return Effect.succeed(
 									response(
 										{

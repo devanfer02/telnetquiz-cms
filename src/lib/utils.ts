@@ -7,9 +7,10 @@ import { ulid } from "ulid";
 import type { z } from "zod";
 
 const EXTENSION_MAP = {
-	".jpg": "image/jpg",
+	".jpg": "image/jpeg",
+	".jpeg": "image/jpeg",
 	".png": "image/png",
-	jpeg: "image/jpeg",
+	".webp": "image/webp",
 } as Record<string, string>;
 
 export function cn(...inputs: ClassValue[]) {

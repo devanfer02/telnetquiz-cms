@@ -7,6 +7,13 @@ export const apiKeyMiddleware = createMiddleware().server(
 		const providedKey = request.headers.get("x-api-key") ?? "";
 		const expectedKey = env.API_KEY;
 
+		if (!providedKey || !expectedKey) {
+			throw json(
+				{ message: "Unauthorized" },
+				{ status: HttpStatus.UNAUTHORIZED },
+			);
+		}
+
 		const providedKeyBuffer = Buffer.from(providedKey);
 		const expectedKeyBuffer = Buffer.from(expectedKey);
 

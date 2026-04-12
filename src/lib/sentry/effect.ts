@@ -35,11 +35,11 @@ export const withApiErrorHandling = <A>(
 						HttpStatus.BAD_REQUEST,
 					),
 				),
-			NotFoundError: (err: NotFoundError) =>
+			NotFoundError: (_err: NotFoundError) =>
 				Effect.succeed(
 					response(
 						{
-							message: `${err.entity} with id ${err.id} not found`,
+							message: "Resource not found",
 						},
 						HttpStatus.NOT_FOUND,
 					),
@@ -58,8 +58,7 @@ export const withApiErrorHandling = <A>(
 				return Effect.succeed(
 					response(
 						{
-							message: "Database error",
-							error: err.message,
+							message: "An internal error occurred",
 						},
 						HttpStatus.INTERNAL_SERVER_ERROR,
 					),
@@ -70,8 +69,7 @@ export const withApiErrorHandling = <A>(
 				return Effect.succeed(
 					response(
 						{
-							message: "Storage error",
-							error: err.message,
+							message: "An internal error occurred",
 						},
 						HttpStatus.INTERNAL_SERVER_ERROR,
 					),
@@ -82,8 +80,7 @@ export const withApiErrorHandling = <A>(
 				return Effect.succeed(
 					response(
 						{
-							message: "Internal server error",
-							error: err.message,
+							message: "An internal error occurred",
 						},
 						HttpStatus.INTERNAL_SERVER_ERROR,
 					),
@@ -94,8 +91,7 @@ export const withApiErrorHandling = <A>(
 				return Effect.succeed(
 					response(
 						{
-							message: "TTS service error",
-							error: err.message,
+							message: "An internal error occurred",
 						},
 						HttpStatus.BAD_GATEWAY,
 					),

@@ -8,7 +8,7 @@ export const registerUserSchema = z.object({
 		.min(6)
 		.max(255)
 		.regex(/\d/, "Must contain at least one number"),
-	school_id: z.number(),
+	school_id: z.number().positive(),
 	gender: z.boolean(),
 	grade: z.string().min(1).max(10),
 });

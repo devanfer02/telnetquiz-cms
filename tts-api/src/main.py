@@ -1,4 +1,5 @@
 import logging
+import re
 from hmac import compare_digest
 
 from fastapi import FastAPI, Header, HTTPException
@@ -17,6 +18,12 @@ MAX_TEXT_LENGTH = 5000
 
 
 VOICE = "id-ID-ArdiNeural"
+CACHE_KEY_PATTERN = re.compile(r"^[a-z]+-[a-f0-9]+-audio$")
+
+
+def validate_cache_key(cache_key: str):
+    if ".." in cache_key or "/" in cache_key or not CACHE_KEY_PATTERN.match(cache_key):
+        raise HTTPException(status_code=400, detail="Invalid cache key format")
 
 
 class SynthesizeRequest(BaseModel):
@@ -52,6 +59,7 @@ async def synthesize_endpoint(
             detail=f"Text exceeds maximum length of {MAX_TEXT_LENGTH} characters",
         )
 
+    validate_cache_key(request.cache_key)
     cached_url = check_cache(request.cache_key)
     if cached_url:
         logger.info("Cache hit for key: %s", request.cache_key)
@@ -79,6 +87,7 @@ async def delete_cache(
     x_api_key: str = Header(...),
 ):
     verify_api_key(x_api_key)
+    validate_cache_key(cache_key)
 
     deleted = delete_audio(cache_key)
     if not deleted:
