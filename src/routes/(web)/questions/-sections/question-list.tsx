@@ -26,6 +26,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { QUERY_KEYS } from "@/lib/constant";
+import { sanitizeHtml } from "@/lib/sanitize";
 import { filterColumns } from "@/lib/utils";
 import { setFlashState } from "@/store/use-flash";
 import PretestPreviewSheet from "./pretest-preview-sheet";
@@ -135,7 +136,9 @@ export default function QuestionList({
 			cell: ({ row }) => (
 				<div
 					className="max-h-20 overflow-y-auto prose prose-sm"
-					dangerouslySetInnerHTML={{ __html: row.original.description }}
+					dangerouslySetInnerHTML={{
+						__html: sanitizeHtml(row.original.description),
+					}}
 				/>
 			),
 		},
@@ -148,7 +151,9 @@ export default function QuestionList({
 			cell: ({ row }) => (
 				<div
 					className="max-h-20 overflow-y-auto prose prose-sm"
-					dangerouslySetInnerHTML={{ __html: row.original.question }}
+					dangerouslySetInnerHTML={{
+						__html: sanitizeHtml(row.original.question),
+					}}
 				/>
 			),
 		},

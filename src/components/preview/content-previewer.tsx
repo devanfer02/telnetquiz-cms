@@ -1,5 +1,6 @@
 import { Check } from "lucide-react";
 import { useCallback, useState } from "react";
+import { sanitizeHtml } from "@/lib/sanitize";
 import PhoneFrame from "./phone-frame";
 
 interface PreviewQuestion {
@@ -163,7 +164,7 @@ export default function ContentPreviewer({
 								<div
 									className="text-xs text-telnet-secondary/80 mt-1 prose prose-xs max-w-none [&_p]:m-0 [&_img]:m-0"
 									dangerouslySetInnerHTML={{
-										__html: currentQuestion.description,
+										__html: sanitizeHtml(currentQuestion.description),
 									}}
 								/>
 							)}
@@ -188,7 +189,7 @@ export default function ContentPreviewer({
 						<div
 							className="text-sm text-telnet-secondary font-semibold text-center mb-4 prose prose-sm max-w-none [&_p]:m-0 [&_img]:m-0"
 							dangerouslySetInnerHTML={{
-								__html: currentQuestion.question,
+								__html: sanitizeHtml(currentQuestion.question),
 							}}
 						/>
 

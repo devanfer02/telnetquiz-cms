@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { BookMarked, Pencil } from "lucide-react";
 import { MetadataTable } from "@/components/global/date-metadata";
 import { Button } from "@/components/ui/button";
+import { sanitizeHtml } from "@/lib/sanitize";
 
 interface ChapterHeaderProps {
 	chapter: Chapter;
@@ -48,7 +49,9 @@ export default function ChapterHeader({ chapter }: ChapterHeaderProps) {
 					<div className="prose max-w-none">
 						<div
 							className="text-gray-700"
-							dangerouslySetInnerHTML={{ __html: chapter.description }}
+							dangerouslySetInnerHTML={{
+								__html: sanitizeHtml(chapter.description),
+							}}
 						/>
 					</div>
 

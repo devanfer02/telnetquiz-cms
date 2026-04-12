@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { BookOpen, Eye, Pencil } from "lucide-react";
 import { MetadataTable } from "@/components/global/date-metadata";
 import { Button } from "@/components/ui/button";
+import { sanitizeHtml } from "@/lib/sanitize";
 
 interface MaterialHeaderProps {
 	studyMaterial: StudyMaterial;
@@ -74,7 +75,9 @@ export default function MaterialHeader({ studyMaterial }: MaterialHeaderProps) {
 					<div className="prose max-w-none">
 						<div
 							className="text-gray-700"
-							dangerouslySetInnerHTML={{ __html: studyMaterial.content }}
+							dangerouslySetInnerHTML={{
+								__html: sanitizeHtml(studyMaterial.content),
+							}}
 						/>
 					</div>
 

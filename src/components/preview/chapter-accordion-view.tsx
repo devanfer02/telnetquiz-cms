@@ -7,6 +7,7 @@ import {
 	AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
+import { sanitizeHtml } from "@/lib/sanitize";
 
 interface ChapterAccordionQuestion {
 	id: number;
@@ -82,12 +83,16 @@ export default function ChapterAccordionView({
 									{q.description && (
 										<div
 											className="text-sm text-muted-foreground mb-1 prose prose-sm max-w-none [&_p]:m-0"
-											dangerouslySetInnerHTML={{ __html: q.description }}
+											dangerouslySetInnerHTML={{
+												__html: sanitizeHtml(q.description),
+											}}
 										/>
 									)}
 									<div
 										className="text-sm font-medium mb-2 prose prose-sm max-w-none [&_p]:m-0"
-										dangerouslySetInnerHTML={{ __html: q.question }}
+										dangerouslySetInnerHTML={{
+											__html: sanitizeHtml(q.question),
+										}}
 									/>
 									{q.imageLink && (
 										<img

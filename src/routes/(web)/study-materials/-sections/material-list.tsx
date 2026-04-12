@@ -19,6 +19,7 @@ import TanstackTable from "@/components/global/ts-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { QUERY_KEYS } from "@/lib/constant";
+import { sanitizeHtml } from "@/lib/sanitize";
 import { setFlashState } from "@/store/use-flash";
 
 interface StudyMaterialListProps {
@@ -64,7 +65,9 @@ export default function StudyMaterialList({
 			cell: ({ row }) => (
 				<div
 					className="max-h-20 overflow-y-auto prose prose-sm"
-					dangerouslySetInnerHTML={{ __html: row.original.content }}
+					dangerouslySetInnerHTML={{
+						__html: sanitizeHtml(row.original.content),
+					}}
 				/>
 			),
 		},

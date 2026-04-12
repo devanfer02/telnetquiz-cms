@@ -1,4 +1,5 @@
 import { Volume2 } from "lucide-react";
+import { sanitizeHtml } from "@/lib/sanitize";
 import PhoneFrame from "./phone-frame";
 
 interface StudyMaterialPreviewerProps {
@@ -55,7 +56,7 @@ export default function StudyMaterialPreviewer({
 									[&_a]:text-[#8B340D] [&_a]:underline
 									[&_img]:rounded-lg [&_img]:my-3
 									text-[#3D1A00]"
-								dangerouslySetInnerHTML={{ __html: content }}
+								dangerouslySetInnerHTML={{ __html: sanitizeHtml(content) }}
 							/>
 						</div>
 					</div>
