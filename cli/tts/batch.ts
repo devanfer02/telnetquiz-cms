@@ -34,7 +34,7 @@ async function runPythonBatch(items: TtsItem[]): Promise<TtsResult[]> {
 		items.map(({ text, cache_key }) => ({ text, cache_key })),
 	);
 
-	const proc = Bun.spawn(["make", "batch:convert"], {
+	const proc = Bun.spawn(["uv", "run", "python", "-m", "src.batch"], {
 		cwd: TTS_PROJECT_DIR,
 		stdin: new Blob([input]),
 		stdout: "pipe",
