@@ -15,6 +15,7 @@
     "api:route": "bun cli/api-routes.ts",
     "db:seed-mock": "bun cli/content/seed-mock.ts",
     "db:seed-content": "bun cli/content/seed.ts",
+    "db:seed-achievements": "bun cli/content/seed-achievements.ts",
     "db:purge": "bun cli/db/purge.ts",
     "db:rls": "bun cli/db/rls.ts",
     "tts:batch": "bun cli/tts/batch.ts",

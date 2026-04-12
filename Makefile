@@ -6,7 +6,7 @@ CMS_IMAGE   = ghcr.io/$(GHCR_OWNER)/telnetquiz-cms
 TTS_IMAGE   = ghcr.io/$(GHCR_OWNER)/telnetquiz-tts
 TAG         ?= latest
 
-.PHONY: dev dev\:cms dev\:tts tts\:batch tts\:purge seed\:content seed\:mock img\:upload populate-content docker\:up docker\:down docker\:build docker\:logs ghcr\:login ghcr\:build ghcr\:push ghcr\:build-push
+.PHONY: dev dev\:cms dev\:tts tts\:batch tts\:purge seed\:content seed\:mock seed\:achievements img\:upload populate-content docker\:up docker\:down docker\:build docker\:logs ghcr\:login ghcr\:build ghcr\:push ghcr\:build-push
 
 # Start both CMS and TTS API concurrently
 dev:
@@ -36,9 +36,13 @@ seed\:mock:
 img\:upload:
 	bun run img:upload
 
+seed\:achievements:
+	bun run db:seed-achievements
+
 populate-content:
 	$(MAKE) img\:upload
 	$(MAKE) seed\:content
+	$(MAKE) seed\:achievements
 	$(MAKE) tts\:batch
 
 # GHCR
