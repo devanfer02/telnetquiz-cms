@@ -39,6 +39,7 @@ img\:upload:
 populate-content:
 	$(MAKE) img\:upload
 	$(MAKE) seed\:content
+	$(MAKE) tts\:batch
 
 # GHCR
 ghcr\:login:
