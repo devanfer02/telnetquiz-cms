@@ -89,6 +89,12 @@ TERM_PRONUNCIATIONS: list[tuple[str, str]] = [
     ("UTP", "yu ti pi"),
     ("AP", "ei pi"),
 
+    # ── English loanwords (pronounced in Indonesian) ─────────────────
+    ("protocol", "protokol"),
+    ("Protocol", "Protokol"),
+    ("protocols", "protokol"),
+    ("Protocols", "Protokol"),
+
     # ── Units ─────────────────────────────────────────────────────────
     ("Gbps", "giga bit per sekon"),
     ("Mbps", "mega bit per sekon"),
