@@ -9,7 +9,7 @@ import {
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import TanStackQueryDevtools from "@/lib/devtools";
 import { env } from "@/lib/env";
-// @ts-expect-error-error
+// @ts-expect-error
 import appCss from "../css/styles.css?url";
 
 interface MyRouterContext {

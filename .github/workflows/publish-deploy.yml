@@ -4,6 +4,14 @@ on:
   push:
     branches: [master]
     tags: ["v*"]
+    paths:
+      - "src/**"
+      - "tts-api/**"
+      - "Dockerfile"
+      - "docker-compose.yml"
+      - "package.json"
+      - "bun.lockb"
+      - ".github/workflows/**"
   workflow_dispatch:
 
 permissions:
