@@ -41,7 +41,9 @@ seed\:achievements:
 
 populate-content:
 	$(MAKE) img\:upload
+ifndef SKIP_SEED
 	$(MAKE) seed\:content
+endif
 	$(MAKE) seed\:achievements
 	$(MAKE) tts\:batch
 
