@@ -1,4 +1,3 @@
-import { randomInt } from "node:crypto";
 import path from "node:path";
 import type { ColumnDef } from "@tanstack/react-table";
 import { type ClassValue, clsx } from "clsx";
@@ -67,7 +66,9 @@ export function getFileExtension(fileName: string) {
 export function shuffleArray<T>(array: T[]): T[] {
 	const shuffled = [...array];
 	for (let i = shuffled.length - 1; i > 0; i--) {
-		const j = randomInt(0, i + 1);
+		const rand = new Uint32Array(1);
+		crypto.getRandomValues(rand);
+		const j = rand[0] % (i + 1);
 		[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
 	}
 	return shuffled;
