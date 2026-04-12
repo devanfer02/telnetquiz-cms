@@ -8,6 +8,7 @@ import {
 } from "@/database/schema";
 import { Db } from "@/lib/db";
 import { dbTryPromise } from "@/lib/retry";
+import { shuffleArray } from "@/lib/utils";
 import type { QuizFormData } from "@/types/zod";
 import {
 	DatabaseError,
@@ -140,7 +141,7 @@ export const sanitizeQuizForClient = <
 	...quiz,
 	questions: quiz.questions.map((q) => ({
 		...q,
-		options: q.options.map(({ isCorrect: _, ...opt }) => opt),
+		options: shuffleArray(q.options).map(({ isCorrect: _, ...opt }) => opt),
 	})),
 });
 

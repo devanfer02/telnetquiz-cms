@@ -3,6 +3,7 @@ import { Effect } from "effect";
 import { options, questions } from "@/database/schema";
 import { Db } from "@/lib/db";
 import { dbTryPromise } from "@/lib/retry";
+import { shuffleArray } from "@/lib/utils";
 import type { QuestionFormData, QuestionsFormData } from "@/types/zod";
 import { DatabaseError, NotFoundError } from "../errors/errors";
 import { invalidateTtsCache } from "../tts/cache";
@@ -48,7 +49,7 @@ export const formatQuestionsForApi = (
 		image_link: q.imageLink,
 		description: q.description,
 		question: q.question,
-		options: q.options.map((o) => ({
+		options: shuffleArray(q.options).map((o) => ({
 			id: o.id,
 			text: o.text,
 		})),
