@@ -137,6 +137,7 @@ export const questions = pgTable(
 			onDelete: "cascade",
 		}),
 		imageLink: varchar(),
+		audioLink: varchar("audio_link"),
 		description: text().notNull(),
 		question: text().notNull(),
 		...timestamps,
@@ -211,6 +212,7 @@ export const studyMaterials = pgTable("study_materials", {
 	id: serial().primaryKey(),
 	title: varchar().notNull(),
 	imageLink: varchar(),
+	audioLink: varchar("audio_link"),
 	content: text().notNull(),
 	...timestamps,
 });

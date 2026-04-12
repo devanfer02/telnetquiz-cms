@@ -1,7 +1,11 @@
+import { eq } from "drizzle-orm";
 import { Effect } from "effect";
+import { questions, studyMaterials } from "@/database/schema";
+import { Db } from "@/lib/db";
+import { dbTryPromise } from "@/lib/retry";
 import { fetchQuestionById } from "../content/questions";
 import { fetchStudyMaterialById } from "../content/study-material";
-import { TtsServiceError } from "../errors/errors";
+import { DatabaseError, TtsServiceError } from "../errors/errors";
 
 export { buildCacheKey, requestTtsAudio } from "./cache";
 
@@ -31,4 +35,21 @@ export const constructTtsText = (type: string, id: number) =>
 				message: `Invalid TTS type: ${type}`,
 			}),
 		);
+	});
+
+export const persistAudioLink = (type: string, id: number, audioUrl: string) =>
+	Effect.gen(function* () {
+		const { db } = yield* Db;
+
+		const table = type === "material" ? studyMaterials : questions;
+
+		yield* dbTryPromise({
+			try: () =>
+				db.update(table).set({ audioLink: audioUrl }).where(eq(table.id, id)),
+			catch: (err) =>
+				new DatabaseError({
+					cause: err,
+					message: `Failed to persist audio_link for ${type} ${id}`,
+				}),
+		});
 	});

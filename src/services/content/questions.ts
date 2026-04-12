@@ -36,6 +36,7 @@ export const formatQuestionsForApi = (
 		chapterId: number | null;
 		chapterTitle: string | null;
 		imageLink: string | null;
+		audioLink: string | null;
 		description: string;
 		question: string;
 		options: { id: number; text: string }[];
@@ -47,6 +48,7 @@ export const formatQuestionsForApi = (
 		chapter_id: q.chapterId,
 		chapter_title: q.chapterTitle,
 		image_link: q.imageLink,
+		audio_link: q.audioLink,
 		description: q.description,
 		question: q.question,
 		options: shuffleArray(q.options).map((o) => ({

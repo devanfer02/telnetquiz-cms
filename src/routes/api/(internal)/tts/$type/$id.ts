@@ -7,6 +7,7 @@ import { ValidationError } from "@/services/errors/errors";
 import {
 	buildCacheKey,
 	constructTtsText,
+	persistAudioLink,
 	requestTtsAudio,
 } from "@/services/tts/tts";
 
@@ -38,6 +39,14 @@ export const Route = createFileRoute("/api/(internal)/tts/$type/$id")({
 								const cacheKey = buildCacheKey(type, id);
 								const text = yield* constructTtsText(type, id);
 								const result = yield* requestTtsAudio(text, cacheKey);
+
+								if (!result.cached) {
+									yield* persistAudioLink(
+										type === "pretest" ? "question" : type,
+										id,
+										result.audio_url,
+									).pipe(Effect.catchAll(() => Effect.void));
+								}
 
 								return response(
 									{
