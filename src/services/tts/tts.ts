@@ -11,6 +11,27 @@ export { buildCacheKey, requestTtsAudio } from "./cache";
 
 const LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H"];
 
+const TTS_REPLACEMENTS: [RegExp, string][] = [
+	[/\bprotocol\b/gi, "protokol"],
+	[/\blayer\b/gi, "leyer"],
+	[/\brouter\b/gi, "ruter"],
+	[/\bswitch\b/gi, "suwitch"],
+	[/\bserver\b/gi, "server"],
+	[/\bbrowser\b/gi, "brauser"],
+	[/\bgateway\b/gi, "geitwey"],
+	[/\bfirewall\b/gi, "faierwal"],
+	[/\bbandwidth\b/gi, "bendwith"],
+	[/\bhandshake\b/gi, "hendsheik"],
+];
+
+function applyTtsPronunciation(text: string): string {
+	let result = text;
+	for (const [pattern, replacement] of TTS_REPLACEMENTS) {
+		result = result.replace(pattern, replacement);
+	}
+	return result;
+}
+
 export const constructTtsText = (type: string, id: number) =>
 	Effect.gen(function* () {
 		if (type === "question" || type === "pretest") {
@@ -20,13 +41,15 @@ export const constructTtsText = (type: string, id: number) =>
 				.map((opt, i) => `${LETTERS[i] ?? String(i + 1)}. ${opt.text}`)
 				.join(". ");
 
-			return `${question.description}. ${question.question}. Pilihan jawaban: ${optionsText}`;
+			return applyTtsPronunciation(
+				`${question.description}. ${question.question}. Pilihan jawaban: ${optionsText}`,
+			);
 		}
 
 		if (type === "material") {
 			const material = yield* fetchStudyMaterialById(id);
 			const plainContent = material.content.replace(/<[^>]*>/g, "");
-			return `${material.title}. ${plainContent}`;
+			return applyTtsPronunciation(`${material.title}. ${plainContent}`);
 		}
 
 		return yield* Effect.fail(
