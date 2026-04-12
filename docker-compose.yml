@@ -1,6 +1,6 @@
 services:
   cms:
-    image: ghcr.io/devanfer02/telnetquiz-cms:latest
+    image: ghcr.io/devanfer02/telnetquiz-cms:${TAG:-latest}
     container_name: telnetquiz-cms
     build:
       context: .
@@ -27,7 +27,7 @@ services:
       start_period: 30s
 
   tts-api:
-    image: ghcr.io/devanfer02/telnetquiz-tts:latest
+    image: ghcr.io/devanfer02/telnetquiz-tts:${TAG:-latest}
     container_name: telnetquiz-tts
     build:
       context: ./tts-api

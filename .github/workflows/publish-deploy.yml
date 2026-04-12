@@ -103,9 +103,18 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: [build-cms, build-tts]
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v')
 
     steps:
+      - name: Determine deploy tag
+        id: tag
+        run: |
+          if [[ "${{ github.ref }}" == refs/tags/v* ]]; then
+            echo "value=${GITHUB_REF#refs/tags/v}" >> "$GITHUB_OUTPUT"
+          else
+            echo "value=latest" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Setup Tailscale
         uses: tailscale/github-action@v3
         with:
@@ -122,6 +131,7 @@ jobs:
           port: ${{ secrets.DEPLOY_PORT }}
           script: |
             cd ${{ secrets.DEPLOY_PATH }}
+            export TAG=${{ steps.tag.outputs.value }}
             docker compose pull
             docker compose up -d
             docker image prune -f
