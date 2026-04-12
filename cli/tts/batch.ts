@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import { resolve } from "node:path";
 import { db } from "../../src/lib/db";
 import { questions, options, studyMaterials } from "../../src/database/schema";
-import { asc } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 
 const LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H"];
 const TTS_PROJECT_DIR = resolve(import.meta.dir, "../../tts-api");
@@ -18,6 +18,8 @@ function buildCacheKey(type: string, id: number): string {
 interface TtsItem {
 	text: string;
 	cache_key: string;
+	entity_type: "question" | "pretest" | "material";
+	entity_id: number;
 }
 
 interface TtsResult {
@@ -28,7 +30,9 @@ interface TtsResult {
 }
 
 async function runPythonBatch(items: TtsItem[]): Promise<TtsResult[]> {
-	const input = JSON.stringify(items);
+	const input = JSON.stringify(
+		items.map(({ text, cache_key }) => ({ text, cache_key })),
+	);
 
 	const proc = Bun.spawn(["make", "batch:convert"], {
 		cwd: TTS_PROJECT_DIR,
@@ -98,6 +102,8 @@ async function batchGenerate() {
 			items.push({
 				text: ttsText,
 				cache_key: buildCacheKey(type, q.id),
+				entity_type: type as "question" | "pretest",
+				entity_id: q.id,
 			});
 		}
 	}
@@ -118,6 +124,8 @@ async function batchGenerate() {
 			items.push({
 				text: `${m.title}. ${plainContent}`,
 				cache_key: buildCacheKey("material", m.id),
+				entity_type: "material",
+				entity_id: m.id,
 			});
 		}
 	}
@@ -140,6 +148,29 @@ async function batchGenerate() {
 		for (const r of results.filter((r) => r.status === "failed")) {
 			console.log(`  ${r.cache_key}: ${r.error}`);
 		}
+	}
+
+	const cacheKeyToItem = new Map(items.map((item) => [item.cache_key, item]));
+	const successResults = results.filter(
+		(r) => r.status !== "failed" && r.audio_url,
+	);
+
+	if (successResults.length > 0) {
+		console.log(`\nUpdating audio_link for ${successResults.length} items...`);
+		let updated = 0;
+		for (const r of successResults) {
+			const item = cacheKeyToItem.get(r.cache_key);
+			if (!item || !r.audio_url) continue;
+
+			const table =
+				item.entity_type === "material" ? studyMaterials : questions;
+			await db
+				.update(table)
+				.set({ audioLink: r.audio_url })
+				.where(eq(table.id, item.entity_id));
+			updated++;
+		}
+		console.log(`Updated ${updated} audio_link rows.`);
 	}
 
 	console.log(
