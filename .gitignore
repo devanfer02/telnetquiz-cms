@@ -14,3 +14,5 @@ todos.json
 .eslintrc-auto-import*
 logs/
 .env.prod
+upload-manifest.json
+cli/content/data/prod
