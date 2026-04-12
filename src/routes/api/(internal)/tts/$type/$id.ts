@@ -7,6 +7,7 @@ import { ValidationError } from "@/services/errors/errors";
 import {
 	buildCacheKey,
 	constructTtsText,
+	getExistingAudioLink,
 	persistAudioLink,
 	requestTtsAudio,
 } from "@/services/tts/tts";
@@ -36,17 +37,30 @@ export const Route = createFileRoute("/api/(internal)/tts/$type/$id")({
 								}
 
 								const id = yield* parseNumericId(params.id);
+								const dbType = type === "pretest" ? "question" : type;
+
+								const existingLink = yield* getExistingAudioLink(
+									dbType,
+									id,
+								).pipe(Effect.catchAll(() => Effect.succeed(null)));
+
+								if (existingLink) {
+									return response(
+										{
+											message: "TTS audio found in database",
+											data: { audio_url: existingLink },
+										},
+										HttpStatus.OK,
+									);
+								}
+
 								const cacheKey = buildCacheKey(type, id);
 								const text = yield* constructTtsText(type, id);
 								const result = yield* requestTtsAudio(text, cacheKey);
 
-								if (!result.cached) {
-									yield* persistAudioLink(
-										type === "pretest" ? "question" : type,
-										id,
-										result.audio_url,
-									).pipe(Effect.catchAll(() => Effect.void));
-								}
+								yield* persistAudioLink(dbType, id, result.audio_url).pipe(
+									Effect.catchAll(() => Effect.void),
+								);
 
 								return response(
 									{

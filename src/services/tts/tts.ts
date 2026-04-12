@@ -37,6 +37,29 @@ export const constructTtsText = (type: string, id: number) =>
 		);
 	});
 
+export const getExistingAudioLink = (type: string, id: number) =>
+	Effect.gen(function* () {
+		const { db } = yield* Db;
+
+		const table = type === "material" ? studyMaterials : questions;
+
+		const row = yield* dbTryPromise({
+			try: () =>
+				db
+					.select({ audioLink: table.audioLink })
+					.from(table)
+					.where(eq(table.id, id))
+					.limit(1),
+			catch: (err) =>
+				new DatabaseError({
+					cause: err,
+					message: `Failed to check audio_link for ${type} ${id}`,
+				}),
+		});
+
+		return row[0]?.audioLink ?? null;
+	});
+
 export const persistAudioLink = (type: string, id: number, audioUrl: string) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
