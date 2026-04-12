@@ -85,9 +85,13 @@ async function batchGenerate() {
 			optionsByQuestion.set(opt.questionId, list);
 		}
 
-		const filtered = allQuestions.filter((q) =>
-			types.includes(q.type ?? "question"),
-		);
+		const filtered = allQuestions.filter((q) => {
+			const dbType = q.type ?? "quiz";
+			return (
+				types.includes(dbType) ||
+				(dbType === "quiz" && types.includes("question"))
+			);
+		});
 
 		console.log(`[questions] ${filtered.length} to process`);
 
@@ -97,12 +101,12 @@ async function batchGenerate() {
 				.map((text, i) => `${LETTERS[i] ?? String(i + 1)}. ${text}`)
 				.join(". ");
 			const ttsText = `${q.description}. ${q.question}. Pilihan jawaban: ${optionsText}`;
-			const type = q.type ?? "question";
+			const cacheType = q.type === "quiz" ? "question" : (q.type ?? "question");
 
 			items.push({
 				text: ttsText,
-				cache_key: buildCacheKey(type, q.id),
-				entity_type: type as "question" | "pretest",
+				cache_key: buildCacheKey(cacheType, q.id),
+				entity_type: cacheType as "question" | "pretest",
 				entity_id: q.id,
 			});
 		}
