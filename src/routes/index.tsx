@@ -67,7 +67,7 @@ function LandingPage() {
 						</p>
 						<div className="flex items-center justify-center lg:justify-start gap-4 pt-2">
 							<a
-								href="https://github.com/devanfer02/telnetquiz-mobile"
+								href="https://github.com/devanfer02/telnetquiz/releases"
 								target="_blank"
 								rel="noopener noreferrer"
 								className="inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 bg-[#F37704] text-white rounded-xl text-sm sm:text-base font-semibold hover:bg-[#d96800] transition-colors"
