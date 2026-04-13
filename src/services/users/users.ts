@@ -8,6 +8,7 @@ import {
 	schools,
 	sessions,
 	submissions,
+	userAchievements,
 	users,
 } from "@/database/schema";
 import { Auth } from "@/lib/auth/server";
@@ -772,6 +773,16 @@ export const resetUserProgress = (userId: string) =>
 				new DatabaseError({
 					cause: error,
 					message: `Failed to delete pretest submissions for user ${userId}`,
+				}),
+		});
+
+		yield* dbTryPromise({
+			try: () =>
+				db.delete(userAchievements).where(eq(userAchievements.userId, userId)),
+			catch: (error) =>
+				new DatabaseError({
+					cause: error,
+					message: `Failed to delete achievements for user ${userId}`,
 				}),
 		});
 
