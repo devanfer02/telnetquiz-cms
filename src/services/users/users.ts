@@ -103,13 +103,16 @@ export const fetchLeaderboard = (
 				fullname: users.name,
 				image: users.image,
 				gender: users.gender,
-				totalScore: sql<number>`COALESCE(SUM(${submissions.score}), 0)`.as(
-					"total_score",
-				),
+				totalScore: sql<number>`COALESCE((
+					SELECT SUM(best.max_score) FROM (
+						SELECT MAX(${submissions.score}) as max_score
+						FROM ${submissions}
+						WHERE ${submissions.userId} = ${users.id}
+						GROUP BY ${submissions.quizId}
+					) best
+				), 0)`.as("total_score"),
 			})
 			.from(users)
-			.leftJoin(submissions, eq(users.id, submissions.userId))
-			.groupBy(users.id, users.name, users.image, users.gender)
 			.orderBy(desc(sql`total_score`), users.id)
 			.limit(limit + 1);
 
@@ -133,10 +136,15 @@ export const fetchLeaderboard = (
 						SELECT rank FROM (
 							SELECT
 								${users.id} as user_id,
-								ROW_NUMBER() OVER (ORDER BY COALESCE(SUM(${submissions.score}), 0) DESC, ${users.id}) as rank
+								ROW_NUMBER() OVER (ORDER BY COALESCE((
+									SELECT SUM(best.max_score) FROM (
+										SELECT MAX(${submissions.score}) as max_score
+										FROM ${submissions}
+										WHERE ${submissions.userId} = ${users.id}
+										GROUP BY ${submissions.quizId}
+									) best
+								), 0) DESC, ${users.id}) as rank
 							FROM ${users}
-							LEFT JOIN ${submissions} ON ${users.id} = ${submissions.userId}
-							GROUP BY ${users.id}
 						) ranked
 						WHERE user_id = ${userId}
 					`),
@@ -153,15 +161,17 @@ export const fetchLeaderboard = (
 							fullname: users.name,
 							image: users.image,
 							gender: users.gender,
-							totalScore:
-								sql<number>`COALESCE(SUM(${submissions.score}), 0)`.as(
-									"total_score",
-								),
+							totalScore: sql<number>`COALESCE((
+								SELECT SUM(best.max_score) FROM (
+									SELECT MAX(${submissions.score}) as max_score
+									FROM ${submissions}
+									WHERE ${submissions.userId} = ${users.id}
+									GROUP BY ${submissions.quizId}
+								) best
+							), 0)`.as("total_score"),
 						})
 						.from(users)
-						.leftJoin(submissions, eq(users.id, submissions.userId))
-						.where(eq(users.id, userId))
-						.groupBy(users.id, users.name, users.image, users.gender),
+						.where(eq(users.id, userId)),
 				catch: (error) =>
 					new DatabaseError({
 						cause: error,
@@ -273,14 +283,17 @@ export const fetchUserProfile = (userId: string) =>
 
 		const user = userResult[0];
 
-		let totalScore = 0;
+		const bestScoreByQuiz = new Map<number, number>();
 		const uniqueQuizIds = new Set<number>();
 		const completedByChapter = new Map<number, Set<number>>();
 		const uniqueDates = new Set<string>();
 
 		for (const sub of rawSubmissions) {
-			totalScore += sub.score ?? 0;
-			if (sub.quizId != null) uniqueQuizIds.add(sub.quizId);
+			if (sub.quizId != null) {
+				const current = bestScoreByQuiz.get(sub.quizId) ?? 0;
+				bestScoreByQuiz.set(sub.quizId, Math.max(current, sub.score ?? 0));
+				uniqueQuizIds.add(sub.quizId);
+			}
 			if (sub.chapterId != null && sub.quizId != null) {
 				const set = completedByChapter.get(sub.chapterId) ?? new Set();
 				set.add(sub.quizId);
@@ -290,6 +303,11 @@ export const fetchUserProfile = (userId: string) =>
 				uniqueDates.add(sub.createdAt.toISOString().split("T")[0]);
 			}
 		}
+
+		const totalScore = [...bestScoreByQuiz.values()].reduce(
+			(sum, s) => sum + s,
+			0,
+		);
 
 		let chaptersCompleted = 0;
 		for (const chapter of allChaptersData) {
@@ -442,15 +460,17 @@ export const updateUserProfile = (
 				})
 			: null;
 
-		// Derive stats from submissions
-		let totalScore = 0;
+		const bestScoreByQuiz = new Map<number, number>();
 		const uniqueQuizIds = new Set<number>();
 		const completedByChapter = new Map<number, Set<number>>();
 		const uniqueDates = new Set<string>();
 
 		for (const sub of rawSubmissions) {
-			totalScore += sub.score ?? 0;
-			if (sub.quizId != null) uniqueQuizIds.add(sub.quizId);
+			if (sub.quizId != null) {
+				const current = bestScoreByQuiz.get(sub.quizId) ?? 0;
+				bestScoreByQuiz.set(sub.quizId, Math.max(current, sub.score ?? 0));
+				uniqueQuizIds.add(sub.quizId);
+			}
 			if (sub.chapterId != null && sub.quizId != null) {
 				const set = completedByChapter.get(sub.chapterId) ?? new Set();
 				set.add(sub.quizId);
@@ -460,6 +480,11 @@ export const updateUserProfile = (
 				uniqueDates.add(sub.createdAt.toISOString().split("T")[0]);
 			}
 		}
+
+		const totalScore = [...bestScoreByQuiz.values()].reduce(
+			(sum, s) => sum + s,
+			0,
+		);
 
 		let chaptersCompleted = 0;
 		for (const chapter of allChaptersData) {
@@ -649,8 +674,15 @@ export const fetchUserDetail = (userId: string) =>
 				}),
 		});
 
-		const totalScore = userSubmissions.reduce(
-			(sum, s) => sum + (s.score ?? 0),
+		const bestScoreByQuiz = new Map<number, number>();
+		for (const sub of userSubmissions) {
+			if (sub.quizId != null) {
+				const current = bestScoreByQuiz.get(sub.quizId) ?? 0;
+				bestScoreByQuiz.set(sub.quizId, Math.max(current, sub.score ?? 0));
+			}
+		}
+		const totalScore = [...bestScoreByQuiz.values()].reduce(
+			(sum, s) => sum + s,
 			0,
 		);
 		const levelsCompleted = new Set(userSubmissions.map((s) => s.quizId)).size;
