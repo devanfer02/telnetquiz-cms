@@ -67,7 +67,7 @@ export default function ChapterList({ chapters }: ChapterListProps) {
 			size: 200,
 			cell: ({ row }) => (
 				<div
-					className="max-h-20 overflow-y-auto prose prose-sm"
+					className="max-h-20 max-w-xs overflow-auto prose prose-sm"
 					dangerouslySetInnerHTML={{
 						__html: sanitizeHtml(row.original.description),
 					}}

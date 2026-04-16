@@ -45,10 +45,10 @@ export default function ChapterHeader({ chapter }: ChapterHeaderProps) {
 						</Link>
 					</Button>
 				</div>
-				<div className="mt-6 pt-6 border-t border-gray-200">
+				<div className="mt-6 pt-6 border-t border-gray-200 overflow-hidden">
 					<div className="prose max-w-none">
 						<div
-							className="text-gray-700"
+							className="text-gray-700 break-words [&_*]:max-w-full [&_*]:break-words"
 							dangerouslySetInnerHTML={{
 								__html: sanitizeHtml(chapter.description),
 							}}
