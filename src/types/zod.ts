@@ -1,4 +1,5 @@
 import z from "zod";
+import { stripHtml } from "@/lib/sanitize";
 
 const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES = [
@@ -27,7 +28,10 @@ export const idStringSchema = z.object({
 
 export const chapterSchema = z.object({
 	title: z.string().min(3, "Judul minimal 3 karakter"),
-	description: z.string().min(10, "Deskripsi minimal 10 karakter"),
+	description: z
+		.string()
+		.transform(stripHtml)
+		.pipe(z.string().min(10, "Deskripsi minimal 10 karakter")),
 	mascotId: z.number().min(1, "Pilih mascot"),
 	minimumScore: z.number().min(1, "KKM minimal 1").max(100, "KKM maksimal 100"),
 });

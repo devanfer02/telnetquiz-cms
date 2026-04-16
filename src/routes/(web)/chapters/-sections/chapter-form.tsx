@@ -1,9 +1,9 @@
 import { useStore } from "@tanstack/react-form";
-import { RichTextarea } from "@/components/global/quill-textarea";
 import SubmitButton from "@/components/global/submit-button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import type { useCustomForm } from "@/hooks/use-custom-form";
 import { validateField } from "@/lib/utils";
 import { type ChapterFormData, chapterSchema } from "@/types/zod";
@@ -64,9 +64,12 @@ export default function ChapterForm({ form, buttonText }: ChapterFormProps) {
 							<div className="space-y-2">
 								<Label htmlFor={field.name}>Deskripsi</Label>
 
-								<RichTextarea
+								<Textarea
+									id={field.name}
+									rows={4}
 									value={field.state.value}
-									onChange={(val) => field.handleChange(val)}
+									onBlur={field.handleBlur}
+									onChange={(e) => field.handleChange(e.target.value)}
 								/>
 
 								{field.state.meta.errors && (
