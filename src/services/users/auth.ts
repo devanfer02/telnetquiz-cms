@@ -6,6 +6,7 @@ import { Db } from "@/lib/db";
 import { dbTryPromise } from "@/lib/retry";
 import type { LoginUserFormData, RegisterUserFormData } from "@/types/zod.api";
 import { AuthError, DatabaseError } from "../errors/errors";
+import { createRefreshToken } from "./refresh-tokens";
 
 export const registerUser = (userForm: RegisterUserFormData) =>
 	Effect.gen(function* () {
@@ -45,20 +46,34 @@ export const registerUser = (userForm: RegisterUserFormData) =>
 			});
 		}
 
-		return result;
+		const refreshToken = yield* createRefreshToken(
+			result.user.id,
+			result.token,
+		);
+
+		return { ...result, refreshToken };
 	});
 
 export const loginUser = (userForm: LoginUserFormData) =>
-	Effect.tryPromise({
-		try: () =>
-			auth.api.signInEmail({
-				body: {
-					email: userForm.email,
-					password: userForm.password,
-				},
-			}),
-		catch: (err) =>
-			new AuthError({
-				message: (err as Error).message,
-			}),
+	Effect.gen(function* () {
+		const result = yield* Effect.tryPromise({
+			try: () =>
+				auth.api.signInEmail({
+					body: {
+						email: userForm.email,
+						password: userForm.password,
+					},
+				}),
+			catch: (err) =>
+				new AuthError({
+					message: (err as Error).message,
+				}),
+		});
+
+		const refreshToken = yield* createRefreshToken(
+			result.user.id,
+			result.token,
+		);
+
+		return { ...result, refreshToken };
 	});

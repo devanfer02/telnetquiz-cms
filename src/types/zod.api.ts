@@ -77,3 +77,9 @@ export const bulkMaterialsSchema = z.object({
 });
 
 export type BulkMaterialsData = z.infer<typeof bulkMaterialsSchema>;
+
+export const refreshTokenSchema = z.object({
+	refreshToken: z.string().min(1),
+});
+
+export type RefreshTokenFormData = z.infer<typeof refreshTokenSchema>;

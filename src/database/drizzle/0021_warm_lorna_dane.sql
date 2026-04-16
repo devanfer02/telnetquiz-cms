@@ -1,0 +1,14 @@
+CREATE TABLE "refresh_tokens" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"token_hash" text NOT NULL,
+	"user_id" text NOT NULL,
+	"session_token" text NOT NULL,
+	"expires_at" timestamp NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
+	CONSTRAINT "refresh_tokens_token_hash_unique" UNIQUE("token_hash")
+);
+--> statement-breakpoint
+ALTER TABLE "refresh_tokens" ADD CONSTRAINT "refresh_tokens_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+CREATE INDEX "refresh_tokens_userId_idx" ON "refresh_tokens" USING btree ("user_id");--> statement-breakpoint
+CREATE INDEX "refresh_tokens_tokenHash_idx" ON "refresh_tokens" USING btree ("token_hash");

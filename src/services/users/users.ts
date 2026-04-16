@@ -17,6 +17,10 @@ import { dbTryPromise } from "@/lib/retry";
 import type { EditUserFormData } from "@/types/zod";
 import type { UpdateProfileFormData } from "@/types/zod.api";
 import { AuthError, DatabaseError, NotFoundError } from "../errors/errors";
+import {
+	deleteRefreshTokensBySession,
+	deleteRefreshTokensByUser,
+} from "./refresh-tokens";
 
 export const patchUser = (id: string, user: EditUserFormData) =>
 	Effect.gen(function* () {
@@ -578,12 +582,16 @@ export const revokeSession = (sessionId: string) =>
 			);
 		}
 
+		yield* deleteRefreshTokensBySession(result[0].token);
+
 		return { success: true, id: sessionId };
 	});
 
 export const revokeAllUserSessions = (userId: string) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
+
+		yield* deleteRefreshTokensByUser(userId);
 
 		yield* dbTryPromise({
 			try: () => db.delete(sessions).where(eq(sessions.userId, userId)),

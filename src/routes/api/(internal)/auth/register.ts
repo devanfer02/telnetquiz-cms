@@ -28,6 +28,7 @@ export const Route = createFileRoute("/api/(internal)/auth/register")({
 								{
 									message: "Successfully register user",
 									token: result.token,
+									refreshToken: result.refreshToken,
 								},
 								HttpStatus.CREATED,
 							);

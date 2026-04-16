@@ -89,6 +89,24 @@ export const accounts = pgTable(
 	(table) => [index("accounts_userId_idx").on(table.userId)],
 );
 
+export const refreshTokens = pgTable(
+	"refresh_tokens",
+	{
+		id: serial().primaryKey(),
+		tokenHash: text("token_hash").notNull().unique(),
+		userId: text("user_id")
+			.notNull()
+			.references(() => users.id, { onDelete: "cascade" }),
+		sessionToken: text("session_token").notNull(),
+		expiresAt: timestamp("expires_at").notNull(),
+		...timestamps,
+	},
+	(table) => [
+		index("refresh_tokens_userId_idx").on(table.userId),
+		index("refresh_tokens_tokenHash_idx").on(table.tokenHash),
+	],
+);
+
 export const verifications = pgTable(
 	"verifications",
 	{
@@ -363,4 +381,11 @@ export const accountRelations = relations(accounts, ({ one }) => ({
 
 export const studyMaterialRelations = relations(studyMaterials, ({ many }) => ({
 	questions: many(questions),
+}));
+
+export const refreshTokenRelations = relations(refreshTokens, ({ one }) => ({
+	user: one(users, {
+		fields: [refreshTokens.userId],
+		references: [users.id],
+	}),
 }));

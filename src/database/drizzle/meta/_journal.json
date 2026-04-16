@@ -148,6 +148,13 @@
 			"when": 1776016817938,
 			"tag": "0020_high_scarecrow",
 			"breakpoints": true
+		},
+		{
+			"idx": 21,
+			"version": "7",
+			"when": 1776326524076,
+			"tag": "0021_warm_lorna_dane",
+			"breakpoints": true
 		}
 	]
 }

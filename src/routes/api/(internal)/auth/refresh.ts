@@ -3,15 +3,11 @@ import { Effect } from "effect";
 import { DbLayer } from "@/lib/db";
 import { HttpStatus, parseBody, response } from "@/lib/http";
 import { authRateLimiter } from "@/middlewares/rate-limit";
-import type {
-	AuthError,
-	DatabaseError,
-	ValidationError,
-} from "@/services/errors/errors";
-import { loginUser } from "@/services/users/auth";
-import { loginUserSchema } from "@/types/zod.api";
+import type { AuthError, ValidationError } from "@/services/errors/errors";
+import { rotateRefreshToken } from "@/services/users/refresh-tokens";
+import { refreshTokenSchema } from "@/types/zod.api";
 
-export const Route = createFileRoute("/api/(internal)/auth/login")({
+export const Route = createFileRoute("/api/(internal)/auth/refresh")({
 	server: {
 		handlers: {
 			POST: {
@@ -20,13 +16,13 @@ export const Route = createFileRoute("/api/(internal)/auth/login")({
 					Effect.runPromise(
 						Effect.gen(function* () {
 							const body = yield* Effect.tryPromise(() => request.json());
-							const data = yield* parseBody(loginUserSchema, body);
-							const result = yield* loginUser(data);
+							const data = yield* parseBody(refreshTokenSchema, body);
+							const result = yield* rotateRefreshToken(data.refreshToken);
 
 							return response(
 								{
-									message: "Successfully login user",
-									token: result.token,
+									message: "Token refreshed successfully",
+									token: result.sessionToken,
 									refreshToken: result.refreshToken,
 								},
 								HttpStatus.OK,
@@ -38,7 +34,7 @@ export const Route = createFileRoute("/api/(internal)/auth/login")({
 									Effect.succeed(
 										response(
 											{
-												message: "Request body validation failed",
+												message: "Validation failed",
 												errors: err.errors,
 											},
 											HttpStatus.BAD_REQUEST,
@@ -48,23 +44,22 @@ export const Route = createFileRoute("/api/(internal)/auth/login")({
 									Effect.succeed(
 										response(
 											{
-												message: "Failed to login user",
-												errors: err.message,
+												message: err.message,
 											},
-											HttpStatus.BAD_REQUEST,
+											HttpStatus.UNAUTHORIZED,
 										),
 									),
 							}),
-							Effect.catchAll((err) => {
-								return Effect.succeed(
+							Effect.catchAll(() =>
+								Effect.succeed(
 									response(
 										{
 											message: "Internal server error",
 										},
 										HttpStatus.INTERNAL_SERVER_ERROR,
 									),
-								);
-							}),
+								),
+							),
 						),
 					),
 			},
