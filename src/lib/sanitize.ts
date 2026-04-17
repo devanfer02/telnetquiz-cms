@@ -1,9 +1,5 @@
 import DOMPurify from "isomorphic-dompurify";
 
-export function stripHtml(html: string): string {
-	return DOMPurify.sanitize(html, { ALLOWED_TAGS: [] }).trim();
-}
-
 export function sanitizeHtml(dirty: string): string {
 	return DOMPurify.sanitize(dirty, {
 		ALLOWED_TAGS: [
