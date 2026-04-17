@@ -55,6 +55,7 @@ import { Route as ApiinternalMaterialsBulkGetRouteImport } from './routes/api/(i
 import { Route as ApiinternalMaterialsIdRouteImport } from './routes/api/(internal)/materials/$id'
 import { Route as ApiinternalChaptersIdRouteImport } from './routes/api/(internal)/chapters/$id'
 import { Route as ApiinternalAuthRegisterRouteImport } from './routes/api/(internal)/auth/register'
+import { Route as ApiinternalAuthRefreshRouteImport } from './routes/api/(internal)/auth/refresh'
 import { Route as ApiinternalAuthLoginRouteImport } from './routes/api/(internal)/auth/login'
 import { Route as ApiinternalActivityRecentRouteImport } from './routes/api/(internal)/activity/recent'
 import { Route as webStudyMaterialsEditIdRouteImport } from './routes/(web)/study-materials/edit.$id'
@@ -300,6 +301,11 @@ const ApiinternalAuthRegisterRoute = ApiinternalAuthRegisterRouteImport.update({
   path: '/auth/register',
   getParentRoute: () => ApiinternalRouteRoute,
 } as any)
+const ApiinternalAuthRefreshRoute = ApiinternalAuthRefreshRouteImport.update({
+  id: '/auth/refresh',
+  path: '/auth/refresh',
+  getParentRoute: () => ApiinternalRouteRoute,
+} as any)
 const ApiinternalAuthLoginRoute = ApiinternalAuthLoginRouteImport.update({
   id: '/auth/login',
   path: '/auth/login',
@@ -401,6 +407,7 @@ export interface FileRoutesByFullPath {
   '/study-materials/edit/$id': typeof webStudyMaterialsEditIdRoute
   '/api/activity/recent': typeof ApiinternalActivityRecentRoute
   '/api/auth/login': typeof ApiinternalAuthLoginRoute
+  '/api/auth/refresh': typeof ApiinternalAuthRefreshRoute
   '/api/auth/register': typeof ApiinternalAuthRegisterRoute
   '/api/chapters/$id': typeof ApiinternalChaptersIdRoute
   '/api/materials/$id': typeof ApiinternalMaterialsIdRoute
@@ -459,6 +466,7 @@ export interface FileRoutesByTo {
   '/study-materials/edit/$id': typeof webStudyMaterialsEditIdRoute
   '/api/activity/recent': typeof ApiinternalActivityRecentRoute
   '/api/auth/login': typeof ApiinternalAuthLoginRoute
+  '/api/auth/refresh': typeof ApiinternalAuthRefreshRoute
   '/api/auth/register': typeof ApiinternalAuthRegisterRoute
   '/api/chapters/$id': typeof ApiinternalChaptersIdRoute
   '/api/materials/$id': typeof ApiinternalMaterialsIdRoute
@@ -519,6 +527,7 @@ export interface FileRoutesById {
   '/(web)/study-materials/edit/$id': typeof webStudyMaterialsEditIdRoute
   '/api/(internal)/activity/recent': typeof ApiinternalActivityRecentRoute
   '/api/(internal)/auth/login': typeof ApiinternalAuthLoginRoute
+  '/api/(internal)/auth/refresh': typeof ApiinternalAuthRefreshRoute
   '/api/(internal)/auth/register': typeof ApiinternalAuthRegisterRoute
   '/api/(internal)/chapters/$id': typeof ApiinternalChaptersIdRoute
   '/api/(internal)/materials/$id': typeof ApiinternalMaterialsIdRoute
@@ -579,6 +588,7 @@ export interface FileRouteTypes {
     | '/study-materials/edit/$id'
     | '/api/activity/recent'
     | '/api/auth/login'
+    | '/api/auth/refresh'
     | '/api/auth/register'
     | '/api/chapters/$id'
     | '/api/materials/$id'
@@ -637,6 +647,7 @@ export interface FileRouteTypes {
     | '/study-materials/edit/$id'
     | '/api/activity/recent'
     | '/api/auth/login'
+    | '/api/auth/refresh'
     | '/api/auth/register'
     | '/api/chapters/$id'
     | '/api/materials/$id'
@@ -696,6 +707,7 @@ export interface FileRouteTypes {
     | '/(web)/study-materials/edit/$id'
     | '/api/(internal)/activity/recent'
     | '/api/(internal)/auth/login'
+    | '/api/(internal)/auth/refresh'
     | '/api/(internal)/auth/register'
     | '/api/(internal)/chapters/$id'
     | '/api/(internal)/materials/$id'
@@ -1046,6 +1058,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiinternalAuthRegisterRouteImport
       parentRoute: typeof ApiinternalRouteRoute
     }
+    '/api/(internal)/auth/refresh': {
+      id: '/api/(internal)/auth/refresh'
+      path: '/auth/refresh'
+      fullPath: '/api/auth/refresh'
+      preLoaderRoute: typeof ApiinternalAuthRefreshRouteImport
+      parentRoute: typeof ApiinternalRouteRoute
+    }
     '/api/(internal)/auth/login': {
       id: '/api/(internal)/auth/login'
       path: '/auth/login'
@@ -1215,6 +1234,7 @@ interface ApiinternalRouteRouteChildren {
   ApiinternalSessionsRoute: typeof ApiinternalSessionsRoute
   ApiinternalActivityRecentRoute: typeof ApiinternalActivityRecentRoute
   ApiinternalAuthLoginRoute: typeof ApiinternalAuthLoginRoute
+  ApiinternalAuthRefreshRoute: typeof ApiinternalAuthRefreshRoute
   ApiinternalAuthRegisterRoute: typeof ApiinternalAuthRegisterRoute
   ApiinternalChaptersIdRoute: typeof ApiinternalChaptersIdRoute
   ApiinternalMaterialsIdRoute: typeof ApiinternalMaterialsIdRoute
@@ -1237,6 +1257,7 @@ const ApiinternalRouteRouteChildren: ApiinternalRouteRouteChildren = {
   ApiinternalSessionsRoute: ApiinternalSessionsRoute,
   ApiinternalActivityRecentRoute: ApiinternalActivityRecentRoute,
   ApiinternalAuthLoginRoute: ApiinternalAuthLoginRoute,
+  ApiinternalAuthRefreshRoute: ApiinternalAuthRefreshRoute,
   ApiinternalAuthRegisterRoute: ApiinternalAuthRegisterRoute,
   ApiinternalChaptersIdRoute: ApiinternalChaptersIdRoute,
   ApiinternalMaterialsIdRoute: ApiinternalMaterialsIdRoute,
