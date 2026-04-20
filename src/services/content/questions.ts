@@ -73,6 +73,7 @@ export const fetchQuestionsByType = (type: "pretest" | "quiz") =>
 									chapter: true,
 								},
 							},
+							chapter: true,
 						},
 					}),
 				catch: (err) =>
@@ -114,7 +115,7 @@ export const fetchQuestionsByType = (type: "pretest" | "quiz") =>
 		return questionRows.map((q) => ({
 			...q,
 			chapterId: q.quiz?.chapterId ?? q.chapterId,
-			chapterTitle: q.quiz?.chapter?.title ?? null,
+			chapterTitle: q.quiz?.chapter?.title ?? q.chapter?.title ?? null,
 			options: optionsByQuestionId.get(q.id) ?? [],
 		}));
 	});
