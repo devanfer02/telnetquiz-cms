@@ -1,4 +1,7 @@
-import { createFileRoute, useSearch } from "@tanstack/react-router";
+import { createFileRoute, redirect, useSearch } from "@tanstack/react-router";
+import { createServerFn } from "@tanstack/react-start";
+import { getRequestHeaders } from "@tanstack/react-start/server";
+import { eq } from "drizzle-orm";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { z } from "zod";
@@ -11,8 +14,37 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { accounts } from "@/database/schema";
 import { authClient } from "@/lib/auth/client";
+import { auth } from "@/lib/auth/server";
+import { db } from "@/lib/db";
+
+const checkAuth = createServerFn({ method: "GET" }).handler(async () => {
+	const headers = getRequestHeaders();
+	const session = await auth.api.getSession({ headers });
+
+	if (!session) return { authenticated: false } as const;
+
+	const [account] = await db
+		.select({ providerId: accounts.providerId })
+		.from(accounts)
+		.where(eq(accounts.userId, session.user.id))
+		.limit(1);
+
+	if (!account || account.providerId !== "google") {
+		return { authenticated: false } as const;
+	}
+
+	return { authenticated: true } as const;
+});
+
 export const Route = createFileRoute("/auth/sign-in")({
+	beforeLoad: async () => {
+		const result = await checkAuth();
+		if (result.authenticated) {
+			throw redirect({ to: "/dashboard" });
+		}
+	},
 	component: SignInComponent,
 	validateSearch: z.object({
 		error: z.string().optional(),
