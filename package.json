@@ -17,6 +17,8 @@
     "db:seed-content": "bun cli/content/seed.ts",
     "db:seed-achievements": "bun cli/content/seed-achievements.ts",
     "db:purge": "bun cli/db/purge.ts",
+    "db:backup": "bun cli/db/backup.ts",
+    "db:restore": "bun cli/db/restore.ts",
     "db:rls": "bun cli/db/rls.ts",
     "tts:batch": "bun cli/tts/batch.ts",
     "tts:purge": "bun cli/tts/purge.ts",

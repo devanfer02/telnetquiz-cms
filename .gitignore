@@ -16,3 +16,4 @@ logs/
 .env.prod
 upload-manifest.json
 cli/content/data/prod
+backups/
