@@ -841,3 +841,28 @@ export const resetUserProgress = (userId: string) =>
 
 		return { success: true, userId };
 	});
+
+export const resetAllUsersProgress = () =>
+	Effect.gen(function* () {
+		const { db } = yield* Db;
+
+		yield* dbTryPromise({
+			try: () => db.delete(submissions),
+			catch: (error) =>
+				new DatabaseError({
+					cause: error,
+					message: "Failed to delete submissions for all users",
+				}),
+		});
+
+		yield* dbTryPromise({
+			try: () => db.delete(userAchievements),
+			catch: (error) =>
+				new DatabaseError({
+					cause: error,
+					message: "Failed to delete achievements for all users",
+				}),
+		});
+
+		return { success: true };
+	});

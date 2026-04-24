@@ -8,6 +8,7 @@ import {
 	fetchUserDetail,
 	fetchUserSessions,
 	patchUser,
+	resetAllUsersProgress,
 	resetUserProgress,
 	revokeAllUserSessions,
 	revokeSession,
@@ -149,3 +150,18 @@ export const resetUserProgressAction = createServerFn({
 			),
 		);
 	});
+
+export const resetAllUsersProgressAction = createServerFn({
+	method: "POST",
+}).handler(async () => {
+	return Effect.runPromise(
+		resetAllUsersProgress().pipe(
+			Effect.provide(DbLayer),
+			Effect.catchAll((err) => {
+				console.error("Failed to reset all users progress. ERR:", err);
+
+				return Effect.succeed(null);
+			}),
+		),
+	);
+});

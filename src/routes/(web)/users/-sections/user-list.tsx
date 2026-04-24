@@ -1,3 +1,4 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import {
 	type ColumnDef,
@@ -8,10 +9,26 @@ import {
 	type SortingState,
 	useReactTable,
 } from "@tanstack/react-table";
+import { RotateCcw } from "lucide-react";
 import { useState } from "react";
+import { resetAllUsersProgressAction } from "@/actions/users";
 import { SortableHeader } from "@/components/global/sortable-header";
 import TanstackTable from "@/components/global/ts-table";
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { QUERY_KEYS } from "@/lib/constant";
+import { setFlashState } from "@/store/use-flash";
 import UserActions from "./user-actions";
 
 function formatDate(value: unknown): string {
@@ -85,6 +102,8 @@ interface UserListProps {
 export default function UserList({ users }: UserListProps) {
 	const [keyword, setKeyword] = useState("");
 	const [sorting, setSorting] = useState<SortingState>([]);
+	const [isResetting, setIsResetting] = useState(false);
+	const queryClient = useQueryClient();
 
 	const table = useReactTable({
 		data: users,
@@ -99,6 +118,25 @@ export default function UserList({ users }: UserListProps) {
 		getFilteredRowModel: getFilteredRowModel(),
 	});
 
+	const handleResetAll = async () => {
+		setIsResetting(true);
+		const result = await resetAllUsersProgressAction();
+		setIsResetting(false);
+
+		if (result) {
+			setFlashState({
+				type: "success",
+				message: "Progress semua user berhasil direset (pretest tetap).",
+			});
+			await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.USERS] });
+		} else {
+			setFlashState({
+				type: "error",
+				message: "Gagal mereset progress semua user.",
+			});
+		}
+	};
+
 	return (
 		<>
 			<div className="flex items-center justify-between mb-4 gap-x-5">
@@ -108,6 +146,42 @@ export default function UserList({ users }: UserListProps) {
 					onChange={(e) => setKeyword(e.target.value)}
 					className="w-full"
 				/>
+				<AlertDialog>
+					<AlertDialogTrigger asChild>
+						<Button
+							type="button"
+							disabled={isResetting}
+							className="bg-amber-600 hover:bg-amber-700 text-white cursor-pointer whitespace-nowrap"
+						>
+							<RotateCcw size={18} />
+							Reset All Progress
+						</Button>
+					</AlertDialogTrigger>
+					<AlertDialogContent>
+						<AlertDialogHeader>
+							<AlertDialogTitle>Reset Progress Semua User?</AlertDialogTitle>
+							<AlertDialogDescription>
+								Tindakan ini akan menghapus{" "}
+								<span className="font-semibold">seluruh quiz submissions</span>{" "}
+								dan achievements milik{" "}
+								<span className="font-semibold">semua user</span>. Hasil pretest{" "}
+								<span className="font-semibold">tidak akan</span> dihapus.
+								Tindakan ini tidak dapat dibatalkan.
+							</AlertDialogDescription>
+						</AlertDialogHeader>
+						<AlertDialogFooter>
+							<AlertDialogCancel className="cursor-pointer">
+								Cancel
+							</AlertDialogCancel>
+							<AlertDialogAction
+								onClick={handleResetAll}
+								className="bg-amber-600 text-white hover:bg-amber-700 cursor-pointer"
+							>
+								Reset All
+							</AlertDialogAction>
+						</AlertDialogFooter>
+					</AlertDialogContent>
+				</AlertDialog>
 			</div>
 			<TanstackTable
 				table={table}
