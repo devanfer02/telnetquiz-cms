@@ -42,14 +42,20 @@ export const getQuestionById = createServerFn({
 		);
 	});
 
+const parseIntOrNull = (value: FormDataEntryValue | null): number | null => {
+	if (value === null) return null;
+	const n = Number(value);
+	return Number.isFinite(n) && n > 0 ? n : null;
+};
+
 export const addQuestions = createServerFn({
 	method: "POST",
 })
 	.inputValidator(z.instanceof(FormData))
 	.handler(async ({ data }) => {
 		const type = data.get("type") as "pretest" | "quiz";
-		const quizId = Number(data.get("quizId"));
-		const materialId = Number(data.get("materialId"));
+		const quizId = parseIntOrNull(data.get("quizId"));
+		const materialId = parseIntOrNull(data.get("materialId"));
 		const questionsRaw = JSON.parse(data.get("questions") as string);
 
 		const questions = questionsRaw.map(
@@ -88,8 +94,8 @@ export const updateQuestion = createServerFn({
 	.handler(async ({ data }) => {
 		const id = Number(data.get("id"));
 		const type = data.get("type") as "pretest" | "quiz";
-		const quizId = Number(data.get("quizId"));
-		const materialId = Number(data.get("materialId"));
+		const quizId = parseIntOrNull(data.get("quizId"));
+		const materialId = parseIntOrNull(data.get("materialId"));
 		const description = data.get("description") as string;
 		const question = data.get("question") as string;
 		const optionsRaw = JSON.parse(data.get("options") as string);

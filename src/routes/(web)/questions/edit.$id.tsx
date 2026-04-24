@@ -32,10 +32,13 @@ export default function RouteComponent() {
 
 	const form = useCustomForm({
 		defaultValues: {
+			type: question.type ?? "quiz",
 			quizId: question.quizId,
+			chapterId: question.chapterId,
 			materialId: question.materialId,
 			questions: [
 				{
+					type: question.type ?? "quiz",
 					question: question.question,
 					description: question.description,
 					image: question.imageLink,
@@ -45,6 +48,7 @@ export default function RouteComponent() {
 						questionId: opt.questionId?.toString(),
 					})),
 					quizId: question.quizId,
+					chapterId: question.chapterId,
 					materialId: question.materialId,
 				},
 			],
@@ -54,8 +58,10 @@ export default function RouteComponent() {
 			const formData = new FormData();
 
 			formData.append("id", String(question.id));
-			formData.append("quizId", String(updatedQ.quizId));
-			formData.append("materialId", String(updatedQ.materialId));
+			formData.append("type", value.type);
+			if (updatedQ.quizId) formData.append("quizId", String(updatedQ.quizId));
+			if (updatedQ.materialId)
+				formData.append("materialId", String(updatedQ.materialId));
 			formData.append("description", updatedQ.description);
 			formData.append("question", updatedQ.question);
 			formData.append("options", JSON.stringify(updatedQ.options));
@@ -80,7 +86,7 @@ export default function RouteComponent() {
 			});
 
 			await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.QUESTIONS] });
-			navigate({ to: "/questions" });
+			navigate({ to: "/questions", hash: value.type });
 		},
 	});
 

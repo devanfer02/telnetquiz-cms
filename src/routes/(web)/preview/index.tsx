@@ -21,7 +21,11 @@ import {
 	AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useHashTab } from "@/hooks/use-hash-tab";
 import { QUERY_KEYS } from "@/lib/constant";
+
+const PREVIEW_TAB_VALUES = ["pretest", "quiz", "materials"] as const;
+type PreviewTab = (typeof PREVIEW_TAB_VALUES)[number];
 
 export const Route = createFileRoute("/(web)/preview/")({
 	loader: async ({ context }) => {
@@ -63,6 +67,12 @@ const difficultyLabel: Record<string, { text: string; className: string }> = {
 };
 
 function RouteComponent() {
+	const [activeTab, setActiveTab] = useHashTab<PreviewTab>(
+		0,
+		PREVIEW_TAB_VALUES,
+		"quiz",
+	);
+
 	const { data: quizzes } = useSuspenseQuery({
 		queryKey: [QUERY_KEYS.QUIZZES],
 		queryFn: () => getAllQuizzes(),
@@ -193,7 +203,11 @@ function RouteComponent() {
 					<p className="text-sm">Belum ada konten untuk di-preview.</p>
 				</div>
 			) : (
-				<Tabs defaultValue="quiz" className="space-y-6">
+				<Tabs
+					value={activeTab}
+					onValueChange={(val) => setActiveTab(val as PreviewTab)}
+					className="space-y-6"
+				>
 					<TabsList>
 						<TabsTrigger value="pretest">
 							<FileQuestion className="w-4 h-4 mr-1.5" />

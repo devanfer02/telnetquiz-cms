@@ -25,11 +25,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useHashTab } from "@/hooks/use-hash-tab";
 import { QUERY_KEYS } from "@/lib/constant";
 import { sanitizeHtml } from "@/lib/sanitize";
 import { filterColumns } from "@/lib/utils";
 import { setFlashState } from "@/store/use-flash";
 import PretestPreviewSheet from "./pretest-preview-sheet";
+
+const TAB_VALUES = ["quiz", "pretest"] as const;
 
 interface QuestionListProps {
 	questions: Question[];
@@ -43,7 +46,11 @@ export default function QuestionList({
 	const queryClient = useQueryClient();
 	const [keyword, setKeyword] = useState("");
 	const [sorting, setSorting] = useState<SortingState>([]);
-	const [activeTab, setActiveTab] = useState<"quiz" | "pretest">("quiz");
+	const [activeTab, setActiveTab] = useHashTab<"quiz" | "pretest">(
+		0,
+		TAB_VALUES,
+		"quiz",
+	);
 
 	const filteredData = useMemo(() => {
 		return questions.filter((q) => {
