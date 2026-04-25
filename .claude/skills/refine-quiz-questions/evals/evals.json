@@ -1,0 +1,55 @@
+{
+  "skill_name": "refine-quiz-questions",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "tolong refine soal-soal kuis di cli/content/data/prod, fokus aja ke chapter 1 dulu. Mau cek alur deskripsi -> pertanyaan -> opsi udah nyambung belum, dan sinkron sama gambarnya. Pretest jangan disentuh ya. Ohiya sekalian cek juga apakah deskripsi-deskripsinya udah bikin siswa SMK ngerasa lagi journey kayak penjelajah, bukan ngerjain LKS biasa.",
+      "expected_output": "Skill executes phase 1 (plan) — reads chapter-1-tcp-ip.json and image-assignments.json, prints scope summary listing audit dimensions including Voice & Journey, and asks user to confirm scope. Does NOT auto-edit. Does NOT touch pretest.json or studyMaterial.",
+      "files": [],
+      "expectations": [
+        "The agent reads chapter-1-tcp-ip.json from cli/content/data/prod/",
+        "The agent reads image-assignments.json from cli/content/data/prod/",
+        "The agent does NOT read pretest.json",
+        "The agent prints a phase-1 scope summary listing chapter, levels, total questions, and image count",
+        "The scope summary mentions Voice & Journey as one of the audit dimensions",
+        "The agent asks the user to confirm scope before proceeding to audit",
+        "The agent does NOT call Edit or Write on any chapter JSON in this turn",
+        "The agent does NOT modify any studyMaterial field"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "audit semua soal kuis chapter 2 (WLAN), bikin change map yang nunjukin before/after tiap perubahan, terus tunggu approval gw sebelum apply. Pengecoh yang terlalu jelas salah tolong direwrite biar jawaban benernya gak ketebak. Penting banget — gw mau hook deskripsinya bener-bener pull siswa masuk ke skenario, bikin mereka ngerasa 'oh my god kita lagi di tengah journey'. Hook yang flat tipe 'WLAN adalah ...' tolong di-rewrite jadi adegan nyata yang relatable buat anak SMK.",
+      "expected_output": "Skill executes phases 1-4: confirms scope on chapter 2, audits all questions including the Voice & Journey dimension (V1/V2/V3 rule codes), produces a change map with verbatim Before/After, and stops at approval gate. Distractor rewrites address obvious-wrongness. Flat hooks rewritten to relatable SMK scenarios. No edits applied without explicit approval.",
+      "files": [],
+      "expectations": [
+        "The agent reads chapter-2-wlan.json",
+        "The agent produces a change map with Before/After diffs in the format from change-map-format.md",
+        "The change map references options as 'Opsi A/B/C/D' for user readability",
+        "Each finding cites a specific rule code (M-, K-, B-, V-, PUEBI, KBBI, or SPOK)",
+        "At least one finding cites V1, V2, or V3 (Voice & Journey) explaining a flat hook or chore-y CTA",
+        "At least one distractor rewrite is proposed for an option that was 'obviously wrong'",
+        "Voice & Journey rewrites preserve baku Indonesian and don't introduce slang or emoji",
+        "The agent ends with the approval prompt and stops — no Edit calls fired",
+        "isCorrect flags are not changed; if a key issue is suspected it is flagged as KEY-CHECK",
+        "studyMaterial fields are untouched"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "perbaiki soal di chapter-1-tcp-ip.json level 1 question 3 — deskripsinya nyebut 'Gambar di atas menampilkan three-way handshake' tapi gw mau pastiin gambarnya emang itu, dan kalimat deskripsinya udah baku belum sesuai PUEBI/SPOK. Bonus: kalau hook-nya kerasa kering, polish biar siswa kerasa lagi ada di journey. Setelah lo kasih change map, gw bilang 'Setuju Q1L1Q3' dan lo apply.",
+      "expected_output": "Skill scopes to a single question, cross-checks image against image-assignments.json, audits the description against PUEBI/SPOK and Voice & Journey, produces a focused change map, and applies the edit only after explicit approval with 'Setuju Q1L1Q3'. The applied file remains valid JSON with original formatting.",
+      "files": [],
+      "expectations": [
+        "The agent cross-references image-assignments.json to confirm chapter 1 / level 1 / q3 image is ch1-three-way-handshake.png",
+        "The agent's change map covers only chapter 1 / level 1 / q3 (not other questions)",
+        "The change map includes at least one finding citing PUEBI, SPOK, or V1/V2 (Voice & Journey)",
+        "The agent stops at the approval gate before any Edit",
+        "After the user replies with 'Setuju Q1L1Q3', the agent applies the edit using exact-string Edit",
+        "The agent prints a post-apply summary listing the file touched and field changed",
+        "The original JSON formatting (indentation, key order) is preserved in the edited file",
+        "The post-edit file is valid JSON parseable by `python -m json.tool`"
+      ]
+    }
+  ]
+}
