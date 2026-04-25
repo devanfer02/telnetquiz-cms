@@ -32,11 +32,6 @@ export default function SchoolList({ schools }: SchoolListProps) {
 
 	const columns: ColumnDef<School>[] = [
 		{
-			accessorKey: "id",
-			header: ({ column }) => <SortableHeader column={column} title="ID" />,
-			size: 10,
-		},
-		{
 			accessorKey: "name",
 			header: ({ column }) => (
 				<SortableHeader column={column} title="Nama Sekolah" />

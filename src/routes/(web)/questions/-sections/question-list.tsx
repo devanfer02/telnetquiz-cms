@@ -69,20 +69,6 @@ export default function QuestionList({
 
 	const columns: ColumnDef<Question>[] = [
 		{
-			accessorKey: "id",
-			header: ({ column }) => <SortableHeader column={column} title="ID" />,
-			size: 10,
-			cell: ({ row }) => {
-				const id = row.original.id.toString();
-
-				return (
-					<p className="hover:bg-white duration-200 py-1 px-2 rounded-md text-telnet-primary hover:text-telnet-dark-brown font-semibold">
-						{id}
-					</p>
-				);
-			},
-		},
-		{
 			accessorKey: "quizId",
 			header: ({ column }) => (
 				<SortableHeader column={column} title="Quiz ID" />

@@ -32,11 +32,6 @@ export default function AchievementList({
 
 	const columns: ColumnDef<Achievement>[] = [
 		{
-			accessorKey: "id",
-			header: ({ column }) => <SortableHeader column={column} title="ID" />,
-			size: 10,
-		},
-		{
 			accessorKey: "slug",
 			header: ({ column }) => <SortableHeader column={column} title="Slug" />,
 			size: 30,

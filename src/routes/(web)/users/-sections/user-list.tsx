@@ -45,18 +45,6 @@ function formatDate(value: unknown): string {
 
 export const columns: ColumnDef<User>[] = [
 	{
-		accessorKey: "id",
-		header: ({ column }) => <SortableHeader column={column} title="ID" />,
-		cell: ({ row }) => {
-			const id = row.original.id.toString();
-			return (
-				<p className="max-w-[6rem] truncate" title={id}>
-					{id}
-				</p>
-			);
-		},
-	},
-	{
 		accessorKey: "name",
 		header: ({ column }) => <SortableHeader column={column} title="Fullname" />,
 		cell: ({ row }) => (
