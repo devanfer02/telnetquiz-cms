@@ -15,8 +15,9 @@ todos.json
 logs/
 .env.prod
 upload-manifest.json
-cli/content/data/prod
+
 backups/
+telnetquiz-key.json
 
 # Skill-creator test workspaces (sandbox copies, eval outputs, etc.)
 .claude/skills/*-workspace/
