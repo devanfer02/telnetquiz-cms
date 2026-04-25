@@ -22,6 +22,7 @@ import { Route as webSchoolsIndexRouteImport } from './routes/(web)/schools/inde
 import { Route as webQuizIndexRouteImport } from './routes/(web)/quiz/index'
 import { Route as webQuestionsIndexRouteImport } from './routes/(web)/questions/index'
 import { Route as webPreviewIndexRouteImport } from './routes/(web)/preview/index'
+import { Route as webExportIndexRouteImport } from './routes/(web)/export/index'
 import { Route as webChaptersIndexRouteImport } from './routes/(web)/chapters/index'
 import { Route as webAchievementsIndexRouteImport } from './routes/(web)/achievements/index'
 import { Route as ApipublicHealthRouteImport } from './routes/api/(public)/health'
@@ -130,6 +131,11 @@ const webQuestionsIndexRoute = webQuestionsIndexRouteImport.update({
 const webPreviewIndexRoute = webPreviewIndexRouteImport.update({
   id: '/preview/',
   path: '/preview/',
+  getParentRoute: () => webRouteRoute,
+} as any)
+const webExportIndexRoute = webExportIndexRouteImport.update({
+  id: '/export/',
+  path: '/export/',
   getParentRoute: () => webRouteRoute,
 } as any)
 const webChaptersIndexRoute = webChaptersIndexRouteImport.update({
@@ -390,6 +396,7 @@ export interface FileRoutesByFullPath {
   '/api/health': typeof ApipublicHealthRoute
   '/achievements': typeof webAchievementsIndexRoute
   '/chapters': typeof webChaptersIndexRoute
+  '/export': typeof webExportIndexRoute
   '/preview': typeof webPreviewIndexRoute
   '/questions': typeof webQuestionsIndexRoute
   '/quiz': typeof webQuizIndexRoute
@@ -449,6 +456,7 @@ export interface FileRoutesByTo {
   '/api/health': typeof ApipublicHealthRoute
   '/achievements': typeof webAchievementsIndexRoute
   '/chapters': typeof webChaptersIndexRoute
+  '/export': typeof webExportIndexRoute
   '/preview': typeof webPreviewIndexRoute
   '/questions': typeof webQuestionsIndexRoute
   '/quiz': typeof webQuizIndexRoute
@@ -510,6 +518,7 @@ export interface FileRoutesById {
   '/api/(public)/health': typeof ApipublicHealthRoute
   '/(web)/achievements/': typeof webAchievementsIndexRoute
   '/(web)/chapters/': typeof webChaptersIndexRoute
+  '/(web)/export/': typeof webExportIndexRoute
   '/(web)/preview/': typeof webPreviewIndexRoute
   '/(web)/questions/': typeof webQuestionsIndexRoute
   '/(web)/quiz/': typeof webQuizIndexRoute
@@ -571,6 +580,7 @@ export interface FileRouteTypes {
     | '/api/health'
     | '/achievements'
     | '/chapters'
+    | '/export'
     | '/preview'
     | '/questions'
     | '/quiz'
@@ -630,6 +640,7 @@ export interface FileRouteTypes {
     | '/api/health'
     | '/achievements'
     | '/chapters'
+    | '/export'
     | '/preview'
     | '/questions'
     | '/quiz'
@@ -690,6 +701,7 @@ export interface FileRouteTypes {
     | '/api/(public)/health'
     | '/(web)/achievements/'
     | '/(web)/chapters/'
+    | '/(web)/export/'
     | '/(web)/preview/'
     | '/(web)/questions/'
     | '/(web)/quiz/'
@@ -825,6 +837,13 @@ declare module '@tanstack/react-router' {
       path: '/preview'
       fullPath: '/preview'
       preLoaderRoute: typeof webPreviewIndexRouteImport
+      parentRoute: typeof webRouteRoute
+    }
+    '/(web)/export/': {
+      id: '/(web)/export/'
+      path: '/export'
+      fullPath: '/export'
+      preLoaderRoute: typeof webExportIndexRouteImport
       parentRoute: typeof webRouteRoute
     }
     '/(web)/chapters/': {
@@ -1161,6 +1180,7 @@ interface webRouteRouteChildren {
   webUsersIdRoute: typeof webUsersIdRoute
   webAchievementsIndexRoute: typeof webAchievementsIndexRoute
   webChaptersIndexRoute: typeof webChaptersIndexRoute
+  webExportIndexRoute: typeof webExportIndexRoute
   webPreviewIndexRoute: typeof webPreviewIndexRoute
   webQuestionsIndexRoute: typeof webQuestionsIndexRoute
   webQuizIndexRoute: typeof webQuizIndexRoute
@@ -1194,6 +1214,7 @@ const webRouteRouteChildren: webRouteRouteChildren = {
   webUsersIdRoute: webUsersIdRoute,
   webAchievementsIndexRoute: webAchievementsIndexRoute,
   webChaptersIndexRoute: webChaptersIndexRoute,
+  webExportIndexRoute: webExportIndexRoute,
   webPreviewIndexRoute: webPreviewIndexRoute,
   webQuestionsIndexRoute: webQuestionsIndexRoute,
   webQuizIndexRoute: webQuizIndexRoute,

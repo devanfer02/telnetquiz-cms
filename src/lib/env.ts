@@ -25,6 +25,8 @@ export const env = createEnv({
 		SENTRY_ENABLED: z.string().optional(),
 		TTS_SERVICE_URL: z.url(),
 		TTS_SERVICE_API_KEY: z.string(),
+		GOOGLE_SHEET_JSON_PATH: z.string(),
+		GOOGLE_SHEET_ID: z.string(),
 	},
 
 	/**

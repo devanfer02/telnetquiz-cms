@@ -34,3 +34,8 @@ export class TtsServiceError extends Data.TaggedError("TtsServiceError")<{
 	cause: unknown;
 	message: string;
 }> {}
+
+export class GoogleSheetsError extends Data.TaggedError("GoogleSheetsError")<{
+	cause: unknown;
+	message: string;
+}> {}
