@@ -64,6 +64,14 @@ const HEADER_FG = { red: 1, green: 1, blue: 1 };
 const BORDER_OUTER = { red: 0.6, green: 0.6, blue: 0.6 };
 const BORDER_INNER = { red: 0.85, green: 0.85, blue: 0.85 };
 
+const QUIZ_DIFFICULTY_COL_INDEX = 4;
+
+const DIFFICULTY_OPTIONS = [
+	{ value: "Easy", bg: { red: 0.82, green: 0.94, blue: 0.84 } },
+	{ value: "Medium", bg: { red: 0.99, green: 0.91, blue: 0.71 } },
+	{ value: "Hard", bg: { red: 0.99, green: 0.83, blue: 0.83 } },
+];
+
 export function stripHtml(input: string): string {
 	return input
 		.replace(/<br\s*\/?>/gi, "\n")
@@ -477,6 +485,87 @@ function buildFormatRequests(
 	return requests;
 }
 
+const buildDifficultyValidationRequest = (
+	sheetId: number,
+	rowCount: number,
+): sheets_v4.Schema$Request | null => {
+	if (rowCount <= 1) return null;
+	return {
+		setDataValidation: {
+			range: {
+				sheetId,
+				startRowIndex: 1,
+				endRowIndex: rowCount,
+				startColumnIndex: QUIZ_DIFFICULTY_COL_INDEX,
+				endColumnIndex: QUIZ_DIFFICULTY_COL_INDEX + 1,
+			},
+			rule: {
+				condition: {
+					type: "ONE_OF_LIST",
+					values: DIFFICULTY_OPTIONS.map((o) => ({
+						userEnteredValue: o.value,
+					})),
+				},
+				strict: true,
+				showCustomUi: true,
+			},
+		},
+	};
+};
+
+const buildDifficultyConditionalFormatRequests = (
+	sheetId: number,
+	rowCount: number,
+): sheets_v4.Schema$Request[] => {
+	if (rowCount <= 1) return [];
+	return DIFFICULTY_OPTIONS.map((opt) => ({
+		addConditionalFormatRule: {
+			rule: {
+				ranges: [
+					{
+						sheetId,
+						startRowIndex: 1,
+						endRowIndex: rowCount,
+						startColumnIndex: QUIZ_DIFFICULTY_COL_INDEX,
+						endColumnIndex: QUIZ_DIFFICULTY_COL_INDEX + 1,
+					},
+				],
+				booleanRule: {
+					condition: {
+						type: "TEXT_EQ",
+						values: [{ userEnteredValue: opt.value }],
+					},
+					format: { backgroundColor: opt.bg },
+				},
+			},
+			index: 0,
+		},
+	}));
+};
+
+const fetchConditionalFormatCounts = Effect.gen(function* () {
+	const { sheets, spreadsheetId } = getSheetsClient();
+	const meta = yield* Effect.tryPromise({
+		try: () =>
+			sheets.spreadsheets.get({
+				spreadsheetId,
+				fields: "sheets(properties.sheetId,conditionalFormats)",
+			}),
+		catch: (err) =>
+			new GoogleSheetsError({
+				cause: err,
+				message: "Failed to fetch conditional format metadata",
+			}),
+	});
+	const counts = new Map<number, number>();
+	for (const s of meta.data.sheets ?? []) {
+		const sid = s.properties?.sheetId;
+		const n = s.conditionalFormats?.length ?? 0;
+		if (typeof sid === "number") counts.set(sid, n);
+	}
+	return counts;
+});
+
 const applyFormatting = (
 	tabIds: Map<string, number>,
 	configs: {
@@ -484,15 +573,27 @@ const applyFormatting = (
 		columns: ColumnSpec[];
 		rowCount: number;
 		dataRowHeight?: number;
+		difficultyDropdown?: boolean;
 	}[],
 ) =>
 	Effect.gen(function* () {
 		const { sheets, spreadsheetId } = getSheetsClient();
+		const ruleCountsBySheet = yield* fetchConditionalFormatCounts;
 
 		const requests: sheets_v4.Schema$Request[] = [];
 		for (const config of configs) {
 			const sheetId = tabIds.get(config.name);
 			if (sheetId === undefined) continue;
+
+			if (config.difficultyDropdown) {
+				const existing = ruleCountsBySheet.get(sheetId) ?? 0;
+				for (let i = 0; i < existing; i++) {
+					requests.push({
+						deleteConditionalFormatRule: { sheetId, index: 0 },
+					});
+				}
+			}
+
 			requests.push(
 				...buildFormatRequests(
 					sheetId,
@@ -501,6 +602,17 @@ const applyFormatting = (
 					config.dataRowHeight,
 				),
 			);
+
+			if (config.difficultyDropdown) {
+				const validation = buildDifficultyValidationRequest(
+					sheetId,
+					config.rowCount,
+				);
+				if (validation) requests.push(validation);
+				requests.push(
+					...buildDifficultyConditionalFormatRequests(sheetId, config.rowCount),
+				);
+			}
 		}
 
 		if (requests.length === 0) return;
@@ -562,6 +674,7 @@ export const exportContentToSpreadsheet = Effect.gen(function* () {
 			columns: QUIZ_COLUMNS,
 			rowCount: quizGrid.length,
 			dataRowHeight: TABULAR_ROW_HEIGHT,
+			difficultyDropdown: true,
 		},
 		{
 			name: MATERIAL_TAB,
