@@ -10,6 +10,8 @@ services:
     env_file:
       - path: ./.env
         required: true
+    volumes:
+      - ./config/telnetquiz-key.json:/app/config/telnetquiz-key.json
     environment:
       - NODE_ENV=production
       - HOST=0.0.0.0
