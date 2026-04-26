@@ -98,8 +98,8 @@ export default function ExportCard({ spreadsheetUrl }: ExportCardProps) {
 								<AlertDialogDescription>
 									Tindakan ini akan menimpa isi tab{" "}
 									<span className="font-semibold">Pretest</span>,{" "}
-									<span className="font-semibold">Quiz Questions</span>, dan{" "}
-									<span className="font-semibold">Study Materials</span> pada
+									<span className="font-semibold">Pertanyaan Quiz</span>, dan{" "}
+									<span className="font-semibold">Materi Belajar</span> pada
 									spreadsheet yang dikonfigurasi. Pastikan service account
 									memiliki akses Editor terhadap spreadsheet.
 								</AlertDialogDescription>
