@@ -18,36 +18,32 @@ const PRETEST_TAB = "Pretest";
 const QUIZ_TAB = "Pertanyaan Quiz";
 const MATERIAL_TAB = "Materi Belajar";
 
-const PRETEST_COLS = {
-	id: 0,
-	bab: 1,
-	description: 2,
-	question: 3,
-	imageLink: 4,
-	preview: 5,
-	options: 6,
-} as const;
+type QuestionColKey =
+	| "id"
+	| "description"
+	| "question"
+	| "imageLink"
+	| "options";
 
-const QUIZ_COLS = {
-	id: 0,
-	bab: 1,
-	level: 2,
-	quizTitle: 3,
-	difficulty: 4,
-	description: 5,
-	question: 6,
-	imageLink: 7,
-	preview: 8,
-	options: 9,
-} as const;
+type MaterialColKey = "id" | "title" | "content" | "imageLink";
 
-const MATERIAL_COLS = {
-	id: 0,
-	title: 1,
-	content: 2,
-	imageLink: 3,
-	preview: 4,
-} as const;
+const QUESTION_COL_HEADERS: Record<QuestionColKey, string> = {
+	id: "ID",
+	description: "Deskripsi",
+	question: "Pertanyaan",
+	imageLink: "Link Gambar",
+	options: "Pilihan Jawaban",
+};
+
+const MATERIAL_COL_HEADERS: Record<MaterialColKey, string> = {
+	id: "ID",
+	title: "Judul",
+	content: "Konten",
+	imageLink: "Link Gambar",
+};
+
+type QuestionColIndex = Record<QuestionColKey, number>;
+type MaterialColIndex = Record<MaterialColKey, number>;
 
 type SheetRow = (string | number | null | undefined)[];
 
@@ -112,6 +108,8 @@ export type SectionDiff<T> = {
 	unchanged: number;
 	invalid: ParseError[];
 	notFound: { rowIdx: number; id: number }[];
+	tabMissing?: boolean;
+	headersMissing?: string[];
 };
 
 export type ImportPreview = {
@@ -119,6 +117,14 @@ export type ImportPreview = {
 	quiz: SectionDiff<QuestionDiffEntry>;
 	material: SectionDiff<MaterialDiffEntry>;
 };
+
+const emptySection = <T>(tabMissing = false): SectionDiff<T> => ({
+	update: [],
+	unchanged: 0,
+	invalid: [],
+	notFound: [],
+	tabMissing,
+});
 
 const cellString = (cell: unknown): string => {
 	if (cell === null || cell === undefined) return "";
@@ -188,9 +194,9 @@ const parseOptions = (
 	return { ok: true, options: parsed };
 };
 
-const isBlankRow = (row: SheetRow, columns: number): boolean => {
-	for (let i = 0; i < columns; i++) {
-		if (cellTrimmed(row[i])) return false;
+const isBlankRow = (row: SheetRow): boolean => {
+	for (const cell of row) {
+		if (cellTrimmed(cell)) return false;
 	}
 	return true;
 };
@@ -201,14 +207,36 @@ const collectZodErrors = (err: z.ZodError): string[] =>
 		return path ? `${path}: ${issue.message}` : issue.message;
 	});
 
+function resolveColumnIndices<K extends string>(
+	headerRow: SheetRow,
+	expected: Record<K, string>,
+): { ok: true; indices: Record<K, number> } | { ok: false; missing: string[] } {
+	const headerByName = new Map<string, number>();
+	headerRow.forEach((cell, idx) => {
+		const label = cellTrimmed(cell);
+		if (label) headerByName.set(label, idx);
+	});
+
+	const indices: Partial<Record<K, number>> = {};
+	const missing: string[] = [];
+	for (const key of Object.keys(expected) as K[]) {
+		const label = expected[key];
+		const idx = headerByName.get(label);
+		if (idx === undefined) missing.push(label);
+		else indices[key] = idx;
+	}
+
+	if (missing.length > 0) return { ok: false, missing };
+	return { ok: true, indices: indices as Record<K, number> };
+}
+
 function parseQuestionRow(
 	row: SheetRow,
 	rowIdx: number,
-	cols: typeof PRETEST_COLS | typeof QUIZ_COLS,
+	cols: QuestionColIndex,
 	schema: typeof pretestRowSchema | typeof quizRowSchema,
-	totalCols: number,
 ): ParsedRow<z.infer<typeof pretestRowSchema>> {
-	if (isBlankRow(row, totalCols)) return { kind: "blank" };
+	if (isBlankRow(row)) return { kind: "blank" };
 
 	const id = parseId(row[cols.id]);
 	if (id === null) {
@@ -252,11 +280,11 @@ function parseQuestionRow(
 function parseMaterialRow(
 	row: SheetRow,
 	rowIdx: number,
+	cols: MaterialColIndex,
 ): ParsedRow<z.infer<typeof materialRowSchema>> {
-	const totalCols = Object.keys(MATERIAL_COLS).length;
-	if (isBlankRow(row, totalCols)) return { kind: "blank" };
+	if (isBlankRow(row)) return { kind: "blank" };
 
-	const id = parseId(row[MATERIAL_COLS.id]);
+	const id = parseId(row[cols.id]);
 	if (id === null) {
 		return {
 			kind: "invalid",
@@ -270,9 +298,9 @@ function parseMaterialRow(
 
 	const candidate = {
 		id,
-		title: parseRichText(row[MATERIAL_COLS.title]),
-		content: parseRichText(row[MATERIAL_COLS.content]),
-		imageLink: parseImageLink(row[MATERIAL_COLS.imageLink]),
+		title: parseRichText(row[cols.title]),
+		content: parseRichText(row[cols.content]),
+		imageLink: parseImageLink(row[cols.imageLink]),
 	};
 
 	const result = materialRowSchema.safeParse(candidate);
@@ -286,15 +314,45 @@ function parseMaterialRow(
 	return { kind: "valid", row: result.data };
 }
 
-const readTab = (tabName: string) =>
+const quoteTabRange = (tabName: string): string =>
+	`'${tabName.replace(/'/g, "''")}'!A:ZZ`;
+
+const listExistingTabs = Effect.gen(function* () {
+	const { sheets, spreadsheetId } = getSheetsClient();
+	const meta = yield* Effect.tryPromise({
+		try: () =>
+			sheets.spreadsheets.get({
+				spreadsheetId,
+				fields: "sheets.properties.title",
+			}),
+		catch: (err) =>
+			new GoogleSheetsError({
+				cause: err,
+				message: "Failed to fetch spreadsheet metadata",
+			}),
+	});
+	const titles = new Set<string>();
+	for (const s of meta.data.sheets ?? []) {
+		const t = s.properties?.title;
+		if (typeof t === "string") titles.add(t);
+	}
+	return titles;
+});
+
+type TabRead =
+	| { kind: "missing" }
+	| { kind: "ok"; header: SheetRow; rows: SheetRow[] };
+
+const readTab = (tabName: string, existingTabs: Set<string>) =>
 	Effect.gen(function* () {
+		if (!existingTabs.has(tabName)) return { kind: "missing" } as TabRead;
 		const { sheets, spreadsheetId } = getSheetsClient();
 		const response = yield* Effect.tryPromise({
 			try: () =>
 				sheets.spreadsheets.values.get({
 					spreadsheetId,
-					range: tabName,
-					valueRenderOption: "FORMATTED_VALUE",
+					range: quoteTabRange(tabName),
+					valueRenderOption: "FORMULA",
 				}),
 			catch: (err) =>
 				new GoogleSheetsError({
@@ -303,7 +361,14 @@ const readTab = (tabName: string) =>
 				}),
 		});
 		const values = (response.data.values ?? []) as SheetRow[];
-		return values.length === 0 ? [] : values.slice(1);
+		if (values.length === 0) {
+			return { kind: "ok", header: [], rows: [] } as TabRead;
+		}
+		return {
+			kind: "ok",
+			header: values[0],
+			rows: values.slice(1),
+		} as TabRead;
 	});
 
 const optionsEqual = (
@@ -390,68 +455,34 @@ function diffMaterialRow(
 	return { id: parsed.id, rowIdx, changedFields: changed, before, after };
 }
 
-const buildPretestDiff = (
+const buildQuestionDiff = (
+	header: SheetRow,
 	rows: SheetRow[],
 	db: QuestionDbRow[],
+	schema: typeof pretestRowSchema | typeof quizRowSchema,
 ): SectionDiff<QuestionDiffEntry> => {
+	const resolved = resolveColumnIndices(header, QUESTION_COL_HEADERS);
+	if (!resolved.ok) {
+		return {
+			update: [],
+			unchanged: 0,
+			invalid: [],
+			notFound: [],
+			headersMissing: resolved.missing,
+		};
+	}
+	const cols = resolved.indices;
+
 	const update: QuestionDiffEntry[] = [];
 	const invalid: ParseError[] = [];
 	const notFound: { rowIdx: number; id: number }[] = [];
 	let unchanged = 0;
 
 	const dbById = new Map(db.map((q) => [q.id, q]));
-	const totalCols = Object.keys(PRETEST_COLS).length;
 
 	rows.forEach((row, idx) => {
 		const rowIdx = idx + 2;
-		const parsed = parseQuestionRow(
-			row,
-			rowIdx,
-			PRETEST_COLS,
-			pretestRowSchema,
-			totalCols,
-		);
-		if (parsed.kind === "blank") return;
-		if (parsed.kind === "invalid") {
-			invalid.push(parsed.error);
-			return;
-		}
-
-		const dbRow = dbById.get(parsed.row.id);
-		if (!dbRow) {
-			notFound.push({ rowIdx, id: parsed.row.id });
-			return;
-		}
-
-		const entry = diffQuestionRow(rowIdx, parsed.row, dbRow);
-		if (entry.changedFields.length === 0) unchanged++;
-		else update.push(entry);
-	});
-
-	return { update, unchanged, invalid, notFound };
-};
-
-const buildQuizDiff = (
-	rows: SheetRow[],
-	db: QuestionDbRow[],
-): SectionDiff<QuestionDiffEntry> => {
-	const update: QuestionDiffEntry[] = [];
-	const invalid: ParseError[] = [];
-	const notFound: { rowIdx: number; id: number }[] = [];
-	let unchanged = 0;
-
-	const dbById = new Map(db.map((q) => [q.id, q]));
-	const totalCols = Object.keys(QUIZ_COLS).length;
-
-	rows.forEach((row, idx) => {
-		const rowIdx = idx + 2;
-		const parsed = parseQuestionRow(
-			row,
-			rowIdx,
-			QUIZ_COLS,
-			quizRowSchema,
-			totalCols,
-		);
+		const parsed = parseQuestionRow(row, rowIdx, cols, schema);
 		if (parsed.kind === "blank") return;
 		if (parsed.kind === "invalid") {
 			invalid.push(parsed.error);
@@ -473,9 +504,22 @@ const buildQuizDiff = (
 };
 
 const buildMaterialDiff = (
+	header: SheetRow,
 	rows: SheetRow[],
 	db: MaterialDbRow[],
 ): SectionDiff<MaterialDiffEntry> => {
+	const resolved = resolveColumnIndices(header, MATERIAL_COL_HEADERS);
+	if (!resolved.ok) {
+		return {
+			update: [],
+			unchanged: 0,
+			invalid: [],
+			notFound: [],
+			headersMissing: resolved.missing,
+		};
+	}
+	const cols = resolved.indices;
+
 	const update: MaterialDiffEntry[] = [];
 	const invalid: ParseError[] = [];
 	const notFound: { rowIdx: number; id: number }[] = [];
@@ -485,7 +529,7 @@ const buildMaterialDiff = (
 
 	rows.forEach((row, idx) => {
 		const rowIdx = idx + 2;
-		const parsed = parseMaterialRow(row, rowIdx);
+		const parsed = parseMaterialRow(row, rowIdx, cols);
 		if (parsed.kind === "blank") return;
 		if (parsed.kind === "invalid") {
 			invalid.push(parsed.error);
@@ -533,12 +577,14 @@ export type ImportApplyResult = {
 };
 
 export const previewImport = Effect.gen(function* () {
-	const [pretestRows, quizRows, materialRows, dbPretest, dbQuiz, dbMaterials] =
+	const existingTabs = yield* listExistingTabs;
+
+	const [pretestRead, quizRead, materialRead, dbPretest, dbQuiz, dbMaterials] =
 		yield* Effect.all(
 			[
-				readTab(PRETEST_TAB),
-				readTab(QUIZ_TAB),
-				readTab(MATERIAL_TAB),
+				readTab(PRETEST_TAB, existingTabs),
+				readTab(QUIZ_TAB, existingTabs),
+				readTab(MATERIAL_TAB, existingTabs),
 				fetchQuestionsByType("pretest"),
 				fetchQuestionsByType("quiz"),
 				fetchAllStudyMaterials,
@@ -547,9 +593,32 @@ export const previewImport = Effect.gen(function* () {
 		);
 
 	const preview: ImportPreview = {
-		pretest: buildPretestDiff(pretestRows, dbPretest),
-		quiz: buildQuizDiff(quizRows, dbQuiz),
-		material: buildMaterialDiff(materialRows, dbMaterials),
+		pretest:
+			pretestRead.kind === "missing"
+				? emptySection<QuestionDiffEntry>(true)
+				: buildQuestionDiff(
+						pretestRead.header,
+						pretestRead.rows,
+						dbPretest,
+						pretestRowSchema,
+					),
+		quiz:
+			quizRead.kind === "missing"
+				? emptySection<QuestionDiffEntry>(true)
+				: buildQuestionDiff(
+						quizRead.header,
+						quizRead.rows,
+						dbQuiz,
+						quizRowSchema,
+					),
+		material:
+			materialRead.kind === "missing"
+				? emptySection<MaterialDiffEntry>(true)
+				: buildMaterialDiff(
+						materialRead.header,
+						materialRead.rows,
+						dbMaterials,
+					),
 	};
 
 	return preview;
@@ -566,8 +635,8 @@ export const commitImport = Effect.gen(function* () {
 		entry: QuestionDiffEntry,
 	) =>
 		updateQuestionFromImport(entry.id, {
-			description: textToHtml(entry.after.description),
-			question: textToHtml(entry.after.question),
+			description: entry.after.description,
+			question: entry.after.question,
 			imageLink: entry.after.imageLink,
 			options: entry.after.options,
 		}).pipe(

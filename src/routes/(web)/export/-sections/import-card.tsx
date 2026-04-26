@@ -57,6 +57,89 @@ const totalUpdates = (preview: NonNullable<PreviewResult>): number =>
 	preview.quiz.update.length +
 	preview.material.update.length;
 
+type AnyDiffEntry =
+	| NonNullable<PreviewResult>["pretest"]["update"][number]
+	| NonNullable<PreviewResult>["material"]["update"][number];
+type OptionsValue = { text: string; isCorrect: boolean }[];
+
+const formatOptionsBlock = (opts: OptionsValue): string =>
+	opts.map((o) => `${o.isCorrect ? "✓" : "✗"} ${o.text}`).join("\n");
+
+const formatTextValue = (value: unknown): string => {
+	if (value === null || value === undefined || value === "") return "(kosong)";
+	if (typeof value === "string") return value;
+	if (Array.isArray(value)) return formatOptionsBlock(value as OptionsValue);
+	return String(value);
+};
+
+function DiffLine({
+	prefix,
+	value,
+	tone,
+}: {
+	prefix: "-" | "+";
+	value: string;
+	tone: "remove" | "add";
+}) {
+	const isPlaceholder = value === "(kosong)";
+	const bg = tone === "remove" ? "bg-red-50" : "bg-emerald-50";
+	const fg = tone === "remove" ? "text-red-900" : "text-emerald-900";
+	const marker = tone === "remove" ? "text-red-600" : "text-emerald-600";
+	return (
+		<div className={`flex gap-2 rounded px-2 py-1 ${bg} ${fg}`}>
+			<span className={`font-mono select-none ${marker}`}>{prefix}</span>
+			<pre
+				className={`whitespace-pre-wrap break-words font-sans text-[11px] leading-snug ${
+					isPlaceholder ? "italic text-muted-foreground" : ""
+				}`}
+			>
+				{value}
+			</pre>
+		</div>
+	);
+}
+
+function FieldDiff({
+	label,
+	before,
+	after,
+}: {
+	label: string;
+	before: unknown;
+	after: unknown;
+}) {
+	return (
+		<div className="space-y-1">
+			<div className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+				{label}
+			</div>
+			<DiffLine prefix="-" value={formatTextValue(before)} tone="remove" />
+			<DiffLine prefix="+" value={formatTextValue(after)} tone="add" />
+		</div>
+	);
+}
+
+function EntryDiff({ entry }: { entry: AnyDiffEntry }) {
+	const before = entry.before as Record<string, unknown>;
+	const after = entry.after as Record<string, unknown>;
+	return (
+		<div className="rounded border border-muted bg-muted/30 p-2 space-y-2">
+			<div className="text-xs font-medium">
+				<span className="font-mono">#{entry.id}</span>
+				<span className="text-muted-foreground"> · baris {entry.rowIdx}</span>
+			</div>
+			{entry.changedFields.map((field) => (
+				<FieldDiff
+					key={field}
+					label={FIELD_LABELS[field] ?? field}
+					before={before[field]}
+					after={after[field]}
+				/>
+			))}
+		</div>
+	);
+}
+
 function SectionSummary({
 	label,
 	section,
@@ -70,39 +153,47 @@ function SectionSummary({
 		<div className="rounded-md border bg-background p-3 space-y-2">
 			<div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
 				<span className="font-medium">{label}</span>
-				<span className="text-emerald-700">{section.update.length} update</span>
-				<span className="text-muted-foreground">
-					{section.unchanged} tidak berubah
-				</span>
-				{section.invalid.length > 0 ? (
+				{section.tabMissing ? (
 					<span className="text-amber-700">
-						{section.invalid.length} invalid
+						Tab belum ada di spreadsheet — jalankan Export terlebih dahulu
 					</span>
-				) : null}
-				{section.notFound.length > 0 ? (
-					<span className="text-red-700">
-						{section.notFound.length} ID tidak ada di DB
+				) : section.headersMissing && section.headersMissing.length > 0 ? (
+					<span className="text-amber-700">
+						Kolom hilang: {section.headersMissing.join(", ")} — jalankan Export
+						untuk memulihkan struktur
 					</span>
-				) : null}
+				) : (
+					<>
+						<span className="text-emerald-700">
+							{section.update.length} update
+						</span>
+						<span className="text-muted-foreground">
+							{section.unchanged} tidak berubah
+						</span>
+						{section.invalid.length > 0 ? (
+							<span className="text-amber-700">
+								{section.invalid.length} invalid
+							</span>
+						) : null}
+						{section.notFound.length > 0 ? (
+							<span className="text-red-700">
+								{section.notFound.length} ID tidak ada di DB
+							</span>
+						) : null}
+					</>
+				)}
 			</div>
 
 			{section.update.length > 0 ? (
 				<details className="text-xs">
 					<summary className="cursor-pointer text-emerald-700">
-						Lihat detail perubahan
+						Lihat detail perubahan ({section.update.length})
 					</summary>
-					<ul className="mt-1 space-y-1 text-muted-foreground">
+					<div className="mt-2 space-y-2">
 						{section.update.map((entry) => (
-							<li key={entry.id}>
-								<span className="font-mono">#{entry.id}</span>{" "}
-								<span className="text-foreground">
-									{entry.changedFields
-										.map((f) => FIELD_LABELS[f] ?? f)
-										.join(", ")}
-								</span>
-							</li>
+							<EntryDiff key={entry.id} entry={entry} />
 						))}
-					</ul>
+					</div>
 				</details>
 			) : null}
 

@@ -21,8 +21,10 @@ function RouteComponent() {
 				title="Export & Import Content"
 				description="Export pretest, soal kuis, dan materi pembelajaran ke Google Spreadsheet, atau import perubahan kembali ke database."
 			/>
-			<ExportCard spreadsheetUrl={spreadsheetUrl} />
-			<ImportCard spreadsheetUrl={spreadsheetUrl} />
+			<div className="grid grid-cols-2 gap-6">
+				<ExportCard spreadsheetUrl={spreadsheetUrl} />
+				<ImportCard spreadsheetUrl={spreadsheetUrl} />
+			</div>
 		</div>
 	);
 }
