@@ -69,7 +69,7 @@ export const sidebarEntries: SidebarEntry[] = [
 			},
 			{
 				type: "link",
-				title: "Export",
+				title: "Export & Import",
 				url: "/export",
 				icon: FileSpreadsheet,
 			},

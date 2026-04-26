@@ -89,6 +89,41 @@ export const quizSchema = z.object({
 	chapterId: z.number().min(1, "Pilih chapter"),
 });
 
+export const importOptionSchema = z.object({
+	text: z.string().min(1, "Teks pilihan wajib diisi"),
+	isCorrect: z.boolean(),
+});
+
+const importRowOptions = z
+	.array(importOptionSchema)
+	.min(2, "Minimal 2 pilihan jawaban")
+	.refine((opts) => opts.filter((o) => o.isCorrect).length === 1, {
+		message: "Tepat 1 pilihan yang benar (✓)",
+	});
+
+export const pretestRowSchema = z.object({
+	id: z.number().int().positive(),
+	description: z.string().min(3, "Deskripsi minimal 3 karakter"),
+	question: z.string().min(3, "Pertanyaan minimal 3 karakter"),
+	imageLink: z.string().nullable(),
+	options: importRowOptions,
+});
+
+export const quizRowSchema = z.object({
+	id: z.number().int().positive(),
+	description: z.string().min(3, "Deskripsi minimal 3 karakter"),
+	question: z.string().min(3, "Pertanyaan minimal 3 karakter"),
+	imageLink: z.string().nullable(),
+	options: importRowOptions,
+});
+
+export const materialRowSchema = z.object({
+	id: z.number().int().positive(),
+	title: z.string().min(3, "Judul minimal 3 karakter"),
+	content: z.string().min(1, "Konten wajib diisi"),
+	imageLink: z.string().nullable(),
+});
+
 export const editUserSchema = z.object({
 	fullname: z.string().min(3).max(255),
 	email: z.email().nonempty(),
@@ -132,3 +167,7 @@ export type QuestionFormData = z.infer<typeof questionSchema>;
 export type QuestionsFormData = z.infer<typeof questionsSchema>;
 export type ChapterFormData = z.infer<typeof chapterSchema>;
 export type StudyMaterialFormData = z.infer<typeof studyMaterialSchema>;
+export type ImportOptionData = z.infer<typeof importOptionSchema>;
+export type PretestRowData = z.infer<typeof pretestRowSchema>;
+export type QuizRowData = z.infer<typeof quizRowSchema>;
+export type MaterialRowData = z.infer<typeof materialRowSchema>;

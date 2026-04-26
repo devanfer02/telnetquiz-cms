@@ -64,7 +64,7 @@ const HEADER_FG = { red: 1, green: 1, blue: 1 };
 const BORDER_OUTER = { red: 0.6, green: 0.6, blue: 0.6 };
 const BORDER_INNER = { red: 0.85, green: 0.85, blue: 0.85 };
 
-function stripHtml(input: string): string {
+export function stripHtml(input: string): string {
 	return input
 		.replace(/<br\s*\/?>/gi, "\n")
 		.replace(/<\/(p|div|li|h[1-6]|tr)>/gi, "\n")
