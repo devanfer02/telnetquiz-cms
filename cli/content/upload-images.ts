@@ -1,6 +1,10 @@
 import { readFileSync, readdirSync, writeFileSync, existsSync } from "node:fs";
 import { join, extname } from "node:path";
-import { PutObjectCommand } from "@aws-sdk/client-s3";
+import {
+	DeleteObjectsCommand,
+	ListObjectsV2Command,
+	PutObjectCommand,
+} from "@aws-sdk/client-s3";
 import { s3 } from "../../src/lib/s3";
 import { env } from "../../src/lib/env";
 
@@ -25,6 +29,7 @@ const MIME_MAP: Record<string, string> = {
 const flags = {
 	dryRun: process.argv.includes("--dry-run"),
 	skipJsonUpdate: process.argv.includes("--skip-json-update"),
+	purge: process.argv.includes("--purge"),
 };
 
 // ============================================================================
@@ -68,6 +73,47 @@ interface PretestJson {
 // ============================================================================
 // UPLOAD
 // ============================================================================
+
+async function listKeysUnderPrefix(prefix: string): Promise<string[]> {
+	const keys: string[] = [];
+	let continuationToken: string | undefined;
+
+	do {
+		const response = await s3.send(
+			new ListObjectsV2Command({
+				Bucket: env.CLOUDFLARE_BUCKET,
+				Prefix: prefix,
+				ContinuationToken: continuationToken,
+			}),
+		);
+		for (const obj of response.Contents ?? []) {
+			if (obj.Key) keys.push(obj.Key);
+		}
+		continuationToken = response.IsTruncated
+			? response.NextContinuationToken
+			: undefined;
+	} while (continuationToken);
+
+	return keys;
+}
+
+async function deleteKeysInBatches(keys: string[]): Promise<number> {
+	let deleted = 0;
+	for (let i = 0; i < keys.length; i += 1000) {
+		const batch = keys.slice(i, i + 1000);
+		const response = await s3.send(
+			new DeleteObjectsCommand({
+				Bucket: env.CLOUDFLARE_BUCKET,
+				Delete: { Objects: batch.map((Key) => ({ Key })), Quiet: true },
+			}),
+		);
+		deleted += batch.length - (response.Errors?.length ?? 0);
+		for (const err of response.Errors ?? []) {
+			console.error(`  Delete failed: ${err.Key}: ${err.Message ?? err.Code}`);
+		}
+	}
+	return deleted;
+}
 
 async function uploadImage(
 	localPath: string,
@@ -180,6 +226,34 @@ async function main() {
 	if (imagesToUpload.length === 0) {
 		console.log("No images found. Exiting.");
 		process.exit(0);
+	}
+
+	// Phase 1.5: Purge existing R2 objects under content/chapter*/
+	if (flags.purge) {
+		console.log("[Purge] Removing existing R2 objects...");
+		let totalListed = 0;
+		let totalDeleted = 0;
+		for (const dir of CHAPTER_DIRS) {
+			const prefix = `content/${dir}/`;
+			const keys = await listKeysUnderPrefix(prefix);
+			totalListed += keys.length;
+			if (keys.length === 0) {
+				console.log(`  ${prefix}: empty`);
+				continue;
+			}
+			if (flags.dryRun) {
+				console.log(`  [dry] ${prefix}: would delete ${keys.length} objects`);
+				continue;
+			}
+			const deleted = await deleteKeysInBatches(keys);
+			totalDeleted += deleted;
+			console.log(`  ${prefix}: ${deleted}/${keys.length} deleted`);
+		}
+		console.log(
+			flags.dryRun
+				? `\n  [dry] Would delete ${totalListed} object(s) total\n`
+				: `\n  Deleted ${totalDeleted}/${totalListed} object(s) total\n`,
+		);
 	}
 
 	// Phase 2: Upload to R2

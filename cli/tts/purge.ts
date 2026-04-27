@@ -28,6 +28,8 @@ async function listTtsFiles(): Promise<string[]> {
 	return keys;
 }
 
+const force = process.argv.includes("--force");
+
 async function purge() {
 	const keys = await listTtsFiles();
 
@@ -45,18 +47,20 @@ async function purge() {
 		console.log(`  ... and ${keys.length - 5} more`);
 	}
 
-	process.stdout.write(
-		"\nAre you sure you want to delete ALL TTS audio files? (y/N): ",
-	);
+	if (!force) {
+		process.stdout.write(
+			"\nAre you sure you want to delete ALL TTS audio files? (y/N): ",
+		);
 
-	const answer = await new Promise<string>((resolve) => {
-		process.stdin.setEncoding("utf-8");
-		process.stdin.once("data", (data) => resolve(data.toString().trim()));
-	});
+		const answer = await new Promise<string>((resolve) => {
+			process.stdin.setEncoding("utf-8");
+			process.stdin.once("data", (data) => resolve(data.toString().trim()));
+		});
 
-	if (answer.toLowerCase() !== "y") {
-		console.log("Aborted.");
-		process.exit(0);
+		if (answer.toLowerCase() !== "y") {
+			console.log("Aborted.");
+			process.exit(0);
+		}
 	}
 
 	console.log("\nDeleting...");
