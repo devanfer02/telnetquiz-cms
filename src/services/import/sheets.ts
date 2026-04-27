@@ -1,6 +1,7 @@
 import { Effect } from "effect";
 import type { z } from "zod";
-import { getSheetsClient } from "@/lib/google-sheets";
+import { getSheetsClient, quoteTabRange } from "@/lib/google-sheets";
+import { stripHtml, textToHtml } from "@/lib/html";
 import {
 	type ImportOptionData,
 	materialRowSchema,
@@ -10,7 +11,6 @@ import {
 import { fetchQuestionsByType } from "../content/questions";
 import { fetchAllStudyMaterials } from "../content/study-material";
 import { GoogleSheetsError } from "../errors/errors";
-import { stripHtml } from "../export/sheets";
 import { updateQuestionFromImport } from "./questions";
 import { updateStudyMaterialFromImport } from "./study-materials";
 
@@ -46,14 +46,6 @@ type QuestionColIndex = Record<QuestionColKey, number>;
 type MaterialColIndex = Record<MaterialColKey, number>;
 
 type SheetRow = (string | number | null | undefined)[];
-
-type QuestionDbRow = Effect.Effect.Success<
-	ReturnType<typeof fetchQuestionsByType>
->[number];
-
-type MaterialDbRow = Effect.Effect.Success<
-	typeof fetchAllStudyMaterials
->[number];
 
 export type ParseError = {
 	rowIdx: number;
@@ -314,9 +306,6 @@ function parseMaterialRow(
 	return { kind: "valid", row: result.data };
 }
 
-const quoteTabRange = (tabName: string): string =>
-	`'${tabName.replace(/'/g, "''")}'!A:ZZ`;
-
 const listExistingTabs = Effect.gen(function* () {
 	const { sheets, spreadsheetId } = getSheetsClient();
 	const meta = yield* Effect.tryPromise({
@@ -455,13 +444,24 @@ function diffMaterialRow(
 	return { id: parsed.id, rowIdx, changedFields: changed, before, after };
 }
 
-const buildQuestionDiff = (
-	header: SheetRow,
-	rows: SheetRow[],
-	db: QuestionDbRow[],
-	schema: typeof pretestRowSchema | typeof quizRowSchema,
-): SectionDiff<QuestionDiffEntry> => {
-	const resolved = resolveColumnIndices(header, QUESTION_COL_HEADERS);
+function buildSectionDiff<
+	K extends string,
+	TParsed extends { id: number },
+	TDb extends { id: number },
+	TEntry extends { changedFields: readonly string[] },
+>(args: {
+	header: SheetRow;
+	rows: SheetRow[];
+	db: TDb[];
+	headerMap: Record<K, string>;
+	parseRow: (
+		row: SheetRow,
+		rowIdx: number,
+		cols: Record<K, number>,
+	) => ParsedRow<TParsed>;
+	diffRow: (rowIdx: number, parsed: TParsed, dbRow: TDb) => TEntry;
+}): SectionDiff<TEntry> {
+	const resolved = resolveColumnIndices(args.header, args.headerMap);
 	if (!resolved.ok) {
 		return {
 			update: [],
@@ -473,16 +473,16 @@ const buildQuestionDiff = (
 	}
 	const cols = resolved.indices;
 
-	const update: QuestionDiffEntry[] = [];
+	const update: TEntry[] = [];
 	const invalid: ParseError[] = [];
 	const notFound: { rowIdx: number; id: number }[] = [];
 	let unchanged = 0;
 
-	const dbById = new Map(db.map((q) => [q.id, q]));
+	const dbById = new Map(args.db.map((row) => [row.id, row]));
 
-	rows.forEach((row, idx) => {
+	args.rows.forEach((row, idx) => {
 		const rowIdx = idx + 2;
-		const parsed = parseQuestionRow(row, rowIdx, cols, schema);
+		const parsed = args.parseRow(row, rowIdx, cols);
 		if (parsed.kind === "blank") return;
 		if (parsed.kind === "invalid") {
 			invalid.push(parsed.error);
@@ -495,76 +495,13 @@ const buildQuestionDiff = (
 			return;
 		}
 
-		const entry = diffQuestionRow(rowIdx, parsed.row, dbRow);
+		const entry = args.diffRow(rowIdx, parsed.row, dbRow);
 		if (entry.changedFields.length === 0) unchanged++;
 		else update.push(entry);
 	});
 
 	return { update, unchanged, invalid, notFound };
-};
-
-const buildMaterialDiff = (
-	header: SheetRow,
-	rows: SheetRow[],
-	db: MaterialDbRow[],
-): SectionDiff<MaterialDiffEntry> => {
-	const resolved = resolveColumnIndices(header, MATERIAL_COL_HEADERS);
-	if (!resolved.ok) {
-		return {
-			update: [],
-			unchanged: 0,
-			invalid: [],
-			notFound: [],
-			headersMissing: resolved.missing,
-		};
-	}
-	const cols = resolved.indices;
-
-	const update: MaterialDiffEntry[] = [];
-	const invalid: ParseError[] = [];
-	const notFound: { rowIdx: number; id: number }[] = [];
-	let unchanged = 0;
-
-	const dbById = new Map(db.map((m) => [m.id, m]));
-
-	rows.forEach((row, idx) => {
-		const rowIdx = idx + 2;
-		const parsed = parseMaterialRow(row, rowIdx, cols);
-		if (parsed.kind === "blank") return;
-		if (parsed.kind === "invalid") {
-			invalid.push(parsed.error);
-			return;
-		}
-
-		const dbRow = dbById.get(parsed.row.id);
-		if (!dbRow) {
-			notFound.push({ rowIdx, id: parsed.row.id });
-			return;
-		}
-
-		const entry = diffMaterialRow(rowIdx, parsed.row, dbRow);
-		if (entry.changedFields.length === 0) unchanged++;
-		else update.push(entry);
-	});
-
-	return { update, unchanged, invalid, notFound };
-};
-
-const escapeHtml = (text: string): string =>
-	text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-
-export const textToHtml = (text: string): string => {
-	const trimmed = text.trim();
-	if (!trimmed) return "";
-	const blocks = trimmed.split(/\n{2,}/);
-	return blocks
-		.map((block) => {
-			const escaped = escapeHtml(block);
-			const withBreaks = escaped.replace(/\n/g, "<br />");
-			return `<p>${withBreaks}</p>`;
-		})
-		.join("");
-};
+}
 
 export type ImportApplyResult = {
 	preview: ImportPreview;
@@ -596,29 +533,38 @@ export const previewImport = Effect.gen(function* () {
 		pretest:
 			pretestRead.kind === "missing"
 				? emptySection<QuestionDiffEntry>(true)
-				: buildQuestionDiff(
-						pretestRead.header,
-						pretestRead.rows,
-						dbPretest,
-						pretestRowSchema,
-					),
+				: buildSectionDiff({
+						header: pretestRead.header,
+						rows: pretestRead.rows,
+						db: dbPretest,
+						headerMap: QUESTION_COL_HEADERS,
+						parseRow: (row, rowIdx, cols) =>
+							parseQuestionRow(row, rowIdx, cols, pretestRowSchema),
+						diffRow: diffQuestionRow,
+					}),
 		quiz:
 			quizRead.kind === "missing"
 				? emptySection<QuestionDiffEntry>(true)
-				: buildQuestionDiff(
-						quizRead.header,
-						quizRead.rows,
-						dbQuiz,
-						quizRowSchema,
-					),
+				: buildSectionDiff({
+						header: quizRead.header,
+						rows: quizRead.rows,
+						db: dbQuiz,
+						headerMap: QUESTION_COL_HEADERS,
+						parseRow: (row, rowIdx, cols) =>
+							parseQuestionRow(row, rowIdx, cols, quizRowSchema),
+						diffRow: diffQuestionRow,
+					}),
 		material:
 			materialRead.kind === "missing"
 				? emptySection<MaterialDiffEntry>(true)
-				: buildMaterialDiff(
-						materialRead.header,
-						materialRead.rows,
-						dbMaterials,
-					),
+				: buildSectionDiff({
+						header: materialRead.header,
+						rows: materialRead.rows,
+						db: dbMaterials,
+						headerMap: MATERIAL_COL_HEADERS,
+						parseRow: parseMaterialRow,
+						diffRow: diffMaterialRow,
+					}),
 	};
 
 	return preview;
@@ -630,16 +576,14 @@ export const commitImport = Effect.gen(function* () {
 	const failed: ImportApplyResult["failed"] = [];
 	const applied = { pretest: 0, quiz: 0, material: 0 };
 
-	const applyQuestionEntry = (
-		entity: "pretest" | "quiz",
-		entry: QuestionDiffEntry,
+	type Entity = "pretest" | "quiz" | "material";
+
+	const trackResult = <A>(
+		entity: Entity,
+		id: number,
+		eff: Effect.Effect<A, unknown>,
 	) =>
-		updateQuestionFromImport(entry.id, {
-			description: entry.after.description,
-			question: entry.after.question,
-			imageLink: entry.after.imageLink,
-			options: entry.after.options,
-		}).pipe(
+		eff.pipe(
 			Effect.tap(() =>
 				Effect.sync(() => {
 					applied[entity] += 1;
@@ -649,46 +593,46 @@ export const commitImport = Effect.gen(function* () {
 				Effect.sync(() => {
 					failed.push({
 						entity,
-						id: entry.id,
+						id,
 						error: err instanceof Error ? err.message : String(err),
 					});
 				}),
 			),
 		);
+
+	const applyQuestionEntry =
+		(entity: "pretest" | "quiz") => (entry: QuestionDiffEntry) =>
+			trackResult(
+				entity,
+				entry.id,
+				updateQuestionFromImport(entry.id, {
+					type: entity,
+					description: entry.after.description,
+					question: entry.after.question,
+					imageLink: entry.after.imageLink,
+					options: entry.after.options,
+				}),
+			);
 
 	const applyMaterialEntry = (entry: MaterialDiffEntry) =>
-		updateStudyMaterialFromImport(entry.id, {
-			title: entry.after.title,
-			content: textToHtml(entry.after.content),
-			imageLink: entry.after.imageLink,
-		}).pipe(
-			Effect.tap(() =>
-				Effect.sync(() => {
-					applied.material += 1;
-				}),
-			),
-			Effect.catchAll((err) =>
-				Effect.sync(() => {
-					failed.push({
-						entity: "material",
-						id: entry.id,
-						error: err instanceof Error ? err.message : String(err),
-					});
-				}),
-			),
+		trackResult(
+			"material",
+			entry.id,
+			updateStudyMaterialFromImport(entry.id, {
+				title: entry.after.title,
+				content: textToHtml(entry.after.content),
+				imageLink: entry.after.imageLink,
+			}),
 		);
 
 	yield* Effect.all(
-		preview.pretest.update.map((e) => applyQuestionEntry("pretest", e)),
-		{ concurrency: 4 },
+		[
+			...preview.pretest.update.map(applyQuestionEntry("pretest")),
+			...preview.quiz.update.map(applyQuestionEntry("quiz")),
+			...preview.material.update.map(applyMaterialEntry),
+		],
+		{ concurrency: 8 },
 	);
-	yield* Effect.all(
-		preview.quiz.update.map((e) => applyQuestionEntry("quiz", e)),
-		{ concurrency: 4 },
-	);
-	yield* Effect.all(preview.material.update.map(applyMaterialEntry), {
-		concurrency: 4,
-	});
 
 	const result: ImportApplyResult = { preview, applied, failed };
 	return result;

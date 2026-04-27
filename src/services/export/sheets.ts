@@ -1,6 +1,7 @@
 import type { sheets_v4 } from "@googleapis/sheets";
 import { Effect } from "effect";
 import { getSheetsClient } from "@/lib/google-sheets";
+import { stripHtml } from "@/lib/html";
 import { fetchQuestionsByType } from "../content/questions";
 import { fetchAllStudyMaterials } from "../content/study-material";
 import { GoogleSheetsError } from "../errors/errors";
@@ -71,24 +72,6 @@ const DIFFICULTY_OPTIONS = [
 	{ value: "Medium", bg: { red: 0.99, green: 0.91, blue: 0.71 } },
 	{ value: "Hard", bg: { red: 0.99, green: 0.83, blue: 0.83 } },
 ];
-
-export function stripHtml(input: string): string {
-	return input
-		.replace(/<br\s*\/?>/gi, "\n")
-		.replace(/<\/(p|div|li|h[1-6]|tr)>/gi, "\n")
-		.replace(/<li[^>]*>/gi, "• ")
-		.replace(/<[^>]*>/g, "")
-		.replace(/&nbsp;/gi, " ")
-		.replace(/&amp;/gi, "&")
-		.replace(/&lt;/gi, "<")
-		.replace(/&gt;/gi, ">")
-		.replace(/&quot;/gi, '"')
-		.replace(/&#39;/gi, "'")
-		.replace(/[ \t]+/g, " ")
-		.replace(/\n[ \t]+/g, "\n")
-		.replace(/\n{3,}/g, "\n\n")
-		.trim();
-}
 
 function formatOptions(
 	options: { text: string; isCorrect: boolean }[],

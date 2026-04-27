@@ -25,3 +25,6 @@ export function getSheetsClient(): {
 	cachedClient = { sheets: sheetsClient, spreadsheetId: env.GOOGLE_SHEET_ID };
 	return cachedClient;
 }
+
+export const quoteTabRange = (tabName: string): string =>
+	`'${tabName.replace(/'/g, "''")}'!A:ZZ`;

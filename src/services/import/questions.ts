@@ -3,12 +3,12 @@ import { Effect } from "effect";
 import { options, questions } from "@/database/schema";
 import { Db } from "@/lib/db";
 import { dbTryPromise } from "@/lib/retry";
-import { fetchQuestionById } from "@/services/content/questions";
 import { invalidateTtsCache } from "@/services/tts/cache";
 import type { ImportOptionData } from "@/types/zod";
-import { DatabaseError } from "../errors/errors";
+import { DatabaseError, NotFoundError } from "../errors/errors";
 
 export type UpdateQuestionFromImportPayload = {
+	type: "pretest" | "quiz";
 	description: string;
 	question: string;
 	imageLink: string | null;
@@ -22,12 +22,10 @@ export const updateQuestionFromImport = (
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
-		const existing = yield* fetchQuestionById(id);
-
-		yield* dbTryPromise({
+		const updatedRows = yield* dbTryPromise({
 			try: () =>
 				db.transaction(async (tx) => {
-					const [updated] = await tx
+					const updated = await tx
 						.update(questions)
 						.set({
 							description: data.description,
@@ -35,9 +33,9 @@ export const updateQuestionFromImport = (
 							imageLink: data.imageLink,
 						})
 						.where(eq(questions.id, id))
-						.returning();
+						.returning({ id: questions.id });
 
-					if (!updated) throw new Error("Failed to update question");
+					if (updated.length === 0) return updated;
 
 					await tx.delete(options).where(eq(options.questionId, id));
 
@@ -50,6 +48,8 @@ export const updateQuestionFromImport = (
 							})),
 						);
 					}
+
+					return updated;
 				}),
 			catch: (err) =>
 				new DatabaseError({
@@ -58,8 +58,11 @@ export const updateQuestionFromImport = (
 				}),
 		});
 
-		const ttsType = existing.type === "pretest" ? "pretest" : "quiz";
-		yield* invalidateTtsCache(ttsType, id).pipe(
+		if (updatedRows.length === 0) {
+			return yield* Effect.fail(new NotFoundError({ id, entity: "Question" }));
+		}
+
+		yield* invalidateTtsCache(data.type, id).pipe(
 			Effect.catchAll(() => Effect.void),
 		);
 

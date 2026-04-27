@@ -3,7 +3,6 @@ import { Effect } from "effect";
 import { studyMaterials } from "@/database/schema";
 import { Db } from "@/lib/db";
 import { dbTryPromise } from "@/lib/retry";
-import { fetchStudyMaterialById } from "@/services/content/study-material";
 import { invalidateTtsCache } from "@/services/tts/cache";
 import { DatabaseError, NotFoundError } from "../errors/errors";
 
@@ -20,8 +19,6 @@ export const updateStudyMaterialFromImport = (
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
-		yield* fetchStudyMaterialById(id);
-
 		const result = yield* dbTryPromise({
 			try: () =>
 				db
@@ -32,7 +29,7 @@ export const updateStudyMaterialFromImport = (
 						imageLink: data.imageLink,
 					})
 					.where(eq(studyMaterials.id, id))
-					.returning(),
+					.returning({ id: studyMaterials.id }),
 			catch: (err) =>
 				new DatabaseError({
 					cause: err,
