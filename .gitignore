@@ -21,3 +21,6 @@ telnetquiz-key.json
 
 # Skill-creator test workspaces (sandbox copies, eval outputs, etc.)
 .claude/skills/*-workspace/
+
+# Validasi-konten skill reports (regenerated each run)
+.claude/skills/validasi-konten/reports/

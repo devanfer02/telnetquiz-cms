@@ -130,7 +130,7 @@ Create server functions for CMS pages. Follow `src/actions/quizzes.ts` as refere
 
 ```typescript
 export const addEntity = createServerFn({ method: "POST" })
-  .inputValidator(entitySchema)       // Zod schema from step 3
+  .inputValidator(entitySchema)       // Zod schema from step 3export
   .handler(async ({ data }) => {
     return Effect.runPromise(
       createEntity(data).pipe(        // Service from step 2
