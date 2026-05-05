@@ -1,7 +1,7 @@
 import { Effect } from "effect";
 import type { z } from "zod";
 import { getSheetsClient, quoteTabRange } from "@/lib/google-sheets";
-import { stripHtml, textToHtml } from "@/lib/html";
+import { hadHtml, stripHtml, textToHtml } from "@/lib/html";
 import {
 	type ImportOptionData,
 	materialRowSchema,
@@ -77,6 +77,11 @@ export type QuestionDiffEntry = {
 		imageLink: string | null;
 		options: ImportOptionData[];
 	};
+	originalHtml: {
+		description: string;
+		question: string;
+		options: { text: string; isCorrect: boolean }[];
+	};
 };
 
 export type MaterialDiffEntry = {
@@ -92,6 +97,10 @@ export type MaterialDiffEntry = {
 		title: string;
 		content: string;
 		imageLink: string | null;
+	};
+	originalHtml: {
+		title: string;
+		content: string;
 	};
 };
 
@@ -411,7 +420,23 @@ function diffQuestionRow(
 		changed.push("imageLink");
 	if (!optionsEqual(before.options, after.options)) changed.push("options");
 
-	return { id: parsed.id, rowIdx, changedFields: changed, before, after };
+	const originalHtml = {
+		description: dbRow.description ?? "",
+		question: dbRow.question ?? "",
+		options: dbRow.options.map((o) => ({
+			text: o.text ?? "",
+			isCorrect: o.isCorrect,
+		})),
+	};
+
+	return {
+		id: parsed.id,
+		rowIdx,
+		changedFields: changed,
+		before,
+		after,
+		originalHtml,
+	};
 }
 
 function diffMaterialRow(
@@ -441,7 +466,19 @@ function diffMaterialRow(
 	if ((before.imageLink ?? "") !== (after.imageLink ?? ""))
 		changed.push("imageLink");
 
-	return { id: parsed.id, rowIdx, changedFields: changed, before, after };
+	const originalHtml = {
+		title: dbRow.title ?? "",
+		content: dbRow.content ?? "",
+	};
+
+	return {
+		id: parsed.id,
+		rowIdx,
+		changedFields: changed,
+		before,
+		after,
+		originalHtml,
+	};
 }
 
 function buildSectionDiff<
@@ -601,26 +638,41 @@ export const commitImport = Effect.gen(function* () {
 		);
 
 	const applyQuestionEntry =
-		(entity: "pretest" | "quiz") => (entry: QuestionDiffEntry) =>
-			trackResult(
+		(entity: "pretest" | "quiz") => (entry: QuestionDiffEntry) => {
+			const optionsHadHtml = entry.originalHtml.options.some((o) =>
+				hadHtml(o.text),
+			);
+			return trackResult(
 				entity,
 				entry.id,
 				updateQuestionFromImport(entry.id, {
 					type: entity,
-					description: entry.after.description,
-					question: entry.after.question,
+					description: hadHtml(entry.originalHtml.description)
+						? textToHtml(entry.after.description)
+						: entry.after.description,
+					question: hadHtml(entry.originalHtml.question)
+						? textToHtml(entry.after.question)
+						: entry.after.question,
 					imageLink: entry.after.imageLink,
-					options: entry.after.options,
+					options: entry.after.options.map((opt) => ({
+						text: optionsHadHtml ? textToHtml(opt.text) : opt.text,
+						isCorrect: opt.isCorrect,
+					})),
 				}),
 			);
+		};
 
 	const applyMaterialEntry = (entry: MaterialDiffEntry) =>
 		trackResult(
 			"material",
 			entry.id,
 			updateStudyMaterialFromImport(entry.id, {
-				title: entry.after.title,
-				content: textToHtml(entry.after.content),
+				title: hadHtml(entry.originalHtml.title)
+					? textToHtml(entry.after.title)
+					: entry.after.title,
+				content: hadHtml(entry.originalHtml.content)
+					? textToHtml(entry.after.content)
+					: entry.after.content,
 				imageLink: entry.after.imageLink,
 			}),
 		);

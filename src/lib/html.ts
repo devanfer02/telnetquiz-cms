@@ -16,6 +16,9 @@ export function stripHtml(input: string): string {
 		.trim();
 }
 
+export const hadHtml = (s: string | null | undefined): boolean =>
+	!!s && /<[a-z][^>]*>/i.test(s);
+
 const escapeHtml = (text: string): string =>
 	text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 

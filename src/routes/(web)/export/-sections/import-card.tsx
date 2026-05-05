@@ -366,10 +366,11 @@ export default function ImportCard({ spreadsheetUrl }: ImportCardProps) {
 											Terapkan perubahan ke database?
 										</AlertDialogTitle>
 										<AlertDialogDescription>
-											{updateCount} baris akan diperbarui di database. Konten
-											teks dari spreadsheet akan menimpa konten saat ini (format
-											kaya seperti bold, list akan hilang dan diganti dengan
-											paragraf sederhana).
+											{updateCount} baris akan diperbarui di database. Field
+											yang awalnya berisi HTML akan dibungkus ulang sebagai
+											paragraf (format inline seperti bold/italic/list tetap
+											hilang); field yang awalnya plain text disimpan apa
+											adanya.
 										</AlertDialogDescription>
 									</AlertDialogHeader>
 									<AlertDialogFooter>
