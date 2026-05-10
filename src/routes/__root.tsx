@@ -25,6 +25,10 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 				charSet: "utf-8",
 			},
 			{
+				name: "viewport",
+				content: "width=device-width, initial-scale=1",
+			},
+			{
 				name: "description",
 				content:
 					"Media pembelajaran interaktif berbasis kuis untuk mata pelajaran Media dan Jaringan Telekomunikasi bagi siswa SMK jurusan Teknik Komputer dan Jaringan.",
