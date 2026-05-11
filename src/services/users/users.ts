@@ -111,7 +111,7 @@ export const fetchLeaderboard = (
 					SELECT SUM(best.max_score) FROM (
 						SELECT MAX(${submissions.score}) as max_score
 						FROM ${submissions}
-						WHERE ${submissions.userId} = ${users.id}
+						WHERE ${submissions.userId} = "users"."id"
 						GROUP BY ${submissions.quizId}
 					) best
 				), 0)`.as("total_score"),
@@ -144,7 +144,7 @@ export const fetchLeaderboard = (
 									SELECT SUM(best.max_score) FROM (
 										SELECT MAX(${submissions.score}) as max_score
 										FROM ${submissions}
-										WHERE ${submissions.userId} = ${users.id}
+										WHERE ${submissions.userId} = "users"."id"
 										GROUP BY ${submissions.quizId}
 									) best
 								), 0) DESC, ${users.id}) as rank
@@ -169,7 +169,7 @@ export const fetchLeaderboard = (
 								SELECT SUM(best.max_score) FROM (
 									SELECT MAX(${submissions.score}) as max_score
 									FROM ${submissions}
-									WHERE ${submissions.userId} = ${users.id}
+									WHERE ${submissions.userId} = "users"."id"
 									GROUP BY ${submissions.quizId}
 								) best
 							), 0)`.as("total_score"),
