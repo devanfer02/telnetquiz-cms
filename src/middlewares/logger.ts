@@ -34,7 +34,7 @@ export const loggerMiddleware = createMiddleware().server(
 
 			logger.info(
 				data,
-				`${reqData.method} ${reqData.path} ${response.response.status} ${duration}ms`,
+				`${reqData.method} ${reqData.path} ${response.response.status} ${duration}ms, ${response.response.body}`,
 			);
 			Sentry.logger.info("API Request Triggered", {
 				...reqData,
