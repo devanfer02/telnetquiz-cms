@@ -10,6 +10,7 @@ import {
 	LayoutDashboard,
 	School,
 	Smartphone,
+	Trophy,
 	Upload,
 	UserCog,
 	Users,
@@ -102,6 +103,12 @@ export const sidebarEntries: SidebarEntry[] = [
 	},
 	{
 		type: "link",
+		title: "Leaderboard",
+		url: "/leaderboard",
+		icon: Trophy,
+	},
+	{
+		type: "link",
 		title: "Achievements",
 		url: "/achievements",
 		icon: Award,
@@ -129,6 +136,7 @@ export const QUERY_KEYS = {
 	SUBMISSIONS: "submission-list",
 	AVERAGE_SCORES: "average-scores",
 	LEADERBOARD: "leaderboard",
+	LEADERBOARD_ALL: "leaderboard-all",
 	DASHBOARD_STATS: "dashboard-stats",
 	SCHOOLS: "school-list",
 	ACHIEVEMENTS: "achievement-list",

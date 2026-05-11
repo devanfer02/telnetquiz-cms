@@ -151,6 +151,54 @@ export const fetchLeaderboard = Effect.gen(function* () {
 	}));
 });
 
+export const fetchLeaderboardAll = Effect.gen(function* () {
+	const { db } = yield* Db;
+
+	const bestPerQuiz = db
+		.select({
+			userId: submissions.userId,
+			quizId: submissions.quizId,
+			bestScore: sql<number>`MAX(${submissions.score})`.as("best_score"),
+			latestAt: sql<string>`MAX(${submissions.createdAt})`.as("latest_at"),
+		})
+		.from(submissions)
+		.groupBy(submissions.userId, submissions.quizId)
+		.as("best_per_quiz");
+
+	const results = yield* dbTryPromise({
+		try: () =>
+			db
+				.select({
+					userId: users.id,
+					userName: users.name,
+					schoolName: schools.name,
+					score: sql<number>`SUM(${bestPerQuiz.bestScore})`,
+					quizzesCompleted: sql<number>`COUNT(${bestPerQuiz.quizId})`,
+					latestSubmitAt: sql<string>`MAX(${bestPerQuiz.latestAt})`,
+				})
+				.from(bestPerQuiz)
+				.leftJoin(users, eq(bestPerQuiz.userId, users.id))
+				.leftJoin(schools, eq(users.schoolId, schools.id))
+				.groupBy(users.id, users.name, schools.name)
+				.orderBy(desc(sql`SUM(${bestPerQuiz.bestScore})`)),
+		catch: (err) =>
+			new DatabaseError({
+				cause: err,
+				message: "Failed to fetch leaderboard",
+			}),
+	});
+
+	return results.map((entry, index) => ({
+		rank: index + 1,
+		userId: entry.userId ?? "",
+		userName: entry.userName || "Unknown User",
+		schoolName: entry.schoolName || "-",
+		score: Number(entry.score),
+		quizzesCompleted: Number(entry.quizzesCompleted),
+		latestSubmitAt: new Date(entry.latestSubmitAt).toISOString(),
+	}));
+});
+
 export const fetchDashboardStats = Effect.gen(function* () {
 	const { db } = yield* Db;
 

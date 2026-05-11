@@ -7,6 +7,7 @@ import {
 	fetchAverageScores,
 	fetchDashboardStats,
 	fetchLeaderboard,
+	fetchLeaderboardAll,
 } from "@/services/users/analytics";
 
 export const getAllUsers = createServerFn({
@@ -59,6 +60,20 @@ export const getLeaderboard = createServerFn({
 			Effect.provide(DbLayer),
 			Effect.catchAll((err) => {
 				console.error("Failed to get leaderboard. ERR:", err);
+				return Effect.succeed([]);
+			}),
+		),
+	);
+});
+
+export const getLeaderboardAll = createServerFn({
+	method: "GET",
+}).handler(async () => {
+	return Effect.runPromise(
+		fetchLeaderboardAll.pipe(
+			Effect.provide(DbLayer),
+			Effect.catchAll((err) => {
+				console.error("Failed to get full leaderboard. ERR:", err);
 				return Effect.succeed([]);
 			}),
 		),

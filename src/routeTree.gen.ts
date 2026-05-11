@@ -22,6 +22,7 @@ import { Route as webSchoolsIndexRouteImport } from './routes/(web)/schools/inde
 import { Route as webQuizIndexRouteImport } from './routes/(web)/quiz/index'
 import { Route as webQuestionsIndexRouteImport } from './routes/(web)/questions/index'
 import { Route as webPreviewIndexRouteImport } from './routes/(web)/preview/index'
+import { Route as webLeaderboardIndexRouteImport } from './routes/(web)/leaderboard/index'
 import { Route as webExportIndexRouteImport } from './routes/(web)/export/index'
 import { Route as webChaptersIndexRouteImport } from './routes/(web)/chapters/index'
 import { Route as webAchievementsIndexRouteImport } from './routes/(web)/achievements/index'
@@ -131,6 +132,11 @@ const webQuestionsIndexRoute = webQuestionsIndexRouteImport.update({
 const webPreviewIndexRoute = webPreviewIndexRouteImport.update({
   id: '/preview/',
   path: '/preview/',
+  getParentRoute: () => webRouteRoute,
+} as any)
+const webLeaderboardIndexRoute = webLeaderboardIndexRouteImport.update({
+  id: '/leaderboard/',
+  path: '/leaderboard/',
   getParentRoute: () => webRouteRoute,
 } as any)
 const webExportIndexRoute = webExportIndexRouteImport.update({
@@ -397,6 +403,7 @@ export interface FileRoutesByFullPath {
   '/achievements': typeof webAchievementsIndexRoute
   '/chapters': typeof webChaptersIndexRoute
   '/export': typeof webExportIndexRoute
+  '/leaderboard': typeof webLeaderboardIndexRoute
   '/preview': typeof webPreviewIndexRoute
   '/questions': typeof webQuestionsIndexRoute
   '/quiz': typeof webQuizIndexRoute
@@ -457,6 +464,7 @@ export interface FileRoutesByTo {
   '/achievements': typeof webAchievementsIndexRoute
   '/chapters': typeof webChaptersIndexRoute
   '/export': typeof webExportIndexRoute
+  '/leaderboard': typeof webLeaderboardIndexRoute
   '/preview': typeof webPreviewIndexRoute
   '/questions': typeof webQuestionsIndexRoute
   '/quiz': typeof webQuizIndexRoute
@@ -519,6 +527,7 @@ export interface FileRoutesById {
   '/(web)/achievements/': typeof webAchievementsIndexRoute
   '/(web)/chapters/': typeof webChaptersIndexRoute
   '/(web)/export/': typeof webExportIndexRoute
+  '/(web)/leaderboard/': typeof webLeaderboardIndexRoute
   '/(web)/preview/': typeof webPreviewIndexRoute
   '/(web)/questions/': typeof webQuestionsIndexRoute
   '/(web)/quiz/': typeof webQuizIndexRoute
@@ -581,6 +590,7 @@ export interface FileRouteTypes {
     | '/achievements'
     | '/chapters'
     | '/export'
+    | '/leaderboard'
     | '/preview'
     | '/questions'
     | '/quiz'
@@ -641,6 +651,7 @@ export interface FileRouteTypes {
     | '/achievements'
     | '/chapters'
     | '/export'
+    | '/leaderboard'
     | '/preview'
     | '/questions'
     | '/quiz'
@@ -702,6 +713,7 @@ export interface FileRouteTypes {
     | '/(web)/achievements/'
     | '/(web)/chapters/'
     | '/(web)/export/'
+    | '/(web)/leaderboard/'
     | '/(web)/preview/'
     | '/(web)/questions/'
     | '/(web)/quiz/'
@@ -837,6 +849,13 @@ declare module '@tanstack/react-router' {
       path: '/preview'
       fullPath: '/preview'
       preLoaderRoute: typeof webPreviewIndexRouteImport
+      parentRoute: typeof webRouteRoute
+    }
+    '/(web)/leaderboard/': {
+      id: '/(web)/leaderboard/'
+      path: '/leaderboard'
+      fullPath: '/leaderboard'
+      preLoaderRoute: typeof webLeaderboardIndexRouteImport
       parentRoute: typeof webRouteRoute
     }
     '/(web)/export/': {
@@ -1181,6 +1200,7 @@ interface webRouteRouteChildren {
   webAchievementsIndexRoute: typeof webAchievementsIndexRoute
   webChaptersIndexRoute: typeof webChaptersIndexRoute
   webExportIndexRoute: typeof webExportIndexRoute
+  webLeaderboardIndexRoute: typeof webLeaderboardIndexRoute
   webPreviewIndexRoute: typeof webPreviewIndexRoute
   webQuestionsIndexRoute: typeof webQuestionsIndexRoute
   webQuizIndexRoute: typeof webQuizIndexRoute
@@ -1215,6 +1235,7 @@ const webRouteRouteChildren: webRouteRouteChildren = {
   webAchievementsIndexRoute: webAchievementsIndexRoute,
   webChaptersIndexRoute: webChaptersIndexRoute,
   webExportIndexRoute: webExportIndexRoute,
+  webLeaderboardIndexRoute: webLeaderboardIndexRoute,
   webPreviewIndexRoute: webPreviewIndexRoute,
   webQuestionsIndexRoute: webQuestionsIndexRoute,
   webQuizIndexRoute: webQuizIndexRoute,
