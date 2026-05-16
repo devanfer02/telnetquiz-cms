@@ -113,6 +113,7 @@ export const fetchRecentActivity = (userId: string) =>
 						quiz_level: e.quiz_level,
 						retry_count: e.count,
 						latest_score: e.latest_score,
+						latest_time: e.latest_time.toISOString(),
 					}))
 				: [];
 
