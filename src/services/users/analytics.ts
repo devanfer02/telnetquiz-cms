@@ -6,6 +6,7 @@ import {
 	questions,
 	quizzes,
 	schools,
+	sessions,
 	studyMaterials,
 	submissions,
 	users,
@@ -31,6 +32,11 @@ export const fetchAllUsers = Effect.gen(function* () {
 					grade: users.grade,
 					bio: users.bio,
 					createdAt: users.createdAt,
+					lastLoginAt: sql<Date | null>`(
+						SELECT MAX(${sessions.createdAt})
+						FROM ${sessions}
+						WHERE ${sessions.userId} = ${users.id}
+					)`.as("last_login_at"),
 				})
 				.from(users)
 				.leftJoin(schools, eq(users.schoolId, schools.id))
