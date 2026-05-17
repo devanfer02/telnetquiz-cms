@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import {
 	type ColumnDef,
 	getCoreRowModel,
@@ -36,6 +36,15 @@ const columns: ColumnDef<LeaderboardRow>[] = [
 	{
 		accessorKey: "userName",
 		header: ({ column }) => <SortableHeader column={column} title="Name" />,
+		cell: ({ row }) => (
+			<Link
+				to="/users/$id"
+				params={{ id: row.original.userId }}
+				className="text-orange-600 hover:underline font-medium"
+			>
+				{row.original.userName}
+			</Link>
+		),
 	},
 	{
 		accessorKey: "schoolName",
