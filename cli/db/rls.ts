@@ -1,9 +1,14 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { sql } from "drizzle-orm";
-import { db } from "../../src/lib/db";
+import { db, getDbMode, setDbMode } from "../../src/lib/db";
+import { env } from "../../src/lib/env";
 
 const SCHEMA_PATH = join(import.meta.dir, "../../src/database/schema.ts");
+
+function maskDbUrl(url: string): string {
+	return url.replace(/:\/\/([^:]+):([^@]+)@/, "://$1:****@");
+}
 
 function parseTableNames(): string[] {
 	const content = readFileSync(SCHEMA_PATH, "utf-8");
@@ -19,6 +24,18 @@ function parseTableNames(): string[] {
 }
 
 async function enableRls() {
+	if (process.argv.includes("--testing")) {
+		setDbMode("testing");
+	}
+
+	const mode = getDbMode();
+	const dbUrl =
+		mode === "testing" ? env.SUPABASE_DB_TESTING_URL : env.SUPABASE_DB_URL;
+	console.log("[DB Target]");
+	console.log(`  Mode: ${mode}`);
+	console.log(`  URL:  ${maskDbUrl(dbUrl)}`);
+	console.log();
+
 	const tables = parseTableNames();
 
 	if (tables.length === 0) {

@@ -1,7 +1,8 @@
 import { createInterface } from "node:readline";
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { db } from "../../src/lib/db";
+import { db, getDbMode, setDbMode } from "../../src/lib/db";
+import { env } from "../../src/lib/env";
 import {
 	chapters,
 	quizzes,
@@ -12,6 +13,10 @@ import {
 	pretestSubmissions,
 } from "../../src/database/schema";
 import { sql } from "drizzle-orm";
+
+function maskDbUrl(url: string): string {
+	return url.replace(/:\/\/([^:]+):([^@]+)@/, "://$1:****@");
+}
 
 // ============================================================================
 // TYPES
@@ -183,6 +188,18 @@ async function main() {
 	console.log("=".repeat(60));
 	console.log("  TelNetQuiz — Seed Actual Content");
 	console.log("=".repeat(60));
+	console.log();
+
+	if (process.argv.includes("--testing")) {
+		setDbMode("testing");
+	}
+
+	const mode = getDbMode();
+	const dbUrl =
+		mode === "testing" ? env.SUPABASE_DB_TESTING_URL : env.SUPABASE_DB_URL;
+	console.log("[DB Target]");
+	console.log(`  Mode: ${mode}`);
+	console.log(`  URL:  ${maskDbUrl(dbUrl)}`);
 	console.log();
 
 	// Phase 0: Parse flags
