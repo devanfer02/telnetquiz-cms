@@ -93,35 +93,130 @@ export const deleteUser = (id: string) =>
 		return { success: true, id };
 	});
 
+export type LeaderboardPeriod = "week" | "month" | "all";
+
+type LeaderboardRow = {
+	user_id: string;
+	fullname: string | null;
+	image: string | null;
+	gender: boolean | null;
+	total_score: number | string;
+	rank: number | string;
+	prev_rank: number | string | null;
+};
+
+const periodWindowDays: Record<Exclude<LeaderboardPeriod, "all">, number> = {
+	week: 7,
+	month: 30,
+};
+
 export const fetchLeaderboard = (
 	userId: string,
 	limit: number,
 	cursor?: number,
+	period: LeaderboardPeriod = "all",
 ) =>
 	Effect.gen(function* () {
 		const { db } = yield* Db;
 
-		const leaderboardQuery = db
-			.select({
-				userId: users.id,
-				fullname: users.name,
-				image: users.image,
-				gender: users.gender,
-				totalScore: sql<number>`COALESCE((
-					SELECT SUM(best.max_score) FROM (
-						SELECT MAX(${submissions.score}) as max_score
-						FROM ${submissions}
-						WHERE ${submissions.userId} = "users"."id"
-						GROUP BY ${submissions.quizId}
-					) best
-				), 0)`.as("total_score"),
-			})
-			.from(users)
-			.orderBy(desc(sql`total_score`), users.id)
-			.limit(limit + 1);
+		const offset = cursor ?? 0;
 
-		const leaderboard = yield* dbTryPromise({
-			try: () => (cursor ? leaderboardQuery.offset(cursor) : leaderboardQuery),
+		const buildQuery = () => {
+			if (period === "all") {
+				return sql`
+					WITH user_scores AS (
+						SELECT
+							u.id AS user_id,
+							u.name AS fullname,
+							u.image,
+							u.gender,
+							COALESCE((
+								SELECT SUM(best.max_score) FROM (
+									SELECT MAX(${submissions.score}) AS max_score
+									FROM ${submissions}
+									WHERE ${submissions.userId} = u.id
+									GROUP BY ${submissions.quizId}
+								) best
+							), 0) AS total_score
+						FROM ${users} u
+					),
+					ranked AS (
+						SELECT
+							user_id, fullname, image, gender, total_score,
+							ROW_NUMBER() OVER (ORDER BY total_score DESC, user_id) AS rank
+						FROM user_scores
+						WHERE total_score > 0
+					)
+					SELECT
+						r.user_id, r.fullname, r.image, r.gender, r.total_score, r.rank,
+						NULL::int AS prev_rank
+					FROM ranked r
+					ORDER BY r.rank
+				`;
+			}
+
+			const days = periodWindowDays[period];
+			const currentStart = sql.raw(`NOW() - INTERVAL '${days} days'`);
+			const prevStart = sql.raw(`NOW() - INTERVAL '${days * 2} days'`);
+
+			return sql`
+				WITH current_best AS (
+					SELECT ${submissions.userId} AS user_id,
+					       ${submissions.quizId} AS quiz_id,
+					       MAX(${submissions.score}) AS max_score
+					FROM ${submissions}
+					WHERE ${submissions.createdAt} >= ${currentStart}
+					GROUP BY ${submissions.userId}, ${submissions.quizId}
+				),
+				current_scores AS (
+					SELECT user_id, COALESCE(SUM(max_score), 0) AS total_score
+					FROM current_best
+					GROUP BY user_id
+				),
+				prev_best AS (
+					SELECT ${submissions.userId} AS user_id,
+					       ${submissions.quizId} AS quiz_id,
+					       MAX(${submissions.score}) AS max_score
+					FROM ${submissions}
+					WHERE ${submissions.createdAt} >= ${prevStart}
+					  AND ${submissions.createdAt} < ${currentStart}
+					GROUP BY ${submissions.userId}, ${submissions.quizId}
+				),
+				prev_scores AS (
+					SELECT user_id, COALESCE(SUM(max_score), 0) AS total_score
+					FROM prev_best
+					GROUP BY user_id
+				),
+				current_ranked AS (
+					SELECT
+						u.id AS user_id,
+						u.name AS fullname,
+						u.image,
+						u.gender,
+						COALESCE(c.total_score, 0) AS total_score,
+						ROW_NUMBER() OVER (ORDER BY COALESCE(c.total_score, 0) DESC, u.id) AS rank
+					FROM ${users} u
+					LEFT JOIN current_scores c ON c.user_id = u.id
+					WHERE COALESCE(c.total_score, 0) > 0
+				),
+				prev_ranked AS (
+					SELECT
+						user_id,
+						ROW_NUMBER() OVER (ORDER BY total_score DESC, user_id) AS rank
+					FROM prev_scores
+					WHERE total_score > 0
+				)
+				SELECT
+					cr.user_id, cr.fullname, cr.image, cr.gender, cr.total_score, cr.rank,
+					pr.rank AS prev_rank
+				FROM current_ranked cr
+				LEFT JOIN prev_ranked pr ON pr.user_id = cr.user_id
+				ORDER BY cr.rank
+			`;
+		};
+
+		const rankedRowsResult = yield* dbTryPromise({
+			try: () => db.execute(buildQuery()),
 			catch: (error) =>
 				new DatabaseError({
 					cause: error,
@@ -129,82 +224,69 @@ export const fetchLeaderboard = (
 				}),
 		});
 
-		const hasNextPage = leaderboard.length > limit;
-		const items = hasNextPage ? leaderboard.slice(0, limit) : leaderboard;
-		const nextCursor = hasNextPage ? (cursor ?? 0) + limit : null;
+		const allRows = rankedRowsResult.rows as unknown as LeaderboardRow[];
 
-		const [userRankResult, userScoreResult] = yield* Effect.all([
-			dbTryPromise({
-				try: () =>
-					db.execute(sql`
-						SELECT rank FROM (
-							SELECT
-								${users.id} as user_id,
-								ROW_NUMBER() OVER (ORDER BY COALESCE((
-									SELECT SUM(best.max_score) FROM (
-										SELECT MAX(${submissions.score}) as max_score
-										FROM ${submissions}
-										WHERE ${submissions.userId} = "users"."id"
-										GROUP BY ${submissions.quizId}
-									) best
-								), 0) DESC, ${users.id}) as rank
-							FROM ${users}
-						) ranked
-						WHERE user_id = ${userId}
-					`),
-				catch: (error) =>
-					new DatabaseError({
-						cause: error,
-						message: "Failed to fetch user rank",
-					}),
-			}),
-			dbTryPromise({
-				try: () =>
-					db
-						.select({
-							fullname: users.name,
-							image: users.image,
-							gender: users.gender,
-							totalScore: sql<number>`COALESCE((
-								SELECT SUM(best.max_score) FROM (
-									SELECT MAX(${submissions.score}) as max_score
-									FROM ${submissions}
-									WHERE ${submissions.userId} = "users"."id"
-									GROUP BY ${submissions.quizId}
-								) best
-							), 0)`.as("total_score"),
-						})
-						.from(users)
-						.where(eq(users.id, userId)),
-				catch: (error) =>
-					new DatabaseError({
-						cause: error,
-						message: "Failed to fetch user score",
-					}),
-			}),
-		]);
+		const pageRows = allRows.slice(offset, offset + limit + 1);
+		const hasNextPage = pageRows.length > limit;
+		const items = hasNextPage ? pageRows.slice(0, limit) : pageRows;
+		const nextCursor = hasNextPage ? offset + limit : null;
 
-		const userRank = userRankResult.rows[0]?.rank as number | null;
-		const currentUser = userScoreResult[0] ?? null;
+		const userRow = allRows.find((r) => r.user_id === userId);
+
+		const userBasicsResult = yield* dbTryPromise({
+			try: () =>
+				db
+					.select({
+						fullname: users.name,
+						image: users.image,
+						gender: users.gender,
+					})
+					.from(users)
+					.where(eq(users.id, userId)),
+			catch: (error) =>
+				new DatabaseError({
+					cause: error,
+					message: "Failed to fetch user basics",
+				}),
+		});
+		const userBasics = userBasicsResult[0] ?? null;
+
+		const deltaOf = (row: LeaderboardRow): number | null => {
+			if (period === "all") return null;
+			if (row.prev_rank == null) return null;
+			return Number(row.prev_rank) - Number(row.rank);
+		};
 
 		return {
-			leaderboard: items.map((item, index) => ({
-				rank: (cursor ?? 0) + index + 1,
-				userId: item.userId,
-				fullname: item.fullname,
-				image: item.image,
-				gender: item.gender,
-				totalScore: Number(item.totalScore),
+			period,
+			leaderboard: items.map((row) => ({
+				rank: Number(row.rank),
+				userId: row.user_id,
+				fullname: row.fullname,
+				image: row.image,
+				gender: row.gender,
+				totalScore: Number(row.total_score),
+				rankDelta: deltaOf(row),
 			})),
-			currentUser: currentUser
+			currentUser: userRow
 				? {
-						rank: Number(userRank),
-						fullname: currentUser.fullname,
-						image: currentUser.image,
-						gender: currentUser.gender,
-						totalScore: Number(currentUser.totalScore),
+						rank: Number(userRow.rank),
+						fullname: userRow.fullname,
+						image: userRow.image,
+						gender: userRow.gender,
+						totalScore: Number(userRow.total_score),
+						rankDelta: deltaOf(userRow),
 					}
-				: null,
+				: userBasics
+					? {
+							rank: 0,
+							fullname: userBasics.fullname,
+							image: userBasics.image,
+							gender: userBasics.gender,
+							totalScore: 0,
+							rankDelta: null as number | null,
+						}
+					: null,
 			pagination: {
 				nextCursor,
 				hasNextPage,

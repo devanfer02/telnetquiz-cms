@@ -4,7 +4,12 @@ import { DbLayer } from "@/lib/db";
 import { HttpStatus, response } from "@/lib/http";
 import { withApiErrorHandling } from "@/lib/sentry/effect";
 import { authMiddleware } from "@/middlewares/auth";
-import { fetchLeaderboard } from "@/services/users/users";
+import {
+	fetchLeaderboard,
+	type LeaderboardPeriod,
+} from "@/services/users/users";
+
+const ALLOWED_PERIODS: LeaderboardPeriod[] = ["week", "month", "all"];
 
 export const Route = createFileRoute("/api/(internal)/leaderboard")({
 	server: {
@@ -17,9 +22,15 @@ export const Route = createFileRoute("/api/(internal)/leaderboard")({
 							const url = new URL(request.url);
 							const limitParam = url.searchParams.get("limit");
 							const cursorParam = url.searchParams.get("cursor");
+							const periodParam = url.searchParams.get("period");
 
 							const limit = limitParam ? Number(limitParam) : 10;
 							const cursor = cursorParam ? Number(cursorParam) : undefined;
+							const period: LeaderboardPeriod = ALLOWED_PERIODS.includes(
+								periodParam as LeaderboardPeriod,
+							)
+								? (periodParam as LeaderboardPeriod)
+								: "all";
 
 							if (Number.isNaN(limit) || limit < 1 || limit > 100) {
 								return response(
@@ -47,6 +58,7 @@ export const Route = createFileRoute("/api/(internal)/leaderboard")({
 								context.user.id,
 								limit,
 								cursor,
+								period,
 							);
 
 							return response(
