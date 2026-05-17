@@ -190,15 +190,17 @@ async function main() {
 	console.log("=".repeat(60));
 	console.log();
 
-	if (process.argv.includes("--testing")) {
+	const testingFlag = process.argv.includes("--testing");
+	if (testingFlag) {
 		setDbMode("testing");
 	}
 
 	const mode = getDbMode();
 	const dbUrl =
 		mode === "testing" ? env.SUPABASE_DB_TESTING_URL : env.SUPABASE_DB_URL;
+	const source = testingFlag ? "--testing flag" : `NODE_ENV=${env.NODE_ENV}`;
 	console.log("[DB Target]");
-	console.log(`  Mode: ${mode}`);
+	console.log(`  Mode: ${mode}  (from ${source})`);
 	console.log(`  URL:  ${maskDbUrl(dbUrl)}`);
 	console.log();
 
