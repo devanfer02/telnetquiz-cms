@@ -147,14 +147,14 @@ export default function ChapterList({ chapters }: ChapterListProps) {
 
 	return (
 		<>
-			<div className="flex items-center justify-between mb-4 gap-x-5">
+			<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3 sm:gap-x-5">
 				<Input
 					placeholder="Cari chapter..."
 					value={keyword ?? ""}
 					onChange={(e) => setKeyword(e.target.value)}
 					className="w-full"
 				/>
-				<Button className="px-4 py-2 rounded-md bg-primary border border-telnet-primary bg-telnet-primary text-white hover:bg-white hover:text-telnet-primary duration-200 cursor-pointer">
+				<Button className="w-full sm:w-auto px-4 py-2 rounded-md bg-primary border border-telnet-primary bg-telnet-primary text-white hover:bg-white hover:text-telnet-primary duration-200 cursor-pointer">
 					<Link to="/chapters/add">Tambah Chapter</Link>
 				</Button>
 			</div>

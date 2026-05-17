@@ -127,7 +127,7 @@ export default function UserList({ users }: UserListProps) {
 
 	return (
 		<>
-			<div className="flex items-center justify-between mb-4 gap-x-5">
+			<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3 sm:gap-x-5">
 				<Input
 					placeholder="Cari User..."
 					value={keyword ?? ""}
@@ -139,7 +139,7 @@ export default function UserList({ users }: UserListProps) {
 						<Button
 							type="button"
 							disabled={isResetting}
-							className="bg-amber-600 hover:bg-amber-700 text-white cursor-pointer whitespace-nowrap"
+							className="w-full sm:w-auto bg-amber-600 hover:bg-amber-700 text-white cursor-pointer whitespace-nowrap"
 						>
 							<RotateCcw size={18} />
 							Reset All Progress

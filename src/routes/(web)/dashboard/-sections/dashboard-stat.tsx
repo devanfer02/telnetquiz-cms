@@ -46,7 +46,7 @@ export default function DashboardStats() {
 			<h1 className="font-black text-telnet-primary text-xl">
 				Current statistics
 			</h1>
-			<div className={`grid grid-cols-3 gap-x-10 gap-y-5`}>
+			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 md:gap-x-10 gap-y-5">
 				{dashboardItems.map((item) => (
 					<CardStat
 						key={item.title}

@@ -251,18 +251,18 @@ export default function QuestionList({
 
 	return (
 		<>
-			<div className="flex items-center justify-between mb-4 gap-x-5">
+			<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3 sm:gap-x-5">
 				<Input
 					placeholder="Cari pertanyaan..."
 					value={keyword ?? ""}
 					onChange={(e) => setKeyword(e.target.value)}
 					className="w-full"
 				/>
-				<div className="flex items-center gap-2 shrink-0">
+				<div className="flex items-center gap-2 shrink-0 w-full sm:w-auto">
 					{activeTab === "pretest" && (
 						<PretestPreviewSheet questions={filteredData} />
 					)}
-					<Button className="px-4 py-2 rounded-md bg-primary border border-telnet-primary bg-telnet-primary text-white hover:bg-white hover:text-telnet-primary duration-200 cursor-pointer">
+					<Button className="flex-1 sm:flex-none px-4 py-2 rounded-md bg-primary border border-telnet-primary bg-telnet-primary text-white hover:bg-white hover:text-telnet-primary duration-200 cursor-pointer">
 						<Link to="/questions/add">Tambah Pertanyaan</Link>
 					</Button>
 				</div>

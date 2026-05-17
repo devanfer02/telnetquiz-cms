@@ -6,7 +6,7 @@ import { Cat, SpeechBubble } from "react-kawaii";
 import FlashContainer from "@/components/global/flash-banner";
 import GlobalLoader from "@/components/global/global-loading";
 import AppSidebar from "@/components/global/sidebar";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { accounts } from "@/database/schema";
 import { auth } from "@/lib/auth/server";
 import { db } from "@/lib/db";
@@ -58,10 +58,16 @@ function RouteComponent() {
 		<AuthProvider>
 			<SidebarProvider>
 				<AppSidebar />
-				<div className="relative flex-1">
+				<div className="relative flex-1 min-w-0">
+					<header className="md:hidden sticky top-0 z-30 flex items-center gap-3 border-b border-border bg-background/95 backdrop-blur px-4 h-14">
+						<SidebarTrigger className="size-9" />
+						<span className="font-bold text-telnet-primary">
+							TelNetQuiz CMS
+						</span>
+					</header>
 					<GlobalLoader />
 
-					<main className="px-6 mt-8 w-full">
+					<main className="px-4 sm:px-6 mt-4 md:mt-8 w-full">
 						<FlashContainer />
 						<Outlet />
 					</main>

@@ -11,16 +11,16 @@ interface MaterialHeaderProps {
 export default function MaterialHeader({ studyMaterial }: MaterialHeaderProps) {
 	return (
 		<div className="bg-linear-to-r from-orange-50 to-white border-b border-gray-200">
-			<div className="max-w-7xl mx-auto px-6 py-8">
-				<div className="flex items-start justify-between gap-6">
+			<div className="max-w-7xl mx-auto px-4 py-6 md:px-6 md:py-8">
+				<div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 md:gap-6">
 					{/* Left side - Title and image */}
-					<div className="flex-1 min-w-0 flex gap-6">
+					<div className="flex-1 min-w-0 flex flex-col sm:flex-row gap-4 sm:gap-6">
 						{/* Optional image */}
 						{studyMaterial.imageLink && (
 							<img
 								src={studyMaterial.imageLink}
 								alt={studyMaterial.title}
-								className="w-32 h-32 object-cover rounded-lg shadow-md shrink-0"
+								className="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-lg shadow-md shrink-0"
 							/>
 						)}
 
@@ -33,14 +33,14 @@ export default function MaterialHeader({ studyMaterial }: MaterialHeaderProps) {
 									Study Material
 								</span>
 							</div>
-							<h1 className="text-4xl font-bold text-gray-900 mb-2 wrap-break-word">
+							<h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-2 wrap-break-word">
 								{studyMaterial.title}
 							</h1>
 						</div>
 					</div>
 
 					{/* Right side - Action buttons */}
-					<div className="flex items-center gap-2 shrink-0">
+					<div className="flex items-center gap-2 shrink-0 flex-wrap">
 						<Button
 							className="bg-amber-600 hover:bg-amber-700 text-white shadow-sm"
 							asChild

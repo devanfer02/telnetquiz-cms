@@ -12,8 +12,8 @@ export default function ChapterHeader({ chapter }: ChapterHeaderProps) {
 
 	return (
 		<div className="bg-linear-to-r from-orange-50 to-white border-b border-gray-200">
-			<div className="max-w-7xl mx-auto px-6 py-8">
-				<div className="flex items-start justify-between gap-6">
+			<div className="max-w-7xl mx-auto px-4 py-6 md:px-6 md:py-8">
+				<div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 md:gap-6">
 					{/* Left side - Title and description */}
 					<div className="flex-1 min-w-0">
 						<div className="flex items-center gap-3 mb-2">
@@ -24,14 +24,14 @@ export default function ChapterHeader({ chapter }: ChapterHeaderProps) {
 								Chapter
 							</span>
 						</div>
-						<h1 className="text-4xl font-bold text-gray-900 mb-3 wrap-break-word">
+						<h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-3 wrap-break-word">
 							{chapter.title}
 						</h1>
 					</div>
 
 					{/* Right side - Action button */}
 					<Button
-						className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm shrink-0"
+						className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm shrink-0 w-full md:w-auto"
 						asChild
 					>
 						<Link
