@@ -8,6 +8,6 @@ export default defineConfig({
   schema: "./src/database/schema.ts",
   out: "./src/database/drizzle",
   dbCredentials: {
-    url: env.SUPABASE_DB_URL
+    url: env.NODE_ENV === "production" ? env.SUPABASE_DB_URL : env.SUPABASE_DB_TESTING_URL
   }
 })

@@ -32,7 +32,7 @@ testingPool.on("error", (err) => {
 const prodDb = drizzle(prodPool, { schema });
 const testingDb = drizzle(testingPool, { schema });
 
-let currentMode: DbMode = "production";
+let currentMode: DbMode = env.NODE_ENV;
 
 export const getDbMode = (): DbMode => currentMode;
 
