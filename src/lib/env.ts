@@ -7,6 +7,7 @@ export const env = createEnv({
 		BETTER_AUTH_URL: z.url(),
 		BETTER_AUTH_SECRET: z.string(),
 		SUPABASE_DB_URL: z.string(),
+		SUPABASE_DB_TESTING_URL: z.string(),
 		GOOGLE_CLIENT_ID: z.string(),
 		GOOGLE_CLIENT_SECRET: z.string(),
 		API_KEY: z.string(),

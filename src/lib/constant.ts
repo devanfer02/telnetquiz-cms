@@ -4,6 +4,7 @@ import {
 	BookMarked,
 	BookOpen,
 	Brain,
+	Database,
 	FileQuestionIcon,
 	FileSpreadsheet,
 	FolderOpen,
@@ -119,6 +120,12 @@ export const sidebarEntries: SidebarEntry[] = [
 		url: "/preview",
 		icon: Smartphone,
 	},
+	{
+		type: "link",
+		title: "Database",
+		url: "/settings/database",
+		icon: Database,
+	},
 ];
 
 export const flatSidebarItems: SidebarLink[] = sidebarEntries.flatMap(
@@ -142,4 +149,5 @@ export const QUERY_KEYS = {
 	ACHIEVEMENTS: "achievement-list",
 	ACHIEVEMENT_DETAIL: "achievement-detail",
 	USER_ACHIEVEMENTS: "user-achievements",
+	DB_MODE: "db-mode",
 };
