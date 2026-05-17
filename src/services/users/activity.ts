@@ -1,9 +1,23 @@
-import { and, eq, gte } from "drizzle-orm";
+import { and, eq, gte, inArray, sql } from "drizzle-orm";
 import { Effect } from "effect";
 import { chapters, quizzes, submissions } from "@/database/schema";
 import { Db } from "@/lib/db";
 import { dbTryPromise } from "@/lib/retry";
 import { DatabaseError } from "../errors/errors";
+
+type EntryAccum = {
+	quiz_id: number;
+	quiz_level: number;
+	count: number;
+	latest_score: number;
+	latest_time: Date;
+};
+
+type ChapterAccum = {
+	chapter_id: number;
+	chapter_title: string;
+	entries: Map<number, EntryAccum>;
+};
 
 export const fetchRecentActivity = (userId: string) =>
 	Effect.gen(function* () {
@@ -50,34 +64,57 @@ export const fetchRecentActivity = (userId: string) =>
 				}),
 		});
 
-		const dayMap = new Map<
-			string,
-			Map<
-				number,
-				{
-					quiz_id: number;
-					chapter_id: number;
-					chapter_title: string;
-					quiz_level: number;
-					count: number;
-					latest_score: number;
-					latest_time: Date;
-				}
-			>
-		>();
+		const chapterIds = Array.from(
+			new Set(rows.map((r) => r.chapterId).filter((id): id is number => !!id)),
+		);
+
+		const totals =
+			chapterIds.length > 0
+				? yield* dbTryPromise({
+						try: () =>
+							db
+								.select({
+									chapterId: quizzes.chapterId,
+									totalLevels: sql<number>`count(${quizzes.id})::int`,
+								})
+								.from(quizzes)
+								.where(inArray(quizzes.chapterId, chapterIds))
+								.groupBy(quizzes.chapterId),
+						catch: (err) =>
+							new DatabaseError({
+								cause: err,
+								message: "Failed to fetch chapter totals",
+							}),
+					})
+				: [];
+
+		const totalByChapter = new Map<number, number>();
+		for (const t of totals) {
+			if (t.chapterId != null) totalByChapter.set(t.chapterId, t.totalLevels);
+		}
+
+		const dayMap = new Map<string, Map<number, ChapterAccum>>();
 
 		for (const row of rows) {
 			if (!row.quizId || !row.chapterId) continue;
 
 			const dateKey = row.createdAt.toISOString().slice(0, 10);
 
-			if (!dayMap.has(dateKey)) {
-				dayMap.set(dateKey, new Map());
-			}
-			const quizMap = dayMap.get(dateKey);
-			if (!quizMap) continue;
+			if (!dayMap.has(dateKey)) dayMap.set(dateKey, new Map());
+			const chapterMap = dayMap.get(dateKey);
+			if (!chapterMap) continue;
 
-			const existing = quizMap.get(row.quizId);
+			let chapter = chapterMap.get(row.chapterId);
+			if (!chapter) {
+				chapter = {
+					chapter_id: row.chapterId,
+					chapter_title: row.chapterTitle,
+					entries: new Map(),
+				};
+				chapterMap.set(row.chapterId, chapter);
+			}
+
+			const existing = chapter.entries.get(row.quizId);
 			if (existing) {
 				existing.count++;
 				if (row.createdAt > existing.latest_time) {
@@ -85,10 +122,8 @@ export const fetchRecentActivity = (userId: string) =>
 					existing.latest_time = row.createdAt;
 				}
 			} else {
-				quizMap.set(row.quizId, {
+				chapter.entries.set(row.quizId, {
 					quiz_id: row.quizId,
-					chapter_id: row.chapterId,
-					chapter_title: row.chapterTitle,
 					quiz_level: row.quizLevel,
 					count: 1,
 					latest_score: row.score ?? 0,
@@ -103,21 +138,54 @@ export const fetchRecentActivity = (userId: string) =>
 				Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - i),
 			);
 			const dateKey = d.toISOString().slice(0, 10);
-			const quizMap = dayMap.get(dateKey);
+			const chapterMap = dayMap.get(dateKey);
 
-			const entries = quizMap
-				? Array.from(quizMap.values()).map((e) => ({
-						quiz_id: e.quiz_id,
-						chapter_id: e.chapter_id,
-						chapter_title: e.chapter_title,
-						quiz_level: e.quiz_level,
-						retry_count: e.count,
-						latest_score: e.latest_score,
-						latest_time: e.latest_time.toISOString(),
-					}))
+			const chapterGroups = chapterMap
+				? Array.from(chapterMap.values()).map((c) => {
+						const entriesArr = Array.from(c.entries.values()).sort(
+							(a, b) => a.quiz_level - b.quiz_level,
+						);
+						const total = totalByChapter.get(c.chapter_id) ?? entriesArr.length;
+						const levelsToday = entriesArr.length;
+						const avg =
+							levelsToday > 0
+								? Math.round(
+										entriesArr.reduce((s, e) => s + e.latest_score, 0) /
+											levelsToday,
+									)
+								: 0;
+						const pct =
+							total > 0
+								? Math.min(100, Math.round((levelsToday / total) * 100))
+								: 0;
+						return {
+							chapter_id: c.chapter_id,
+							chapter_title: c.chapter_title,
+							total_levels: total,
+							levels_completed_today: levelsToday,
+							average_score: avg,
+							completion_percentage: pct,
+							entries: entriesArr.map((e) => ({
+								quiz_id: e.quiz_id,
+								quiz_level: e.quiz_level,
+								retry_count: e.count,
+								latest_score: e.latest_score,
+								latest_time: e.latest_time.toISOString(),
+							})),
+						};
+					})
 				: [];
 
-			activities.push({ date: dateKey, entries });
+			const levelCount = chapterGroups.reduce(
+				(s, g) => s + g.levels_completed_today,
+				0,
+			);
+
+			activities.push({
+				date: dateKey,
+				level_count: levelCount,
+				chapter_groups: chapterGroups,
+			});
 		}
 
 		return { activities };
