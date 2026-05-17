@@ -62,9 +62,16 @@ export const verifyAnswerSchema = z.object({
 	answered_option_id: z.number(),
 });
 
+export const verifyPretestAnswerSchema = z.object({
+	question_id: z.number(),
+	answered_option_id: z.number(),
+});
+
 export type UpdateProfileFormData = z.infer<typeof updateProfileSchema>;
 
 export type VerifyAnswerData = z.infer<typeof verifyAnswerSchema>;
+
+export type VerifyPretestAnswerData = z.infer<typeof verifyPretestAnswerSchema>;
 
 export const quizMaterialsSchema = z.object({
 	quiz_id: z.number(),

@@ -8,7 +8,57 @@ import {
 } from "@/database/schema";
 import { Db } from "@/lib/db";
 import { dbTryPromise } from "@/lib/retry";
-import { DatabaseError, ValidationError } from "../errors/errors";
+import {
+	DatabaseError,
+	NotFoundError,
+	ValidationError,
+} from "../errors/errors";
+
+export const verifyPretestAnswer = (
+	questionId: number,
+	answeredOptionId: number,
+) =>
+	Effect.gen(function* () {
+		const { db } = yield* Db;
+
+		const question = yield* dbTryPromise({
+			try: () =>
+				db.query.questions.findFirst({
+					where: eq(questions.id, questionId),
+					with: {
+						options: true,
+					},
+				}),
+			catch: (err) =>
+				new DatabaseError({
+					cause: err,
+					message: `Failed to fetch question ${questionId}`,
+				}),
+		});
+
+		if (!question) {
+			return yield* Effect.fail(
+				new NotFoundError({ id: questionId, entity: "Question" }),
+			);
+		}
+
+		if (question.type !== "pretest") {
+			return yield* Effect.fail(
+				new ValidationError({
+					errors: {
+						message: `Question ${questionId} is not a pretest question`,
+					},
+				}),
+			);
+		}
+
+		const correctOption = question.options.find((o) => o.isCorrect);
+
+		return {
+			correct: correctOption?.id === answeredOptionId,
+			correct_option_id: correctOption?.id ?? 0,
+		};
+	});
 
 export const checkPretestStatus = (userId: string) =>
 	Effect.gen(function* () {
