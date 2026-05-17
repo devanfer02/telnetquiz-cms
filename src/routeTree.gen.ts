@@ -35,6 +35,7 @@ import { Route as ApiinternalAchievementsRouteImport } from './routes/api/(inter
 import { Route as webUsersIdRouteImport } from './routes/(web)/users/$id'
 import { Route as webStudyMaterialsAddRouteImport } from './routes/(web)/study-materials/add'
 import { Route as webStudyMaterialsIdRouteImport } from './routes/(web)/study-materials/$id'
+import { Route as webSettingsDatabaseRouteImport } from './routes/(web)/settings/database'
 import { Route as webSchoolsAddRouteImport } from './routes/(web)/schools/add'
 import { Route as webQuizAddRouteImport } from './routes/(web)/quiz/add'
 import { Route as webQuizIdRouteImport } from './routes/(web)/quiz/$id'
@@ -52,6 +53,7 @@ import { Route as ApiinternalUsersAvatarRouteImport } from './routes/api/(intern
 import { Route as ApiinternalQuizVerifyRouteImport } from './routes/api/(internal)/quiz/verify'
 import { Route as ApiinternalQuizMaterialsRouteImport } from './routes/api/(internal)/quiz/materials'
 import { Route as ApiinternalQuizIdRouteImport } from './routes/api/(internal)/quiz/$id'
+import { Route as ApiinternalPretestVerifyRouteImport } from './routes/api/(internal)/pretest/verify'
 import { Route as ApiinternalPretestStatusRouteImport } from './routes/api/(internal)/pretest/status'
 import { Route as ApiinternalMaterialsBulkGetRouteImport } from './routes/api/(internal)/materials/bulk-get'
 import { Route as ApiinternalMaterialsIdRouteImport } from './routes/api/(internal)/materials/$id'
@@ -199,6 +201,11 @@ const webStudyMaterialsIdRoute = webStudyMaterialsIdRouteImport.update({
   path: '/study-materials/$id',
   getParentRoute: () => webRouteRoute,
 } as any)
+const webSettingsDatabaseRoute = webSettingsDatabaseRouteImport.update({
+  id: '/settings/database',
+  path: '/settings/database',
+  getParentRoute: () => webRouteRoute,
+} as any)
 const webSchoolsAddRoute = webSchoolsAddRouteImport.update({
   id: '/schools/add',
   path: '/schools/add',
@@ -286,6 +293,12 @@ const ApiinternalQuizIdRoute = ApiinternalQuizIdRouteImport.update({
   path: '/quiz/$id',
   getParentRoute: () => ApiinternalRouteRoute,
 } as any)
+const ApiinternalPretestVerifyRoute =
+  ApiinternalPretestVerifyRouteImport.update({
+    id: '/verify',
+    path: '/verify',
+    getParentRoute: () => ApiinternalPretestRoute,
+  } as any)
 const ApiinternalPretestStatusRoute =
   ApiinternalPretestStatusRouteImport.update({
     id: '/status',
@@ -391,6 +404,7 @@ export interface FileRoutesByFullPath {
   '/quiz/$id': typeof webQuizIdRoute
   '/quiz/add': typeof webQuizAddRoute
   '/schools/add': typeof webSchoolsAddRoute
+  '/settings/database': typeof webSettingsDatabaseRoute
   '/study-materials/$id': typeof webStudyMaterialsIdRoute
   '/study-materials/add': typeof webStudyMaterialsAddRoute
   '/users/$id': typeof webUsersIdRoute
@@ -427,6 +441,7 @@ export interface FileRoutesByFullPath {
   '/api/materials/$id': typeof ApiinternalMaterialsIdRoute
   '/api/materials/bulk-get': typeof ApiinternalMaterialsBulkGetRoute
   '/api/pretest/status': typeof ApiinternalPretestStatusRoute
+  '/api/pretest/verify': typeof ApiinternalPretestVerifyRoute
   '/api/quiz/$id': typeof ApiinternalQuizIdRoute
   '/api/quiz/materials': typeof ApiinternalQuizMaterialsRoute
   '/api/quiz/verify': typeof ApiinternalQuizVerifyRoute
@@ -452,6 +467,7 @@ export interface FileRoutesByTo {
   '/quiz/$id': typeof webQuizIdRoute
   '/quiz/add': typeof webQuizAddRoute
   '/schools/add': typeof webSchoolsAddRoute
+  '/settings/database': typeof webSettingsDatabaseRoute
   '/study-materials/$id': typeof webStudyMaterialsIdRoute
   '/study-materials/add': typeof webStudyMaterialsAddRoute
   '/users/$id': typeof webUsersIdRoute
@@ -488,6 +504,7 @@ export interface FileRoutesByTo {
   '/api/materials/$id': typeof ApiinternalMaterialsIdRoute
   '/api/materials/bulk-get': typeof ApiinternalMaterialsBulkGetRoute
   '/api/pretest/status': typeof ApiinternalPretestStatusRoute
+  '/api/pretest/verify': typeof ApiinternalPretestVerifyRoute
   '/api/quiz/$id': typeof ApiinternalQuizIdRoute
   '/api/quiz/materials': typeof ApiinternalQuizMaterialsRoute
   '/api/quiz/verify': typeof ApiinternalQuizVerifyRoute
@@ -515,6 +532,7 @@ export interface FileRoutesById {
   '/(web)/quiz/$id': typeof webQuizIdRoute
   '/(web)/quiz/add': typeof webQuizAddRoute
   '/(web)/schools/add': typeof webSchoolsAddRoute
+  '/(web)/settings/database': typeof webSettingsDatabaseRoute
   '/(web)/study-materials/$id': typeof webStudyMaterialsIdRoute
   '/(web)/study-materials/add': typeof webStudyMaterialsAddRoute
   '/(web)/users/$id': typeof webUsersIdRoute
@@ -551,6 +569,7 @@ export interface FileRoutesById {
   '/api/(internal)/materials/$id': typeof ApiinternalMaterialsIdRoute
   '/api/(internal)/materials/bulk-get': typeof ApiinternalMaterialsBulkGetRoute
   '/api/(internal)/pretest/status': typeof ApiinternalPretestStatusRoute
+  '/api/(internal)/pretest/verify': typeof ApiinternalPretestVerifyRoute
   '/api/(internal)/quiz/$id': typeof ApiinternalQuizIdRoute
   '/api/(internal)/quiz/materials': typeof ApiinternalQuizMaterialsRoute
   '/api/(internal)/quiz/verify': typeof ApiinternalQuizVerifyRoute
@@ -578,6 +597,7 @@ export interface FileRouteTypes {
     | '/quiz/$id'
     | '/quiz/add'
     | '/schools/add'
+    | '/settings/database'
     | '/study-materials/$id'
     | '/study-materials/add'
     | '/users/$id'
@@ -614,6 +634,7 @@ export interface FileRouteTypes {
     | '/api/materials/$id'
     | '/api/materials/bulk-get'
     | '/api/pretest/status'
+    | '/api/pretest/verify'
     | '/api/quiz/$id'
     | '/api/quiz/materials'
     | '/api/quiz/verify'
@@ -639,6 +660,7 @@ export interface FileRouteTypes {
     | '/quiz/$id'
     | '/quiz/add'
     | '/schools/add'
+    | '/settings/database'
     | '/study-materials/$id'
     | '/study-materials/add'
     | '/users/$id'
@@ -675,6 +697,7 @@ export interface FileRouteTypes {
     | '/api/materials/$id'
     | '/api/materials/bulk-get'
     | '/api/pretest/status'
+    | '/api/pretest/verify'
     | '/api/quiz/$id'
     | '/api/quiz/materials'
     | '/api/quiz/verify'
@@ -701,6 +724,7 @@ export interface FileRouteTypes {
     | '/(web)/quiz/$id'
     | '/(web)/quiz/add'
     | '/(web)/schools/add'
+    | '/(web)/settings/database'
     | '/(web)/study-materials/$id'
     | '/(web)/study-materials/add'
     | '/(web)/users/$id'
@@ -737,6 +761,7 @@ export interface FileRouteTypes {
     | '/api/(internal)/materials/$id'
     | '/api/(internal)/materials/bulk-get'
     | '/api/(internal)/pretest/status'
+    | '/api/(internal)/pretest/verify'
     | '/api/(internal)/quiz/$id'
     | '/api/(internal)/quiz/materials'
     | '/api/(internal)/quiz/verify'
@@ -942,6 +967,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof webStudyMaterialsIdRouteImport
       parentRoute: typeof webRouteRoute
     }
+    '/(web)/settings/database': {
+      id: '/(web)/settings/database'
+      path: '/settings/database'
+      fullPath: '/settings/database'
+      preLoaderRoute: typeof webSettingsDatabaseRouteImport
+      parentRoute: typeof webRouteRoute
+    }
     '/(web)/schools/add': {
       id: '/(web)/schools/add'
       path: '/schools/add'
@@ -1060,6 +1092,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/quiz/$id'
       preLoaderRoute: typeof ApiinternalQuizIdRouteImport
       parentRoute: typeof ApiinternalRouteRoute
+    }
+    '/api/(internal)/pretest/verify': {
+      id: '/api/(internal)/pretest/verify'
+      path: '/verify'
+      fullPath: '/api/pretest/verify'
+      preLoaderRoute: typeof ApiinternalPretestVerifyRouteImport
+      parentRoute: typeof ApiinternalPretestRoute
     }
     '/api/(internal)/pretest/status': {
       id: '/api/(internal)/pretest/status'
@@ -1194,6 +1233,7 @@ interface webRouteRouteChildren {
   webQuizIdRoute: typeof webQuizIdRoute
   webQuizAddRoute: typeof webQuizAddRoute
   webSchoolsAddRoute: typeof webSchoolsAddRoute
+  webSettingsDatabaseRoute: typeof webSettingsDatabaseRoute
   webStudyMaterialsIdRoute: typeof webStudyMaterialsIdRoute
   webStudyMaterialsAddRoute: typeof webStudyMaterialsAddRoute
   webUsersIdRoute: typeof webUsersIdRoute
@@ -1229,6 +1269,7 @@ const webRouteRouteChildren: webRouteRouteChildren = {
   webQuizIdRoute: webQuizIdRoute,
   webQuizAddRoute: webQuizAddRoute,
   webSchoolsAddRoute: webSchoolsAddRoute,
+  webSettingsDatabaseRoute: webSettingsDatabaseRoute,
   webStudyMaterialsIdRoute: webStudyMaterialsIdRoute,
   webStudyMaterialsAddRoute: webStudyMaterialsAddRoute,
   webUsersIdRoute: webUsersIdRoute,
@@ -1259,10 +1300,12 @@ const webRouteRouteWithChildren = webRouteRoute._addFileChildren(
 
 interface ApiinternalPretestRouteChildren {
   ApiinternalPretestStatusRoute: typeof ApiinternalPretestStatusRoute
+  ApiinternalPretestVerifyRoute: typeof ApiinternalPretestVerifyRoute
 }
 
 const ApiinternalPretestRouteChildren: ApiinternalPretestRouteChildren = {
   ApiinternalPretestStatusRoute: ApiinternalPretestStatusRoute,
+  ApiinternalPretestVerifyRoute: ApiinternalPretestVerifyRoute,
 }
 
 const ApiinternalPretestRouteWithChildren =
