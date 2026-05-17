@@ -127,7 +127,7 @@ export const fetchLeaderboard = (
 					WITH user_scores AS (
 						SELECT
 							u.id AS user_id,
-							u.name AS fullname,
+							u.fullname,
 							u.image,
 							u.gender,
 							COALESCE((
@@ -190,7 +190,7 @@ export const fetchLeaderboard = (
 				current_ranked AS (
 					SELECT
 						u.id AS user_id,
-						u.name AS fullname,
+						u.fullname,
 						u.image,
 						u.gender,
 						COALESCE(c.total_score, 0) AS total_score,
