@@ -1,0 +1,58 @@
+[
+  {
+    "slug": "pretest_complete",
+    "title": "Penjelajah Pretest",
+    "description": "Menyelesaikan pretest",
+    "icon": "scroll-text",
+    "rule": { ">": [{ "var": "pretest_total" }, 0] }
+  },
+  {
+    "slug": "first_quiz",
+    "title": "Kuis Pertama",
+    "description": "Menyelesaikan kuis pertama",
+    "icon": "trophy",
+    "rule": { ">": [{ "var": "total_submissions" }, 0] }
+  },
+  {
+    "slug": "perfect_score",
+    "title": "Nilai Sempurna",
+    "description": "Mendapatkan nilai 100 pada kuis",
+    "icon": "star",
+    "rule": { "==": [{ "var": "has_perfect_score" }, true] }
+  },
+  {
+    "slug": "chapter_master",
+    "title": "Penguasa Bab",
+    "description": "Menyelesaikan semua kuis dalam satu bab",
+    "icon": "crown",
+    "rule": { ">": [{ "var": "chapters_completed" }, 0] }
+  },
+  {
+    "slug": "five_levels",
+    "title": "Lima Langkah",
+    "description": "Menyelesaikan 5 level kuis",
+    "icon": "footprints",
+    "rule": { ">=": [{ "var": "levels_completed" }, 5] }
+  },
+  {
+    "slug": "all_chapters",
+    "title": "Sang Penakluk",
+    "description": "Menyelesaikan semua bab",
+    "icon": "graduation-cap",
+    "rule": { ">=": [{ "var": "chapters_completed" }, 2] }
+  },
+  {
+    "slug": "pretest_ace",
+    "title": "Jenius Pretest",
+    "description": "Mendapatkan skor pretest di atas 80",
+    "icon": "brain",
+    "rule": { ">=": [{ "var": "pretest_score" }, 80] }
+  },
+  {
+    "slug": "ten_submissions",
+    "title": "Pantang Menyerah",
+    "description": "Mengerjakan 10 kuis",
+    "icon": "flame",
+    "rule": { ">=": [{ "var": "total_submissions" }, 10] }
+  }
+]

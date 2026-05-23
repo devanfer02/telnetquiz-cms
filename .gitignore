@@ -24,3 +24,5 @@ telnetquiz-key.json
 
 # Validasi-konten skill reports (regenerated each run)
 .claude/skills/validasi-konten/reports/
+
+cli/content/data/prod/images

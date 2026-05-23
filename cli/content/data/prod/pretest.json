@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "chapterRef": "Prinsip TCP/IP",
+      "description": "Setiap detik, jutaan data terbang di jaringan. Ada polisi yang mengatur lalu lintasnya. Yuk, temukan jati dirinya!",
+      "question": "Fungsi utama protokol TCP/IP adalah...",
+      "imageLink": null,
+      "options": [
+        {
+          "text": "Mengatur komunikasi dan pengiriman data antar perangkat dalam jaringan",
+          "isCorrect": true
+        },
+        {
+          "text": "Mengenkripsi seluruh data yang tersimpan di hard disk komputer",
+          "isCorrect": false
+        },
+        {
+          "text": "Mengelola tampilan antarmuka pengguna pada sistem operasi",
+          "isCorrect": false
+        },
+        {
+          "text": "Mengatur kecepatan prosesor agar sesuai dengan beban jaringan",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "chapterRef": "Prinsip TCP/IP",
+      "description": "Setiap perangkat memiliki alamat unik sendiri. Gambar di atas menampilkan rumah beralamat IP. Alamat itu tersusun dari deretan bit. Ayo pecahkan misterinya!",
+      "question": "Jumlah bit pada alamat IPv4 adalah...",
+      "imageLink": "https://telnetquiz.r2.ferrel.dev/content/chapter0/ch0-ip-address.webp",
+      "options": [
+        {
+          "text": "32 bit",
+          "isCorrect": true
+        },
+        {
+          "text": "64 bit",
+          "isCorrect": false
+        },
+        {
+          "text": "128 bit",
+          "isCorrect": false
+        },
+        {
+          "text": "16 bit",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "chapterRef": "Prinsip Sistem WLAN",
+      "description": "Kamu pasti sering menggunakan Wi-Fi. Gambar di atas menampilkan jaringan nirkabel. Teknologi ini memiliki nama resmi tersendiri. Saatnya uji pengetahuan kamu!",
+      "question": "Definisi WLAN yang paling tepat adalah...",
+      "imageLink": "https://telnetquiz.r2.ferrel.dev/content/chapter0/ch0-wlan.png",
+      "options": [
+        {
+          "text": "Jaringan area lokal yang menghubungkan perangkat menggunakan gelombang radio tanpa kabel",
+          "isCorrect": true
+        },
+        {
+          "text": "Jaringan luas yang menghubungkan komputer antar kota menggunakan kabel fiber optik",
+          "isCorrect": false
+        },
+        {
+          "text": "Perangkat lunak yang digunakan untuk memantau lalu lintas internet",
+          "isCorrect": false
+        },
+        {
+          "text": "Protokol keamanan yang melindungi data pada jaringan berkabel",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "chapterRef": "Prinsip Sistem WLAN",
+      "description": "Gambar di atas menampilkan sebuah kotak kecil yang biasanya kamu lihat tertempel pada plafon ruangan. Kotak kecil tersebut merupakan jembatan antara HP dan kabel. Ayo, pilih jawabannya!",
+      "question": "Perangkat kotak kecil tersebut adalah...",
+      "imageLink": "https://telnetquiz.r2.ferrel.dev/content/chapter2/ch2-wlan-architecture.webp",
+      "options": [
+        {
+          "text": "Access Point (AP)",
+          "isCorrect": true
+        },
+        {
+          "text": "Repeater",
+          "isCorrect": false
+        },
+        {
+          "text": "Modem DSL",
+          "isCorrect": false
+        },
+        {
+          "text": "Network Interface Card (NIC) kabel",
+          "isCorrect": false
+        }
+      ]
+    }
+  ]
+}

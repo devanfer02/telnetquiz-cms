@@ -1,0 +1,597 @@
+{
+  "chapter": {
+    "title": "Prinsip Sistem WLAN",
+    "description": "Bab ini membahas konsep dasar Wireless Local Area Network (WLAN), meliputi pengertian, kelebihan dan kekurangan, topologi, komponen, standar IEEE 802.11, serta konfigurasi dasar access point.",
+    "mascotId": 2
+  },
+  "levels": [
+    {
+      "title": "Konsep Dasar dan Prinsip Kerja WLAN",
+      "level": 1,
+      "difficulty": "easy",
+      "questions": [
+        {
+          "description": "Kamu buka HP, langsung tersambung Wi-Fi. Gambar di atas menampilkan jaringan nirkabel. Teknologi itu memiliki nama resmi. Yuk, cari tahu definisinya!",
+          "question": "Definisi WLAN yang tepat adalah...",
+          "imageLink": "https://telnetquiz.r2.ferrel.dev/content/chapter2/ch2-wlan-overview.png",
+          "studyMaterial": {
+            "title": "Pengertian WLAN",
+            "content": "<p><strong>WLAN (Wireless Local Area Network)</strong> adalah jaringan area lokal yang menghubungkan dua atau lebih perangkat menggunakan <strong>transmisi gelombang radio</strong> tanpa memerlukan kabel fisik.</p><h3>Karakteristik WLAN</h3><ul><li><strong>Media transmisi:</strong> Menggunakan gelombang radio (frekuensi 2,4 GHz atau 5 GHz) sebagai pengganti kabel.</li><li><strong>Perangkat yang terhubung:</strong> Komputer, smartphone, tablet, laptop, dan perangkat IoT lainnya.</li><li><strong>Jangkauan:</strong> Umumnya mencakup area lokal seperti rumah, sekolah, kantor, atau gedung.</li></ul><h3>Keunggulan Utama</h3><p>WLAN bersifat <strong>praktis, efisien, dan mudah dalam perawatan</strong> karena tidak memerlukan pemasangan kabel yang rumit melalui dinding atau langit-langit gedung.</p>",
+            "imageLink": "https://telnetquiz.r2.ferrel.dev/content/chapter2/ch2-wlan-overview.png"
+          },
+          "options": [
+            {
+              "text": "Jaringan luas yang menghubungkan komputer antar kota menggunakan kabel fiber optik",
+              "isCorrect": false
+            },
+            {
+              "text": "Jaringan area lokal yang menghubungkan perangkat menggunakan gelombang radio tanpa kabel",
+              "isCorrect": true
+            },
+            {
+              "text": "Perangkat lunak yang digunakan untuk memantau lalu lintas internet",
+              "isCorrect": false
+            },
+            {
+              "text": "Protokol keamanan yang melindungi data pada jaringan berkabel",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "description": "Wi-Fi kirim data tanpa kabel. Gambar di atas menampilkan kanal WLAN. Media transmisinya memiliki karakter khusus. Ayo pecahkan misterinya!",
+          "question": "WLAN kirim data lewat media...",
+          "imageLink": "https://telnetquiz.r2.ferrel.dev/content/chapter2/ch2-wlan-channels.png",
+          "studyMaterial": {
+            "title": "Media Transmisi WLAN",
+            "content": "<p>Berbeda dengan jaringan kabel (LAN) yang menggunakan kabel UTP, coaxial, atau fiber optik, <strong>WLAN menggunakan gelombang radio</strong> sebagai media transmisi datanya.</p><h3>Cara Kerja</h3><ol><li>Perangkat pengirim mengubah data digital menjadi <strong>sinyal radio</strong>.</li><li>Sinyal radio dipancarkan melalui antena ke udara.</li><li>Perangkat penerima menangkap sinyal radio dan mengubahnya kembali menjadi data digital.</li></ol><h3>Frekuensi yang Digunakan</h3><ul><li><strong>2,4 GHz:</strong> Jangkauan lebih luas, tetapi lebih rentan terhadap interferensi.</li><li><strong>5 GHz:</strong> Kecepatan lebih tinggi, tetapi jangkauan lebih pendek.</li></ul><p>Penggunaan gelombang radio inilah yang membuat WLAN bersifat <strong>nirkabel (wireless)</strong> dan praktis dalam pemasangannya.</p>",
+            "imageLink": "https://telnetquiz.r2.ferrel.dev/content/chapter2/ch2-wlan-channels.png"
+          },
+          "options": [
+            {
+              "text": "Kabel coaxial",
+              "isCorrect": false
+            },
+            {
+              "text": "Kabel UTP kategori 6",
+              "isCorrect": false
+            },
+            {
+              "text": "Serat optik (fiber optic)",
+              "isCorrect": false
+            },
+            {
+              "text": "Gelombang radio",
+              "isCorrect": true
+            }
+          ]
+        },
+        {
+          "description": "Pindah kelas ke kantin, Wi-Fi tetap jalan. Kemampuan ini disebut mobilitas tinggi. Saatnya uji insting kamu!",
+          "question": "Arti mobilitas tinggi WLAN adalah...",
+          "imageLink": null,
+          "studyMaterial": {
+            "title": "Kelebihan WLAN: Mobilitas Tinggi",
+            "content": "<p>WLAN memiliki empat kelebihan utama dibandingkan jaringan kabel konvensional:</p><h3>1. Mobilitas Tinggi</h3><p>Pengguna dapat <strong>mengakses jaringan secara real-time dari mana saja</strong> selama masih berada dalam jangkauan sinyal. Tidak perlu terikat pada satu titik koneksi kabel.</p><h3>2. Fleksibilitas dan Kemudahan Instalasi</h3><p>Tidak perlu menarik kabel melalui dinding atau langit-langit gedung, sehingga pemasangan jauh lebih cepat dan mudah.</p><h3>3. Minimalisasi Anggaran Biaya</h3><p>Biaya instalasi secara keseluruhan lebih rendah karena tidak memerlukan pembelian dan pemasangan kabel dalam jumlah besar.</p><h3>4. Kemampuan Jangkauan</h3><p>Topologi jaringan WLAN dapat disesuaikan dari <strong>peer-to-peer</strong> untuk jaringan kecil hingga jaringan berskala luas dengan mudah.</p>",
+            "imageLink": null
+          },
+          "options": [
+            {
+              "text": "Pengguna dapat mengakses jaringan secara real-time dari mana saja dalam jangkauan sinyal",
+              "isCorrect": true
+            },
+            {
+              "text": "Kecepatan transfer data selalu lebih tinggi dibandingkan jaringan kabel",
+              "isCorrect": false
+            },
+            {
+              "text": "Jaringan dapat menjangkau seluruh kota tanpa perangkat tambahan",
+              "isCorrect": false
+            },
+            {
+              "text": "Data yang dikirim melalui WLAN tidak mungkin disadap oleh pihak lain",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "description": "WLAN praktis, tapi ada kelemahan. Gambar di atas menampilkan risiko keamanan. Data di udara rawan disadap. Siap ungkap alasannya!",
+          "question": "Kerahasiaan WLAN kurang terjamin karena...",
+          "imageLink": "https://telnetquiz.r2.ferrel.dev/content/chapter2/ch2-wlan-security-risk.svg",
+          "studyMaterial": {
+            "title": "Kekurangan WLAN: Keamanan Data",
+            "content": "<p>Meskipun memiliki banyak kelebihan, WLAN juga memiliki dua kekurangan utama:</p><h3>1. Kerahasiaan Data Kurang Terjamin</h3><p>Karena data ditransmisikan melalui <strong>gelombang radio yang merambat di udara</strong>, sinyal tersebut berpotensi ditangkap oleh pihak yang tidak berwenang. Meskipun sudah menggunakan enkripsi, sistem keamanan tetap dapat ditembus oleh penyerang yang memiliki kemampuan teknis.</p><h3>2. Sinyal Sering Terganggu</h3><p>Kualitas sinyal WLAN dapat terpengaruh oleh berbagai faktor:</p><ul><li><strong>Cuaca:</strong> Hujan deras atau cuaca buruk dapat melemahkan sinyal.</li><li><strong>Hambatan fisik:</strong> Dinding tebal, lantai beton, dan material bangunan dapat mengurangi kekuatan sinyal.</li><li><strong>Interferensi elektromagnetik:</strong> Benda logam dan perangkat elektronik lain dapat mengganggu sinyal radio.</li></ul>",
+            "imageLink": "https://telnetquiz.r2.ferrel.dev/content/chapter2/ch2-wlan-security-risk.svg"
+          },
+          "options": [
+            {
+              "text": "Jaringan WLAN sama sekali tidak memiliki sistem autentikasi pengguna apa pun",
+              "isCorrect": false
+            },
+            {
+              "text": "WLAN sama sekali tidak mendukung protokol enkripsi data apa pun",
+              "isCorrect": false
+            },
+            {
+              "text": "Sinyal radio merambat di udara sehingga dapat ditangkap oleh pihak yang tidak berwenang",
+              "isCorrect": true
+            },
+            {
+              "text": "Kecepatan WLAN terlalu lambat untuk mengirim data terenkripsi",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "description": "Sinyal WLAN sering terganggu saat hujan deras. Gambar di atas menampilkan sumber interferensi. Banyak faktor lingkungan dapat mengganggu sinyal. Tebak yang paling tepat, ya!",
+          "question": "BUKAN penyebab gangguan sinyal WLAN adalah...",
+          "imageLink": "https://telnetquiz.r2.ferrel.dev/content/chapter2/ch2-wlan-interference.webp",
+          "studyMaterial": {
+            "title": "Gangguan Sinyal WLAN",
+            "content": "<p>Kualitas sinyal WLAN sangat dipengaruhi oleh lingkungan sekitar. Berikut adalah faktor-faktor yang umum menyebabkan gangguan:</p><h3>Faktor Penyebab Gangguan</h3><ul><li><strong>Cuaca buruk:</strong> Hujan lebat, kabut tebal, dan badai dapat menyerap atau memantulkan gelombang radio.</li><li><strong>Hambatan fisik:</strong> Dinding beton, lantai, partisi logam, dan material padat lainnya menghalangi perambatan sinyal.</li><li><strong>Interferensi elektromagnetik:</strong> Perangkat seperti microwave, telepon nirkabel, dan perangkat Bluetooth yang beroperasi pada frekuensi serupa dapat menimbulkan interferensi.</li><li><strong>Benda logam:</strong> Logam memantulkan gelombang radio dan menyebabkan sinyal melemah atau terdistorsi.</li></ul><h3>Solusi Umum</h3><p>Untuk meminimalkan gangguan, access point sebaiknya ditempatkan di lokasi strategis yang <strong>minim hambatan fisik</strong> dan jauh dari sumber interferensi elektromagnetik.</p>",
+            "imageLink": "https://telnetquiz.r2.ferrel.dev/content/chapter2/ch2-wlan-interference.webp"
+          },
+          "options": [
+            {
+              "text": "Cuaca buruk seperti hujan deras dan kabut tebal",
+              "isCorrect": false
+            },
+            {
+              "text": "Jumlah pengguna yang terhubung ke jaringan kabel LAN",
+              "isCorrect": true
+            },
+            {
+              "text": "Dinding tebal dan material bangunan beton",
+              "isCorrect": false
+            },
+            {
+              "text": "Interferensi elektromagnetik dari benda logam",
+              "isCorrect": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Standar IEEE 802.11 dan Karakteristiknya",
+      "level": 2,
+      "difficulty": "medium",
+      "questions": [
+        {
+          "description": "Wi-Fi rumah lama biasanya menggunakan standar 802.11b — terasa lambat untuk video HD sekarang. Gambar di atas memuat tabel standar 802.11. Standar awal ini memiliki frekuensi dan kecepatan yang khas. Ayo, pilih jawabannya!",
+          "question": "Frekuensi dan kecepatan maksimum 802.11b adalah...",
+          "imageLink": "https://telnetquiz.r2.ferrel.dev/content/chapter2/ch2-ieee80211-comparison.jpg",
+          "studyMaterial": {
+            "title": "Standar IEEE 802.11b",
+            "content": "<p>IEEE 802.11b adalah salah satu standar WLAN awal yang populer dan banyak diimplementasikan pada perangkat jaringan nirkabel.</p><h3>Spesifikasi 802.11b</h3><ul><li><strong>Frekuensi:</strong> 2,4 GHz</li><li><strong>Kecepatan maksimum:</strong> 11 Mbps</li><li><strong>Jangkauan:</strong> Relatif luas karena menggunakan frekuensi rendah</li></ul><h3>Perbandingan dengan Standar Lain</h3><p>Dibandingkan standar 802.11a yang beroperasi pada 5 GHz dengan kecepatan 54 Mbps, standar 802.11b memiliki kecepatan lebih rendah tetapi <strong>jangkauan lebih luas</strong> dan <strong>lebih tahan terhadap hambatan fisik</strong> karena frekuensi 2,4 GHz memiliki kemampuan penetrasi yang lebih baik.</p><p>Standar ini kemudian disempurnakan oleh 802.11g yang tetap menggunakan frekuensi 2,4 GHz tetapi dengan kecepatan hingga 54 Mbps.</p>",
+            "imageLink": "https://telnetquiz.r2.ferrel.dev/content/chapter2/ch2-ieee80211-comparison.jpg"
+          },
+          "options": [
+            {
+              "text": "2,4 GHz dengan kecepatan maksimum 54 Mbps",
+              "isCorrect": false
+            },
+            {
+              "text": "5 GHz dengan kecepatan maksimum 54 Mbps",
+              "isCorrect": false
+            },
+            {
+              "text": "2,4 GHz dengan kecepatan maksimum 11 Mbps",
+              "isCorrect": true
+            },
+            {
+              "text": "5 GHz dengan kecepatan maksimum 11 Mbps",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "description": "Selain 802.11b yang banyak di rumah, 802.11a hadir bersamaan untuk kebutuhan kantor dan enterprise. Gambar di atas membandingkan keduanya. Pendekatan teknisnya berbeda total. Ayo kita bedakan keduanya!",
+          "question": "Ciri utama 802.11a dibandingkan 802.11b adalah...",
+          "imageLink": "https://telnetquiz.r2.ferrel.dev/content/chapter2/ch2-ieee80211-comparison.jpg",
+          "studyMaterial": {
+            "title": "Standar IEEE 802.11a",
+            "content": "<p>IEEE 802.11a dirilis bersamaan dengan 802.11b tetapi menggunakan pendekatan teknis yang berbeda.</p><h3>Spesifikasi 802.11a</h3><ul><li><strong>Frekuensi:</strong> 5 GHz (berbeda dari 802.11b yang menggunakan 2,4 GHz)</li><li><strong>Kecepatan maksimum:</strong> 54 Mbps</li><li><strong>Modulasi:</strong> OFDM (Orthogonal Frequency-Division Multiplexing)</li></ul><h3>Kelebihan dan Kekurangan</h3><p><strong>Kelebihan:</strong> Kecepatan lebih tinggi (54 Mbps vs 11 Mbps) dan lebih sedikit interferensi karena frekuensi 5 GHz tidak sepadat 2,4 GHz.</p><p><strong>Kekurangan:</strong> Jangkauan lebih pendek karena frekuensi tinggi lebih mudah diserap oleh hambatan fisik. Selain itu, 802.11a <strong>tidak kompatibel</strong> dengan perangkat 802.11b karena menggunakan frekuensi berbeda.</p>",
+            "imageLink": "https://telnetquiz.r2.ferrel.dev/content/chapter2/ch2-ieee80211-comparison.jpg"
+          },
+          "options": [
+            {
+              "text": "802.11a menggunakan frekuensi 5 GHz dengan kecepatan hingga 54 Mbps",
+              "isCorrect": true
+            },
+            {
+              "text": "802.11a menggunakan frekuensi 2,4 GHz dengan kecepatan hingga 100 Mbps",
+              "isCorrect": false
+            },
+            {
+              "text": "802.11a hanya dapat digunakan untuk jaringan kabel",
+              "isCorrect": false
+            },
+            {
+              "text": "802.11a memiliki jangkauan lebih luas dari 802.11b",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "description": "Router Wi-Fi modern memiliki banyak antena. Gambar di atas menampilkan teknologi MIMO. Antena ganda dipakai untuk mengirim data paralel. Saatnya uji insting kamu!",
+          "question": "Teknologi kunci 802.11n (Wi-Fi 4) adalah...",
+          "imageLink": "https://telnetquiz.r2.ferrel.dev/content/chapter2/ch2-mimo-vs-mumimo.webp",
+          "studyMaterial": {
+            "title": "Standar IEEE 802.11n (Wi-Fi 4)",
+            "content": "<p>IEEE 802.11n merupakan lompatan besar dalam teknologi WLAN dengan memperkenalkan fitur-fitur canggih.</p><h3>Spesifikasi 802.11n</h3><ul><li><strong>Frekuensi:</strong> Dual-band (2,4 GHz dan 5 GHz)</li><li><strong>Kecepatan maksimum:</strong> Hingga 600 Mbps</li><li><strong>Teknologi kunci:</strong> MIMO (Multiple-Input Multiple-Output)</li></ul><h3>Apa Itu MIMO?</h3><p>MIMO adalah teknologi yang menggunakan <strong>beberapa antena secara bersamaan</strong> untuk mengirim dan menerima data. Dengan MIMO, beberapa aliran data (spatial streams) dapat dikirim secara paralel, sehingga:</p><ul><li>Kecepatan transfer meningkat drastis</li><li>Keandalan sinyal lebih baik</li><li>Jangkauan lebih stabil</li></ul><p>Kemampuan dual-band memungkinkan perangkat memilih frekuensi yang paling optimal sesuai kondisi lingkungan.</p>",
+            "imageLink": "https://telnetquiz.r2.ferrel.dev/content/chapter2/ch2-mimo-vs-mumimo.webp"
+          },
+          "options": [
+            {
+              "text": "Frekuensi 5 GHz tunggal tanpa dukungan 2,4 GHz",
+              "isCorrect": false
+            },
+            {
+              "text": "Antena tunggal dengan kecepatan transfer tinggi",
+              "isCorrect": false
+            },
+            {
+              "text": "Beamforming yang fokus ke satu perangkat saja",
+              "isCorrect": false
+            },
+            {
+              "text": "MIMO (Multiple-Input Multiple-Output)",
+              "isCorrect": true
+            }
+          ]
+        },
+        {
+          "description": "802.11g cepat tapi tetap 2,4 GHz. Gambar di atas mencantumkan 802.11g. Standar ini sukses karena kompatibel. Yuk, jawab tantangan di bawah!",
+          "question": "Kecepatan maksimum 802.11g adalah...",
+          "imageLink": "https://telnetquiz.r2.ferrel.dev/content/chapter2/ch2-ieee80211-comparison.jpg",
+          "studyMaterial": {
+            "title": "Standar IEEE 802.11g",
+            "content": "<p>IEEE 802.11g merupakan evolusi dari 802.11b yang menggabungkan keunggulan frekuensi 2,4 GHz dengan kecepatan yang lebih tinggi.</p><h3>Spesifikasi 802.11g</h3><ul><li><strong>Frekuensi:</strong> 2,4 GHz (sama dengan 802.11b)</li><li><strong>Kecepatan maksimum:</strong> 54 Mbps (sama dengan 802.11a)</li><li><strong>Kompatibilitas:</strong> Backward-compatible dengan perangkat 802.11b</li></ul><h3>Keunggulan 802.11g</h3><p>Standar ini menjadi sangat populer karena:</p><ol><li><strong>Kecepatan tinggi:</strong> 54 Mbps, lima kali lipat dari 802.11b</li><li><strong>Jangkauan luas:</strong> Menggunakan frekuensi 2,4 GHz yang memiliki penetrasi lebih baik</li><li><strong>Kompatibel:</strong> Dapat bekerja dengan perangkat 802.11b yang sudah ada</li></ol><p>Namun, kelemahannya adalah frekuensi 2,4 GHz yang <strong>lebih padat</strong> dan rentan terhadap interferensi dari perangkat lain.</p>",
+            "imageLink": "https://telnetquiz.r2.ferrel.dev/content/chapter2/ch2-ieee80211-comparison.jpg"
+          },
+          "options": [
+            {
+              "text": "11 Mbps",
+              "isCorrect": false
+            },
+            {
+              "text": "54 Mbps",
+              "isCorrect": true
+            },
+            {
+              "text": "600 Mbps",
+              "isCorrect": false
+            },
+            {
+              "text": "150 Mbps",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "description": "Wi-Fi rumah modern terasa sangat cepat. Gambar di atas menampilkan MU-MIMO. Standar ini layani banyak perangkat sekaligus. Ayo pecahkan misterinya!",
+          "question": "Keunggulan utama 802.11ac (Wi-Fi 5) adalah...",
+          "imageLink": "https://telnetquiz.r2.ferrel.dev/content/chapter2/ch2-mimo-vs-mumimo.webp",
+          "studyMaterial": {
+            "title": "Standar IEEE 802.11ac (Wi-Fi 5)",
+            "content": "<p>IEEE 802.11ac merupakan standar WLAN generasi kelima yang menawarkan kecepatan sangat tinggi untuk kebutuhan modern.</p><h3>Spesifikasi 802.11ac</h3><ul><li><strong>Frekuensi:</strong> 5 GHz</li><li><strong>Kecepatan maksimum:</strong> Hingga 6,9 Gbps (secara teoritis)</li><li><strong>Teknologi:</strong> MU-MIMO (Multi-User MIMO)</li><li><strong>Lebar kanal:</strong> Hingga 160 MHz</li></ul><h3>MU-MIMO vs MIMO</h3><p>Perbedaan MU-MIMO dengan MIMO biasa:</p><ul><li><strong>MIMO (802.11n):</strong> Hanya dapat berkomunikasi dengan satu perangkat pada satu waktu</li><li><strong>MU-MIMO (802.11ac):</strong> Dapat melayani <strong>beberapa perangkat secara bersamaan</strong>, sehingga lebih efisien di lingkungan dengan banyak pengguna</li></ul><p>Standar ini sangat cocok untuk kebutuhan streaming video HD, gaming online, dan lingkungan dengan banyak perangkat terhubung.</p>",
+            "imageLink": "https://telnetquiz.r2.ferrel.dev/content/chapter2/ch2-mimo-vs-mumimo.webp"
+          },
+          "options": [
+            {
+              "text": "Membutuhkan hanya satu antena untuk seluruh jaringan",
+              "isCorrect": false
+            },
+            {
+              "text": "Menggunakan frekuensi 2,4 GHz dengan jangkauan hingga 1 km",
+              "isCorrect": false
+            },
+            {
+              "text": "Mendukung MU-MIMO dan kecepatan hingga 6,9 Gbps pada frekuensi 5 GHz",
+              "isCorrect": true
+            },
+            {
+              "text": "Bekerja tanpa access point dengan koneksi langsung antar perangkat",
+              "isCorrect": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Komponen dan Topologi Jaringan WLAN",
+      "level": 3,
+      "difficulty": "medium",
+      "questions": [
+        {
+          "description": "Di sekolah, ada kotak kecil pemancar. Gambar di atas menampilkan access point. Dia jembatan antara HP dan jaringan. Yuk, telaah fungsinya!",
+          "question": "Fungsi utama Access Point adalah...",
+          "imageLink": "https://telnetquiz.r2.ferrel.dev/content/chapter2/ch2-wlan-architecture.webp",
+          "studyMaterial": {
+            "title": "Access Point pada WLAN",
+            "content": "<p><strong>Access Point</strong> adalah perangkat keras utama dalam jaringan WLAN yang berfungsi sebagai penghubung antara perangkat nirkabel dan jaringan.</p><h3>Fungsi Access Point</h3><ul><li><strong>Mengirim dan menerima data:</strong> AP memancarkan sinyal radio dan menerima data dari perangkat klien.</li><li><strong>Menghubungkan pengguna:</strong> Menjadi titik koneksi sentral bagi seluruh perangkat nirkabel dalam jaringan.</li><li><strong>Bertindak sebagai hub/switch/router:</strong> AP dapat berfungsi sebagai penghubung antar perangkat dan juga sebagai gateway ke jaringan kabel atau internet.</li></ul><h3>Cara Kerja</h3><p>Access Point menerima sinyal radio dari perangkat klien, lalu meneruskan data tersebut ke jaringan kabel (LAN) atau ke internet. Sebaliknya, data dari jaringan kabel diteruskan melalui sinyal radio ke perangkat klien. Setiap AP memiliki <strong>SSID</strong> (Service Set Identifier) sebagai nama jaringan yang dapat dilihat oleh pengguna.</p>",
+            "imageLink": "https://telnetquiz.r2.ferrel.dev/content/chapter2/ch2-wlan-architecture.webp"
+          },
+          "options": [
+            {
+              "text": "Mengatur kecepatan prosesor pada setiap server di jaringan lokal",
+              "isCorrect": false
+            },
+            {
+              "text": "Menyimpan seluruh data pengguna secara terpusat di server jaringan lokal",
+              "isCorrect": false
+            },
+            {
+              "text": "Mengenkripsi hard disk pada setiap perangkat yang terhubung",
+              "isCorrect": false
+            },
+            {
+              "text": "Mengirim dan menerima data serta menghubungkan perangkat nirkabel ke jaringan",
+              "isCorrect": true
+            }
+          ]
+        },
+        {
+          "description": "Wi-Fi bisa terkoneksi tanpa access point. Gambar di atas membandingkan mode koneksi. Dua topologi itu memiliki fungsi yang berbeda. Saatnya ungkap perbedaannya!",
+          "question": "Beda topologi Ad-hoc dan Infrastructure yaitu...",
+          "imageLink": "https://telnetquiz.r2.ferrel.dev/content/chapter2/ch2-adhoc-vs-infra.png",
+          "studyMaterial": {
+            "title": "Topologi WLAN: Ad-hoc vs Infrastructure",
+            "content": "<p>WLAN memiliki dua topologi utama yang menentukan bagaimana perangkat saling berkomunikasi:</p><h3>1. Ad-hoc (IBSS - Independent Basic Service Set)</h3><ul><li>Komunikasi <strong>langsung antar perangkat</strong> (peer-to-peer) tanpa melalui access point.</li><li>Setiap perangkat bertindak sebagai pengirim dan penerima.</li><li><strong>Kekurangan:</strong> Rentan terhadap masalah tabrakan data (collision) karena tidak ada pengatur lalu lintas.</li><li>Cocok untuk jaringan sementara atau kecil.</li></ul><h3>2. Infrastructure (BSS - Basic Service Set)</h3><ul><li>Semua komunikasi <strong>melalui access point</strong> sebagai pusat pengatur.</li><li>Access point mengatur lalu lintas data sehingga lebih teratur.</li><li><strong>Kelebihan:</strong> Lebih stabil, teratur, dan dapat terhubung ke jaringan kabel/internet.</li><li>Digunakan pada sebagian besar jaringan Wi-Fi di sekolah, kantor, dan rumah.</li></ul>",
+            "imageLink": "https://telnetquiz.r2.ferrel.dev/content/chapter2/ch2-adhoc-vs-infra.png"
+          },
+          "options": [
+            {
+              "text": "Ad-hoc hanya bisa digunakan dengan kabel sedangkan Infrastructure bersifat nirkabel",
+              "isCorrect": false
+            },
+            {
+              "text": "Ad-hoc tidak menggunakan access point, Infrastructure memakai access point sebagai pusat komunikasi",
+              "isCorrect": true
+            },
+            {
+              "text": "Ad-hoc lebih cepat dibandingkan Infrastructure dalam segala kondisi",
+              "isCorrect": false
+            },
+            {
+              "text": "Infrastructure hanya dapat menghubungkan dua perangkat saja dalam satu jaringan",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "description": "Jaringan WLAN antar gedung sekolah butuh antena terarah dengan jangkauan jauh. Gambar di atas menampilkan beberapa pola antena. Setiap jenis memiliki bentuk dan kegunaan berbeda. Yuk, pilih yang paling cocok!",
+          "question": "Jenis antena yang paling cocok untuk komunikasi WLAN titik ke titik jarak jauh antar gedung adalah...",
+          "imageLink": "https://telnetquiz.r2.ferrel.dev/content/chapter2/ch2-antenna-patterns.jpg",
+          "studyMaterial": {
+            "title": "Jenis-Jenis Antena WLAN",
+            "content": "<p>Antena merupakan komponen penting yang menentukan jangkauan dan arah sinyal WLAN. Terdapat lima jenis antena utama:</p><h3>1. Antena Grid</h3><p>Digunakan untuk komunikasi <strong>point-to-point</strong> jarak jauh dengan gain sekitar <strong>24 dB</strong>. Bentuknya menyerupai kisi-kisi.</p><h3>2. Antena Yagi</h3><p>Terdiri dari elemen <strong>driven, reflektor, dan direktor</strong>. Bersifat directional (terarah).</p><h3>3. Antena Omni (Omnidirectional)</h3><p>Memancarkan sinyal ke <strong>segala arah (360 derajat)</strong>. Umum digunakan pada access point indoor.</p><h3>4. Antena Sectoral</h3><p>Memancarkan sinyal ke <strong>sektor tertentu</strong> (misalnya 60, 90, atau 120 derajat). Cocok untuk area yang membutuhkan cakupan terarah.</p><h3>5. Antena Parabolic</h3><p>Menggunakan <strong>reflektor lengkung</strong> untuk memfokuskan sinyal. Cocok untuk komunikasi jarak sangat jauh.</p>",
+            "imageLink": "https://telnetquiz.r2.ferrel.dev/content/chapter2/ch2-antenna-patterns.jpg"
+          },
+          "options": [
+            {
+              "text": "Antena Grid",
+              "isCorrect": true
+            },
+            {
+              "text": "Antena Omni",
+              "isCorrect": false
+            },
+            {
+              "text": "Antena Sectoral",
+              "isCorrect": false
+            },
+            {
+              "text": "Antena Yagi",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "description": "Laptop butuh Wireless LAN Card (kartu jaringan nirkabel). Gambar di atas memuat jenis NIC. Pilih satu bentuk paling praktis. Ayo kita klasifikasikan!",
+          "question": "Wireless LAN Card paling praktis adalah...",
+          "imageLink": "https://telnetquiz.r2.ferrel.dev/content/chapter2/ch2-nic-types.png",
+          "studyMaterial": {
+            "title": "Wireless LAN Card",
+            "content": "<p>Wireless LAN Card adalah perangkat yang dipasang pada komputer atau laptop agar dapat <strong>terhubung ke jaringan WLAN</strong>. Tanpa perangkat ini, komputer tidak dapat menerima atau mengirim sinyal Wi-Fi.</p><h3>Jenis-Jenis Wireless LAN Card</h3><ul><li><strong>PCMCIA (PC Card):</strong> Digunakan pada laptop lama dengan slot PCMCIA. Berbentuk kartu tipis yang dimasukkan ke slot samping laptop.</li><li><strong>ISA/PCI:</strong> Dipasang pada slot ekspansi di motherboard komputer desktop. Memerlukan pembukaan casing komputer untuk pemasangan.</li><li><strong>USB Wireless Adapter:</strong> Paling praktis dan populer saat ini. Cukup dicolokkan ke port USB tanpa perlu membuka casing. Tersedia dalam berbagai ukuran, termasuk bentuk nano yang sangat kecil.</li><li><strong>Ethernet Card (dengan fungsi wireless):</strong> Kartu jaringan yang mendukung koneksi nirkabel, umumnya terintegrasi di motherboard modern.</li></ul>",
+            "imageLink": "https://telnetquiz.r2.ferrel.dev/content/chapter2/ch2-nic-types.png"
+          },
+          "options": [
+            {
+              "text": "Kartu ISA",
+              "isCorrect": false
+            },
+            {
+              "text": "Kartu PCMCIA",
+              "isCorrect": false
+            },
+            {
+              "text": "USB Wireless Adapter",
+              "isCorrect": true
+            },
+            {
+              "text": "Antena parabolic eksternal",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "description": "Access point sekolah memancarkan sinyal ke segala arah. Gambar di atas menampilkan antena omni. Antena omni memiliki pola khas. Yuk, cari tahu karakternya!",
+          "question": "Ciri khas antena omnidirectional yaitu...",
+          "imageLink": "https://telnetquiz.r2.ferrel.dev/content/chapter2/ch2-antenna-patterns.jpg",
+          "studyMaterial": {
+            "title": "Antena Omnidirectional",
+            "content": "<p>Antena omnidirectional merupakan salah satu jenis antena yang paling banyak digunakan pada perangkat access point, terutama untuk penggunaan indoor.</p><h3>Karakteristik Utama</h3><ul><li><strong>Pola radiasi:</strong> Memancarkan sinyal ke <strong>segala arah secara horizontal (360 derajat)</strong>.</li><li><strong>Gain:</strong> Relatif rendah dibandingkan antena directional (umumnya 2-9 dBi).</li><li><strong>Penggunaan:</strong> Ideal untuk area yang membutuhkan cakupan merata ke semua arah, seperti ruangan, aula, atau area publik.</li></ul><h3>Perbandingan dengan Antena Directional</h3><p>Berbeda dengan antena <strong>directional</strong> (seperti Yagi, Grid, Sectoral, Parabolic) yang memfokuskan sinyal ke satu arah tertentu, antena omnidirectional mendistribusikan sinyal secara merata. Hal ini membuatnya cocok untuk melayani pengguna yang tersebar di berbagai posisi sekitar access point.</p>",
+            "imageLink": "https://telnetquiz.r2.ferrel.dev/content/chapter2/ch2-antenna-patterns.jpg"
+          },
+          "options": [
+            {
+              "text": "Memerlukan reflektor lengkung untuk memfokuskan sinyal",
+              "isCorrect": false
+            },
+            {
+              "text": "Memancarkan sinyal hanya ke satu arah dengan gain sangat tinggi",
+              "isCorrect": false
+            },
+            {
+              "text": "Digunakan hanya untuk komunikasi point-to-point dengan satu pasangan",
+              "isCorrect": false
+            },
+            {
+              "text": "Memancarkan sinyal ke segala arah (360 derajat) secara horizontal",
+              "isCorrect": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Konfigurasi Dasar Jaringan WLAN pada Access Point",
+      "level": 4,
+      "difficulty": "hard",
+      "questions": [
+        {
+          "description": "Kamu pasang access point baru di sekolah. Gambar di atas menampilkan menu SSID. Langkah awal konfigurasi sangat penting. Ayo, analisis langkahnya!",
+          "question": "Langkah pertama konfigurasi access point baru yaitu...",
+          "imageLink": "https://telnetquiz.r2.ferrel.dev/content/chapter2/ch2-ssid-setup.png",
+          "studyMaterial": {
+            "title": "Langkah Konfigurasi Dasar Access Point",
+            "content": "<p>Untuk mengonfigurasi access point baru agar dapat digunakan, terdapat beberapa langkah dasar yang harus dilakukan secara berurutan:</p><h3>Urutan Konfigurasi</h3><ol><li><strong>Mengatur SSID (Service Set Identifier):</strong> Memberikan nama jaringan yang akan terlihat oleh pengguna. SSID sebaiknya mudah dikenali, misalnya <code>SMK-Merdeka-WiFi</code>.</li><li><strong>Memilih mode keamanan:</strong> Mengaktifkan enkripsi seperti WPA2 atau WPA3 dan mengatur password agar jaringan tidak dapat diakses sembarang orang.</li><li><strong>Memilih channel/kanal:</strong> Menentukan kanal frekuensi yang digunakan untuk menghindari interferensi dengan jaringan sekitar.</li><li><strong>Mengatur alamat IP:</strong> Mengonfigurasi alamat IP access point dan mengaktifkan DHCP server agar perangkat klien mendapatkan IP otomatis.</li></ol><p>Langkah pertama selalu dimulai dengan <strong>mengatur SSID</strong> karena ini adalah identitas jaringan yang akan digunakan.</p>",
+            "imageLink": "https://telnetquiz.r2.ferrel.dev/content/chapter2/ch2-ssid-setup.png"
+          },
+          "options": [
+            {
+              "text": "Mengatur SSID (nama jaringan) pada access point",
+              "isCorrect": true
+            },
+            {
+              "text": "Memasang antena parabolic di atap gedung sekolah",
+              "isCorrect": false
+            },
+            {
+              "text": "Menghubungkan seluruh komputer dengan kabel UTP",
+              "isCorrect": false
+            },
+            {
+              "text": "Mengganti sistem operasi pada semua laptop siswa",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "description": "Jaringan sekolah butuh keamanan kuat. Gambar di atas membandingkan standar enkripsi. Pilihan mode keamanan bervariasi. Saatnya pilih yang terbaik!",
+          "question": "Mode keamanan WLAN sekolah paling direkomendasikan adalah...",
+          "imageLink": "https://telnetquiz.r2.ferrel.dev/content/chapter2/ch2-wep-wpa-comparison.png",
+          "studyMaterial": {
+            "title": "Mode Keamanan WLAN",
+            "content": "<p>Keamanan jaringan WLAN sangat penting untuk mencegah akses tidak sah. Terdapat beberapa mode keamanan yang dapat dipilih saat mengonfigurasi access point:</p><h3>Jenis Mode Keamanan</h3><ul><li><strong>WEP (Wired Equivalent Privacy):</strong> Standar keamanan paling lama. <strong>Sudah tidak aman</strong> karena enkripsinya mudah ditembus. Tidak direkomendasikan.</li><li><strong>WPA (Wi-Fi Protected Access):</strong> Pengganti WEP dengan enkripsi TKIP yang lebih baik, namun masih memiliki kelemahan.</li><li><strong>WPA2:</strong> Menggunakan enkripsi <strong>AES (Advanced Encryption Standard)</strong> yang jauh lebih kuat. Standar minimum yang direkomendasikan saat ini.</li><li><strong>WPA3:</strong> Standar terbaru dengan enkripsi 192-bit dan perlindungan terhadap serangan brute force. <strong>Paling direkomendasikan</strong> jika perangkat mendukung.</li></ul><p>Untuk jaringan sekolah, minimal gunakan <strong>WPA2-Personal</strong> dengan password yang kuat, atau <strong>WPA3</strong> jika perangkat sudah mendukung.</p>",
+            "imageLink": "https://telnetquiz.r2.ferrel.dev/content/chapter2/ch2-wep-wpa-comparison.png"
+          },
+          "options": [
+            {
+              "text": "Tidak perlu mode keamanan agar semua orang dapat mengakses dengan mudah",
+              "isCorrect": false
+            },
+            {
+              "text": "WEP karena merupakan standar keamanan yang paling lama dan teruji",
+              "isCorrect": false
+            },
+            {
+              "text": "WPA2 atau WPA3 karena menggunakan enkripsi AES yang kuat",
+              "isCorrect": true
+            },
+            {
+              "text": "MAC filtering saja sudah cukup tanpa enkripsi tambahan",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "description": "Wi-Fi lab sering terasa lambat karena banyak jaringan lain di sekitar. Gambar di atas menampilkan channel non-overlap. Interferensi antar jaringan harus ditangani. Ayo cari solusinya!",
+          "question": "Solusi kurangi interferensi antar WLAN berdekatan adalah...",
+          "imageLink": "https://telnetquiz.r2.ferrel.dev/content/chapter2/ch2-channel-overlap.webp",
+          "studyMaterial": {
+            "title": "Pemilihan Channel pada Access Point",
+            "content": "<p>Channel (kanal) adalah pembagian frekuensi radio yang digunakan oleh access point untuk berkomunikasi. Pemilihan channel yang tepat sangat penting untuk menghindari interferensi.</p><h3>Channel pada Frekuensi 2,4 GHz</h3><p>Pada frekuensi 2,4 GHz terdapat 14 channel, tetapi hanya <strong>3 channel yang tidak saling tumpang tindih (non-overlapping)</strong>:</p><ul><li><strong>Channel 1</strong></li><li><strong>Channel 6</strong></li><li><strong>Channel 11</strong></li></ul><h3>Cara Mengurangi Interferensi</h3><ol><li><strong>Gunakan channel non-overlapping:</strong> Pilih channel 1, 6, atau 11 yang berbeda dari jaringan sekitar.</li><li><strong>Lakukan site survey:</strong> Periksa channel yang sudah digunakan oleh jaringan lain di sekitar.</li><li><strong>Pertimbangkan frekuensi 5 GHz:</strong> Frekuensi ini memiliki lebih banyak channel non-overlapping sehingga interferensi lebih kecil.</li></ol>",
+            "imageLink": "https://telnetquiz.r2.ferrel.dev/content/chapter2/ch2-channel-overlap.webp"
+          },
+          "options": [
+            {
+              "text": "Meningkatkan daya pancar access point ke level maksimum",
+              "isCorrect": false
+            },
+            {
+              "text": "Memilih channel non-overlapping (1, 6, atau 11) yang berbeda dari jaringan sekitar",
+              "isCorrect": true
+            },
+            {
+              "text": "Menonaktifkan enkripsi pada semua jaringan yang berdekatan",
+              "isCorrect": false
+            },
+            {
+              "text": "Mengganti semua perangkat klien dengan yang mendukung Bluetooth",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "description": "Laptop baru harus terkoneksi otomatis. Gambar di atas memuat alur DHCP. Ada layanan yang memberi IP otomatis. Tebak layanan yang tepat!",
+          "question": "Layanan agar klien dapat IP otomatis adalah...",
+          "imageLink": "https://telnetquiz.r2.ferrel.dev/content/chapter1/ch1-dhcp-dora.gif",
+          "studyMaterial": {
+            "title": "Konfigurasi IP dan DHCP pada Access Point",
+            "content": "<p>Setiap perangkat dalam jaringan WLAN memerlukan alamat IP untuk dapat berkomunikasi. Ada dua cara pemberian alamat IP:</p><h3>1. IP Statis (Manual)</h3><p>Alamat IP dikonfigurasi secara manual pada setiap perangkat. Cocok untuk perangkat yang memerlukan alamat tetap seperti server atau printer jaringan.</p><h3>2. IP Dinamis (DHCP)</h3><p><strong>DHCP (Dynamic Host Configuration Protocol)</strong> adalah layanan yang secara otomatis memberikan alamat IP kepada setiap perangkat yang terhubung ke jaringan.</p><h3>Parameter DHCP</h3><ul><li><strong>IP Pool/Range:</strong> Rentang alamat IP yang tersedia, misalnya <code>192.168.1.100</code> - <code>192.168.1.200</code></li><li><strong>Subnet Mask:</strong> Misalnya <code>255.255.255.0</code></li><li><strong>Default Gateway:</strong> Alamat IP access point/router, misalnya <code>192.168.1.1</code></li><li><strong>DNS Server:</strong> Alamat server DNS untuk resolusi nama domain</li></ul><p>Dengan mengaktifkan DHCP, pengguna <strong>tidak perlu mengatur IP secara manual</strong> di setiap perangkat.</p>",
+            "imageLink": "https://telnetquiz.r2.ferrel.dev/content/chapter1/ch1-dhcp-dora.gif"
+          },
+          "options": [
+            {
+              "text": "SMTP (Simple Mail Transfer Protocol)",
+              "isCorrect": false
+            },
+            {
+              "text": "DNS (Domain Name System)",
+              "isCorrect": false
+            },
+            {
+              "text": "FTP (File Transfer Protocol)",
+              "isCorrect": false
+            },
+            {
+              "text": "DHCP (Dynamic Host Configuration Protocol)",
+              "isCorrect": true
+            }
+          ]
+        },
+        {
+          "description": "Kafe minta kamu pasang Wi-Fi publik. Jaringan harus aman dan mudah. Pilih kombinasi konfigurasi terbaik!",
+          "question": "Konfigurasi tepat Wi-Fi publik kafe adalah...",
+          "imageLink": null,
+          "studyMaterial": {
+            "title": "Konfigurasi WLAN untuk Lingkungan Publik",
+            "content": "<p>Mengonfigurasi jaringan WLAN untuk tempat publik seperti kafe memerlukan keseimbangan antara <strong>keamanan dan kemudahan akses</strong>.</p><h3>Praktik Terbaik</h3><ul><li><strong>SSID yang jelas:</strong> Gunakan nama jaringan yang mudah dikenali pelanggan, misalnya <code>Kafe-Sejahtera-WiFi</code>.</li><li><strong>SSID broadcast aktif:</strong> Biarkan SSID terlihat agar pelanggan dapat menemukan jaringan dengan mudah.</li><li><strong>WPA2/WPA3-Personal:</strong> Tetap gunakan enkripsi dengan password yang dapat dibagikan kepada pelanggan (misalnya ditempel di meja atau struk).</li><li><strong>Isolasi klien:</strong> Aktifkan fitur <strong>client isolation</strong> agar perangkat pelanggan tidak dapat saling mengakses satu sama lain.</li></ul><h3>Konfigurasi Tambahan</h3><ul><li><strong>Bandwidth limiting:</strong> Batasi kecepatan per pengguna agar jaringan tetap stabil.</li><li><strong>DHCP:</strong> Aktifkan agar pelanggan mendapat IP otomatis tanpa konfigurasi manual.</li></ul>",
+            "imageLink": null
+          },
+          "options": [
+            {
+              "text": "SSID broadcast aktif, keamanan WPA2-Personal dengan password, dan DHCP aktif",
+              "isCorrect": true
+            },
+            {
+              "text": "SSID disembunyikan, tanpa password, dan IP statis untuk setiap pelanggan",
+              "isCorrect": false
+            },
+            {
+              "text": "Menggunakan topologi Ad-hoc tanpa access point dan tanpa enkripsi",
+              "isCorrect": false
+            },
+            {
+              "text": "DHCP nonaktif dengan setiap pelanggan mengatur IP manual",
+              "isCorrect": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
